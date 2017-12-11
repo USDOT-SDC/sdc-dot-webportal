@@ -97,7 +97,7 @@ def get_streaming_url():
                                                          UserId=user_id)
         return {'url': response['StreamingURL']}
     except KeyError as ke:
-        logger.error('received malformed mapping data from dynamodb. %s' % mapping)
+        logger.exception('received malformed mapping data from dynamodb. %s' % mapping)
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
     except ClientError as ce:
         logger.exception("Creation of streaming url failed for [user=%s, Fleet=%s, stack=%s]" % (
