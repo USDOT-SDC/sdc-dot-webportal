@@ -1,0 +1,16 @@
+.navbar .nav > li > a {
+    line-height: 50px;
+  }
+
+.bg{
+    width: 100vw;
+    height: 100vh;
+    background: url('../../assets/images/home-background.jpg') no-repeat center;
+    /* background-size: 100% 100%; */
+    /* background-position: center; */
+    /* display: block; */
+}
+
+.main-font { 
+    color: whitesmoke;
+ }

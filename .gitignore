@@ -1,0 +1,39 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+webportal/webapp/dist
+webportal/webapp/tmp
+webportal/webapp/out-tsc
+
+# dependencies
+webportal/webapp/node_modules
+
+# IDEs and editors
+webportal/webapp/.idea
+webportal/webapp/.project
+webportal/webapp/.classpath
+webportal/webapp/.c9/
+webportal/webapp/*.launch
+webportal/webapp/.settings/
+webportal/webapp/*.sublime-workspace
+
+# IDE - VSCode
+webportal/webapp/.vscode/*
+
+# misc
+webportal/webapp/.sass-cache
+webportal/webapp/connect.lock
+webportal/webapp/coverage
+webportal/webapp/libpeerconnection.log
+webportal/webapp/npm-debug.log
+testem.log
+/typings
+
+# e2e
+webportal/webapp/e2e/*.js
+webportal/webapp/e2e/*.map
+
+# System Files
+webportal/webapp/.DS_Store
+webportal/webapp/Thumbs.db
+

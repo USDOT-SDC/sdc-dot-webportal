@@ -1,0 +1,19 @@
+.navbar .nav > li > a {
+    line-height: 50px;
+  }
+
+.bg{
+    width: 100vw;
+    height: 100vh;
+    background: url('../../assets/images/home-background.jpg') no-repeat center;;
+}
+
+.logout-btn {
+    cursor: pointer
+}
+
+.user-home-font { 
+    color: wheat;
+ }
+
+
