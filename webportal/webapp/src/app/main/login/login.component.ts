@@ -23,6 +23,25 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
 
   ngOnInit() {
 
+    console.log('invoked ...')
+    this.activatedRoute.fragment.subscribe((fragment: string) => {
+      console.log("Hash fragment is here => ", fragment);
+      if(fragment) {
+      var hash = fragment;
+      this.hash_json = {}
+      hash.split('&').map(hk => { 
+        let temp = hk.split('='); 
+        this.hash_json[temp[0]] = temp[1] 
+      });
+      this.cognitoUtil.hash_json = this.hash_json;
+
+      if(this.cognitoUtil.hash_json['id_token']) {
+        this.router.navigate(['home']);
+      }
+      console.log(this.hash_json);
+    }  
+    });
+
     if(!this.cognitoUtil.hash_json || !this.cognitoUtil.hash_json['id_token']) {
       // Show adfs login page
       window.location.href = 'https://test-sdc.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=7342nq8oeb2ao2e33pk17bh1q2&redirect_uri=https://d4p2fyeb90av.cloudfront.net/index.html';
@@ -31,18 +50,7 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
       this.router.navigate(['home']);
     }
 
-    console.log('invoked ...')
-    this.activatedRoute.fragment.subscribe((fragment: string) => {
-      console.log("Hash fragment is here => ", fragment);
-      var hash = fragment;
-      this.hash_json = {}
-      hash.split('&').map(hk => { 
-        let temp = hk.split('='); 
-        this.hash_json[temp[0]] = temp[1] 
-      });
-      this.cognitoUtil.hash_json = this.hash_json;
-      console.log(this.hash_json);
-    });
+    
   }
 
 
