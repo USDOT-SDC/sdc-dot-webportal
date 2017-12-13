@@ -25,7 +25,8 @@ export interface Callback {
 
 @Injectable()
 export class CognitoUtil {
-
+    public hash_json:any;
+    
     public static _REGION = "us-east-1";
 
     

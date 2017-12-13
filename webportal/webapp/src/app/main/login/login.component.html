@@ -1,6 +1,9 @@
 <div class="container">
   <br><br>
-  <h1>SDC Login</h1>
+
+  <h1 *ngIf='hash_json["error_description"]'>Error : {{hash_json['error_description']}}</h1>
+  
+  <!--<h1>SDC Login</h1>
   <div class="container-fluid">
   <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
       <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -16,5 +19,5 @@
     </div>
     <div *ngIf="f.submitted && errorMessage" [hidden]="user.username || user.password" class="alert alert-danger">{{ errorMessage }}</div>
   </form>
-</div>
+</div> -->
 </div>

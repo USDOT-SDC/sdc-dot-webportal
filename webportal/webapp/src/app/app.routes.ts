@@ -11,8 +11,9 @@ import { SettingsComponent } from './user-home/settings/settings.component';
 const appRoutes: Routes = [
     {
         path: '', component: MainComponent, children: [
-            { path: '', component: HomeComponent },
-            { path: 'login', component: LoginComponent },
+            { path: 'index.html', component: LoginComponent },
+            //{ path: '', component: HomeComponent },
+            { path: '', component: LoginComponent },
             { path: 'about', component: AboutComponent }
         ],
     },
