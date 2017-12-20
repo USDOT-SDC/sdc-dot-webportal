@@ -12,10 +12,40 @@
     },
     {
       "Action": [
-        "dynamodb:*"
+        "dynamodb:*",
+        "appstream:*",
+        "apigateway:*"
       ],
       "Resource": "*",
       "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "apigateway:POST"
+      ],
+      "Resource": "arn:aws:apigateway:*::/restapis/*/authorizers",
+      "Effect": "Allow",
+      "Condition": {
+        "ArnLike": {
+          "apigateway:CognitoUserPoolProviderArn": [
+            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q"
+          ]
+        }
+      }
+    },
+    {
+      "Action": [
+        "apigateway:PATCH"
+      ],
+      "Resource": "arn:aws:apigateway:*::/restapis/*/authorizers/*",
+      "Effect": "Allow",
+      "Condition": {
+        "ArnLike": {
+          "apigateway:CognitoUserPoolProviderArn": [
+            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q"
+          ]
+        }
+      }
     }
   ]
 }
