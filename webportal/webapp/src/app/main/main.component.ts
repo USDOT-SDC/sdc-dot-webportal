@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+import { CognitoService } from '../../services/cognito.service';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent {
 
-  constructor() { }
+  constructor(private cognitoService: CognitoService) { }
 
-  ngOnInit() {
+  userLogin() {
+    this.cognitoService.login(false);
   }
 
 }

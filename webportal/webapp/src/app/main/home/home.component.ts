@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
-import { CognitoUtil } from '../../../services/cognito.service';
-
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CognitoService } from '../../../services/cognito.service';
 
 @Component({
   selector: 'app-home',
@@ -9,16 +8,27 @@ import { CognitoUtil } from '../../../services/cognito.service';
   styleUrls: ['./home.component.css']
 })
 
-export class HomeComponent implements OnInit {
- 
-  hash_json:any;
-  error_message:any;
-  saml_response:any;
+export class HomeComponent {
 
-  constructor(private activatedRoute: ActivatedRoute, private cognitoUtil: CognitoUtil) { 
-  }
+  constructor(
+    private cognitoService: CognitoService,
+    private router: Router) { }
 
   ngOnInit() {
-   
+    var currentUrl = window.location.href;
+    if (currentUrl.indexOf("access_token") !== -1) {
+      this.cognitoService.onLoad();
+      this.router.navigate(['account']);
+    }
+    this.cognitoService.isUserSessionActive(this);
   }
+
+  isLoggedIn(message: string, isLoggedIn: boolean) {
+    if (isLoggedIn) {
+      console.log("The user is authenticated: " + isLoggedIn);
+      this.router.navigate(['account']);
+    } else
+      console.log("User not authenticated: " + isLoggedIn);
+  }
+
 }

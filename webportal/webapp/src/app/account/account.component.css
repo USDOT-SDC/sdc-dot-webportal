@@ -2,10 +2,8 @@
     line-height: 50px;
   }
 
-html,body {
-    height:100%;
-  }
-
-  .login-btn {
+.logout-btn {
     cursor: pointer
 }
+
+

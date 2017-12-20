@@ -4,9 +4,10 @@ import {
     CognitoIdentityServiceProvider,
     CognitoUser,
     CognitoUserAttribute,
-    CognitoUserPool
+    CognitoUserPool,
 } from "amazon-cognito-identity-js";
-import * as AWS from "aws-sdk/global";
+import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth";
+import * as AWS from "aws-sdk";
 import * as awsservice from "aws-sdk/lib/service";
 import * as CognitoIdentity from "aws-sdk/clients/cognitoidentity";
 
@@ -24,124 +25,116 @@ export interface Callback {
 }
 
 @Injectable()
-export class CognitoUtil {
-    public hash_json:any;
-    
-    public static _REGION = "us-east-1";
+export class CognitoService {
 
-    
-    public static _USER_POOL_ID = "us-east-1_uAgXIUy4Q";
-    public static _CLIENT_ID = "7342nq8oeb2ao2e33pk17bh1q2";
-
+    public static _REGION = "" // User pool AWS region
+    public static _USER_POOL_ID = "" // User pool ID
+    public static _CLIENT_ID = "" // App client ID
+    public static _IDENTITY_PROVIDER = "" // User pool Identity provider name
+    public static _APP_DOMAIN = "" // App domain name
+    public static _IDP_ENDPOINT = "cognito-idp." + CognitoService._REGION + ".amazonaws.com/" + CognitoService._USER_POOL_ID
+    public static _REDIRECT_URL = "" // Re-direct URL for the user pool
     public static _POOL_DATA:any = {
-        UserPoolId: CognitoUtil._USER_POOL_ID,
-        ClientId: CognitoUtil._CLIENT_ID
+        UserPoolId: CognitoService._USER_POOL_ID,
+        ClientId: CognitoService._CLIENT_ID
+    };
+    public static _AUTH_DATA = {
+        ClientId : CognitoService._CLIENT_ID,
+        AppWebDomain : CognitoService._APP_DOMAIN + ".auth." + CognitoService._REGION + ".amazoncognito.com",
+        TokenScopesArray : ['phone', 'email', 'profile','openid' ], 
+        RedirectUriSignIn : CognitoService._REDIRECT_URL,
+        RedirectUriSignOut : CognitoService._REDIRECT_URL, 
+        IdentityProvider : CognitoService._IDENTITY_PROVIDER,
+        UserPoolId : CognitoService._USER_POOL_ID,
+        AdvancedSecurityDataCollectionFlag : false
     };
 
-    public cognitoCreds: AWS.CognitoIdentityCredentials;
-
-    getUserPool() {
-        // if (environment.cognito_idp_endpoint) {
-            // CognitoUtil._POOL_DATA.endpoint = "https://test-sdc.auth.us-east-1.amazoncognito.com/saml2/idpresponse";
-        // }
-        return new CognitoUserPool(CognitoUtil._POOL_DATA);
+    // Authenticate the user & login
+    login(isLoggedIn: boolean) {
+        var userAuth = new CognitoAuth(CognitoService._AUTH_DATA)
+        userAuth.userhandler = {
+            onSuccess: function(result) {
+            },
+            onFailure: function(err) {
+            }
+        };
+        if (isLoggedIn) {
+            var currentUrl = window.location.href;
+            userAuth.parseCognitoWebResponse(currentUrl);
+        } else
+            userAuth.getSession();
     }
 
+    // Immediately after login
+    onLoad() {
+        this.login(true)
+    }
+
+    // Check if the user is already logged in
+    isUserSessionActive(callback: LoggedInCallback) {
+        var currentUser = this.getCurrentUser()
+
+        if (currentUser != null) {
+            currentUser.getSession(function (err, session) {
+                if (err) {
+                    console.log("UserLoginService: Couldn't get the session: " + err, err.stack);
+                    callback.isLoggedIn(err, false);
+                }
+                else {
+                    console.log("UserLoginService: Session is " + session.isValid());
+                    callback.isLoggedIn(err, session.isValid());
+                }
+            });
+        } else {
+            console.log("UserLoginService: can't retrieve the current user");
+            callback.isLoggedIn("Can't retrieve the CurrentUser", false);
+        }
+
+    }
+
+    // Create UserPool object
+    getUserPool() {
+        return new CognitoUserPool(CognitoService._POOL_DATA);
+    }
+ 
+    // Fetch the current logged in user
     getCurrentUser() {
         return this.getUserPool().getCurrentUser();
     }
 
-    // AWS Stores Credentials in many ways, and with TypeScript this means that 
-    // getting the base credentials we authenticated with from the AWS globals gets really murky,
-    // having to get around both class extension and unions. Therefore, we're going to give
-    // developers direct access to the raw, unadulterated CognitoIdentityCredentials
-    // object at all times.
-    setCognitoCreds(creds: AWS.CognitoIdentityCredentials) {
-        this.cognitoCreds = creds;
-    }
-
-    getCognitoCreds() {
-        return this.cognitoCreds;
-    }
-
-    
-    getAccessToken(callback: Callback): void {
-        if (callback == null) {
-            throw("CognitoUtil: callback in getAccessToken is null...returning");
-        }
-        if (this.getCurrentUser() != null)
-            this.getCurrentUser().getSession(function (err : any, session : any) {
-                if (err) {
-                    console.log("CognitoUtil: Can't set the credentials:" + err);
-                    callback.callbackWithParam(null);
-                }
-
-                else {
-                    if (session.isValid()) {
-                        callback.callbackWithParam(session.getAccessToken().getJwtToken());
-                    }
-                }
-            });
-        else
-            callback.callbackWithParam(null);
-    }
-
-    getIdToken(callback: Callback): void {
-        if (callback == null) {
-            throw("CognitoUtil: callback in getIdToken is null...returning");
-        }
-        if (this.getCurrentUser() != null)
-            this.getCurrentUser().getSession(function (err : any, session : any) {
-                if (err) {
-                    console.log("CognitoUtil: Can't set the credentials:" + err);
-                    callback.callbackWithParam(null);
-                }
-                else {
-                    if (session.isValid()) {
-                        callback.callbackWithParam(session.getIdToken().getJwtToken());
-                    } else {
-                        console.log("CognitoUtil: Got the id token, but the session isn't valid");
-                    }
-                }
-            });
-        else
-            callback.callbackWithParam(null);
-    }
-
-    getRefreshToken(callback: Callback): void {
-        if (callback == null) {
-            throw("CognitoUtil: callback in getRefreshToken is null...returning");
-        }
-        if (this.getCurrentUser() != null)
-            this.getCurrentUser().getSession(function (err: any, session: any) {
-                if (err) {
-                    console.log("CognitoUtil: Can't set the credentials:" + err);
-                    callback.callbackWithParam(null);
-                }
-
-                else {
-                    if (session.isValid()) {
-                        callback.callbackWithParam(session.getRefreshToken());
-                    }
-                }
-            });
-        else
-            callback.callbackWithParam(null);
-    }
-
-    refresh(): void {
-        this.getCurrentUser().getSession(function (err : any, session : any) {
-            if (err) {
-                console.log("CognitoUtil: Can't set the credentials:" + err);
+    // Logout the user session
+    logout() {
+        var userAuth = new CognitoAuth(CognitoService._AUTH_DATA)
+        userAuth.userhandler = {
+            onSuccess: function(result) {
+            },
+            onFailure: function(err) {
             }
-
-            else {
-                if (session.isValid()) {
-                    console.log("CognitoUtil: refreshed successfully");
-                } else {
-                    console.log("CognitoUtil: refreshed but session is still not valid");
-                }
-            }
-        });
+        };
+        userAuth.signOut()
+        this.getUserPool().getCurrentUser().signOut()
+        localStorage.clear()
     }
+
+    // Method to fetch the cognito ID token
+    getIdToken() {
+        var cognitoUser = this.getCurrentUser();
+        var idToken = ''
+        if (cognitoUser != null) {
+            cognitoUser.getSession(function(err, session) {
+                if (err) {
+                    alert(err);
+                    return;
+                }
+                console.log('session validity: ' + session.isValid());
+                idToken = session.getIdToken().getJwtToken()
+            });
+        } else {
+            console.log("NO TOKEN")
+        }
+        return idToken
+    }
+
+    // TODO: Add refresh token logic
+
 }

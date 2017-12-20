@@ -2,39 +2,39 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule }   from '@angular/forms';
 import { RoutingModule } from './app.routes'
+import { HttpModule } from '@angular/http'
+// import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
-import { LoginComponent } from './main/login/login.component';
 import { AboutComponent } from './main/about/about.component';
-import { UserHomeComponent } from './user-home/user-home.component';
-import { SettingsComponent } from './user-home/settings/settings.component'
-
-import { CognitoUtil } from '../services/cognito.service'
-import { UserService } from '../services/user.service';
-import { AccountComponent } from './user-home/account/account.component';
+import { AccountComponent } from './account/account.component';
+import { SettingsComponent } from './account/settings/settings.component';
+import { MyAccountComponent } from './account/myaccount/myaccount.component';
+import { CognitoService } from '../services/cognito.service'
+import { ApiGatewayService } from '../services/apigateway.service'
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     MainComponent,
-    LoginComponent,
+    HomeComponent,
     AboutComponent,
-    UserHomeComponent,
-    SettingsComponent,
-    AccountComponent
+    AccountComponent,
+    MyAccountComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
     RoutingModule,
-    FormsModule
+    FormsModule,
+    HttpModule
   ],
   providers: [
-    CognitoUtil,
-    UserService
+    CognitoService,
+    ApiGatewayService
   ],
   bootstrap: [AppComponent]
 })
