@@ -12,7 +12,7 @@ import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
 import { AboutComponent } from './main/about/about.component';
 import { AccountComponent } from './account/account.component';
-import { SettingsComponent } from './account/settings/settings.component';
+import { DatasetsComponent } from './account/datasets/datasets.component';
 import { AccountHomeComponent } from './account/accounthome/accounthome.component';
 import { CognitoService } from '../services/cognito.service';
 import { ApiGatewayService } from '../services/apigateway.service';
@@ -27,7 +27,7 @@ import { RegisterComponent } from './main/register/register.component';
     AboutComponent,
     AccountComponent,
     AccountHomeComponent,
-    SettingsComponent,
+    DatasetsComponent,
     WorkstationComponent,
     RegisterComponent
   ],

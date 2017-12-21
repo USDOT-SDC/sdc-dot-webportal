@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css']
+  selector: 'app-datasets',
+  templateUrl: './datasets.component.html',
+  styleUrls: ['./datasets.component.css']
 })
-export class SettingsComponent implements OnInit {
+export class DatasetsComponent implements OnInit {
 
   constructor() { }
     displayedColumns = ['position', 'name', 'weight', 'symbol'];
