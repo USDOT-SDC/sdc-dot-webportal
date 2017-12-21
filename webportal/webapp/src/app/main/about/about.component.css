@@ -1,0 +1,13 @@
+
+.cardBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card {
+    height: 215px;
+    background-color: #f8f8f8;
+}
+.cardContent {
+    height: 80px;
+}

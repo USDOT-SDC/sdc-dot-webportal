@@ -12,7 +12,7 @@ import { RegisterComponent } from './main/register/register.component';
 const appRoutes: Routes = [
     {
         path: '', component: MainComponent, children: [
-            { path: '', redirectTo: '/home', pathMatch: 'full' },
+            { path: '', redirectTo: '/about', pathMatch: 'full' },
             { path: 'index.html', component: HomeComponent },
             { path: 'home', component: HomeComponent },
             { path: 'about', component: AboutComponent },
