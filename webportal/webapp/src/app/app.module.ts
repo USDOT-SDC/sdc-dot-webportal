@@ -5,7 +5,7 @@ import { RoutingModule } from './app.routes';
 import { HttpModule } from '@angular/http';
 // import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule,MatTableModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatTableModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
@@ -13,7 +13,7 @@ import { HomeComponent } from './main/home/home.component';
 import { AboutComponent } from './main/about/about.component';
 import { AccountComponent } from './account/account.component';
 import { SettingsComponent } from './account/settings/settings.component';
-import { MyAccountComponent } from './account/myaccount/myaccount.component';
+import { AccountHomeComponent } from './account/accounthome/accounthome.component';
 import { CognitoService } from '../services/cognito.service';
 import { ApiGatewayService } from '../services/apigateway.service';
 import { WorkstationComponent } from './account/workstation/workstation.component';
@@ -26,7 +26,7 @@ import { RegisterComponent } from './main/register/register.component';
     HomeComponent,
     AboutComponent,
     AccountComponent,
-    MyAccountComponent,
+    AccountHomeComponent,
     SettingsComponent,
     WorkstationComponent,
     RegisterComponent
