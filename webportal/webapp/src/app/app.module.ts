@@ -1,9 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
-import { RoutingModule } from './app.routes'
-import { HttpModule } from '@angular/http'
+import { FormsModule } from '@angular/forms';
+import { RoutingModule } from './app.routes';
+import { HttpModule } from '@angular/http';
 // import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule,MatTableModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
@@ -12,9 +14,10 @@ import { AboutComponent } from './main/about/about.component';
 import { AccountComponent } from './account/account.component';
 import { SettingsComponent } from './account/settings/settings.component';
 import { MyAccountComponent } from './account/myaccount/myaccount.component';
-import { CognitoService } from '../services/cognito.service'
-import { ApiGatewayService } from '../services/apigateway.service'
-
+import { CognitoService } from '../services/cognito.service';
+import { ApiGatewayService } from '../services/apigateway.service';
+import { WorkstationComponent } from './account/workstation/workstation.component';
+import { RegisterComponent } from './main/register/register.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +27,22 @@ import { ApiGatewayService } from '../services/apigateway.service'
     AboutComponent,
     AccountComponent,
     MyAccountComponent,
-    SettingsComponent
+    SettingsComponent,
+    WorkstationComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     RoutingModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatTableModule
   ],
   providers: [
     CognitoService,

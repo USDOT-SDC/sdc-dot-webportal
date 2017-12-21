@@ -1,0 +1,64 @@
+<div style="padding: 20%;text-align:center;" *ngIf="stacks == null">
+  <h3>
+    <img src="../../assets/images/dot-logo.png">
+    <br>
+    <br> Loading
+  </h3>
+</div>
+<!-- <div class="container col-md-6" *ngIf="stacks"> -->
+<!-- <div class="container-fluid">
+    <form name="form" (ngSubmit)="launchWorstation()" #f="ngForm" novalidate>
+      <div class="form-group">
+        <label for="Stack">Available stacks</label>
+        <select class="form-control" id="selectStack" name="stackname" [(ngModel)]="selectedStack" #stackname="ngModel">
+          <option disabled>Please select</option>
+          <option *ngFor='let stack of stacks' [ngValue]='stack'>{{stack}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-lg btn-block" [disabled]="selectedStack == 'Please select'">Launch</button>
+      </div>
+    </form>
+  </div> -->
+<div class="container-fluid">
+  <div class="col-md-3" *ngIf="stacks">
+    <h2>My Stacks</h2>
+    <table class="table table-striped table-bordered">
+      <thead class="thead-inverse">
+      <tr>
+        <th>#</th>
+        <th>Stack Name</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-template ngFor let-stack [ngForOf]="stacks" let-i="index+1">
+        <tr>
+          <td>{{ i }}</td>
+          <td>{{ stack }}</td>
+          <!-- <td>
+            <div class="btn-group" data-toggle="toggle">
+                <label class="btn btn-primary active">
+                  <input type="checkbox" name="options"
+                    autocomplete="off"
+                    [checked]="idx === 0"
+                    [value]="stack"
+                    (change)="selectStack(stack)">Select
+                </label>
+            </div>
+          </td> -->
+          <td>
+            <input type="radio" name="radiogroup" [checked]="idx === 0" [value]="stack" (change)="selectStack(stack)">
+          </td>
+        </tr>
+      </ng-template>
+      </tbody>
+    </table>
+    <div class="form-group">
+      <button class="btn btn-primary btn-lg btn-block" (click)="launchWorkstation()" [disabled]="!selectedStack">Launch</button>
+    </div>
+  </div>
+  <div class="col-md-9" *ngIf="stacks">
+    <img style="width: 100%;" src="../../assets/images/appstream.jpg" class="mx-auto d-block">
+  </div>
+</div>
