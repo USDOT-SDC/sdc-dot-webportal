@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 // import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatTableModule } from '@angular/material';
-
+import { MatExpansionModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
@@ -18,6 +18,7 @@ import { CognitoService } from '../services/cognito.service';
 import { ApiGatewayService } from '../services/apigateway.service';
 import { WorkstationComponent } from './account/workstation/workstation.component';
 import { RegisterComponent } from './main/register/register.component';
+import {ToastyModule} from 'ng2-toasty';
 
 @NgModule({
   declarations: [
@@ -42,8 +43,12 @@ import { RegisterComponent } from './main/register/register.component';
     MatCardModule,
     MatToolbarModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatExpansionModule,
+    // MatAccordion,
+    ToastyModule.forRoot(),
   ],
+  exports: [BrowserModule, ToastyModule],
   providers: [
     CognitoService,
     ApiGatewayService

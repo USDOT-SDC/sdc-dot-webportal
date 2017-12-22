@@ -16,7 +16,7 @@ export class HomeComponent {
 
   ngOnInit() {
     var currentUrl = window.location.href;
-    if (currentUrl.indexOf("access_token") !== -1) {
+    if (currentUrl.indexOf('access_token') !== -1) {
       this.cognitoService.onLoad();
       this.router.navigate(['account']);
     }
@@ -25,10 +25,11 @@ export class HomeComponent {
 
   isLoggedIn(message: string, isLoggedIn: boolean) {
     if (isLoggedIn) {
-      console.log("The user is authenticated: " + isLoggedIn);
+      console.log('The user is authenticated: ' + isLoggedIn);
       this.router.navigate(['account']);
-    } else
-      console.log("User not authenticated: " + isLoggedIn);
+    } else {
+        console.log('User not authenticated: ' + isLoggedIn);
+    }
   }
 
 }

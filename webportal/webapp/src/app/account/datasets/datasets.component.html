@@ -1,38 +1,89 @@
 <div class="container">
-  <div class="example-container mat-elevation-z8" style="padding: 50px">
     <mat-card>
-      <mat-table #table [dataSource]="dataSource">
+         <div class="row">
+    <div class="col-md-12">
+      <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            My Datasets
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <table class="table">
+          <thead class="thead-inverse">
+          <tr>
+            <th>Dataset Name</th>
+            <th>Dataset Type</th>
+            <th>Download</th>
+            <th>Publish</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Signal_Timing_Analysis</td>
+            <td>Curated</td>
+            <td><i class="material-icons iconFont">cloud_download</i></td>
+            <td><i class="material-icons iconFont">backup</i></td>
+          </tr>
+          </tbody>
+        </table>
+      </mat-expansion-panel>
 
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
+      <mat-expansion-panel style="margin-top: 40px;">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            SDC Curated Datasets
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <table class="table">
+          <thead class="thead-inverse">
+          <tr>
+            <th>Dataset Name</th>
+            <th>Dataset Type</th>
+            <th>Description</th>
+            <th>Request Access</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-template ngFor let-dataset [ngForOf]="datasets">
+            <tr>
+              <td>{{dataset.DatasetCode}}</td>
+              <td>{{dataset.DatasetType}}</td>
+              <td>{{dataset.Description}}</td>
+              <td><button class="btn btn-primary dotBtn">Request</button></td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>
+      </mat-expansion-panel>
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-        </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="weight">
-          <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
-        </ng-container>
-
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol">
-          <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-    </mat-card>
+      <mat-expansion-panel style="margin-top: 40px;">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          SDC Published Datasets
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <table class="table">
+        <thead class="thead-inverse">
+        <tr>
+            <th>Dataset Name</th>
+            <th>Dataset Type</th>
+            <th>Description</th>
+            <th>Request Access</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-template ngFor let-datasetPublished [ngForOf]="datasetsPublished">
+          <tr>
+            <td>{{datasetPublished.DatasetCode}}</td>
+            <td>{{datasetPublished.DatasetType}}</td>
+            <td>{{datasetPublished.Description}}</td>
+            <td><button class="btn btn-primary dotBtn">Request</button></td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </table>
+    </mat-expansion-panel>
+    </div>
   </div>
+    </mat-card>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiGatewayService} from '../../../services/apigateway.service';
+import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
 
 @Component({
   selector: 'app-workstation',
@@ -10,9 +11,10 @@ export class WorkstationComponent implements OnInit {
     selectedStack: string;
     stacks: any = [];
     streamingUrl: any;
-
     constructor(
-        private gatewayService: ApiGatewayService) { }
+        private gatewayService: ApiGatewayService,
+        private toastyService: ToastyService,
+        private toastyConfig: ToastyConfig) { }
 
     ngOnInit() {
         this.getAssociatedStacks();
@@ -26,23 +28,19 @@ export class WorkstationComponent implements OnInit {
         );
     }
 
-    launchWorkstation() {
+    launchWorkstation(stack: any) {
+        this.selectedStack = stack;
         this.gatewayService.get('streaming-url?stack_name=' + this.selectedStack).subscribe(
             (response: any) => {
+                this.toastyService.success('Successfully launch stack');
                 this.streamingUrl = response;
                 if (this.streamingUrl != null) {
                     window.open(this.streamingUrl);
                 } else {
                     console.log('Failed to launch stack!');
-                    alert('Failed to launch stack!');
+                    this.toastyService.error('Failed to launch stack');
                 }
             }
         );
     }
-
-    selectStack(stack: any) {
-        this.selectedStack = stack;
-    }
-
-
 }

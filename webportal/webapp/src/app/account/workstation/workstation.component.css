@@ -9,3 +9,10 @@
 .selected-row {
     background-color: #8a878770;
 }
+
+.dotBtn {
+    color: #fff;
+    background-color: #2279a6 !important;
+    border-color: #288dc1 !important;
+    width: 60%;
+}

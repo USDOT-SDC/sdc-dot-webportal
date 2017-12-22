@@ -10,7 +10,7 @@ import 'rxjs/add/observable/throw';
 export class ApiGatewayService {
 
     protected options: RequestOptions;
-    private static _API_ENDPOINT = "" // AWS API gateway base endpoint
+    private static _API_ENDPOINT = ''; // AWS API gateway base endpoint
 
     apiResponse: any;
     extractData: any;
@@ -29,10 +29,10 @@ export class ApiGatewayService {
             try {
                 return res.json();
             } catch (e) {
-                console.log("Response is not a JSON")
+                console.log("Response is not a JSON");
                 return res.text().toString();
             }
-        }
+        };
     }
 
     // Handle error
@@ -62,7 +62,7 @@ export class ApiGatewayService {
 
     // Set required headers on the request
     setRequestHeaders() {
-        let authToken = this.cognitoService.getIdToken()
+        let authToken = this.cognitoService.getIdToken();
         const headers = new Headers({
             'Content-Type': 'application/json',
             'Authorization': " " + authToken,
@@ -73,10 +73,17 @@ export class ApiGatewayService {
 
     // HTTP GET method invocation
     get(url: string) {
-        this.setRequestHeaders()
+        this.setRequestHeaders();
         return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
             .map(this.extractData)
             .catch(this.handleError);
     }
 
+
+    getDatasets(url: string) {
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
 }
