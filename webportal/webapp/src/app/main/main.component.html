@@ -4,25 +4,25 @@
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header col-md-4">
         <a class="brand-name" style="width: 15%;float: left;margin: 5px 0;">
-          <img style="height: 50px;" class="img-responsive2" src="../assets/images/dot-logo.svg" alt="Logo">
+          <img style="margin-top: 8px;" class="img-responsive2" src="../assets/images/dot-logo-white.png" alt="Logo">
         </a>
-        <div style=" float: left;width: 85%;padding: 10px 20px;">
-          <span>U.S. Department of Transportation</span><br/>
-          <span style="font-weight: 700;">Secure Data Commons Platform</span>
+        <div style=" float: left;width: 85%;padding: 10px 0px;margin-left: -15px">
+          <span style="font-weight: 700;">Secure Data Commons Platform</span><br/>
+          <span style="font-size: 12px;">U.S. Department of Transportation</span>
         </div>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="col-md-8" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" style="font-size: 11px">
           <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-            <a class="nav-link" [routerLink]="['/about']">About</a>
+            <a class="nav-link" [routerLink]="['/about']">ABOUT &emsp; &nbsp;|</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['active']">
-            <a class="nav-link" [routerLink]="['/home']">Datasets</a>
+            <a class="nav-link" [routerLink]="['/home']">DATASETS &emsp; &nbsp;|</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['active']">
-            <a class="nav-link" [routerLink]="['/register']">Register / Login</a>
+            <a class="nav-link" [routerLink]="['/register']">REGISTER / LOGIN</a>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->

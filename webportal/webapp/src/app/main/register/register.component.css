@@ -82,7 +82,8 @@
 }
 
 .actionBtn {
-    background-color: #5eb8ef !important;
-    border-color: #5eb8ef !important;
+    color: #fff;
+    background-color: #2279a6 !important;
+    border-color: #288dc1 !important;
     width: 25%;
 }
