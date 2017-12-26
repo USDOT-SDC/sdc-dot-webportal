@@ -18,7 +18,8 @@ import { CognitoService } from '../services/cognito.service';
 import { ApiGatewayService } from '../services/apigateway.service';
 import { WorkstationComponent } from './account/workstation/workstation.component';
 import { RegisterComponent } from './main/register/register.component';
-import {ToastyModule} from 'ng2-toasty';
+import { ToastyModule } from 'ng2-toasty';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {ToastyModule} from 'ng2-toasty';
     MatIconModule,
     MatTableModule,
     MatExpansionModule,
+    MatSnackBarModule,
     // MatAccordion,
     ToastyModule.forRoot(),
   ],

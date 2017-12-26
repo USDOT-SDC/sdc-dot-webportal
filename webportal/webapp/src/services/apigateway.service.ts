@@ -29,7 +29,7 @@ export class ApiGatewayService {
             try {
                 return res.json();
             } catch (e) {
-                console.log("Response is not a JSON");
+                console.log('Response is not a JSON');
                 return res.text().toString();
             }
         };
@@ -57,7 +57,7 @@ export class ApiGatewayService {
             error.statusText = message;
             error.message = message;
             return Observable.throw(error);
-        }
+        };
     }
 
     // Set required headers on the request
@@ -81,6 +81,13 @@ export class ApiGatewayService {
 
 
     getDatasets(url: string) {
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    sendRequestMail(url: string) {
         this.setRequestHeaders();
         return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
             .map(this.extractData)

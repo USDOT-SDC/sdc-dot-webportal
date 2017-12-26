@@ -49,7 +49,7 @@
               <td>{{dataset.DatasetCode}}</td>
               <td>{{dataset.DatasetType}}</td>
               <td>{{dataset.Description}}</td>
-              <td><button class="btn btn-primary dotBtn">Request</button></td>
+              <td><button class="btn btn-primary dotBtn" (click)="requestMail(dataset.BucketName)">Request</button></td>
             </tr>
           </ng-template>
           </tbody>
