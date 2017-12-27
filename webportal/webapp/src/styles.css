@@ -22,11 +22,35 @@ body { padding-top: 70px; }
     background-color: rgb(21, 35, 80) !important;
     font-weight: 700 !important;
 }
-.container {
-    padding-top: 25px;
-}
+/*.container {*/
+    /*padding-top: 25px;*/
+/*}*/
 .iconFont {
     color: #337ab7;
     margin-left: 15px;
     cursor: pointer;
+}
+
+#footerInfo {
+    background-color: #2E5B7A;
+    text-align: center;
+    color: white;
+    height: 160px;
+}
+
+.footerLogo {
+    display: inline;
+    font-size: 50px;
+    text-align: center;
+}
+
+.padding-top-lg {
+    padding-top: 60px
+}
+
+.padding-top-sm {
+    padding-top: 20px;
+}
+.font-13 {
+    font-size: 13px;
 }
