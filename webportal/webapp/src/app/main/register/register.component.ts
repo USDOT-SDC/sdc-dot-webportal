@@ -15,4 +15,9 @@ export class RegisterComponent implements OnInit {
       this.cognitoService.login(false);
   }
 
+  requestForm() {
+      var mylink = document.getElementById('MyLink');
+      mylink.setAttribute('href', '../../assets/SDC_Form/SDCAccessRequestForm.docx');
+      mylink.click();
+  }
 }

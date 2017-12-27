@@ -22,9 +22,10 @@ body { padding-top: 70px; }
     background-color: rgb(21, 35, 80) !important;
     font-weight: 700 !important;
 }
-/*.container {*/
-    /*padding-top: 25px;*/
-/*}*/
+.container {
+    margin-bottom: 50px;
+    margin-top: 25px;
+}
 .iconFont {
     color: #337ab7;
     margin-left: 15px;

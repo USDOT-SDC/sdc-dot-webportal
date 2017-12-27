@@ -72,6 +72,7 @@
 .accessLink {
     font-size: 20px;
     cursor: pointer;
+    text-decoration: underline !important;
 }
 #wrapper {
     width: 100%;
