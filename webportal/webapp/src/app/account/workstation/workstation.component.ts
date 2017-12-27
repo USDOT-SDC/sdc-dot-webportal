@@ -23,7 +23,8 @@ export class WorkstationComponent implements OnInit {
     getAssociatedStacks() {
         this.gatewayService.get('stacks').subscribe(
             (response: any) => {
-                this.stacks = response;
+                this.stacks = response.mappings;
+                console.log(this.stacks);
             }
         );
     }
