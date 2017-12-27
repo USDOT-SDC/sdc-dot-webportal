@@ -11,33 +11,36 @@ import { MatSnackBar } from '@angular/material';
 export class DatasetsComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService,
                 public snackBar: MatSnackBar) {}
-    datasets: any = [];
-    datasetsPublished = [{
-            'DatasetType': 'Published',
-            'DatasetCode': 'WAZE',
-            'Description': 'Contains curated waze data',
-            'BucketName': 'dev-dot-sdc-curated-911061262852-us-east-1'
-        } , {
-            'DatasetType': 'Published',
-            'DatasetCode': 'Here',
-            'Description': 'Contains curated waze data',
-            'BucketName': 'dev-dot-sdc-curated-911061262852-us-east-1'
-        } , {
-        'DatasetType': 'Published',
-            'DatasetCode': 'Speed',
-            'Description': 'Contains curated waze data',
-            'BucketName': 'dev-dot-sdc-curated-911061262852-us-east-1'
-        } ,
-    ];
+    curatedDatasets: any = [];
+    myDatasets: any = [];
+    publishedDatasets = [];
 
     ngOnInit() {
-        this.getDatasets();
+        this.getCuratedDatasets();
+        this.getMyDatasetsList();
+        this.getPublishedDatasets();
     }
 
-    getDatasets() {
-        this.gatewayService.getDatasets('datasets?datasetcode=' + 'WAZE' + '&datasettype=' + 'Curated').subscribe(
+    getCuratedDatasets() {
+        this.gatewayService.getCuratedDatasets('datasets?datasetcode=' + 'WAZE' + '&datasettype=' + 'Curated').subscribe(
             (response: any) => {
-                this.datasets.push(response);
+                this.curatedDatasets.push(response);
+            }
+        );
+    }
+
+    getMyDatasetsList() {
+        this.gatewayService.getMyDatasetsList('my_datasets').subscribe(
+            (response: any) => {
+                this.myDatasets = response;
+            }
+        );
+    }
+
+    getPublishedDatasets() {
+        this.gatewayService.getPublishedDatasets('datasets?datasetcode=' + 'WAZE' + '&datasettype=' + 'Published').subscribe(
+            (response: any) => {
+                this.publishedDatasets.push(response);
             }
         );
     }

@@ -2,6 +2,7 @@
     <mat-card>
          <div class="row">
     <div class="col-md-12">
+      <!--My Datasets table-->
       <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -12,22 +13,23 @@
           <thead class="thead-inverse">
           <tr>
             <th>Dataset Name</th>
-            <th>Dataset Type</th>
             <th>Download</th>
             <th>Publish</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>Signal_Timing_Analysis</td>
-            <td>Curated</td>
-            <td><i class="material-icons iconFont">cloud_download</i></td>
-            <td><i class="material-icons iconFont">backup</i></td>
-          </tr>
+          <ng-template ngFor let-myDataset [ngForOf]="myDatasets">
+            <tr>
+              <td>{{myDataset}}</td>
+              <td><i class="material-icons iconFont">cloud_download</i></td>
+              <td><i class="material-icons iconFont">backup</i></td>
+            </tr>
+          </ng-template>
           </tbody>
         </table>
       </mat-expansion-panel>
 
+      <!--Curated Datasets table-->
       <mat-expansion-panel style="margin-top: 40px;">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -40,22 +42,25 @@
             <th>Dataset Name</th>
             <th>Dataset Type</th>
             <th>Description</th>
+            <th>Bucket Name</th>
             <th>Request Access</th>
           </tr>
           </thead>
           <tbody>
-          <ng-template ngFor let-dataset [ngForOf]="datasets">
+          <ng-template ngFor let-curatedDataset [ngForOf]="curatedDatasets">
             <tr>
-              <td>{{dataset.DatasetCode}}</td>
-              <td>{{dataset.DatasetType}}</td>
-              <td>{{dataset.Description}}</td>
-              <td><button class="btn btn-primary dotBtn" (click)="requestMail(dataset.BucketName)">Request</button></td>
+              <td>{{curatedDataset.DatasetCode}}</td>
+              <td>{{curatedDataset.DatasetType}}</td>
+              <td>{{curatedDataset.Description}}</td>
+              <td>{{curatedDataset.BucketName}}</td>
+              <td><button class="btn btn-primary dotBtn" (click)="requestMail(curatedDataset.BucketName)">Request</button></td>
             </tr>
           </ng-template>
           </tbody>
         </table>
       </mat-expansion-panel>
 
+      <!--Published Datasets table-->
       <mat-expansion-panel style="margin-top: 40px;">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -68,16 +73,18 @@
             <th>Dataset Name</th>
             <th>Dataset Type</th>
             <th>Description</th>
+            <th>Bucket Name</th>
             <th>Request Access</th>
         </tr>
         </thead>
         <tbody>
-        <ng-template ngFor let-datasetPublished [ngForOf]="datasetsPublished">
+        <ng-template ngFor let-publishedDataset [ngForOf]="publishedDatasets">
           <tr>
-            <td>{{datasetPublished.DatasetCode}}</td>
-            <td>{{datasetPublished.DatasetType}}</td>
-            <td>{{datasetPublished.Description}}</td>
-            <td><button class="btn btn-primary dotBtn">Request</button></td>
+            <td>{{publishedDataset.DatasetCode}}</td>
+            <td>{{publishedDataset.DatasetType}}</td>
+            <td>{{publishedDataset.Description}}</td>
+            <td>{{publishedDataset.BucketName}}</td>
+            <td><button class="btn btn-primary dotBtn" (click)="requestMail(publishedDataset.BucketName)">Request</button></td>
           </tr>
         </ng-template>
         </tbody>
