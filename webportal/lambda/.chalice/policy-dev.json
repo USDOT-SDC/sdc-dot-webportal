@@ -14,7 +14,9 @@
       "Action": [
         "dynamodb:*",
         "appstream:*",
-        "apigateway:*"
+        "apigateway:*",
+        "s3:*",
+        "ses:sendEmail"
       ],
       "Resource": "*",
       "Effect": "Allow"
