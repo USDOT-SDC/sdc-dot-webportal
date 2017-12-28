@@ -21,7 +21,11 @@ TABLENAME = 'roles-to-stack-and-fleet-mapping'
 TABLENAME_DATASET = 'AvailableDataset'
 APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
+APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
+DATA_DICT_S3_BUCKET_NAME = 'dev-dot-sdc-curated-911061262852-us-east-1'
+DATA_DICT_PATH = 'data-dictionaries'
+
 
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
@@ -39,6 +43,8 @@ def get_user_details(id_token):
         })
         roles_response=response['claims']['family_name']
         email=response['claims']['email']
+        full_username=response['claims']['cognito:username'].split('\\')[1]
+        print(full_username)
         roles_list_formatted = ast.literal_eval(json.dumps(roles_response))
         role_list= roles_list_formatted.split(",")
         
@@ -49,7 +55,7 @@ def get_user_details(id_token):
                 roles.append(r.split(":role/")[1])
 
         
-        return { 'role' : roles , 'email': email}
+        return { 'role' : roles , 'email': email, 'username': full_username }
     except BaseException as be:
         logging.exception("Error: Failed to get role from token" + str(be) )
         raise ChaliceViewError("Internal error at server side") 
@@ -58,6 +64,25 @@ def get_user_details(id_token):
 
 authorizer = CognitoUserPoolAuthorizer(
     'test_cognito', provider_arns=['arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q'])
+
+@app.route('/user', authorizer=authorizer, cors=cors_config)
+def get_user():  
+    email_id=''
+    try:
+        id_token = app.current_request.headers['authorization']
+        info_dict=get_user_details(id_token)
+        email_id=info_dict['email']
+        username=info_dict['username']       
+    except BaseException as be:
+        logging.exception("Error: Failed to get email and username from token" + str(be) )
+        raise ChaliceViewError("Internal error at server side") 
+
+               
+
+    return Response(body=info_dict,
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})              
+
 
 @app.route('/stacks', authorizer=authorizer, cors=cors_config)
 def list_stacks():  
@@ -170,6 +195,17 @@ def get_streaming_url():
     except ClientError as ce:
         logger.exception("Failed to create datasets folder of user %s" % user_id)
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
+
+    try:
+        client_s3 = boto3.client('s3')
+        response = client_s3.put_object(
+                Bucket=APPSTREAM_S3_BUCKET_NAME,
+                Body='',
+                Key=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME
+                )
+    except ClientError as ce:
+        logger.exception("Failed to create algorithm folder of user %s" % user_id)
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")        
  
     # Create the appstream url.
     try:
@@ -235,17 +271,17 @@ def get_datasets():
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})              
 
-@app.route('/access_dataset', authorizer=authorizer, cors=cors_config)
-def get_access_dataset():
+@app.route('/send_email', authorizer=authorizer, cors=cors_config)
+def send_email():
     ses_client = boto3.client('ses')
 
-    receiver = 'pratiksha.mandale@reancloud.com'
+    receiver = 'pallavi.giri@reancloud.com'
     params = app.current_request.query_params
-    if not params or "sender" not in params or "bucket_name" not in params:
-        logger.error("The query parameters 'sender' or 'bucket_name' is missing")
-        raise BadRequestError("The query parameters 'sender' or 'bucket_name' is missing")
+    if not params or "sender" not in params or "message" not in params:
+        logger.error("The query parameters 'sender' or 'message' is missing")
+        raise BadRequestError("The query parameters 'sender' or 'message' is missing")
     sender = params['sender']
-    bucket_name = params['bucket_name']
+    message = params['message']
 
     try:
         response = ses_client.send_email(
@@ -262,7 +298,7 @@ def get_access_dataset():
                 'Body': {
                     'Html': {
                         'Charset': 'UTF-8',
-                        'Data': 'Give access to User: ' + sender + ' to bucket: ' + bucket_name,
+                        'Data': message,
                     },
                     'Text': {
                         'Charset': 'UTF-8',
@@ -305,8 +341,6 @@ def get_my_datasets():
             Bucket=APPSTREAM_S3_BUCKET_NAME,
             Prefix=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME
         )
-        print(response['Contents'])
-
         total_content=response['Contents']
 
         
@@ -314,10 +348,49 @@ def get_my_datasets():
             if not c['Key'].endswith(hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME):
                 datasets_content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME)[1])
     except BaseException as ce:
-        logger.exception("Failed to create datasets folder of user %s. %s" % (user_id,ce))
+        logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
                                            
     return Response(body=list(datasets_content),
                     status_code=200,
-                    headers={'Content-Type': 'text/plain'}) 
+                    headers={'Content-Type': 'text/plain'})
 
+@app.route('/my_algorithm', authorizer=authorizer, cors=cors_config)
+def get_my_algorithm():  
+    algorithm_content = set()
+    user_id = ''
+    try:
+        id_token = app.current_request.headers['authorization']
+        info_dict=get_user_details(id_token)
+        user_id=info_dict['email']     
+    except BaseException as be:
+        logging.exception("Error: Failed to get user_id/email from token" + str(be) )
+        raise ChaliceViewError("Internal error at server side")
+
+    try:
+        hash_object_user_id = hashlib.sha256(user_id)
+        hex_dig_user_id = hash_object_user_id.hexdigest()
+    except BaseException as be:
+        logger.exception("Failed to create sha256 hash for userid: %s" % user_id)
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
+
+    try:
+        client_s3 = boto3.client('s3')
+        response = client_s3.list_objects(
+            Bucket=APPSTREAM_S3_BUCKET_NAME,
+            Prefix=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME
+        )
+        total_content=response['Contents']
+
+        
+        for c in total_content:
+            if not c['Key'].endswith(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME):
+                algorithm_content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME)[1])
+    except BaseException as ce:
+        logger.exception("Failed to list algorithm folder of user %s. %s" % (user_id,ce))
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
+                                           
+    return Response(body=list(algorithm_content),
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})                                           
+    
