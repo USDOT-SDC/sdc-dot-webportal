@@ -6,14 +6,13 @@
       <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            My Datasets
+            My Datasets / Algorithm
           </mat-panel-title>
         </mat-expansion-panel-header>
         <table class="table">
           <thead class="thead-inverse">
           <tr>
-            <th>Dataset Name</th>
-            <th>Download</th>
+            <th>Dataset / Algorithm Name</th>
             <th>Publish</th>
           </tr>
           </thead>
@@ -21,8 +20,7 @@
           <ng-template ngFor let-myDataset [ngForOf]="myDatasets">
             <tr>
               <td>{{myDataset}}</td>
-              <td><i class="material-icons iconFont">cloud_download</i></td>
-              <td><i class="material-icons iconFont">backup</i></td>
+              <td><i class="material-icons iconFont" (click)="requestMail('Dataset publish Mail')">backup</i></td>
             </tr>
           </ng-template>
           </tbody>
@@ -53,7 +51,7 @@
               <td>{{curatedDataset.DatasetType}}</td>
               <td>{{curatedDataset.Description}}</td>
               <td>{{curatedDataset.BucketName}}</td>
-              <td><button class="btn btn-primary dotBtn" (click)="requestMail(curatedDataset.BucketName)">Request</button></td>
+              <td><button class="btn btn-primary dotBtn" (click)="requestMail(curatedDataset.BucketName, 'Access Request Mail')">Request</button></td>
             </tr>
           </ng-template>
           </tbody>
@@ -84,7 +82,7 @@
             <td>{{publishedDataset.DatasetType}}</td>
             <td>{{publishedDataset.Description}}</td>
             <td>{{publishedDataset.BucketName}}</td>
-            <td><button class="btn btn-primary dotBtn" (click)="requestMail(publishedDataset.BucketName)">Request</button></td>
+            <td><button class="btn btn-primary dotBtn" (click)="requestMail(publishedDataset.BucketName, 'Access Request Mail')">Request</button></td>
           </tr>
         </ng-template>
         </tbody>

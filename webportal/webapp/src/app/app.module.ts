@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 // import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatTableModule } from '@angular/material';
-import { MatExpansionModule } from '@angular/material';
+import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
@@ -20,6 +20,7 @@ import { WorkstationComponent } from './account/workstation/workstation.componen
 import { RegisterComponent } from './main/register/register.component';
 import { ToastyModule } from 'ng2-toasty';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AccountHomeComponent,
     DatasetsComponent,
     WorkstationComponent,
-    RegisterComponent
+    RegisterComponent,
+    DialogBoxComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatTableModule,
     MatExpansionModule,
     MatSnackBarModule,
-    // MatAccordion,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatOptionModule,
     ToastyModule.forRoot(),
   ],
   exports: [BrowserModule, ToastyModule],
@@ -55,6 +61,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     CognitoService,
     ApiGatewayService
   ],
+  entryComponents: [DialogBoxComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

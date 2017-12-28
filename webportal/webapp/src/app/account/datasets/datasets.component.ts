@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { MatSnackBar } from '@angular/material';
-
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 @Component({
   selector: 'app-datasets',
   templateUrl: './datasets.component.html',
@@ -10,7 +11,8 @@ import { MatSnackBar } from '@angular/material';
 })
 export class DatasetsComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService,
-                public snackBar: MatSnackBar) {}
+                public snackBar: MatSnackBar,
+                public dialog: MatDialog) {}
     curatedDatasets: any = [];
     myDatasets: any = [];
     publishedDatasets = [];
@@ -45,14 +47,15 @@ export class DatasetsComponent implements OnInit {
         );
     }
 
-    requestMail(BucketName) {
-        this.gatewayService.sendRequestMail('access_dataset?sender=' + 'pallavi.giri@reancloud.com' + '&bucket_name=' + BucketName).subscribe(
-            (response: any) => {
-                this.snackBar.open('Your request has been sent successfully', 'close', {
-                    duration: 2000,
-                });
-                console.log('Access Request Sent Successfully');
-            }
-        );
+    requestMail(BucketName, mailType) {
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            width: '500px',
+            data: { bucketName: BucketName, mailType : mailType }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+
     }
 }

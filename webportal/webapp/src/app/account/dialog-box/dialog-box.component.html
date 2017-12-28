@@ -1,0 +1,27 @@
+<div>
+  <h4>Access Request</h4>
+  <hr>
+  <mat-dialog-content>
+    <mat-form-field style='width: 100%' *ngIf="mailType == 'Access Request Mail'">
+      <textarea matInput placeholder="Enter state list" [(ngModel)]="messageModel.stateList"></textarea>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="mailType != 'Access Request Mail'">
+      <mat-select placeholder='Type' [(ngModel)]="messageModel.type">
+        <mat-option *ngFor="let dataType of dataTypes" [value]="dataType.value">
+          {{ dataType.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="mailType != 'Access Request Mail'">
+      <input matInput placeholder="Enter file name" [(ngModel)]="messageModel.fileName" value="{{fileName}}">
+    </mat-form-field>
+
+  </mat-dialog-content>
+  <hr>
+  <mat-dialog-actions>
+    <button class="btn btn-primary dotBtn" (click)="sendMail()">SEND REQUEST</button>&nbsp;
+    <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
+  </mat-dialog-actions>
+</div>
