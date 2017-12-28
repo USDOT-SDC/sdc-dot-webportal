@@ -20,7 +20,7 @@
           <ng-template ngFor let-myDataset [ngForOf]="myDatasets">
             <tr>
               <td>{{myDataset}}</td>
-              <td><i class="material-icons iconFont" (click)="requestMail('Dataset publish Mail')">backup</i></td>
+              <td><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset)">backup</i></td>
             </tr>
           </ng-template>
           </tbody>
@@ -51,7 +51,7 @@
               <td>{{curatedDataset.DatasetType}}</td>
               <td>{{curatedDataset.Description}}</td>
               <td>{{curatedDataset.BucketName}}</td>
-              <td><button class="btn btn-primary dotBtn" (click)="requestMail(curatedDataset.BucketName, 'Access Request Mail')">Request</button></td>
+              <td><button class="btn btn-primary dotBtn" (click)="requestMail(curatedDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
             </tr>
           </ng-template>
           </tbody>
@@ -82,7 +82,7 @@
             <td>{{publishedDataset.DatasetType}}</td>
             <td>{{publishedDataset.Description}}</td>
             <td>{{publishedDataset.BucketName}}</td>
-            <td><button class="btn btn-primary dotBtn" (click)="requestMail(publishedDataset.BucketName, 'Access Request Mail')">Request</button></td>
+            <td><button class="btn btn-primary dotBtn" (click)="requestMail(publishedDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
           </tr>
         </ng-template>
         </tbody>

@@ -16,11 +16,22 @@ export class DatasetsComponent implements OnInit {
     curatedDatasets: any = [];
     myDatasets: any = [];
     publishedDatasets = [];
+    user: any;
 
     ngOnInit() {
         this.getCuratedDatasets();
         this.getMyDatasetsList();
         this.getPublishedDatasets();
+        this.getMyAlgorithmList();
+        this.getUserInfo();
+    }
+    getUserInfo() {
+        this.gatewayService.getUserInfo('user').subscribe(
+            (response: any) => {
+                this.user = response;
+                console.log('user = ' + this.user.email);
+            }
+        );
     }
 
     getCuratedDatasets() {
@@ -34,7 +45,19 @@ export class DatasetsComponent implements OnInit {
     getMyDatasetsList() {
         this.gatewayService.getMyDatasetsList('my_datasets').subscribe(
             (response: any) => {
-                this.myDatasets = response;
+                for (let i = 0; i < response.length; i++) {
+                    this.myDatasets.push(response[i]);
+                }
+            }
+        );
+    }
+
+    getMyAlgorithmList() {
+        this.gatewayService.getMyAlgorithmList('my_algorithm').subscribe(
+            (response: any) => {
+                for (let j = 0; j < response.length; j++) {
+                    this.myDatasets.push(response[j]);
+                }
             }
         );
     }
@@ -47,10 +70,10 @@ export class DatasetsComponent implements OnInit {
         );
     }
 
-    requestMail(BucketName, mailType) {
+    requestMail(BucketName, mailType, datasetName) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '500px',
-            data: { bucketName: BucketName, mailType : mailType }
+            data: { bucketName: BucketName, mailType : mailType, datasetName: datasetName }
         });
 
         dialogRef.afterClosed().subscribe(result => {

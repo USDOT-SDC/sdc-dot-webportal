@@ -6,7 +6,7 @@
       <textarea matInput placeholder="Enter state list" [(ngModel)]="messageModel.stateList"></textarea>
     </mat-form-field>
 
-    <mat-form-field style='width: 100%' *ngIf="mailType != 'Access Request Mail'">
+    <mat-form-field style='width: 100%' *ngIf="mailType == 'Dataset publish Mail'">
       <mat-select placeholder='Type' [(ngModel)]="messageModel.type">
         <mat-option *ngFor="let dataType of dataTypes" [value]="dataType.value">
           {{ dataType.viewValue }}
@@ -14,7 +14,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field style='width: 100%' *ngIf="mailType != 'Access Request Mail'">
+    <mat-form-field style='width: 100%' *ngIf="mailType == 'Dataset publish Mail'">
       <input matInput placeholder="Enter file name" [(ngModel)]="messageModel.fileName" value="{{fileName}}">
     </mat-form-field>
 

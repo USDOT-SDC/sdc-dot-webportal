@@ -12,6 +12,7 @@ export class DialogBoxComponent implements OnInit{
     fileName: string;
     mailType: string;
     message: string;
+    datasetName: string;
     dataTypes = [
         {value: 'dataset', viewValue: 'Dataset'},
         {value: 'algorithm', viewValue: 'Algorithm'},
@@ -24,7 +25,10 @@ export class DialogBoxComponent implements OnInit{
     };
     constructor(private gatewayService: ApiGatewayService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) { this.messageModel.bucketName = data.bucketName; this.mailType = data.mailType; }
+        @Inject(MAT_DIALOG_DATA) public data: any) {    this.messageModel.bucketName = data.bucketName;
+                                                        this.mailType = data.mailType;
+                                                        this.datasetName = data.datasetName;
+                                                    }
     onNoClick(): void {
         this.dialogRef.close();
     }
@@ -39,8 +43,8 @@ export class DialogBoxComponent implements OnInit{
             this.message = 'This mail is regarding Dataset Access Request : Bucket Name = ' + this.messageModel.bucketName +
                 ', State List = ' + this.messageModel.stateList + '.';
         } else {
-            this.message = 'This mail is regarding Dataset publish request : File Name = ' + this.messageModel.fileName +
-                            ', Type = ' + this.messageModel.type + '.';
+            this.message = 'This mail is regarding Dataset publish request : Dataset / Algorithm Name = ' + this.datasetName +
+                            ', File Name = ' + this.messageModel.fileName + ', Type = ' + this.messageModel.type + '.';
         }
         this.gatewayService.sendRequestMail('send_email?sender=' + 'pallavi.giri@reancloud.com' + '&message=' + this.message).subscribe(
             (response: any) => {

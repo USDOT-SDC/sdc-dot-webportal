@@ -101,7 +101,21 @@ export class ApiGatewayService {
             .catch(this.handleError);
     }
 
+    getMyAlgorithmList(url: string) {
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
     sendRequestMail(url: string) {
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    getUserInfo(url: string) {
         this.setRequestHeaders();
         return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
             .map(this.extractData)
