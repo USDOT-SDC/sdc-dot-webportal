@@ -9,7 +9,8 @@
                 My Datasets / Algorithm
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <table class="table">
+              <div *ngIf="!myDatasets">No Data Available</div>
+            <table class="table" *ngIf="myDatasets">
               <thead class="thead-inverse">
               <tr>
                 <th>Dataset / Algorithm Name</th>
@@ -61,7 +62,7 @@
         <!--data dictionary card-->
         <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 350px">
             <mat-card-title> {{selectedsdcDataset.DatasetCode}} {{selectedsdcDataset.DatasetType}} Data Dictionary</mat-card-title><hr>
-            <mat-card-content style="max-height: 264px;overflow: scroll">
+            <mat-card-content style="max-height: 250px;overflow: scroll">
                 <markdown [data]="dictionary"></markdown>
             </mat-card-content>
         </mat-card>

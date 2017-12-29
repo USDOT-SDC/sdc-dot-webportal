@@ -39,6 +39,14 @@ export class WorkstationComponent implements OnInit {
 
     }
 
+    instanceAction(action) {
+        this.gatewayService.get('instance?instance_id=' + this.instanceId + '&action=' + action).subscribe(
+            (response: any) => {
+                console.log(response);
+            }
+        );
+    }
+
     launchWorkstation(stack: any) {
         this.selectedStack = stack.stack_name;
         var fleetName = stack.fleet_name;
