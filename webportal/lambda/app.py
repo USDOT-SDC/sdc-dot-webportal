@@ -294,8 +294,48 @@ def get_instance_status():
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
 
+@app.route('/instance', authorizer=authorizer, cors=cors_config)
+def perform_instance_action():  
+    params = app.current_request.query_params
+    if not params or "instance_id" not in params:
+        logger.error("The query parameters 'instance_id' is missing")
+        raise BadRequestError("The query parameters 'instance_id' is missing")
+
+    if not params or "action" not in params:
+        logger.error("The query parameters 'action' is missing")
+        raise BadRequestError("The query parameters 'action' is missing")
+
+    if params['action'] == 'run':
+        try:
+            client_ec2 = boto3.client('ec2')
+            response = client_ec2.start_instances(
+                InstanceIds=[
+                    params['instance_id'],
+                ]
+            )
+        except BaseException as be:
+            logging.exception("Error: Failed to start instance" + str(be) )
+            raise ChaliceViewError("Internal error at server side")
+    else:
+        try:
+            client_ec2 = boto3.client('ec2')
+            response = client_ec2.stop_instances(
+                InstanceIds=[
+                    params['instance_id'],
+                ],
+                Force=True
+            )
+        except BaseException as be:
+            logging.exception("Error: Failed to stop instance" + str(be) )
+            raise ChaliceViewError("Internal error at server side")    
+                                           
+    return Response(body={'Status': response['InstanceStatuses'][0]['InstanceState']['Name']},
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+
+
 @app.route('/dataset_dictionary', authorizer=authorizer, cors=cors_config)
-def get_instance_status():  
+def get_dataset_dictionary():  
     params = app.current_request.query_params
     if not params or "datasetcode" not in params or "datasettype" not in params:
         logger.error("The query parameters 'datasetcode' or 'datasettype' is missing")
