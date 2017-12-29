@@ -17,14 +17,14 @@ cors_config = CORSConfig(
 )
 
 
-TABLENAME = 'roles-to-stack-and-fleet-mapping'
+TABLENAME = 'dev-UserStacksTable'
 TABLENAME_DATASET = 'AvailableDataset'
 APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
 DATA_DICT_S3_BUCKET_NAME = 'dev-dot-sdc-curated-911061262852-us-east-1'
-DATA_DICT_PATH = 'data-dictionaries'
+DATA_DICT_PATH = 'data-dictionaries/'
 
 
 app = Chalice(app_name='webportal')
@@ -60,129 +60,77 @@ def get_user_details(id_token):
         logging.exception("Error: Failed to get role from token" + str(be) )
         raise ChaliceViewError("Internal error at server side") 
 
+def get_datasets():  
+
+    table = dynamodb_client.Table(TABLENAME_DATASET)
+
+    response = table.scan(TableName=TABLENAME_DATASET)
+    print(response)                                        
+
+    return { 'datasets' : response }
 
 
 authorizer = CognitoUserPoolAuthorizer(
     'test_cognito', provider_arns=['arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q'])
 
 @app.route('/user', authorizer=authorizer, cors=cors_config)
-def get_user():  
-    email_id=''
-    try:
-        id_token = app.current_request.headers['authorization']
-        info_dict=get_user_details(id_token)
-        email_id=info_dict['email']
-        username=info_dict['username']       
-    except BaseException as be:
-        logging.exception("Error: Failed to get email and username from token" + str(be) )
-        raise ChaliceViewError("Internal error at server side") 
+def list_stacks():
 
-               
-
-    return Response(body=info_dict,
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})              
-
-
-@app.route('/stacks', authorizer=authorizer, cors=cors_config)
-def list_stacks():  
+    user_info={} 
     roles=[]
     try:
         id_token = app.current_request.headers['authorization']
         info_dict=get_user_details(id_token)
-        roles=info_dict['role']       
+        user_info['role']=info_dict['role']
+        user_info['email']=info_dict['email']
+        user_info['username']=info_dict['username']
+        user_info['datasets']=get_datasets()['datasets']['Items']
+        
+      
     except BaseException as be:
         logging.exception("Error: Failed to get role from token" + str(be) )
         raise ChaliceViewError("Internal error at server side") 
-
-
     table = dynamodb_client.Table(TABLENAME)
 
     # stack_names=set()
         
     # Extract the stack names associated with the roles passed        
-    for role in roles:
-        # Get the item with role name
-        try:
-            response_table = table.get_item(Key={'role': role })
-        except BaseException as be:
-            logging.exception("Error: Could not perform get_item() on requested table.Verify requested table exist." + str(be) )
-            raise ChaliceViewError("Internal error at server side")                
 
-        # Convert unicode to ascii
-        try:                
-            formatted_item=ast.literal_eval(json.dumps(response_table['Item']))
-        except KeyError as ke:
-            logging.exception("Error: Could not fetch the item for role: " + role)
-            raise NotFoundError("Unknown role '%s'" % (role))                            
+    # Get the item with role name
+    try:
+        response_table = table.get_item(Key={'username': user_info['username'] })
+    except BaseException as be:
+        logging.exception("Error: Could not perform get_item() on requested table.Verify requested table exist." + str(be) )
+        raise ChaliceViewError("Internal error at server side")                
 
-        # List the stack name
-        # try:
-        #     for i in formatted_item['mappings']:
-        #         stack_names.add(i['stack_name'])
-        # except BaseException as be:
-        #     logging.exception("Error:Could not fetch the stacknames for role." + str(be) )
-        #     raise ChaliceViewError("Internal error at server side")                
+    # Convert unicode to ascii
+    try:                
+        user_info['stacks']=ast.literal_eval(json.dumps(response_table['Item']['stacks']))
+    except KeyError as ke:
+        logging.exception("Error: Could not fetch the item for user: " + user_info['username'])
+        raise NotFoundError("Unknown role '%s'" % (user_info['userinfo']))
+    except BaseException as be:
+        logging.exception("Error: Could not perform get_item() on requested table.Verify requested table exist." + str(be) )
+        raise ChaliceViewError("Internal error at server side")                           
 
-    return Response(body=formatted_item,
+    return Response(body=user_info,
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})              
 
 
-@app.route('/streaming-url', authorizer=authorizer, cors=cors_config)
+@app.route('/streamingurl', authorizer=authorizer, cors=cors_config)
 def get_streaming_url():          
     params = app.current_request.query_params
-    if not params or "stack_name" not in params:
-        logger.error("The query parameters 'stack_name' is missing")
-        raise BadRequestError("The query parameters 'stack_name' is missing")
-    stack_name = params['stack_name']
-    table = dynamodb_client.Table(TABLENAME)
+    if not params or "stack_name" not in params or "fleet_name" not in params or "username" not in params :
+        logger.error("The query parameters 'stack_name' or 'fleet_name' or 'username' is missing")
+        raise BadRequestError("The query parameters 'stack_name' or 'fleet_name' or 'username' is missing")
 
-    # The following values should be retrieved from Cognito authorizer.
-    # user_id = "deepak@sdc.usdot"
-    # roles=['DOT-TrustedPartners']
-    try:
-        id_token = app.current_request.headers['authorization']
-        info_dict=get_user_details(id_token)
-        roles=info_dict['role'] 
-        user_id=info_dict['email']     
-    except BaseException as be:
-        logging.exception("Error: Failed to get role from token" + str(be) )
-        raise ChaliceViewError("Internal error at server side")    
-
-    # Check if the user has access to the stack.
-    found = None
-
-    for role in roles:
-        try:
-            response = table.get_item(Key={'role': role})
-            if not 'Item' in response:
-                logging.exception("Error: Could not fetch the item for role: " + role)
-                raise ChaliceViewError("Unknown role '%s'" % (role))
-            item = response['Item']
-            formatted_item = ast.literal_eval(json.dumps(item))
-            for mapping in formatted_item['mappings']:
-                if mapping['stack_name'] == stack_name:
-                    found = mapping
-                    break
-            if found:
-                break
-        except KeyError as ke:
-            logging.exception("Error: Could not fetch the item for role: " + role)
-            raise NotFoundError("Unknown role '%s'" % (role))
-        except ClientError as ce:
-            logger.exception("Failed to fetch mappings for role: %s".format(role))
-            raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-
-    if not found:
-        logger.error("Attempt to access forbidden stack with name %s" % stack_name)
-        raise ForbiddenError("You do not have access to stack %s" % stack_name)
 
     try:
-        hash_object_user_id = hashlib.sha256(user_id)
+        hash_object_user_id = hashlib.sha256(params['username'])
         hex_dig_user_id = hash_object_user_id.hexdigest()
     except BaseException as be:
-        logger.exception("Failed to create sha256 hash for userid: %s" % user_id)
+        logger.exception("Failed to create sha256 hash for userid: %s" % params['username'])
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
     try:
@@ -193,7 +141,7 @@ def get_streaming_url():
                 Key=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME
                 )
     except ClientError as ce:
-        logger.exception("Failed to create datasets folder of user %s" % user_id)
+        logger.exception("Failed to create datasets folder of user %s" % params['username'])
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
     try:
@@ -204,13 +152,13 @@ def get_streaming_url():
                 Key=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME
                 )
     except ClientError as ce:
-        logger.exception("Failed to create algorithm folder of user %s" % user_id)
+        logger.exception("Failed to create algorithm folder of user %s" % params['username'])
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")        
  
     # Create the appstream url.
     try:
-        response = appstream_client.create_streaming_url(FleetName=found['fleet_name'], StackName=found['stack_name'],
-                                                         UserId=user_id)
+        response = appstream_client.create_streaming_url(FleetName=params['fleet_name'], StackName=params['stack_name'],
+                                                         UserId=params['username'])
         #return {'url': response['StreamingURL']}
 
         return Response(body=response['StreamingURL'],
@@ -222,54 +170,7 @@ def get_streaming_url():
     except ClientError as ce:
         logger.exception("Creation of streaming url failed for [user=%s, Fleet=%s, stack=%s]" % (
         user_id, found['fleet_name'], found['stack_name']))
-        raise ChaliceViewError("Error creating streaming url")
-
-
-        # {
-        #   "role1": [
-        #     {
-        #       "stack_name": "dot-sdc-default-tools-stack",
-        #       "fleet_name": "dot-sdc-default-tools-fleet"
-        #     },
-        #     {
-        #       "stack_name": "dot-sdc-esri-stack",
-        #       "fleet_name": "dot-sdc-esri-fleet"
-        #     }
-        #   ]
-        # }
-        # See the README documentation for more examples.
-        #
-
-@app.route('/datasets', authorizer=authorizer, cors=cors_config)
-def get_datasets():  
-
-    params = app.current_request.query_params
-    if not params or "datasetcode" not in params or "datasettype" not in params:
-        logger.error("The query parameters 'datasetcode' or 'datasettype' is missing")
-        raise BadRequestError("The query parameters 'datasetcode' or 'datasettype' is missing")
-    datasetcode = params['datasetcode']
-    datasettype = params['datasettype']
-
-    table = dynamodb_client.Table(TABLENAME_DATASET)
-        
-
-    # Get the item with role name
-    try:
-        response_table = table.get_item(Key={'DatasetCode': datasetcode, 'DatasetType': datasettype })
-    except BaseException as be:
-        logging.exception("Error: Could not perform get_item() on requested table.Verify requested table exist." + str(be) )
-        raise ChaliceViewError("Internal error at server side")                
-
-    # Convert unicode to ascii
-    try:
-        formatted_item=ast.literal_eval(json.dumps(response_table['Item']))
-    except KeyError as ke:
-        logging.exception("Error: Could not fetch the item for DatasetCode: " + datasetcode + " and DatasetType: "+ datasettype)
-        raise NotFoundError("Unknown parameter '%s' and '%s'" % (datasetcode,datasettype))                                           
-
-    return Response(body=formatted_item,
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})              
+        raise ChaliceViewError("Error creating streaming url")             
 
 @app.route('/send_email', authorizer=authorizer, cors=cors_config)
 def send_email():
@@ -316,14 +217,14 @@ def send_email():
         logging.exception("Failed to send email "+ str(ke) )
         raise NotFoundError("Failed to send email")
 
-@app.route('/my_datasets', authorizer=authorizer, cors=cors_config)
+@app.route('/user_data', authorizer=authorizer, cors=cors_config)
 def get_my_datasets():  
-    datasets_content = set()
+    content = set()
     user_id = ''
     try:
         id_token = app.current_request.headers['authorization']
         info_dict=get_user_details(id_token)
-        user_id=info_dict['email']     
+        user_id=info_dict['username']     
     except BaseException as be:
         logging.exception("Error: Failed to get user_id/email from token" + str(be) )
         raise ChaliceViewError("Internal error at server side")
@@ -346,32 +247,9 @@ def get_my_datasets():
         
         for c in total_content:
             if not c['Key'].endswith(hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME):
-                datasets_content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME)[1])
+                content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME)[1])
     except BaseException as ce:
         logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
-        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-                                           
-    return Response(body=list(datasets_content),
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})
-
-@app.route('/my_algorithm', authorizer=authorizer, cors=cors_config)
-def get_my_algorithm():  
-    algorithm_content = set()
-    user_id = ''
-    try:
-        id_token = app.current_request.headers['authorization']
-        info_dict=get_user_details(id_token)
-        user_id=info_dict['email']     
-    except BaseException as be:
-        logging.exception("Error: Failed to get user_id/email from token" + str(be) )
-        raise ChaliceViewError("Internal error at server side")
-
-    try:
-        hash_object_user_id = hashlib.sha256(user_id)
-        hex_dig_user_id = hash_object_user_id.hexdigest()
-    except BaseException as be:
-        logger.exception("Failed to create sha256 hash for userid: %s" % user_id)
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
     try:
@@ -385,12 +263,56 @@ def get_my_algorithm():
         
         for c in total_content:
             if not c['Key'].endswith(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME):
-                algorithm_content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME)[1])
+                content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME)[1])
     except BaseException as ce:
         logger.exception("Failed to list algorithm folder of user %s. %s" % (user_id,ce))
-        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")        
                                            
-    return Response(body=list(algorithm_content),
+    return Response(body=list(content),
                     status_code=200,
-                    headers={'Content-Type': 'text/plain'})                                           
+                    headers={'Content-Type': 'text/plain'})
+
+@app.route('/instancestatus', authorizer=authorizer, cors=cors_config)
+def get_instance_status():  
+    params = app.current_request.query_params
+    if not params or "instance_id" not in params:
+        logger.error("The query parameters 'instance_id' is missing")
+        raise BadRequestError("The query parameters 'instance_id' is missing")
+
+    try:
+        client_ec2 = boto3.client('ec2')
+        response = client_ec2.describe_instance_status(
+            InstanceIds=[
+                params['instance_id'],
+            ]
+        )
+    except BaseException as be:
+        logging.exception("Error: Failed to get info about instance" + str(be) )
+        raise ChaliceViewError("Internal error at server side")    
+                                           
+    return Response(body={'Status': response['InstanceStatuses'][0]['InstanceState']['Name']},
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+
+@app.route('/dataset_dictionary', authorizer=authorizer, cors=cors_config)
+def get_instance_status():  
+    params = app.current_request.query_params
+    if not params or "datasetcode" not in params or "datasettype" not in params:
+        logger.error("The query parameters 'datasetcode' or 'datasettype' is missing")
+        raise BadRequestError("The query parameters 'datasetcode' or 'datasettype' is missing")
+
+    try:
+        client_s3 = boto3.client('s3')
+        response = client_s3.get_object(
+        Bucket=DATA_DICT_S3_BUCKET_NAME,
+        Key=DATA_DICT_PATH+params['datasetcode']+'-'+params['datasettype']+'-dictionary.README.md'
+        )
+        data = response['Body'].read()
+    except BaseException as be:
+        logging.exception("Error: Failed to get data from s3 file" + str(be) )
+        raise ChaliceViewError("Internal error at server side")    
+                                           
+    return Response(body={'data': data },
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})                                                               
     

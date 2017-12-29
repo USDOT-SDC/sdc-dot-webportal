@@ -16,7 +16,8 @@
         "appstream:*",
         "apigateway:*",
         "s3:*",
-        "ses:sendEmail"
+        "ses:sendEmail",
+        "ec2:*"
       ],
       "Resource": "*",
       "Effect": "Allow"
