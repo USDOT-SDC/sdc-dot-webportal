@@ -6,12 +6,12 @@
     margin-top: -20px;
 }
 .card {
-    height: 180px;
+    height: 220px;
     background-color: #f8f8f8;
     margin-bottom: 10px;
 }
 .cardContent {
-    height: 80px;
+    height: 120px;
 }
 .cardTitle {
     margin-top: -15px !important;
