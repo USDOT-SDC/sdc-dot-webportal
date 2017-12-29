@@ -31,7 +31,7 @@
       <mat-expansion-panel style="margin-top: 40px;">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            SDC Curated Datasets
+            SDC Datasets
           </mat-panel-title>
         </mat-expansion-panel-header>
         <table class="table">
@@ -45,13 +45,13 @@
           </tr>
           </thead>
           <tbody>
-          <ng-template ngFor let-curatedDataset [ngForOf]="curatedDatasets">
+          <ng-template ngFor let-sdcDataset [ngForOf]="sdcDatasets">
             <tr>
-              <td>{{curatedDataset.DatasetCode}}</td>
-              <td>{{curatedDataset.DatasetType}}</td>
-              <td>{{curatedDataset.Description}}</td>
-              <td>{{curatedDataset.BucketName}}</td>
-              <td><button class="btn btn-primary dotBtn" (click)="requestMail(curatedDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
+              <td>{{sdcDataset.DatasetCode}}</td>
+              <td>{{sdcDataset.DatasetType}}</td>
+              <td>{{sdcDataset.Description}}</td>
+              <td>{{sdcDataset.BucketName}}</td>
+              <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
             </tr>
           </ng-template>
           </tbody>
@@ -59,7 +59,7 @@
       </mat-expansion-panel>
 
       <!--Published Datasets table-->
-      <mat-expansion-panel style="margin-top: 40px;">
+      <!-- <mat-expansion-panel style="margin-top: 40px;">
       <mat-expansion-panel-header>
         <mat-panel-title>
           SDC Published Datasets
@@ -87,7 +87,7 @@
         </ng-template>
         </tbody>
       </table>
-    </mat-expansion-panel>
+    </mat-expansion-panel> -->
     </div>
   </div>
     </mat-card>

@@ -11,22 +11,28 @@ export class WorkstationComponent implements OnInit {
     selectedStack: string;
     stacks: any = [];
     streamingUrl: any;
+    instanceId: any;
+    instanceState: any;
+
     constructor(
         private gatewayService: ApiGatewayService,
         private toastyService: ToastyService,
         private toastyConfig: ToastyConfig) { }
 
     ngOnInit() {
-        this.getAssociatedStacks();
+        this.instanceId = sessionStorage.getItem('instance-id')
+        if(this.instanceId) {
+            this.getInstanceState()
+        }
     }
 
-    getAssociatedStacks() {
-        this.gatewayService.get('stacks').subscribe(
+    getInstanceState() {
+        this.gatewayService.get('instancestatus?instance_id=' + this.instanceId).subscribe(
             (response: any) => {
-                this.stacks = response.mappings;
-                console.log(this.stacks);
+                this.instanceState = response
             }
-        );
+        )
+
     }
 
     launchWorkstation(stack: any) {

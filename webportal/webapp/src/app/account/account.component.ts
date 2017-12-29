@@ -25,7 +25,14 @@ export class AccountComponent implements OnInit {
         (response: any) => {
             sessionStorage.setItem("username", response.username)
             sessionStorage.setItem("email", response.email)
-            // sessionStorage.setItem("stacks", response.stacks)
+            sessionStorage.setItem("stacks", response.stacks)
+            sessionStorage.setItem("datasets", response.datasets)
+            sessionStorage.setItem("roles", response.role)
+            for (var i=0; i<response.stacks.length; i++) {
+              if(response.stacks[i].instance_id) {
+                sessionStorage.setItem("instance-id", response.stacks[i].instance_id)
+              }
+            }
         }
     );
 }
