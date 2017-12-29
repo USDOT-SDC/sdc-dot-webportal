@@ -21,6 +21,7 @@ import { RegisterComponent } from './main/register/register.component';
 import { ToastyModule } from 'ng2-toasty';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
+import { MarkdownModule } from 'ngx-md';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
     MatDialogModule,
     MatSelectModule,
     MatOptionModule,
+    MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
   ],
   exports: [BrowserModule, ToastyModule],

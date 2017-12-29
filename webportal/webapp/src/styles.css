@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-
+@import '~prismjs/themes/prism.css';
 @import '~bootstrap/dist/css/bootstrap.css';
 body { padding-top: 70px; }
 
@@ -8,6 +8,7 @@ body { padding-top: 70px; }
 .navbar-default {
     background: rgb(21, 35, 80) !important;
     color: #f8f8f8 !important;
+    box-shadow: 0 7px 10px #777777ba;
 }
 .navbar-default .navbar-nav > li > a {
     color: #f8f8f8 !important;
@@ -37,6 +38,7 @@ body { padding-top: 70px; }
     text-align: center;
     color: white;
     height: 160px;
+    box-shadow: 0 -5px 10px #777777ba;
 }
 
 .footerLogo {

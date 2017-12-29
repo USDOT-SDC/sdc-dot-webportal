@@ -17,20 +17,22 @@ export class AccountComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getUserInfo()
+    this.getUserInfo();
   }
 
   getUserInfo() {
     this.gatewayService.getUserInfo('user').subscribe(
         (response: any) => {
-            sessionStorage.setItem("username", response.username)
-            sessionStorage.setItem("email", response.email)
-            sessionStorage.setItem("stacks", response.stacks)
-            sessionStorage.setItem("datasets", response.datasets)
-            sessionStorage.setItem("roles", response.role)
-            for (var i=0; i<response.stacks.length; i++) {
-              if(response.stacks[i].instance_id) {
-                sessionStorage.setItem("instance-id", response.stacks[i].instance_id)
+            sessionStorage.setItem('username', response.username);
+            sessionStorage.setItem('email', response.email);
+            sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
+            sessionStorage.setItem('datasets', JSON.stringify(response.datasets));
+            sessionStorage.setItem('roles', response.role);
+            console.log('stacks = ' + sessionStorage.getItem('stacks'));
+            console.log('datasets = ' + sessionStorage.getItem('datasets'));
+            for (var i = 0; i < response.stacks.length; i++) {
+              if (response.stacks[i].instance_id) {
+                sessionStorage.setItem('instance-id', response.stacks[i].instance_id);
               }
             }
         }

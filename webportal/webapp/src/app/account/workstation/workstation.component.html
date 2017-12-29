@@ -16,7 +16,7 @@
           <th>#</th>
           <th>Stack Name</th>
           <th>Applications</th>
-          <th></th>
+          <th>Action</th>
           <th></th>
         </tr>
         </thead>
@@ -27,10 +27,13 @@
             <td>{{ stack.stack_name }}</td>
             <td> {{stack.application}} </td>
             <td>
-              <button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack.stack_name)">Launch</button>
+              <div *ngIf="stack.instance_id && instanceState.Status">
+                <span *ngIf="instanceState.Status == 'running' "> Stop </span>
+                <span *ngIf="instanceState.Status != 'running' "> Run </span>
+              </div>
             </td>
             <td>
-              <button class="btn btn-primary dotBtn" [disabled]=true>Stop</button>
+              <button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack)">Launch</button>
             </td>
           </tr>
         </ng-template>

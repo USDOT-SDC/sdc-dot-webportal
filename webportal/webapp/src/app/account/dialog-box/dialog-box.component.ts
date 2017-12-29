@@ -13,6 +13,7 @@ export class DialogBoxComponent implements OnInit{
     mailType: string;
     message: string;
     datasetName: string;
+    userEmail: string;
     dataTypes = [
         {value: 'dataset', viewValue: 'Dataset'},
         {value: 'algorithm', viewValue: 'Algorithm'},
@@ -33,8 +34,7 @@ export class DialogBoxComponent implements OnInit{
         this.dialogRef.close();
     }
     ngOnInit() {
-        console.log(this.messageModel.bucketName);
-        console.log(this.mailType);
+        this.userEmail = sessionStorage.getItem('email');
     }
 
 
@@ -46,7 +46,7 @@ export class DialogBoxComponent implements OnInit{
             this.message = 'This mail is regarding Dataset publish request : Dataset / Algorithm Name = ' + this.datasetName +
                             ', File Name = ' + this.messageModel.fileName + ', Type = ' + this.messageModel.type + '.';
         }
-        this.gatewayService.sendRequestMail('send_email?sender=' + 'pallavi.giri@reancloud.com' + '&message=' + this.message).subscribe(
+        this.gatewayService.sendRequestMail('send_email?sender=' + this.userEmail + '&message=' + this.message).subscribe(
             (response: any) => {
                 this.snackBar.open('Your request has been sent successfully', 'close', {
                     duration: 2000,

@@ -20,24 +20,29 @@ export class WorkstationComponent implements OnInit {
         private toastyConfig: ToastyConfig) { }
 
     ngOnInit() {
-        this.instanceId = sessionStorage.getItem('instance-id')
-        if(this.instanceId) {
-            this.getInstanceState()
+        this.instanceId = sessionStorage.getItem('instance-id');
+        var stacksString = sessionStorage.getItem('stacks');
+        this.stacks = JSON.parse(stacksString);
+        console.log(this.stacks);
+        if (this.instanceId) {
+            this.getInstanceState();
         }
     }
 
     getInstanceState() {
         this.gatewayService.get('instancestatus?instance_id=' + this.instanceId).subscribe(
             (response: any) => {
-                this.instanceState = response
+                this.instanceState = response;
+                console.log("instanceState = " + this.instanceState);
             }
-        )
+        );
 
     }
 
     launchWorkstation(stack: any) {
-        this.selectedStack = stack;
-        this.gatewayService.get('streaming-url?stack_name=' + this.selectedStack).subscribe(
+        this.selectedStack = stack.stack_name;
+        var fleetName = stack.fleet_name;
+        this.gatewayService.get('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
             (response: any) => {
                 this.toastyService.success('Successfully launch stack');
                 this.streamingUrl = response;
@@ -50,4 +55,5 @@ export class WorkstationComponent implements OnInit {
             }
         );
     }
+
 }

@@ -1,94 +1,72 @@
 <div class="container">
     <mat-card>
-         <div class="row">
-    <div class="col-md-12">
-      <!--My Datasets table-->
-      <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            My Datasets / Algorithm
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <table class="table">
-          <thead class="thead-inverse">
-          <tr>
-            <th>Dataset / Algorithm Name</th>
-            <th>Publish</th>
-          </tr>
-          </thead>
-          <tbody>
-          <ng-template ngFor let-myDataset [ngForOf]="myDatasets">
-            <tr>
-              <td>{{myDataset}}</td>
-              <td><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset)">backup</i></td>
-            </tr>
-          </ng-template>
-          </tbody>
-        </table>
-      </mat-expansion-panel>
+     <div class="row">
+        <div class="col-md-12">
+          <!--My Datasets table-->
+          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                My Datasets / Algorithm
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table class="table">
+              <thead class="thead-inverse">
+              <tr>
+                <th>Dataset / Algorithm Name</th>
+                <th>Publish</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-template ngFor let-myDataset [ngForOf]="myDatasets">
+                <tr>
+                  <td>{{myDataset}}</td>
+                  <td><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset)">backup</i></td>
+                </tr>
+              </ng-template>
+              </tbody>
+            </table>
+          </mat-expansion-panel>
 
-      <!--Curated Datasets table-->
-      <mat-expansion-panel style="margin-top: 40px;">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            SDC Datasets
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <table class="table">
-          <thead class="thead-inverse">
-          <tr>
-            <th>Dataset Name</th>
-            <th>Dataset Type</th>
-            <th>Description</th>
-            <th>Bucket Name</th>
-            <th>Request Access</th>
-          </tr>
-          </thead>
-          <tbody>
-          <ng-template ngFor let-sdcDataset [ngForOf]="sdcDatasets">
-            <tr>
-              <td>{{sdcDataset.DatasetCode}}</td>
-              <td>{{sdcDataset.DatasetType}}</td>
-              <td>{{sdcDataset.Description}}</td>
-              <td>{{sdcDataset.BucketName}}</td>
-              <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
-            </tr>
-          </ng-template>
-          </tbody>
-        </table>
-      </mat-expansion-panel>
+          <!--Curated Datasets table-->
+          <mat-expansion-panel style="margin-top: 40px;">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                SDC Datasets
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table class="table">
+              <thead class="thead-inverse">
+              <tr>
+                <th>Dataset Name</th>
+                <th>Dataset Type</th>
+                <th>Description</th>
+                <th>Bucket Name</th>
+                <th>Request Access</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-template ngFor let-sdcDataset [ngForOf]="sdcDatasets">
+                <tr style="cursor: pointer" (click)="selectsdcDataset(sdcDataset)" [ngClass]="{'selected_row' : selectedsdcDataset == sdcDataset}">
+                  <td>{{sdcDataset.DatasetCode}}</td>
+                  <td>{{sdcDataset.DatasetType}}</td>
+                  <td>{{sdcDataset.Description}}</td>
+                  <td>{{sdcDataset.BucketName}}</td>
+                  <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
+                </tr>
+              </ng-template>
+              </tbody>
+            </table>
+          </mat-expansion-panel>
 
-      <!--Published Datasets table-->
-      <!-- <mat-expansion-panel style="margin-top: 40px;">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          SDC Published Datasets
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <table class="table">
-        <thead class="thead-inverse">
-        <tr>
-            <th>Dataset Name</th>
-            <th>Dataset Type</th>
-            <th>Description</th>
-            <th>Bucket Name</th>
-            <th>Request Access</th>
-        </tr>
-        </thead>
-        <tbody>
-        <ng-template ngFor let-publishedDataset [ngForOf]="publishedDatasets">
-          <tr>
-            <td>{{publishedDataset.DatasetCode}}</td>
-            <td>{{publishedDataset.DatasetType}}</td>
-            <td>{{publishedDataset.Description}}</td>
-            <td>{{publishedDataset.BucketName}}</td>
-            <td><button class="btn btn-primary dotBtn" (click)="requestMail(publishedDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
-          </tr>
-        </ng-template>
-        </tbody>
-      </table>
-    </mat-expansion-panel> -->
-    </div>
-  </div>
+        <!--data dictionary card-->
+        <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 350px">
+            <mat-card-title> {{selectedsdcDataset.DatasetCode}} {{selectedsdcDataset.DatasetType}} Data Dictionary</mat-card-title><hr>
+            <mat-card-content style="max-height: 264px;overflow: scroll">
+                <markdown [data]="dictionary"></markdown>
+            </mat-card-content>
+        </mat-card>
+
+        </div>
+      </div>
     </mat-card>
 </div>

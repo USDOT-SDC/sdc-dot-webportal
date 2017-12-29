@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { MatSnackBar } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
+
 @Component({
     selector: 'app-datasets',
     templateUrl: './datasets.component.html',
@@ -16,16 +16,35 @@ export class DatasetsComponent implements OnInit {
     sdcDatasets: any = [];
     myDatasets = [];
     user: any;
+    selectedsdcDataset: any = {};
+    dictionary: string;
+    showDictionary: boolean = false;
 
     ngOnInit() {
-        this.sdcDatasets = sessionStorage.getItem('datasets')
-        this.getMyDatasetsList()
+        var sdcDatasetsString = sessionStorage.getItem('datasets');
+        this.sdcDatasets = JSON.parse(sdcDatasetsString);
+        this.getMyDatasetsList();
     }
 
     getMyDatasetsList() {
-        this.gatewayService.getMyDatasetsList('userdata').subscribe(
+        this.gatewayService.get('user_data').subscribe(
             (response: any) => {
-                this.myDatasets = response
+                this.myDatasets = response;
+            }
+        );
+    }
+
+    selectsdcDataset(dataset) {
+        this.selectedsdcDataset = dataset;
+        this.showDictionary = true;
+        this.gatewayService.get('dataset_dictionary?datasetcode=' + this.selectedsdcDataset.DatasetCode + '&datasettype=' + this.selectedsdcDataset.DatasetType).subscribe(
+            (response: any) => {
+                this.dictionary = response.data;
+            }, (error: any) => {
+                this.showDictionary = false;
+                this.snackBar.open('Data Dictionary not available', 'close', {
+                    duration: 2000,
+                });
             }
         );
     }
