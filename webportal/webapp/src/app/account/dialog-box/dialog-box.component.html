@@ -3,7 +3,7 @@
   <hr>
   <mat-dialog-content>
     <mat-form-field style='width: 100%' *ngIf="mailType == 'Access Request Mail'">
-      <textarea matInput placeholder="Enter state list" [(ngModel)]="messageModel.stateList"></textarea>
+      <textarea matInput placeholder="Enter the list of state" [(ngModel)]="messageModel.stateList"></textarea>
     </mat-form-field>
 
     <mat-form-field style='width: 100%' *ngIf="mailType == 'Dataset publish Mail'">

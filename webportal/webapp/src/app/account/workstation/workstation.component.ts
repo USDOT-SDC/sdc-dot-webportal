@@ -50,7 +50,7 @@ export class WorkstationComponent implements OnInit {
     launchWorkstation(stack: any) {
         this.selectedStack = stack.stack_name;
         var fleetName = stack.fleet_name;
-        this.gatewayService.get('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
+        this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
             (response: any) => {
                 this.toastyService.success('Successfully launch stack');
                 this.streamingUrl = response;

@@ -81,7 +81,7 @@ export class ApiGatewayService {
 
     sendRequestMail(url: string) {
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -89,6 +89,13 @@ export class ApiGatewayService {
     getUserInfo(url: string) {
         this.setRequestHeaders();
         return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    post(url: string){
+        this.setRequestHeaders();
+        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
             .map(this.extractData)
             .catch(this.handleError);
     }

@@ -8,12 +8,13 @@ import {message} from 'aws-sdk/clients/sns';
   templateUrl: './dialog-box.component.html',
   styleUrls: ['./dialog-box.component.css']
 })
-export class DialogBoxComponent implements OnInit{
+export class DialogBoxComponent implements OnInit {
     fileName: string;
     mailType: string;
     message: string;
     datasetName: string;
     userEmail: string;
+    userName: string;
     dataTypes = [
         {value: 'dataset', viewValue: 'Dataset'},
         {value: 'algorithm', viewValue: 'Algorithm'},
@@ -35,16 +36,31 @@ export class DialogBoxComponent implements OnInit{
     }
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
+        this.userName = sessionStorage.getItem('username');
+
     }
 
 
     sendMail() {
         if (this.mailType === 'Access Request Mail') {
-            this.message = 'This mail is regarding Dataset Access Request : Bucket Name = ' + this.messageModel.bucketName +
-                ', State List = ' + this.messageModel.stateList + '.';
+            this.message =  '<div>' +
+                '    Hello,<br><br>' +
+                '    Please approve the request for Dataset Access.<br>' +
+                '    <ul>' +
+                '        <li>Bucket Name = ' + this.messageModel.bucketName + '</li>' +
+                '        <li>State List = ' + this.messageModel.stateList + '</li>' +
+                '    </ul>' +
+                '    Thanks, <br>' + this.userName +
+                '</div>';
         } else {
-            this.message = 'This mail is regarding Dataset publish request : Dataset / Algorithm Name = ' + this.datasetName +
-                            ', File Name = ' + this.messageModel.fileName + ', Type = ' + this.messageModel.type + '.';
+            this.message = '<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>' +
+                '    <ul>' +
+                '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
+                '        <li>File Name = ' + this.messageModel.fileName + '</li>' +
+                '        <li>Type = ' + this.messageModel.type + '</li>' +
+                '    </ul>' +
+                '    Thanks, <br>' + this.userName +
+                '</div>';
         }
         this.gatewayService.sendRequestMail('send_email?sender=' + this.userEmail + '&message=' + this.message).subscribe(
             (response: any) => {
