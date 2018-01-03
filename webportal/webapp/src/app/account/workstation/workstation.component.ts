@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiGatewayService} from '../../../services/apigateway.service';
 import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-workstation',
@@ -16,8 +17,7 @@ export class WorkstationComponent implements OnInit {
 
     constructor(
         private gatewayService: ApiGatewayService,
-        private toastyService: ToastyService,
-        private toastyConfig: ToastyConfig) { }
+        public snackBar: MatSnackBar) { }
 
     ngOnInit() {
         this.instanceId = sessionStorage.getItem('instance-id');
@@ -40,9 +40,12 @@ export class WorkstationComponent implements OnInit {
     }
 
     instanceAction(action) {
-        this.gatewayService.get('instance?instance_id=' + this.instanceId + '&action=' + action).subscribe(
+        this.gatewayService.post('instance?instance_id=' + this.instanceId + '&action=' + action).subscribe(
             (response: any) => {
                 console.log(response);
+                this.snackBar.open('Instance ' + action + ' successfully', 'close', {
+                    duration: 2000,
+                });
             }
         );
     }
@@ -52,13 +55,11 @@ export class WorkstationComponent implements OnInit {
         var fleetName = stack.fleet_name;
         this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
             (response: any) => {
-                this.toastyService.success('Successfully launch stack');
                 this.streamingUrl = response;
                 if (this.streamingUrl != null) {
                     window.open(this.streamingUrl);
                 } else {
                     console.log('Failed to launch stack!');
-                    this.toastyService.error('Failed to launch stack');
                 }
             }
         );
