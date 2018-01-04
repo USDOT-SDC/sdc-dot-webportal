@@ -25,6 +25,7 @@ APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
 DATA_DICT_S3_BUCKET_NAME = 'dev-dot-sdc-curated-911061262852-us-east-1'
 DATA_DICT_PATH = 'data-dictionaries/'
+RECEIVER = 'support@securedatacommons.com'
 
 
 app = Chalice(app_name='webportal')
@@ -44,11 +45,9 @@ def get_user_details(id_token):
         roles_response=response['claims']['family_name']
         email=response['claims']['email']
         full_username=response['claims']['cognito:username'].split('\\')[1]
-        print(full_username)
         roles_list_formatted = ast.literal_eval(json.dumps(roles_response))
         role_list= roles_list_formatted.split(",")
         
-        print(role_list)
         roles=[]
         for r in role_list:
             if ":role/" in r:
@@ -65,7 +64,6 @@ def get_datasets():
     table = dynamodb_client.Table(TABLENAME_DATASET)
 
     response = table.scan(TableName=TABLENAME_DATASET)
-    print(response)                                        
 
     return { 'datasets' : response }
 
@@ -74,7 +72,7 @@ authorizer = CognitoUserPoolAuthorizer(
     'test_cognito', provider_arns=['arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q'])
 
 @app.route('/user', authorizer=authorizer, cors=cors_config)
-def list_stacks():
+def get_user_info():
 
     user_info={} 
     roles=[]
@@ -118,7 +116,7 @@ def list_stacks():
                     headers={'Content-Type': 'text/plain'})              
 
 
-@app.route('/streamingurl', authorizer=authorizer, cors=cors_config)
+@app.route('/streamingurl', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def get_streaming_url():          
     params = app.current_request.query_params
     if not params or "stack_name" not in params or "fleet_name" not in params or "username" not in params :
@@ -172,11 +170,10 @@ def get_streaming_url():
         user_id, found['fleet_name'], found['stack_name']))
         raise ChaliceViewError("Error creating streaming url")             
 
-@app.route('/send_email', authorizer=authorizer, cors=cors_config)
+@app.route('/send_email', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def send_email():
     ses_client = boto3.client('ses')
 
-    receiver = 'pallavi.giri@reancloud.com'
     params = app.current_request.query_params
     if not params or "sender" not in params or "message" not in params:
         logger.error("The query parameters 'sender' or 'message' is missing")
@@ -192,7 +189,7 @@ def send_email():
                 'CcAddresses': [
                 ],
                 'ToAddresses': [
-                    receiver
+                    RECEIVER
                 ],
             },
             Message={
@@ -208,7 +205,7 @@ def send_email():
                 },
                 'Subject': {
                     'Charset': 'UTF-8',
-                    'Data': 'Access Request email',
+                    'Data': 'Request email',
                 },
             },
             Source=sender
@@ -218,7 +215,7 @@ def send_email():
         raise NotFoundError("Failed to send email")
 
 @app.route('/user_data', authorizer=authorizer, cors=cors_config)
-def get_my_datasets():  
+def get_my_datasets():      
     content = set()
     user_id = ''
     try:
@@ -290,11 +287,11 @@ def get_instance_status():
         logging.exception("Error: Failed to get info about instance" + str(be) )
         raise ChaliceViewError("Internal error at server side")    
                                            
-    return Response(body={'Status': response['InstanceStatuses'][0]['InstanceState']['Name']},
+    return Response(body={'Status': response},
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
 
-@app.route('/instance', authorizer=authorizer, cors=cors_config)
+@app.route('/instance', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def perform_instance_action():  
     params = app.current_request.query_params
     if not params or "instance_id" not in params:
@@ -329,7 +326,7 @@ def perform_instance_action():
             logging.exception("Error: Failed to stop instance" + str(be) )
             raise ChaliceViewError("Internal error at server side")    
                                            
-    return Response(body={'Status': response['InstanceStatuses'][0]['InstanceState']['Name']},
+    return Response(body={'Status': response},
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
 
