@@ -24,7 +24,6 @@ export class WorkstationComponent implements OnInit {
         this.instanceId = sessionStorage.getItem('instance-id');
         var stacksString = sessionStorage.getItem('stacks');
         this.stacks = JSON.parse(stacksString);
-        console.log(this.stacks);
         if (this.instanceId) {
             this.getInstanceState();
         }
@@ -39,7 +38,6 @@ export class WorkstationComponent implements OnInit {
                 } else {
                     this.instanceState = 'stop';
                 }
-                console.log('instanceState = ' + this.instanceState);
             }
         );
 
@@ -48,7 +46,6 @@ export class WorkstationComponent implements OnInit {
     instanceAction(action) {
         this.gatewayService.post('instance?instance_id=' + this.instanceId + '&action=' + action).subscribe(
             (response: any) => {
-                console.log(response);
                 this.getInstanceState();
                 this.snackBar.open('Instance ' + action + ' successfully', 'close', {
                     duration: 2000,
