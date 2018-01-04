@@ -13,7 +13,8 @@ export class WorkstationComponent implements OnInit {
     stacks: any = [];
     streamingUrl: any;
     instanceId: any;
-    instanceState: any;
+    instanceState: string;
+    instanceData: any = [];
 
     constructor(
         private gatewayService: ApiGatewayService,
@@ -32,8 +33,13 @@ export class WorkstationComponent implements OnInit {
     getInstanceState() {
         this.gatewayService.get('instancestatus?instance_id=' + this.instanceId).subscribe(
             (response: any) => {
-                this.instanceState = response;
-                console.log("instanceState = " + this.instanceState);
+                this.instanceData = response.Status.InstanceStatuses;
+                if (this.instanceData.length > 0) {
+                    this.instanceState = response.Status.InstanceStatuses[0].InstanceState.Name;
+                } else {
+                    this.instanceState = 'stop';
+                }
+                console.log('instanceState = ' + this.instanceState);
             }
         );
 
@@ -43,6 +49,7 @@ export class WorkstationComponent implements OnInit {
         this.gatewayService.post('instance?instance_id=' + this.instanceId + '&action=' + action).subscribe(
             (response: any) => {
                 console.log(response);
+                this.getInstanceState();
                 this.snackBar.open('Instance ' + action + ' successfully', 'close', {
                     duration: 2000,
                 });

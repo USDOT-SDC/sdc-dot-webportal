@@ -31,9 +31,9 @@
                 <div *ngIf="!stack.instance_id">
                   <span> -- </span>
                 </div>
-                <div *ngIf="stack.instance_id && instanceState && instanceState.Status" style="cursor: pointer;">
-                  <a *ngIf="instanceState.Status == 'running' " (click)="instanceAction('stop')"> Stop </a>
-                  <a *ngIf="instanceState.Status != 'running' " (click)="instanceAction('run')"> Run </a>
+                <div *ngIf="stack.instance_id && instanceState && instanceState" style="cursor: pointer;">
+                  <a *ngIf="instanceState == 'running' " (click)="instanceAction('stop')"> Stop </a>
+                  <a *ngIf="instanceState == 'stop' " (click)="instanceAction('run')"> Run </a>
                 </div>
               </td>
               <td>
