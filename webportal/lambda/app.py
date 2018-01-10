@@ -17,16 +17,16 @@ cors_config = CORSConfig(
 )
 
 
-TABLENAME = 'dev-UserStacksTable'
-TABLENAME_DATASET = 'AvailableDataset'
+TABLENAME = 'prod-UserStacksTable'
+TABLENAME_DATASET = 'prod-AvailableDataset'
 APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
-DATA_DICT_S3_BUCKET_NAME = 'dev-dot-sdc-curated-911061262852-us-east-1'
+DATA_DICT_S3_BUCKET_NAME = 'prod-dot-sdc-curated-911061262852-us-east-1'
 DATA_DICT_PATH = 'data-dictionaries/'
 RECEIVER = 'support@securedatacommons.com'
-
+PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q'
 
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
@@ -69,7 +69,7 @@ def get_datasets():
 
 
 authorizer = CognitoUserPoolAuthorizer(
-    'test_cognito', provider_arns=['arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q'])
+    'test_cognito', provider_arns=[PROVIDER_ARNS])
 
 @app.route('/user', authorizer=authorizer, cors=cors_config)
 def get_user_info():
@@ -178,7 +178,8 @@ def send_email():
     if not params or "sender" not in params or "message" not in params:
         logger.error("The query parameters 'sender' or 'message' is missing")
         raise BadRequestError("The query parameters 'sender' or 'message' is missing")
-    sender = params['sender']
+    #sender = params['sender']
+    sender = RECEIVER
     message = params['message']
 
     try:
