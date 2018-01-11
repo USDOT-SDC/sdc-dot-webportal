@@ -37,7 +37,7 @@ export class DatasetsComponent implements OnInit {
     selectsdcDataset(dataset) {
         this.selectedsdcDataset = dataset;
         this.showDictionary = true;
-        this.gatewayService.get('dataset_dictionary?datasetcode=' + this.selectedsdcDataset.DatasetCode + '&datasettype=' + this.selectedsdcDataset.DatasetType).subscribe(
+        this.gatewayService.get('dataset_dictionary?readmebucket=' + this.selectedsdcDataset.ReadmeBucket + '&readmepathkey=' + this.selectedsdcDataset.ReadmePathKey).subscribe(
             (response: any) => {
                 this.dictionary = response.data;
             }, (error: any) => {

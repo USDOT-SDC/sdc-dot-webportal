@@ -1,27 +1,86 @@
-<div>
-  <h4>Access Request</h4>
+<!--SDC Datasets Access Request Dialogbox-->
+<div *ngIf="mailType == 'Access Request Mail'">
+  <h4>SDC Datasets Access Request</h4>
   <hr>
   <mat-dialog-content>
-    <mat-form-field style='width: 100%' *ngIf="mailType == 'Access Request Mail'">
-      <textarea matInput placeholder="Enter the list of state" [(ngModel)]="messageModel.stateList"></textarea>
-    </mat-form-field>
+      <mat-form-field style='width: 100%'>
+        <textarea matInput name="stateList" id="stateList" placeholder="Enter the list of state" [(ngModel)]="messageModel.stateList" required></textarea>
+          <mat-error *ngIf="!messageModel.stateList">required</mat-error>
+      </mat-form-field>
 
-    <mat-form-field style='width: 100%' *ngIf="mailType == 'Dataset publish Mail'">
+  </mat-dialog-content>
+  <hr>
+  <mat-dialog-actions>
+    <button class="btn btn-primary dotBtn" [disabled]="!messageModel.stateList" (click)="sendMail()">SEND REQUEST</button>&nbsp;
+    <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
+  </mat-dialog-actions>
+</div>
+
+
+<!--Publish Dataset / Algorithm Request Dialogbox-->
+<div *ngIf="mailType == 'Dataset publish Mail'">
+  <h4>Publish Dataset / Algorithm Request</h4>
+  <hr>
+  <mat-dialog-content>
+
+    <mat-form-field style='width: 100%'>
       <mat-select placeholder='Type' [(ngModel)]="messageModel.type">
-        <mat-option *ngFor="let dataType of dataTypes" [value]="dataType.value">
+        <mat-option *ngFor="let dataType of dataTypes" [value]="dataType.value" required>
           {{ dataType.viewValue }}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="!messageModel.type">Please select type</mat-error>
     </mat-form-field>
 
-    <mat-form-field style='width: 100%' *ngIf="mailType == 'Dataset publish Mail'">
-      <input matInput placeholder="Enter file name" [(ngModel)]="messageModel.fileName" value="{{fileName}}">
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Name" [(ngModel)]="messageModel.name" value="{{messageModel.name}}" required>
+      <mat-error *ngIf="!messageModel.name">required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Description" [(ngModel)]="messageModel.description" value="{{messageModel.description}}" required>
+      <mat-error *ngIf="!messageModel.description">required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="File/folder name" [(ngModel)]="messageModel.fileFolderName" value="{{messageModel.fileFolderName}}" required>
+      <mat-error *ngIf="!messageModel.fileFolderName">required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Readme / Data dictionary file name" [(ngModel)]="messageModel.readmeFileName" value="{{messageModel.readmeFileName}}" required>
+      <mat-error *ngIf="!messageModel.readmeFileName">required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
+      <input matInput placeholder="Geographic Scope" [(ngModel)]="messageModel.geographicScope" value="{{messageModel.geographicScope}}" required>
+      <mat-error *ngIf="!messageModel.geographicScope">required</mat-error>
+    </mat-form-field>
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
+      <input matInput placeholder="Start/End Date for Data Availability" [(ngModel)]="messageModel.dataAvailability" value="{{messageModel.dataAvailability}}" required>
+      <mat-error *ngIf="!messageModel.dataAvailability">required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'algorithm'">
+      <input matInput placeholder="Programming Tools/language" [(ngModel)]="messageModel.ProgrammingTool" value="{{messageModel.ProgrammingTool}}" required>
+      <mat-error *ngIf="!messageModel.ProgrammingTool">required</mat-error>
     </mat-form-field>
 
   </mat-dialog-content>
   <hr>
   <mat-dialog-actions>
-    <button class="btn btn-primary dotBtn" (click)="sendMail()">SEND REQUEST</button>&nbsp;
+    <span *ngIf="messageModel.type == 'dataset'">
+      <button class="btn btn-primary dotBtn"
+              [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.geographicScope || !messageModel.dataAvailability"
+              (click)="sendMail()">SEND REQUEST
+      </button>
+    </span>&nbsp;
+    <span *ngIf="messageModel.type == 'algorithm'">
+      <button class="btn btn-primary dotBtn"
+              [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.ProgrammingTool"
+              (click)="sendMail()">SEND REQUEST
+      </button>
+    </span>&nbsp;
     <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
   </mat-dialog-actions>
 </div>
