@@ -8,8 +8,12 @@
               <mat-panel-title>
                 My Datasets / Algorithm
               </mat-panel-title>
+
             </mat-expansion-panel-header>
               <div *ngIf="!myDatasets">No Data Available</div>
+              <span>This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They
+                    are not available to anyone else unless you publish the dataset. <a>Learn More </a> on how to upload your
+                    datasets / algorithms and publish them for other users.</span><hr>
             <table class="table" *ngIf="myDatasets">
               <thead class="thead-inverse">
               <tr>
@@ -35,6 +39,9 @@
                 SDC Datasets
               </mat-panel-title>
             </mat-expansion-panel-header>
+              <span>These are datasets that are available within SDC platform that are published / enabled by SDC team or
+                    published by other users. Access to these datasets are available upon request. <a>Learn More </a> about the
+                    different types of datasets and how to request access to these datasets.</span><hr>
             <table class="table">
               <thead class="thead-inverse">
               <tr>
