@@ -31,7 +31,7 @@
               <td> {{stack.application}} </td>
               <td>
                 <div *ngIf="!stack.instance_id">
-                  <span> -- </span>
+                  <span> ----</span>
                 </div>
                 <div *ngIf="stack.instance_id && instanceState && instanceState" style="cursor: pointer;">
                   <a *ngIf="instanceState == 'running' " (click)="instanceAction('stop')"> Stop </a>

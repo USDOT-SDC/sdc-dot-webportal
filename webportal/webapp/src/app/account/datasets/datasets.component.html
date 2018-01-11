@@ -8,12 +8,12 @@
               <mat-panel-title>
                 My Datasets / Algorithm
               </mat-panel-title>
-
             </mat-expansion-panel-header>
-              <div *ngIf="!myDatasets">No Data Available</div>
-              <span>This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They
-                    are not available to anyone else unless you publish the dataset. <a>Learn More </a> on how to upload your
-                    datasets / algorithms and publish them for other users.</span><hr>
+            <div *ngIf="!myDatasets">No Data Available</div>
+            <span style="color:grey">This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They
+              are not available to anyone else unless you publish the dataset. Learn More on how to upload your
+              datasets / algorithms and publish them for other users.
+            </span><hr>
             <table class="table" *ngIf="myDatasets">
               <thead class="thead-inverse">
               <tr>
@@ -39,26 +39,40 @@
                 SDC Datasets
               </mat-panel-title>
             </mat-expansion-panel-header>
-              <span>These are datasets that are available within SDC platform that are published / enabled by SDC team or
-                    published by other users. Access to these datasets are available upon request. <a>Learn More </a> about the
-                    different types of datasets and how to request access to these datasets.</span><hr>
+            <span style="color: grey">These are datasets that are available within SDC platform that are published / enabled by SDC team or
+              published by other users. Access to these datasets are available upon request. Learn More about the
+              different types of datasets and how to request access to these datasets.
+            </span><hr>
             <table class="table">
               <thead class="thead-inverse">
               <tr>
-                <th>Dataset Name</th>
-                <th>Dataset Type</th>
+                <th>Name</th>
+                <th>Type</th>
                 <th>Description</th>
-                <th>Bucket Name</th>
+                <th>Programming tools / language</th>
+                <th>Geographic Scope</th>
+                <th>Start / End for Data Availability</th>
                 <th>Request Access</th>
               </tr>
               </thead>
               <tbody>
               <ng-template ngFor let-sdcDataset [ngForOf]="sdcDatasets">
                 <tr style="cursor: pointer" (click)="selectsdcDataset(sdcDataset)" [ngClass]="{'selected_row' : selectedsdcDataset == sdcDataset}">
-                  <td>{{sdcDataset.DatasetCode}}</td>
-                  <td>{{sdcDataset.DatasetType}}</td>
+                  <td>{{sdcDataset.Name}}</td>
+                  <td>{{sdcDataset.Type}}</td>
                   <td>{{sdcDataset.Description}}</td>
-                  <td>{{sdcDataset.BucketName}}</td>
+                  <td>
+                    <div *ngIf="sdcDataset.Programming_tool">{{sdcDataset.Programming_tool}}</div>
+                    <div *ngIf="!sdcDataset.Programming_tool" class="textAlignCenter">-----</div>
+                  </td>
+                  <td>
+                    <div *ngIf="sdcDataset.Geographic_Scope">{{sdcDataset.Geographic_Scope}}</div>
+                    <div *ngIf="!sdcDataset.Geographic_Scope" class="textAlignCenter">-----</div>
+                  </td>
+                  <td>
+                    <div *ngIf="sdcDataset.Data_Availability_Span">{{sdcDataset.Data_Availability_Span}}</div>
+                    <div *ngIf="!sdcDataset.Data_Availability_Span" class="textAlignCenter">-----</div>
+                  </td>
                   <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
                 </tr>
               </ng-template>
@@ -67,9 +81,9 @@
           </mat-expansion-panel>
 
         <!--data dictionary card-->
-        <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 350px">
-            <mat-card-title> {{selectedsdcDataset.DatasetCode}} {{selectedsdcDataset.DatasetType}} Data Dictionary</mat-card-title><hr>
-            <mat-card-content style="max-height: 250px;overflow: scroll">
+        <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 500px">
+            <mat-card-title> {{selectedsdcDataset.DatasetCode}} {{selectedsdcDataset.DatasetType}} Data Di-tionary</mat-card-title><hr>
+            <mat-card-content style="max-height: 400px;overflow: scroll">
                 <markdown [data]="dictionary"></markdown>
             </mat-card-content>
         </mat-card>
