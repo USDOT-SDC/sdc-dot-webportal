@@ -8,6 +8,7 @@ import { AccountHomeComponent } from './account/accounthome/accounthome.componen
 import { DatasetsComponent } from './account/datasets/datasets.component';
 import { WorkstationComponent } from './account/workstation/workstation.component';
 import { RegisterComponent } from './main/register/register.component';
+import { FaqComponent } from './account/faq/faq.component';
 
 const appRoutes: Routes = [
     {
@@ -25,6 +26,8 @@ const appRoutes: Routes = [
             { path: 'accounthome', component: AccountHomeComponent },
             { path: 'datasets', component: DatasetsComponent },
             { path: 'workstation', component: WorkstationComponent },
+            { path: 'FAQ', component: FaqComponent },
+
         ],
     }
 ];

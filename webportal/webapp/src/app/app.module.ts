@@ -22,6 +22,7 @@ import { ToastyModule } from 'ng2-toasty';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
+import { FaqComponent } from './account/faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MarkdownModule } from 'ngx-md';
     WorkstationComponent,
     RegisterComponent,
     DialogBoxComponent,
+    FaqComponent,
   ],
   imports: [
     BrowserModule,
