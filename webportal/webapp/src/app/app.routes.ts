@@ -9,14 +9,17 @@ import { DatasetsComponent } from './account/datasets/datasets.component';
 import { WorkstationComponent } from './account/workstation/workstation.component';
 import { RegisterComponent } from './main/register/register.component';
 import { FaqComponent } from './account/faq/faq.component';
+import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
+
 
 const appRoutes: Routes = [
     {
         path: '', component: MainComponent, children: [
-            { path: '', redirectTo: '/about', pathMatch: 'full' },
+            { path: '', redirectTo: '/home', pathMatch: 'full' },
             { path: 'index.html', component: HomeComponent },
             { path: 'home', component: HomeComponent },
             { path: 'about', component: AboutComponent },
+            { path: 'datasetinfo', component: DatasetinfoComponent },
             { path: 'register', component: RegisterComponent },
         ],
     },

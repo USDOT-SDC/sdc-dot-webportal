@@ -51,6 +51,9 @@ body { padding-top: 70px; }
     padding-top: 60px
 }
 
+.pull-margin-40{
+    margin-left: -40px;
+}
 .padding-top-sm {
     padding-top: 20px;
 }
@@ -65,4 +68,9 @@ body { padding-top: 70px; }
 
 .textAlignCenter {
     text-align: center;
+}
+
+.questionText {
+    font-size: 16px;
+    color: #13136b;
 }

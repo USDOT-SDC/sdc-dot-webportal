@@ -23,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
 import { FaqComponent } from './account/faq/faq.component';
+import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { FaqComponent } from './account/faq/faq.component';
     RegisterComponent,
     DialogBoxComponent,
     FaqComponent,
+    DatasetinfoComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,51 +1,94 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <img style="width: 100%" src="../../assets/images/background_about.jpg" class="mx-auto d-block">
-        </div>
-    </div>
+<!--<div class="container">-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<img style="width: 100%" src="../../assets/images/background_about.jpg" class="mx-auto d-block">-->
+        <!--</div>-->
+    <!--</div>-->
 
-    <div class="row" style="padding-top: 15px;">
-        <div class="col-md-4">
-            <mat-card class="card">
-                <mat-card-title class="cardTitle">About SDC</mat-card-title>
-                <mat-card-content class="cardContent">The Secure Data Commons is an online analytic portal for transportation researchers. On this portal, researchers can take advantage of pre-established programming environments to access and analyze a growing set of transportation-related data sets.
-                </mat-card-content>
-                <mat-card-actions>
-                    <div class="cardBtn">
-                        <button class="btn-default" [routerLink]="['/about']" style="width: 50%">Learn More</button>
-                    </div>
-                </mat-card-actions>
-            </mat-card>
+    <!--<div class="row" style="padding-top: 15px;">-->
+        <!--<div class="col-md-4">-->
+            <!--<mat-card class="card">-->
+                <!--<mat-card-title class="cardTitle">About SDC</mat-card-title>-->
+                <!--&lt;!&ndash;<a (click)="internalRoute('home','curated')" style="width: 50%">Learn More</a>&ndash;&gt;-->
+
+                <!--<mat-card-content class="cardContent">The Secure Data Commons is an online analytic portal for transportation researchers. On this portal, researchers can take advantage of pre-established programming environments to access and analyze a growing set of transportation-related data sets.-->
+                <!--</mat-card-content>-->
+                <!--<mat-card-actions>-->
+                    <!--<div class="cardBtn">-->
+                        <!--<button class="btn-default" [routerLink]="['/about']" style="width: 50%">Learn More</button>-->
+                    <!--</div>-->
+                <!--</mat-card-actions>-->
+            <!--</mat-card>-->
+        <!--</div>-->
+        <!--<div class="col-md-4">-->
+            <!--<mat-card class="card">-->
+                <!--<mat-card-title class="cardTitle">Datasets</mat-card-title>-->
+                <!--<mat-card-content class="cardContent">Check out the list of current datasets that-->
+                    <!--are available on SDC platform and learn how-->
+                    <!--to get access to those datasets-->
+                <!--</mat-card-content>-->
+                <!--<mat-card-actions>-->
+                    <!--<div class="cardBtn">-->
+                        <!--<button class="btn-default" [routerLink]="['/home']" style="width: 50%">Learn More</button>-->
+                    <!--</div>-->
+                <!--</mat-card-actions>-->
+            <!--</mat-card>-->
+        <!--</div>-->
+        <!--<div class="col-md-4">-->
+            <!--<mat-card class="card">-->
+                <!--<mat-card-title class="cardTitle">Sign up</mat-card-title>-->
+                <!--<mat-card-content class="cardContent">Complete our online-->
+                    <!--access request form and when you are-->
+                    <!--approved you can begin creating your very-->
+                    <!--own data analysis environments!-->
+                <!--</mat-card-content>-->
+                <!--<mat-card-actions>-->
+                    <!--<div class="cardBtn">-->
+                        <!--<button class="btn-default" [routerLink]="['/register']" style="width: 50%">Learn More</button>-->
+
+                    <!--</div>-->
+                <!--</mat-card-actions>-->
+            <!--</mat-card>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<div class="container">
+    <mat-card class="info">
+        <div class="row">
+            <h3>About</h3>
+            <mat-card-content>
+                <p>The Secure Data Commons (SDC) is a cloud-based analytics platform that enables access to traffic
+                    engineers,
+                    researchers, data scientists to various transportation related datasets. The SDC platform is a
+                    prototype created as part of the U.S.Department of Transportation (USDOT) research project. The
+                    objective of this prototype is to provide a secure platform, which will enable USDOT and the broader
+                    transportation sector to share and collaborate their research, tools, algorithms, analysis etc
+                    around sensitive datasets using modern, commercially available tools without the need to install or
+                    purchase tools/softwares.</p>
+                <ul><p class="pull-margin-40">The primary objectives of Secure Data Commons platform are:</p>
+                    <li>Enable scalable data storage, data analysis and user access protocol via cloud based platforms </li>
+                    <li>Leverage cloud capabilities to share complex (high volume, velocity and/or variety)
+                        transportation datasets with the transportation research community
+                    </li>
+                    <li>Authorized access to users through a data use agreement with revocable access terms to protect
+                        the sensitivity of data
+                    </li>
+                    <li>Provide users with predefined data analysis tools and encourage custom toolsets and open sharing
+                        of code and added datasets amongst the user community
+                    </li>
+                    <li>Ensure sensitive data is protected through implementation of USDOT Information Technology (IT)
+                        security standards
+                    </li>
+                </ul>
+                <ul><p class="pull-margin-40">The core capabilities of Secure Data Commons platform are:</p>
+                    <li>Granular access controls for data and code to users.</li>
+                    <li>Robust security architecture that secures datasets and user workstations</li>
+                    <li>Ability for users to upload and share their own data </li>
+                    <li>Ability to create workspaces and the ability to code and use analytic tools in the sandbox</li>
+                    <li>Ability to create highly searchable and linkable base datasets</li>
+                </ul>
+            </mat-card-content>
         </div>
-        <div class="col-md-4">
-            <mat-card class="card">
-                <mat-card-title class="cardTitle">Datasets</mat-card-title>
-                <mat-card-content class="cardContent">Check out the list of current datasets that
-                    are available on SDC platform and learn how
-                    to get access to those datasets
-                </mat-card-content>
-                <mat-card-actions>
-                    <div class="cardBtn">
-                        <button class="btn-default" [routerLink]="['/home']" style="width: 50%">Learn More</button>
-                    </div>
-                </mat-card-actions>
-            </mat-card>
-        </div>
-        <div class="col-md-4">
-            <mat-card class="card">
-                <mat-card-title class="cardTitle">Sign up</mat-card-title>
-                <mat-card-content class="cardContent">Complete our online
-                    access request form and when you are
-                    approved you can begin creating your very
-                    own data analysis environments!
-                </mat-card-content>
-                <mat-card-actions>
-                    <div class="cardBtn">
-                        <button class="btn-default" [routerLink]="['/register']" style="width: 50%">Learn More</button>
-                    </div>
-                </mat-card-actions>
-            </mat-card>
-        </div>
-    </div>
+    </mat-card>
 </div>
