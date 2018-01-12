@@ -5,7 +5,8 @@
   <mat-dialog-content>
       <mat-form-field style='width: 100%'>
         <textarea matInput name="stateList" id="stateList" placeholder="Enter the list of state" [(ngModel)]="messageModel.stateList" required></textarea>
-          <mat-error *ngIf="!messageModel.stateList">required</mat-error>
+          <mat-error *ngIf="!messageModel.stateList">Required</mat-error>
+        <mat-hint> Provide comma separated state name (e.g. KN, VI)</mat-hint>
       </mat-form-field>
 
   </mat-dialog-content>
@@ -34,36 +35,36 @@
 
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Name" [(ngModel)]="messageModel.name" value="{{messageModel.name}}" required>
-      <mat-error *ngIf="!messageModel.name">required</mat-error>
+      <mat-error *ngIf="!messageModel.name">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Description" [(ngModel)]="messageModel.description" value="{{messageModel.description}}" required>
-      <mat-error *ngIf="!messageModel.description">required</mat-error>
+      <mat-error *ngIf="!messageModel.description">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="File/folder name" [(ngModel)]="messageModel.fileFolderName" value="{{messageModel.fileFolderName}}" required>
-      <mat-error *ngIf="!messageModel.fileFolderName">required</mat-error>
+      <mat-error *ngIf="!messageModel.fileFolderName">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Readme / Data dictionary file name" [(ngModel)]="messageModel.readmeFileName" value="{{messageModel.readmeFileName}}" required>
-      <mat-error *ngIf="!messageModel.readmeFileName">required</mat-error>
+      <mat-error *ngIf="!messageModel.readmeFileName">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
       <input matInput placeholder="Geographic Scope" [(ngModel)]="messageModel.geographicScope" value="{{messageModel.geographicScope}}" required>
-      <mat-error *ngIf="!messageModel.geographicScope">required</mat-error>
+      <mat-error *ngIf="!messageModel.geographicScope">Required</mat-error>
     </mat-form-field>
     <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
       <input matInput placeholder="Start/End Date for Data Availability" [(ngModel)]="messageModel.dataAvailability" value="{{messageModel.dataAvailability}}" required>
-      <mat-error *ngIf="!messageModel.dataAvailability">required</mat-error>
+      <mat-error *ngIf="!messageModel.dataAvailability">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'algorithm'">
       <input matInput placeholder="Programming Tools/language" [(ngModel)]="messageModel.ProgrammingTool" value="{{messageModel.ProgrammingTool}}" required>
-      <mat-error *ngIf="!messageModel.ProgrammingTool">required</mat-error>
+      <mat-error *ngIf="!messageModel.ProgrammingTool">Required</mat-error>
     </mat-form-field>
 
   </mat-dialog-content>

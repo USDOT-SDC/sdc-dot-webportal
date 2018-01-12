@@ -37,6 +37,7 @@ export class DialogBoxComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any) {    this.messageModel.bucketName = data.bucketName;
                                                         this.mailType = data.mailType;
                                                         this.datasetName = data.datasetName;
+                                                        this.messageModel.name = data.datasetName
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -49,11 +50,11 @@ export class DialogBoxComponent implements OnInit {
 
 
     sendMail() {
-        if (this.messageModel.type === 'dataset') {
+        if (this.messageModel.type == 'dataset') {
             this.showDataset = true;
             this.showAlgorithm = false;
 
-        } else if (this.messageModel.type === 'algorithm') {
+        } else if (this.messageModel.type == 'algorithm') {
             this.showAlgorithm = true;
             this.showDataset = false;
 
