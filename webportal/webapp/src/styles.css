@@ -54,11 +54,23 @@ body { padding-top: 70px; }
 .pull-margin-40{
     margin-left: -40px;
 }
+.push-top-40 {
+    margin-top: 40px;
+}
+.push-top-30{
+    margin-top: 30px;
+}
 .padding-top-sm {
     padding-top: 20px;
 }
 .font-13 {
     font-size: 13px;
+}
+.width-70 {
+    width: 70%;
+}
+.width-40 {
+    width: 40%;
 }
 
 .logo {

@@ -11,7 +11,7 @@
             </mat-expansion-panel-header>
             <div *ngIf="!myDatasets">No Data Available</div>
             <span style="color:grey">This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They
-              are not available to anyone else unless you publish the dataset. <a href="">Learn More</a> on how to upload your
+              are not available to anyone else unless you publish the dataset. <a [routerLink]="['/account/faq']">Learn more </a> on how to upload your
               datasets / algorithms and publish them for other users.
             </span><hr>
             <table class="table" *ngIf="myDatasets">
@@ -40,7 +40,7 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <span style="color: grey">These are datasets that are available within SDC platform that are published / enabled by SDC team or
-              published by other users. Access to these datasets are available upon request. <a href="">Learn More </a> about the
+              published by other users. Access to these datasets are available upon request. <a [routerLink]="['/account/faq']">Learn more </a> about the
               different types of datasets and how to request access to these datasets.
             </span><hr>
             <table class="table">
@@ -82,7 +82,7 @@
 
         <!--data dictionary card-->
         <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 500px">
-            <mat-card-title> {{selectedsdcDataset.DatasetCode}} {{selectedsdcDataset.DatasetType}} Data Di-tionary</mat-card-title><hr>
+            <mat-card-title> {{selectedsdcDataset.DatasetCode}} {{selectedsdcDataset.DatasetType}} Data Dictionary</mat-card-title><hr>
             <mat-card-content style="max-height: 400px;overflow: scroll">
                 <markdown [data]="dictionary"></markdown>
             </mat-card-content>

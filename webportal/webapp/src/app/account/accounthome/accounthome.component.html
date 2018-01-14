@@ -16,13 +16,13 @@
         <div class="col-md-6">
           <mat-card style="height: 140px">
             <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/1.png"> &nbsp; Curated and published datasets</mat-card-subtitle>
-            <mat-card-content class="matContent">Check out the list of currently available datasets (curated, published), data dictionaries owned by you and others</mat-card-content>
+            <mat-card-content class="matContent"><a [routerLink]="['/account/datasets']">Check out</a> the list of currently available datasets (curated, published), data dictionaries owned by you and others. <a [routerLink]="['/account/faq']">Learn more</a> about what curated and published datasets mean</mat-card-content>
           </mat-card>
         </div>
         <!--<div class="col-md-1"></div>-->
         <div class="col-md-6">
           <mat-card style="height: 140px">
-            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/2.png"> &nbsp;Access to workstations with programming tools</mat-card-subtitle>
+            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/2.png"> &nbsp;<a [routerLink]="['/account/workstation']">Access to workstations </a> with programming tools</mat-card-subtitle>
             <mat-card-content class="matContent">Access the workstations assigned to you, if you have requested as part of the registration process </mat-card-content>
           </mat-card>
         </div>
@@ -30,15 +30,15 @@
       <div class="row" style="padding-top: 50px;">
         <div class="col-md-6">
           <mat-card style="height: 140px">
-            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/3.png"> &nbsp;Bring your own algorithms / code</mat-card-subtitle>
-            <mat-card-content class="matContent">Learn more about how you can bring your algorithms and code to the SDC platform</mat-card-content>
+            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/3.png"> &nbsp;Bring your own datasets / algorithms</mat-card-subtitle>
+            <mat-card-content class="matContent"><a [routerLink]="['/account/faq']">Learn more </a> about how you can bring your algorithms and code to the SDC platform</mat-card-content>
           </mat-card>
         </div>
         <!--<div class="col-md-1"></div>-->
         <div class="col-md-6">
           <mat-card style="height: 140px">
-            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/4.png"> &nbsp;Publish derived datasets and analysis</mat-card-subtitle>
-            <mat-card-content class="matContent">Learn more about how you can publish your analyses and share your research with others</mat-card-content>
+            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/4.png"> &nbsp;Publish your datasets / algorithms</mat-card-subtitle>
+            <mat-card-content class="matContent"><a [routerLink]="['/account/faq']">Learn more </a> about how you can publish your research analysis and algorithms with other researchers</mat-card-content>
           </mat-card>
         </div>
       </div>

@@ -37,7 +37,7 @@ export class DialogBoxComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any) {    this.messageModel.bucketName = data.bucketName;
                                                         this.mailType = data.mailType;
                                                         this.datasetName = data.datasetName;
-                                                        this.messageModel.name = data.datasetName
+                                                        this.messageModel.fileFolderName = data.datasetName;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();

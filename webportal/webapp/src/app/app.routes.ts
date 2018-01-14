@@ -29,7 +29,7 @@ const appRoutes: Routes = [
             { path: 'accounthome', component: AccountHomeComponent },
             { path: 'datasets', component: DatasetsComponent },
             { path: 'workstation', component: WorkstationComponent },
-            { path: 'FAQ', component: FaqComponent },
+            { path: 'faq', component: FaqComponent },
 
         ],
     }
