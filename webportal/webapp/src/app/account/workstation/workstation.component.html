@@ -34,7 +34,7 @@
                 </div>
                 <div *ngIf="stack.instance_id && instanceState && instanceState" style="cursor: pointer;">
                   <a *ngIf="instanceState == 'running' " (click)="instanceAction('stop')"> Stop </a>
-                  <a *ngIf="instanceState == 'stop' " (click)="instanceAction('run')"> Run </a>
+                  <a *ngIf="instanceState == 'stop' " (click)="instanceAction('run')"> Start </a>
                 </div>
               </td>
               <td>
