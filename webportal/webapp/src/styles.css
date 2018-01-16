@@ -51,11 +51,15 @@ body { padding-top: 70px; }
     padding-top: 60px
 }
 
+.padding-top-xs {
+    padding-top: 5%;
+}
+
 .pull-margin-40{
     margin-left: -40px;
 }
 .push-top-40 {
-    margin-top: 40px;
+    margin-top: 80px;
 }
 .push-top-30{
     margin-top: 30px;
