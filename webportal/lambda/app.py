@@ -17,16 +17,18 @@ cors_config = CORSConfig(
 )
 
 
-TABLENAME = 'prod-UserStacksTable'
-TABLENAME_DATASET = 'prod-AvailableDataset'
+TABLENAME = 'dev-UserStacksTable'
+TABLENAME_DATASET = 'dev-AvailableDataset'
 APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
-DATA_DICT_S3_BUCKET_NAME = 'prod-dot-sdc-curated-911061262852-us-east-1'
+DATA_DICT_S3_BUCKET_NAME = 'dev-dot-sdc-curated-911061262852-us-east-1'
 DATA_DICT_PATH = 'data-dictionaries/'
-RECEIVER = 'support@securedatacommons.com'
+RECEIVER = 'pallavi.giri@reancloud.com'
 PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q'
+RESTAPIID = 'u2zksemc1h'
+AUTHORIZERID = 'ne1w0w'
 
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
@@ -37,8 +39,8 @@ def get_user_details(id_token):
     try:
         apigateway = boto3.client('apigateway')    
         response = apigateway.test_invoke_authorizer(
-        restApiId='u2zksemc1h',
-        authorizerId='ne1w0w',
+        restApiId=RESTAPIID,
+        authorizerId=AUTHORIZERID,
         headers={
             'Authorization': id_token
         })
@@ -57,15 +59,19 @@ def get_user_details(id_token):
         return { 'role' : roles , 'email': email, 'username': full_username }
     except BaseException as be:
         logging.exception("Error: Failed to get role from token" + str(be) )
-        raise ChaliceViewError("Internal error at server side") 
+        raise ChaliceViewError("Internal error occurred! Contact your administrator") 
 
-def get_datasets():  
+def get_datasets(): 
 
-    table = dynamodb_client.Table(TABLENAME_DATASET)
+    try: 
+        table = dynamodb_client.Table(TABLENAME_DATASET)
 
-    response = table.scan(TableName=TABLENAME_DATASET)
+        response = table.scan(TableName=TABLENAME_DATASET)
 
-    return { 'datasets' : response }
+        return { 'datasets' : response }
+    except BaseException as be:
+        logging.exception("Error: Failed to get dataset" + str(be) )
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")     
 
 
 authorizer = CognitoUserPoolAuthorizer(
@@ -86,8 +92,8 @@ def get_user_info():
         
       
     except BaseException as be:
-        logging.exception("Error: Failed to get role from token" + str(be) )
-        raise ChaliceViewError("Internal error at server side") 
+        logging.exception("Error: Failed to get user details from token or datasets and algorithm." + str(be) )
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.") 
     table = dynamodb_client.Table(TABLENAME)
 
     # stack_names=set()
@@ -99,7 +105,7 @@ def get_user_info():
         response_table = table.get_item(Key={'username': user_info['username'] })
     except BaseException as be:
         logging.exception("Error: Could not perform get_item() on requested table.Verify requested table exist." + str(be) )
-        raise ChaliceViewError("Internal error at server side")                
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")                
 
     # Convert unicode to ascii
     try:                
@@ -109,7 +115,7 @@ def get_user_info():
         raise NotFoundError("Unknown role '%s'" % (user_info['userinfo']))
     except BaseException as be:
         logging.exception("Error: Could not perform get_item() on requested table.Verify requested table exist." + str(be) )
-        raise ChaliceViewError("Internal error at server side")                           
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")                           
 
     return Response(body=user_info,
                     status_code=200,
@@ -225,7 +231,7 @@ def get_my_datasets():
         user_id=info_dict['username']     
     except BaseException as be:
         logging.exception("Error: Failed to get user_id/email from token" + str(be) )
-        raise ChaliceViewError("Internal error at server side")
+        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
     try:
         hash_object_user_id = hashlib.sha256(user_id)
@@ -240,12 +246,15 @@ def get_my_datasets():
             Bucket=APPSTREAM_S3_BUCKET_NAME,
             Prefix=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME
         )
-        total_content=response['Contents']
+        total_content = {}
+        if 'Contents' in response:
+            total_content=response['Contents']
 
         
         for c in total_content:
             if not c['Key'].endswith(hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME):
                 content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME)[1])
+               
     except BaseException as ce:
         logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
@@ -256,12 +265,14 @@ def get_my_datasets():
             Bucket=APPSTREAM_S3_BUCKET_NAME,
             Prefix=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME
         )
-        total_content=response['Contents']
+        total_content_algo = {}
+        if 'Contents' in response:
+            total_content_algo=response['Contents']
 
-        
-        for c in total_content:
+        for c in total_content_algo:
             if not c['Key'].endswith(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME):
                 content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME)[1])
+
     except BaseException as ce:
         logger.exception("Failed to list algorithm folder of user %s. %s" % (user_id,ce))
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")        
@@ -335,15 +346,15 @@ def perform_instance_action():
 @app.route('/dataset_dictionary', authorizer=authorizer, cors=cors_config)
 def get_dataset_dictionary():  
     params = app.current_request.query_params
-    if not params or "datasetcode" not in params or "datasettype" not in params:
-        logger.error("The query parameters 'datasetcode' or 'datasettype' is missing")
-        raise BadRequestError("The query parameters 'datasetcode' or 'datasettype' is missing")
+    if not params or "readmepathkey" not in params or "readmebucket" not in params:
+        logger.error("The query parameters 'readmepathkey' or 'readmebucket' is missing")
+        raise BadRequestError("The query parameters 'readmepathkey' or 'readmebucket' is missing")
 
     try:
         client_s3 = boto3.client('s3')
         response = client_s3.get_object(
-        Bucket=DATA_DICT_S3_BUCKET_NAME,
-        Key=DATA_DICT_PATH+params['datasetcode']+'-'+params['datasettype']+'-dictionary.README.md'
+        Bucket=params['readmebucket'],
+        Key=params['readmepathkey']
         )
         data = response['Body'].read()
     except BaseException as be:
