@@ -1,6 +1,4 @@
-
 # SDC-DOT Webportal README
-
 
 ## Deploy Backend for Webportal
 
