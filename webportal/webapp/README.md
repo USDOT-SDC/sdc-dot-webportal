@@ -14,12 +14,12 @@
    * Install Angular CLI `sudo npm i -g @angular/cli@latest`
    * Install TSLint `sudo npm install -g tslint typescript`
    * Install Protractor for e2e testing `sudo npm install -g protractor`
-   * sudo npm i -g typings
-   * npm i
+   * `sudo npm i -g typings`
+   * Install Node modules library `npm i`
 
 3. Run local build
    * ../webportal/webapp$  `ng serve`
-   * open http://localhost:4200
+   * open `http://localhost:4200`
    
    
 ## Configuration UI changes
@@ -27,7 +27,6 @@
 ```sh 
 NOTE - Do not check in configuration value into project repository for the security purpose
 ```
-
 
 1. Cognito configuration
     * cd ../webapp/src/services
@@ -49,14 +48,17 @@ NOTE - Do not check in configuration value into project repository for the secur
         
 
 ## Deployment steps for the application UI
-1. Run the command below for Development Deployment -
-   * Goto ../webapp/
-   * Run ./dev_deploy.sh
-    
-2. Run the command below for Production Deployment -
-   * Goto ../webapp/
-   * Run ./prod_deploy.sh 
+
    
 ```sh 
 NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment script 
-```   
+```  
+
+1. Run the command below for Development Deployment -
+   * Goto `../webapp/`
+   * Run `./dev_deploy.sh`
+    
+2. Run the command below for Production Deployment -
+   * Goto `../webapp/`
+   * Run `./prod_deploy.sh` 
+ 
