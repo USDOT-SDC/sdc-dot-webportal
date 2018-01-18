@@ -57,16 +57,16 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 1. Run the command below for Development Deployment -
    * Goto `../webapp/`
    * Run `./dev_deploy.sh`
-    
+
 2. Run the command below for Production Deployment -
    * Goto `../webapp/`
-   * Run `./prod_deploy.sh` 
- 
+   * Run `./prod_deploy.sh`
+
 ## Deploy Backend
 
 ### Pre-requiste
 
-    To deploy backend you need to install [Chalice](https://github.com/aws/chalice)
+To deploy backend you need to install [Chalice](https://github.com/aws/chalice)
 
 ### Deployment Steps
 
@@ -93,4 +93,4 @@ To deploy run below command:
 chalice deploy --stage <stage_name> --no-autogen-policy --profile us-dot
 ```
 
-where, stage_name can be dev, prod and so on.
+where, `stage_name` can be dev, prod and so on.
