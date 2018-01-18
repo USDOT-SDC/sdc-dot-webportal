@@ -63,15 +63,15 @@
                   <td>{{sdcDataset.Description}}</td>
                   <td>
                     <div *ngIf="sdcDataset.Programming_tool">{{sdcDataset.Programming_tool}}</div>
-                    <div *ngIf="!sdcDataset.Programming_tool" class="textAlignCenter">-----</div>
+                    <div *ngIf="!sdcDataset.Programming_tool">-----</div>
                   </td>
                   <td>
                     <div *ngIf="sdcDataset.Geographic_Scope">{{sdcDataset.Geographic_Scope}}</div>
-                    <div *ngIf="!sdcDataset.Geographic_Scope" class="textAlignCenter">-----</div>
+                    <div *ngIf="!sdcDataset.Geographic_Scope">-----</div>
                   </td>
                   <td>
                     <div *ngIf="sdcDataset.Data_Availability_Span">{{sdcDataset.Data_Availability_Span}}</div>
-                    <div *ngIf="!sdcDataset.Data_Availability_Span" class="textAlignCenter">-----</div>
+                    <div *ngIf="!sdcDataset.Data_Availability_Span">-----</div>
                   </td>
                   <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
                 </tr>

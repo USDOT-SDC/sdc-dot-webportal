@@ -50,15 +50,6 @@ export class DialogBoxComponent implements OnInit {
 
 
     sendMail() {
-        if (this.messageModel.type == 'dataset') {
-            this.showDataset = true;
-            this.showAlgorithm = false;
-
-        } else if (this.messageModel.type == 'algorithm') {
-            this.showAlgorithm = true;
-            this.showDataset = false;
-
-        }
         if (this.mailType === 'Access Request Mail') {
             this.message =  '<div>' +
                 '    Hello,<br><br>' +
@@ -72,21 +63,36 @@ export class DialogBoxComponent implements OnInit {
                 '    Thanks, <br>' + this.userName +
                 '</div>';
         } else {
-            this.message = '<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>' +
-                '    <ul>' +
-                '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
-                '        <li>Type = ' + this.messageModel.type + '</li>' +
-                '        <li>File Name = ' + this.messageModel.name + '</li>' +
-                '        <li>Description = ' + this.messageModel.description + '</li>' +
-                '        <li>Readme / Data dictionary file name = ' + this.messageModel.readmeFileName + '</li>' +
-                '        <li *ngIf="showDataset">Geographic Scope = ' + this.messageModel.geographicScope + '</li>' +
-                '        <li *ngIf="showDataset">Start/End Date for Data Availability = ' + this.messageModel.dataAvailability + '</li>' +
-                '        <li *ngIf="showAlgorithm">Programming Tools/language = ' + this.messageModel.ProgrammingTool + '</li>  <br>' +
-                '        <li>Sender Name = ' + this.userName + '</li>' +
-                '        <li>Sender E-mail id = ' + this.userEmail + '</li>' +
-                '    </ul>' +
-                '    Thanks, <br>' + this.userName +
-                '</div>';
+            if (this.messageModel.type == 'dataset') {
+                this.message = '<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>' +
+                    '    <ul>' +
+                    '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
+                    '        <li>Type = ' + this.messageModel.type + '</li>' +
+                    '        <li>File Name = ' + this.messageModel.name + '</li>' +
+                    '        <li>Description = ' + this.messageModel.description + '</li>' +
+                    '        <li>Readme / Data dictionary file name = ' + this.messageModel.readmeFileName + '</li>' +
+                    '        <li>Geographic Scope = ' + this.messageModel.geographicScope + '</li>' +
+                    '        <li>Start/End Date for Data Availability = ' + this.messageModel.dataAvailability + '</li> <br>' +
+                    '        <li>Sender Name = ' + this.userName + '</li>' +
+                    '        <li>Sender E-mail id = ' + this.userEmail + '</li>' +
+                    '    </ul>' +
+                    '    Thanks, <br>' + this.userName +
+                    '</div>';
+            } else if (this.messageModel.type == 'algorithm') {
+                this.message = '<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>' +
+                    '    <ul>' +
+                    '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
+                    '        <li>Type = ' + this.messageModel.type + '</li>' +
+                    '        <li>File Name = ' + this.messageModel.name + '</li>' +
+                    '        <li>Description = ' + this.messageModel.description + '</li>' +
+                    '        <li>Readme / Data dictionary file name = ' + this.messageModel.readmeFileName + '</li>' +
+                    '        <li>Programming Tools/language = ' + this.messageModel.ProgrammingTool + '</li>  <br>' +
+                    '        <li>Sender Name = ' + this.userName + '</li>' +
+                    '        <li>Sender E-mail id = ' + this.userEmail + '</li>' +
+                    '    </ul>' +
+                    '    Thanks, <br>' + this.userName +
+                    '</div>';
+            }
         }
         this.gatewayService.sendRequestMail('send_email?sender=' + this.userEmail + '&message=' + this.message).subscribe(
             (response: any) => {
