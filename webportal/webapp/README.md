@@ -1,5 +1,5 @@
 
-#SDC-DOT Webportal README
+# SDC-DOT Webportal README
 
 
 ## Installation steps for UI first-time build -
@@ -22,7 +22,7 @@
    * open http://localhost:4200
    
    
-##Configuration UI changes
+## Configuration UI changes
 
 ```sh 
 NOTE - Do not check in configuration value into project repository for the security purpose
@@ -49,11 +49,11 @@ NOTE - Do not check in configuration value into project repository for the secur
         
 
 ## Deployment steps for the application UI
-1.Run the command below for Development Deployment -
+1. Run the command below for Development Deployment -
    * Goto ../webapp/
    * Run ./dev_deploy.sh
     
-1.Run the command below for Production Deployment -
+2. Run the command below for Production Deployment -
    * Goto ../webapp/
    * Run ./prod_deploy.sh 
    
