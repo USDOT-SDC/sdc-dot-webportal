@@ -2,6 +2,39 @@
 # SDC-DOT Webportal README
 
 
+## Deploy Backend for Webportal
+
+### Pre-requiste
+
+To deploy backend you need to install [Chalice](https://github.com/aws/chalice)
+
+### Deployment Steps
+
+#### Modify the variable values
+
+Once Chalice framework installed modify the following varibale value in app.py file (location: webportal/lambda/app.py)
+
+| **Variables**                   | **Description**                                              |
+| ------------------------------- | ------------------------------------------------------------ |
+| TABLENAME                       | AWS DynamoDB Tablename for fetching user-stack mapping       |
+| TABLENAME_DATASET               | AWS DynamoDB Tablename for fetching Available dataset        |
+| APPSTREAM_S3_BUCKET_NAME        | AWS S3 bucket name used by AWS AppStream                     |
+| RECEIVER                        | The support email where admin will receive all request email |
+| PROVIDER_ARNS                   | ARN of AWS Cognito User Pool                                 |
+| RESTAPIID                       | RestAPI ID of API Gateway                                    |
+| AUTHORIZERID                    | Respective Authorizer ID of RestAPI ID provided above        |
+
+
+#### Deploy the Backend
+
+To deploy run below command:
+
+```sh
+chalice deploy --stage <stage_name> --no-autogen-policy --profile us-dot
+```
+
+where, `stage_name` can be dev, prod and so on.
+
 ## Installation steps for UI first-time build -
 
 ##### Goto ../webapp/ folder and run the command below -
@@ -61,36 +94,3 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 2. Run the command below for Production Deployment -
    * Goto `../webapp/`
    * Run `./prod_deploy.sh`
-
-## Deploy Backend
-
-### Pre-requiste
-
-To deploy backend you need to install [Chalice](https://github.com/aws/chalice)
-
-### Deployment Steps
-
-#### Modify the variable values
-
-Once Chalice framework installed modify the following varibale value in app.py file (location: webportal/lambda/app.py)
-
-| **Variables**                   | **Description**                                              |
-| ------------------------------- | ------------------------------------------------------------ |
-| TABLENAME                       | AWS DynamoDB Tablename for fetching user-stack mapping       |
-| TABLENAME_DATASET               | AWS DynamoDB Tablename for fetching Available dataset        |
-| APPSTREAM_S3_BUCKET_NAME        | AWS S3 bucket name used by AWS AppStream                     |
-| RECEIVER                        | The support email where admin will receive all request email |
-| PROVIDER_ARNS                   | ARN of AWS Cognito User Pool                                 |
-| RESTAPIID                       | RestAPI ID of API Gateway                                    |
-| AUTHORIZERID                    | Respective Authorizer ID of RestAPI ID provided above        |
-
-
-#### Deploy the Backend
-
-To deploy run below command:
-
-```sh
-chalice deploy --stage <stage_name> --no-autogen-policy --profile us-dot
-```
-
-where, `stage_name` can be dev, prod and so on.
