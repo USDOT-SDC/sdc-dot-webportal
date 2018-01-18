@@ -16,19 +16,17 @@ cors_config = CORSConfig(
     allow_credentials=True
 )
 
-
-TABLENAME = 'dev-UserStacksTable'
-TABLENAME_DATASET = 'dev-AvailableDataset'
-APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
+#Parameters used to deploy production setup
+TABLENAME = ''
+TABLENAME_DATASET = ''
+APPSTREAM_S3_BUCKET_NAME = ''
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
-DATA_DICT_S3_BUCKET_NAME = 'dev-dot-sdc-curated-911061262852-us-east-1'
-DATA_DICT_PATH = 'data-dictionaries/'
-RECEIVER = 'pallavi.giri@reancloud.com'
-PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q'
-RESTAPIID = 'u2zksemc1h'
-AUTHORIZERID = 'ne1w0w'
+RECEIVER = ''
+PROVIDER_ARNS = ''
+RESTAPIID = ''
+AUTHORIZERID = ''
 
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
