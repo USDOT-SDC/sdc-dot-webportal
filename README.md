@@ -2,7 +2,7 @@
 
 ## Step to deploy backend for Webportal
 
-### Pre-requiste
+### Prerequisite
 
 To deploy backend you need to install [Chalice](https://github.com/aws/chalice)
 
