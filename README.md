@@ -1,8 +1,8 @@
 # SDC-DOT Webportal README
 
-## Deploy Backend for Webportal
+## Step to deploy backend for Webportal
 
-### Pre-requiste
+### Prerequisite
 
 To deploy backend you need to install [Chalice](https://github.com/aws/chalice)
 
@@ -10,7 +10,7 @@ To deploy backend you need to install [Chalice](https://github.com/aws/chalice)
 
 #### Modify the variable values
 
-Once Chalice framework installed modify the following varibale value in app.py file (location: webportal/lambda/app.py)
+Once Chalice framework is installed, modify the following variable value in app.py file (location: webportal/lambda/app.py)
 
 | **Variables**                   | **Description**                                              |
 | ------------------------------- | ------------------------------------------------------------ |
@@ -31,11 +31,11 @@ To deploy run below command:
 chalice deploy --stage <stage_name> --no-autogen-policy --profile us-dot
 ```
 
-where, `stage_name` can be dev, prod and so on.
+where, `stage_name` can be `dev`, `prod` and so on.
 
-## Installation steps for UI first-time build -
+## Installation steps for deploying UI
 
-### Goto ../webapp/ folder and run the command below -
+### Goto ../webapp/ folder and run the command below
 
 1. Install Nodejs
    * curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
