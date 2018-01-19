@@ -1,0 +1,26 @@
+<div class="container">
+  <!-- row requires "row-divided" class -->
+  <mat-card>
+    <div class="row row-divided">
+      <div class="col-xs-6 column-one">
+        <h3>Sign up</h3>
+        <p class="textFormat">Please download the access request
+          form below, fill out the required details and send an email
+          to support@securedatacommons.com. Once approved,
+          we will send you an email with the instructions for
+          accessing the platform.</p>
+
+        <span class="accessLink">
+          <a href="../../../assets/SDC_Form/SDCAccessRequestForm.pdf" target="_blank" (click)="requestForm()">Access Request Form</a>
+        </span>
+      </div>
+      <div class="vertical-divider">or</div>
+      <div class="col-xs-6 column-two">
+        <div id="wrapper">
+          <button class="btn btn-primary actionBtn" (click)="userLogin()">Login</button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<a id="MyLink" style="display:none"></a>

@@ -1,26 +1,53 @@
-<div class="bg account-font">
-  <nav class="navbar navbar-default">
+<div>
+  <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand brand-name navbar-left">
-          <img class="img-responsive2" src="../assets/images/dot-logo.svg" alt="Logo"> SDC
-        </a>
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header col-md-4">
+        <!--<a class="brand-name" style="width: 15%;float: left;margin: 5px 0;">-->
+          <!--<img style="margin-top: 8px;" class="img-responsive2" src="../assets/images/dot-logo-white.png" alt="Logo">-->
+        <!--</a>-->
+        <div style=" float: left;width: 85%;padding: 18px 0px;margin-left: -15px">
+          <!--<span style="font-weight: 700;">U.S. Department of Transportation</span><br/>-->
+          <span class="logo">Secure Data Commons Platform</span>
+        </div>
       </div>
-      <ul class="nav navbar-nav">
-        <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-          <a class="nav-link" [routerLink]="['/account/myaccount']">My account</a>
-        </li>
-        <li class="nav-item" [routerLinkActive]="['active']">
-          <a class="nav-link" [routerLink]="['/account/settings']">Settings</a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="nav-item" [routerLinkActive]="['active']">
-            <a class="nav-link logout-btn" (click)="userLogout()">
-              <span class="glyphicon glyphicon-log-out"></span> Logout</a>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="col-md-8" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right" style="font-size: 11px">
+          <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link"  [routerLink]="['/account/accounthome']">HOME &emsp; &nbsp;|</a>
           </li>
-      </ul>
-    </div>
+          <li class="nav-item" [routerLinkActive]="['active']">
+            <a class="nav-link" [routerLink]="['/account/datasets']">DATASETS &emsp; &nbsp;|</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['active']">
+            <a class="nav-link" [routerLink]="['/account/workstation']">WORKSTATIONS &emsp; &nbsp;|</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['active']">
+            <a class="nav-link" [routerLink]="['/account/faq']">FAQ &emsp; &nbsp;|</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['active']">
+            <a class="nav-link" style="cursor: pointer" (click)="userLogout()">LOGOUT</a>
+          </li>
+
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
   </nav>
   <router-outlet></router-outlet>
+
+  <!--footer-->
+  <div class="container-fluid">
+    <div class="row padding-top-lg">
+      <div id="footerInfo" class="padding-top-sm">
+        <!--<div class="footerLogo">-->
+          <!--<img src="../assets/images/dot-logo-white.png" alt="DOT Logo" style="margin-top: 25px;">-->
+          <!--<span style="font-weight: 700;font-size: 14px">U.S. Department of Transportation</span>-->
+        <!--</div>-->
+        <p class="logo">Secure Data Commons Platform</p>
+        <p class="font-13">The SDC platform was created as a prototype as part of a U.S. DOT research project under contract number DTFH6116D00052 / Task 12</p>
+      </div>
+    </div>
+  </div>
 </div>
