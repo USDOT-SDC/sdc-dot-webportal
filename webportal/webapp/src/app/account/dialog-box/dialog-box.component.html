@@ -1,0 +1,87 @@
+<!--SDC Datasets Access Request Dialogbox-->
+<div *ngIf="mailType == 'Access Request Mail'">
+  <h4>SDC Datasets Access Request</h4>
+  <hr>
+  <mat-dialog-content>
+      <mat-form-field style='width: 100%'>
+        <textarea matInput name="stateList" id="stateList" placeholder="Enter the state(s) for which you would like to request access." [(ngModel)]="messageModel.stateList" required></textarea>
+          <mat-error align="end" *ngIf="!messageModel.stateList">Required</mat-error>
+      </mat-form-field>
+      <p style="margin-top: -15px;color: #a09e9e;font-size: 12px;"> use commas when requesting multiple states (e.g. KN, VI)</p>
+
+  </mat-dialog-content>
+  <hr>
+  <mat-dialog-actions>
+    <button class="btn btn-primary dotBtn" [disabled]="!messageModel.stateList" (click)="sendMail()">SEND REQUEST</button>&nbsp;
+    <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
+  </mat-dialog-actions>
+</div>
+
+
+<!--Publish Dataset / Algorithm Request Dialogbox-->
+<div *ngIf="mailType == 'Dataset publish Mail'">
+  <h4>Publish Dataset / Algorithm Request</h4>
+  <hr>
+  <mat-dialog-content>
+
+    <mat-form-field style='width: 100%'>
+      <mat-select placeholder='Type' [(ngModel)]="messageModel.type">
+        <mat-option *ngFor="let dataType of dataTypes" [value]="dataType.value" required>
+          {{ dataType.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.type">Please select type</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Name" [(ngModel)]="messageModel.name" value="{{messageModel.name}}" required>
+      <mat-error align="end" *ngIf="!messageModel.name">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Description" [(ngModel)]="messageModel.description" value="{{messageModel.description}}" required>
+      <mat-error align="end" *ngIf="!messageModel.description">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="File/folder name" [(ngModel)]="messageModel.fileFolderName" value="{{messageModel.fileFolderName}}" required>
+      <mat-error align="end" *ngIf="!messageModel.fileFolderName">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Readme / Data dictionary file name" [(ngModel)]="messageModel.readmeFileName" value="{{messageModel.readmeFileName}}" required>
+      <mat-error align="end" *ngIf="!messageModel.readmeFileName">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
+      <input matInput placeholder="Geographic Scope" [(ngModel)]="messageModel.geographicScope" value="{{messageModel.geographicScope}}" required>
+      <mat-error *ngIf="!messageModel.geographicScope">Required</mat-error>
+    </mat-form-field>
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
+      <input matInput placeholder="Start/End Date for Data Availability" [(ngModel)]="messageModel.dataAvailability" value="{{messageModel.dataAvailability}}" required>
+      <mat-error align="end" *ngIf="!messageModel.dataAvailability">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'algorithm'">
+      <input matInput placeholder="Programming Tools/language" [(ngModel)]="messageModel.ProgrammingTool" value="{{messageModel.ProgrammingTool}}" required>
+      <mat-error align="end" *ngIf="!messageModel.ProgrammingTool">Required</mat-error>
+    </mat-form-field>
+
+  </mat-dialog-content>
+  <hr>
+  <mat-dialog-actions>
+    <span *ngIf="messageModel.type == 'dataset'">
+      <button class="btn btn-primary dotBtn"
+              [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.geographicScope || !messageModel.dataAvailability"
+              (click)="sendMail()">SEND REQUEST
+      </button>
+    </span>&nbsp;
+    <span *ngIf="messageModel.type == 'algorithm'">
+      <button class="btn btn-primary dotBtn"
+              [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.ProgrammingTool"
+              (click)="sendMail()">SEND REQUEST
+      </button>
+    </span>&nbsp;
+    <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
+  </mat-dialog-actions>
+</div>

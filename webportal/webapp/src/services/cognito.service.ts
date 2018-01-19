@@ -111,9 +111,9 @@ export class CognitoService {
             onFailure: function(err) {
             }
         };
-        userAuth.signOut()
-        this.getUserPool().getCurrentUser().signOut()
-        localStorage.clear()
+        // userAuth.signOut();
+        this.getCurrentUser().signOut();
+        localStorage.clear();
     }
 
     // Method to fetch the cognito ID token

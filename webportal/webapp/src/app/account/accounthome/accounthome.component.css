@@ -1,0 +1,31 @@
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  
+  .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }
+
+  .selected-row {
+    background-color: #8a878770;
+  }
+
+
+.infoDiv{
+  text-align: left;
+  padding-top: 25px;
+  font-size: 16px;
+  color: rgb(52, 73, 95);
+}
+
+.matContent {
+  text-align: left;
+  font-size: 15px;
+  color: #536576;
+}
+.matTitle {
+  font-style: italic;
+  text-align: left;
+  font-size: 15px;
+  color: #536576;
+}

@@ -1,0 +1,51 @@
+<div style="padding: 20%;text-align:center;" *ngIf="stacks == null">
+  <h3>
+    <img src="../../assets/images/dot-logo.png">
+    <br>
+    <br> Loading
+  </h3>
+</div>
+
+<div class="container">
+  <mat-card>
+    <div class="row">
+      <h3>My Workstations</h3>
+        <span>Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data</span><hr>
+      <mat-card-content style="max-height: 300px;overflow-y: scroll">
+        <table class="table">
+          <thead class="thead-inverse">
+          <tr>
+            <th>#</th>
+            <th>Stack Name</th>
+            <th>Applications</th>
+            <th>Action</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-template ngFor let-stack [ngForOf]="stacks" let-i="index+1">
+            <tr>
+              <td>{{ i }}</td>
+              <td>{{ stack.display_name }}</td>
+              <td> {{stack.application}} </td>
+              <td>
+                <div *ngIf="!stack.instance_id">
+                  <span> ----</span>
+                </div>
+                <div *ngIf="stack.instance_id && instanceState && instanceState" style="cursor: pointer;">
+                  <a *ngIf="instanceState == 'running' " (click)="instanceAction('stop')"> Stop </a>
+                  <a *ngIf="instanceState == 'stop' " (click)="instanceAction('run')"> Start </a>
+                </div>
+              </td>
+              <td>
+                <!--<button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack)">Launch</button>-->
+                <a style="cursor: pointer;" (click)="launchWorkstation(stack)"> Launch </a>
+              </td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </div>
+  </mat-card>
+</div>
