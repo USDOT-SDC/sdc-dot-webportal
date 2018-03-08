@@ -20,11 +20,19 @@ export class DialogBoxComponent implements OnInit {
         {value: 'dataset', viewValue: 'Dataset'},
         {value: 'algorithm', viewValue: 'Algorithm'},
     ];
+
+    Categories = [
+        {value: 'raw', viewValue: 'Raw'},
+        {value: 'curated', viewValue: 'Curated'},
+        {value: 'published', viewValue: 'Published'},
+    ];
+
     messageModel = {
         name: '',
         stateList: '',
         fileFolderName: '',
         type: 'dataset',
+        category : '',
         bucketName: '',
         description: '',
         readmeFileName: '',
@@ -68,6 +76,7 @@ export class DialogBoxComponent implements OnInit {
                     '    <ul>' +
                     '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
                     '        <li>Type = ' + this.messageModel.type + '</li>' +
+                    '        <li>Category = ' + this.messageModel.category + '</li>' +
                     '        <li>File Name = ' + this.messageModel.name + '</li>' +
                     '        <li>Description = ' + this.messageModel.description + '</li>' +
                     '        <li>Readme / Data dictionary file name = ' + this.messageModel.readmeFileName + '</li>' +

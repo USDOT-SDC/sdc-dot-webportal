@@ -1,5 +1,4 @@
 <div class="container">
-  <!-- row requires "row-divided" class -->
   <mat-card>
     <div class="row row-divided">
       <div class="col-xs-6 column-one">
@@ -10,9 +9,17 @@
           we will send you an email with the instructions for
           accessing the platform.</p>
 
-        <span class="accessLink">
-          <a href="../../../assets/SDC_Form/SDCAccessRequestForm.pdf" target="_blank" (click)="requestForm()">Access Request Form</a>
-        </span>
+        <div class="accessLink">
+          <a style="font-size:16px;" href="../../../assets/SDC_Form/SDCAccessRequestForm.pdf" target="_blank" (click)="requestForm()">Access Request Form</a>
+        </div>
+        <div style="width:50px;height:50px;float:left;padding-left:10px;padding-top:20px;">
+          <img style="width:32px;height:32px;" src="../../../assets/images/info_icon.png" alt="Warning!">
+        </div>
+        <div style="padding-top: 20px;">
+          <p class="textFormat" style="margin-top:inherit;font-size:13px;">You are accessing a U.S. Government information system. This information system, including all related equipment, networks, and network devices, is provided for U.S. Government-authorized use only. Unauthorized or improper use of this system is prohibited, and may result in civil and criminal penalties, or administrative disciplinary action. The communications and data stored or transiting this system may be, for any lawful Government purpose, monitored, recorded, and subject to audit or investigation. By using this system, you understand and consent to such terms. 
+            For details on how we use your information, please see our <a href="https://www.transportation.gov/dot-website-privacy-policy">Privacy Policy</a>
+          </p>
+        </div>
       </div>
       <div class="vertical-divider">or</div>
       <div class="col-xs-6 column-two">

@@ -1,6 +1,6 @@
 <!--SDC Datasets Access Request Dialogbox-->
 <div *ngIf="mailType == 'Access Request Mail'">
-  <h4>SDC Datasets Access Request</h4>
+  <h4>SDC Data Access Request Form</h4>
   <hr>
   <mat-dialog-content>
       <mat-form-field style='width: 100%'>
@@ -31,6 +31,15 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="!messageModel.type">Please select type</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
+      <mat-select placeholder='Category' [(ngModel)]="messageModel.category">
+        <mat-option *ngFor="let category of Categories" [value]="category.value" required>
+          {{ category.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.category">Please select category</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>

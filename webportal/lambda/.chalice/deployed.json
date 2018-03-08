@@ -15,7 +15,7 @@
     "api_handler_arn": "arn:aws:lambda:us-east-1:911061262852:function:webportal-dev",
     "rest_api_id": "u2zksemc1h",
     "lambda_functions": {},
-    "chalice_version": "1.0.4",
+    "chalice_version": "1.1.0",
     "api_gateway_stage": "api",
     "backend": "api"
   }

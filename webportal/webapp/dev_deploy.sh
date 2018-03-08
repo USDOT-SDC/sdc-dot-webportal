@@ -1,5 +1,5 @@
 #/bin/bash
-ng build --prod --aot
+ng build --dev --aot
 #upload files
 s3cmd --exclude '.git/*' sync --delete-removed ./dist/ s3://test-sdc-webportal-hosting/
 #set content type of css files
