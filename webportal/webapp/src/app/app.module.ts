@@ -5,7 +5,7 @@ import { RoutingModule } from './app.routes';
 import { HttpModule } from '@angular/http';
 // import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatTableModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatTableModule, MatRadioModule } from '@angular/material';
 import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
@@ -59,6 +59,8 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     MatDialogModule,
     MatSelectModule,
     MatOptionModule,
+    MatRadioModule,
+    MatCheckboxModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
   ],
