@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
 import { AboutComponent } from './main/about/about.component';
+import { HomeFaqComponent } from './main/faq/faq.component';
 import { AccountComponent } from './account/account.component';
 import { DatasetsComponent } from './account/datasets/datasets.component';
 import { AccountHomeComponent } from './account/accounthome/accounthome.component';
@@ -38,6 +39,7 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     RegisterComponent,
     DialogBoxComponent,
     FaqComponent,
+    HomeFaqComponent,
     DatasetinfoComponent,
   ],
   imports: [

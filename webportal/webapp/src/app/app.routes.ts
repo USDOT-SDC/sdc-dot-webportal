@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
 import { AboutComponent } from './main/about/about.component';
+import { HomeFaqComponent } from './main/faq/faq.component';
 import { AccountComponent } from './account/account.component';
 import { AccountHomeComponent } from './account/accounthome/accounthome.component';
 import { DatasetsComponent } from './account/datasets/datasets.component';
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
             { path: 'about', component: AboutComponent },
             { path: 'datasetinfo', component: DatasetinfoComponent },
             { path: 'register', component: RegisterComponent },
+            { path: 'faqs', component: HomeFaqComponent },
         ],
     },
     {
@@ -30,7 +32,6 @@ const appRoutes: Routes = [
             { path: 'datasets', component: DatasetsComponent },
             { path: 'workstation', component: WorkstationComponent },
             { path: 'faq', component: FaqComponent },
-
         ],
     }
 ];
