@@ -1,18 +1,52 @@
 <!--SDC Datasets Access Request Dialogbox-->
 <div *ngIf="mailType == 'Access Request Mail'">
-  <h4>SDC Datasets Access Request</h4>
+  <h4>SDC Data Access Request Form</h4>
   <hr>
   <mat-dialog-content>
+      <p>Please fill out the following information to obtain access to the data set.</p>
+      <h5 style="font-size:16px;padding-top: 10px;">Basis for Access</h5>
+      <div style='width: 100%;padding-top: 15px;'>
+        <p>Are you a USDOT Employee or researcher under contract to USDOT?</p>
+        <mat-radio-group name="dotEmployee" id="dotEmployee" required [(ngModel)]="messageModel.dotEmployee">
+          <mat-radio-button value="true">Yes</mat-radio-button>
+          <br/><mat-radio-button value="false">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <mat-form-field style='width: 100%' *ngIf="messageModel.dotEmployee === 'true'">
+          <input matInput placeholder="If yes, please provide valid USDOT email address" (ngModelChange)="isEmailValid=validateEmailRegex()" [(ngModel)]="messageModel.dotEmployeeEmail" value="{{messageModel.dotEmployeeEmail}}" required>
+          <mat-error align="start" *ngIf="!isEmailValid">Please enter a valid email address</mat-error>
+          <!-- <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+              Please enter a valid email address
+          </mat-error> -->
+          <mat-error align="end" *ngIf="!messageModel.dotEmployeeEmail">Required</mat-error>
+      </mat-form-field>
+      <div style='width: 100%;padding-top: 15px;' *ngIf="messageModel.dotEmployee === 'false'">
+        <p>If No, Do you or your agency have an existing agreement with the data provider?</p>
+        <mat-radio-group name="dotEmployeeExistingContract" id="dotEmployeeExistingContract" required [(ngModel)]="messageModel.dotEmployeeExistingContract">
+          <mat-radio-button value="true">Yes</mat-radio-button>
+          <br/><mat-radio-button value="false">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'true'">
+          <p>Kindly email a copy of your data agreement with the requested data provider at <strong>support@securedatacommons.com</strong>. Access will be provided after the SDC team has validated the agreement.</p>
+      </div>
+      <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'false'">
+          <p>Would you like to sign an agreement to use the data available on the SDC Platform? Kindly write to <strong>support@securedatacommons.com</strong></p>
+      </div>
+      <hr>
+      <h5 style="font-size:16px;padding-top: 10px;">Geographic Extent of Access</h5>
       <mat-form-field style='width: 100%'>
         <textarea matInput name="stateList" id="stateList" placeholder="Enter the state(s) for which you would like to request access." [(ngModel)]="messageModel.stateList" required></textarea>
-          <mat-error align="end" *ngIf="!messageModel.stateList">Required</mat-error>
+        <mat-error align="end" *ngIf="!messageModel.stateList">Required</mat-error>
       </mat-form-field>
       <p style="margin-top: -15px;color: #a09e9e;font-size: 12px;"> use commas when requesting multiple states (e.g. KN, VI)</p>
-
-  </mat-dialog-content>
+      <mat-checkbox [(ngModel)]="agreed" [disabled]="!messageModel.stateList && (!messageModel.dotEmployee === 'false' && !messageModel.dotEmployeeExistingContract) || (messageModel.dotEmployee === 'true' && !messageModel.dotEmployeeEmail)"></mat-checkbox>
+      <p>By clicking accept, the user agrees to the conditions set in the data provider agreement. If you are a USDOT employee or engaged in USDOT-sponsored research activity, you are agreeing to the overall data agreements that USDOT has with the data providers.</p>
+      <p style="padding-top:10px;">Failure to comply with these terms may result in termination of the user account for the site and associated data in those accounts.</p>
+    </mat-dialog-content>
   <hr>
   <mat-dialog-actions>
-    <button class="btn btn-primary dotBtn" [disabled]="!messageModel.stateList" (click)="sendMail()">SEND REQUEST</button>&nbsp;
+    <button class="btn btn-primary dotBtn" [disabled]="!agreed" (click)="sendMail()">SEND REQUEST</button>&nbsp;
     <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
   </mat-dialog-actions>
 </div>
@@ -31,6 +65,15 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="!messageModel.type">Please select type</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
+      <mat-select placeholder='Category' [(ngModel)]="messageModel.category">
+        <mat-option *ngFor="let category of Categories" [value]="category.value" required>
+          {{ category.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.category">Please select category</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>

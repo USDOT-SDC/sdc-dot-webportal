@@ -33,13 +33,13 @@
                   <span> ----</span>
                 </div>
                 <div *ngIf="stack.instance_id && instanceState && instanceState" style="cursor: pointer;">
-                  <a *ngIf="instanceState == 'running' " (click)="instanceAction('stop')"> Stop </a>
-                  <a *ngIf="instanceState == 'stop' " (click)="instanceAction('run')"> Start </a>
+                  <a class="btn btn-primary dotBtn" *ngIf="instanceState == 'running' " (click)="instanceAction('stop')"> Stop </a>
+                  <a class="btn btn-primary dotBtn" *ngIf="instanceState == 'stop' " (click)="instanceAction('run')"> Start </a>
                 </div>
               </td>
               <td>
                 <!--<button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack)">Launch</button>-->
-                <a style="cursor: pointer;" (click)="launchWorkstation(stack)"> Launch </a>
+                <a class="btn btn-primary dotBtn" style="cursor: pointer;" (click)="launchWorkstation(stack)"> Launch </a>
               </td>
             </tr>
           </ng-template>

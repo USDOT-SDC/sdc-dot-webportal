@@ -13,7 +13,10 @@ export class DatasetsComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService,
         public snackBar: MatSnackBar,
         public dialog: MatDialog) { }
+    sdcElements: any = [];
+    sortedSdcElements: any = [];
     sdcDatasets: any = [];
+    sdcAlgorithms: any = [];
     myDatasets = [];
     user: any;
     selectedsdcDataset: any = {};
@@ -22,7 +25,24 @@ export class DatasetsComponent implements OnInit {
 
     ngOnInit() {
         var sdcDatasetsString = sessionStorage.getItem('datasets');
-        this.sdcDatasets = JSON.parse(sdcDatasetsString);
+        this.sdcElements = JSON.parse(sdcDatasetsString);
+        this.sortedSdcElements= this.sdcElements.reverse();
+        this.sortedSdcElements.forEach(element => {
+            if (element.Type == "Algorithm")
+            {
+                if ( element.Owner == "SDC platform" ) 
+                    this.sdcAlgorithms.unshift(element);
+                else
+                    this.sdcAlgorithms.push(element);
+            }
+            else
+            {
+                if ( element.Owner == "SDC platform" ) 
+                    this.sdcDatasets.unshift(element);
+                else
+                    this.sdcDatasets.push(element);
+            }
+        });
         this.getMyDatasetsList();
     }
 

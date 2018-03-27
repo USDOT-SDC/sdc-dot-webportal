@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatRadioModule, MatCheckboxModule} from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 
 @Component({
@@ -20,11 +20,22 @@ export class DialogBoxComponent implements OnInit {
         {value: 'dataset', viewValue: 'Dataset'},
         {value: 'algorithm', viewValue: 'Algorithm'},
     ];
+
+    Categories = [
+        {value: 'raw', viewValue: 'Raw'},
+        {value: 'curated', viewValue: 'Curated'},
+        {value: 'published', viewValue: 'Published'},
+    ];
+
     messageModel = {
         name: '',
         stateList: '',
+        dotEmployee: '',
+        dotEmployeeEmail: '',
+        dotEmployeeExistingContract: '',        
         fileFolderName: '',
         type: 'dataset',
+        category : '',
         bucketName: '',
         description: '',
         readmeFileName: '',
@@ -48,6 +59,10 @@ export class DialogBoxComponent implements OnInit {
 
     }
 
+    validateEmailRegex(email) {
+        var regexEmail = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+        return regexEmail.test(email);
+    }
 
     sendMail() {
         if (this.mailType === 'Access Request Mail') {
@@ -56,6 +71,9 @@ export class DialogBoxComponent implements OnInit {
                 '    Please approve the request for Dataset Access.<br>' +
                 '    <ul>' +
                 '        <li>Bucket Name = ' + this.messageModel.bucketName + '</li>' +
+                '        <li>User is a USDOT employee or researcher = ' + this.messageModel.dotEmployee + '</li> <br>' +
+                '        <li>USDOT employee email address = ' + this.messageModel.dotEmployeeEmail + '</li> <br>' +
+                '        <li>User has a data agreement with the provider = ' + this.messageModel.dotEmployeeExistingContract + '</li> <br>' +
                 '        <li>State List = ' + this.messageModel.stateList + '</li> <br>' +
                 '        <li>Sender Name = ' + this.userName + '</li>' +
                 '        <li>Sender E-mail id = ' + this.userEmail + '</li>' +
@@ -68,6 +86,7 @@ export class DialogBoxComponent implements OnInit {
                     '    <ul>' +
                     '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
                     '        <li>Type = ' + this.messageModel.type + '</li>' +
+                    '        <li>Category = ' + this.messageModel.category + '</li>' +
                     '        <li>File Name = ' + this.messageModel.name + '</li>' +
                     '        <li>Description = ' + this.messageModel.description + '</li>' +
                     '        <li>Readme / Data dictionary file name = ' + this.messageModel.readmeFileName + '</li>' +

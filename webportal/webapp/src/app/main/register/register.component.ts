@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
 
   requestForm() {
       var mylink = document.getElementById('MyLink');
-      mylink.setAttribute('href', '../../assets/SDC_Form/SDCAccessRequestForm.docx');
+      mylink.setAttribute('href', '../../assets/SDC_Form/SDCAccessRequestForm.pdf');
       mylink.click();
   }
 }
