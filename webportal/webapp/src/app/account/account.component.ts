@@ -39,7 +39,8 @@ export class AccountComponent implements OnInit {
 
   userLogout() {
     this.cognitoService.logout();
+    localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate(['/']);
   }
-
 }

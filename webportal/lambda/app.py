@@ -73,7 +73,7 @@ def get_datasets():
 
 
 authorizer = CognitoUserPoolAuthorizer(
-    'test_cognito', provider_arns=[PROVIDER_ARNS])
+    '', provider_arns=[PROVIDER_ARNS])
 
 @app.route('/user', authorizer=authorizer, cors=cors_config)
 def get_user_info():
@@ -123,9 +123,9 @@ def get_user_info():
 @app.route('/streamingurl', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def get_streaming_url():          
     params = app.current_request.query_params
-    if not params or "stack_name" not in params or "fleet_name" not in params or "username" not in params :
-        logger.error("The query parameters 'stack_name' or 'fleet_name' or 'username' is missing")
-        raise BadRequestError("The query parameters 'stack_name' or 'fleet_name' or 'username' is missing")
+    if not params or "stack_name" not in params or "username" not in params :
+        logger.error("The query parameters 'stack_name' or 'username' is missing")
+        raise BadRequestError("The query parameters 'stack_name' or 'username' is missing")
 
 
     try:
@@ -158,21 +158,21 @@ def get_streaming_url():
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")        
  
     # Create the appstream url.
-    try:
-        response = appstream_client.create_streaming_url(FleetName=params['fleet_name'], StackName=params['stack_name'],
-                                                         UserId=params['username'])
-        #return {'url': response['StreamingURL']}
+    # try:
+    #     response = appstream_client.create_streaming_url(FleetName=params['fleet_name'], StackName=params['stack_name'],
+    #                                                      UserId=params['username'])
+    #     #return {'url': response['StreamingURL']}
 
-        return Response(body=response['StreamingURL'],
-                status_code=200,
-                headers={'Content-Type': 'text/plain'})
-    except KeyError as ke:
-        logger.exception('received malformed mapping data from dynamodb. %s' % mapping)
-        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-    except ClientError as ce:
-        logger.exception("Creation of streaming url failed for [user=%s, Fleet=%s, stack=%s]" % (
-        user_id, found['fleet_name'], found['stack_name']))
-        raise ChaliceViewError("Error creating streaming url")             
+    #     return Response(body=response['StreamingURL'],
+    #             status_code=200,
+    #             headers={'Content-Type': 'text/plain'})
+    # except KeyError as ke:
+    #     logger.exception('received malformed mapping data from dynamodb. %s' % mapping)
+    #     raise ChaliceViewError("Internal error occurred! Contact your administrator.")
+    # except ClientError as ce:
+    #     logger.exception("Creation of streaming url failed for [user=%s, Fleet=%s, stack=%s]" % (
+    #     user_id, found['fleet_name'], found['stack_name']))
+    #     raise ChaliceViewError("Error creating streaming url")             
 
 @app.route('/send_email', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def send_email():

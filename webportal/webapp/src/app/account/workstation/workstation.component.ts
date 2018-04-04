@@ -54,19 +54,23 @@ export class WorkstationComponent implements OnInit {
         );
     }
 
-    launchWorkstation(stack: any) {
-        this.selectedStack = stack.stack_name;
-        var fleetName = stack.fleet_name;
-        this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
-            (response: any) => {
-                this.streamingUrl = response;
-                if (this.streamingUrl != null) {
-                    window.open(this.streamingUrl);
-                } else {
-                    console.log('Failed to launch stack!');
-                }
-            }
-        );
-    }
+    // launchWorkstation(stack: any) {
+    //     this.selectedStack = stack.stack_name;
+    //     var fleetName = stack.fleet_name;
+    //     this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
+    //         (response: any) => {
+    //             this.streamingUrl = response;
+    //             if (this.streamingUrl != null) {
+    //                 window.open(this.streamingUrl);
+    //             } else {
+    //                 console.log('Failed to launch stack!');
+    //             }
+    //         }
+    //     );
+    // }
 
+    launchWorkstation(stack: any) {
+        this.streamingUrl = "https://stream.securedatacommons.com/guacamole/"
+        window.open(this.streamingUrl)
+    }
 }
