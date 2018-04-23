@@ -76,7 +76,7 @@
                   <td>
                     <div *ngIf="sdcDataset.Owner">{{sdcDataset.Owner}}</div>
                   </td>
-                  <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
+                  <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', sdcDataset.Name)">Request</button></td>
                 </tr>
               </ng-template>
               </tbody>
@@ -116,7 +116,7 @@
                   <td>
                     <div *ngIf="sdcDataset.Owner">{{sdcDataset.Owner}}</div>
                   </td>
-                  <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', '')">Request</button></td>
+                  <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', sdcDataset.Name)">Request</button></td>
                 </tr>
               </ng-template>
               </tbody>

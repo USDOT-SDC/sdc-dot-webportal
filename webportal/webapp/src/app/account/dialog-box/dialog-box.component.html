@@ -1,5 +1,5 @@
 <!--SDC Datasets Access Request Dialogbox-->
-<div *ngIf="mailType == 'Access Request Mail'">
+<div *ngIf="mailType == 'Access Request Mail' && datasetName != 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets'">
   <h4>SDC Data Access Request Form</h4>
   <hr>
   <mat-dialog-content>
@@ -40,6 +40,7 @@
         <mat-error align="end" *ngIf="!messageModel.stateList">Required</mat-error>
       </mat-form-field>
       <p style="margin-top: -15px;color: #a09e9e;font-size: 12px;"> use commas when requesting multiple states (e.g. KN, VI)</p>
+      <hr>
       <mat-checkbox [(ngModel)]="agreed" [disabled]="!messageModel.stateList && (!messageModel.dotEmployee === 'false' && !messageModel.dotEmployeeExistingContract) || (messageModel.dotEmployee === 'true' && !messageModel.dotEmployeeEmail)"></mat-checkbox>
       <p>By clicking accept, the user agrees to the conditions set in the data provider agreement. If you are a USDOT employee or engaged in USDOT-sponsored research activity, you are agreeing to the overall data agreements that USDOT has with the data providers.</p>
       <p style="padding-top:10px;">Failure to comply with these terms may result in termination of the user account for the site and associated data in those accounts.</p>
@@ -51,6 +52,59 @@
   </mat-dialog-actions>
 </div>
 
+
+<!--SDC Datasets Access Request Dialogbox-->
+<div *ngIf="mailType == 'Access Request Mail' && datasetName == 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets'">
+  <h4>SDC Data Access Request Form</h4> 
+  <hr>
+  <mat-dialog-content>
+      <p>Please fill out the following information to obtain access to the data set.</p>
+      <h5 style="font-size:16px;padding-top: 10px;">Basis for Access</h5>
+      <div style='width: 100%;padding-top: 15px;'>
+        <p>Are you a member of either the NYC, THEA or Wyoming CV Pilot Team?</p>
+        <mat-radio-group name="isCVPilotTeamMember" id="isCVPilotTeamMember" required [(ngModel)]="messageModel.isCVPilotTeamMember">
+          <mat-radio-button value="true">Yes</mat-radio-button>
+          <br/><mat-radio-button value="false">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style='width: 100%' *ngIf="messageModel.isCVPilotTeamMember === 'true'">
+          <p>If yes, please indicate which CV Pilot Team you are affiliated with</p>
+          <mat-radio-group name="cvPilotTeamName" id="cvPilotTeamName" required [(ngModel)]="messageModel.cvPilotTeamName"></mat-radio-group>
+            <mat-radio-button value="NYC">NYC CV Pilot Team</mat-radio-button>
+            <br/><mat-radio-button value="THEA">THEA CV Pilot Team</mat-radio-button>
+            <br/><mat-radio-button value="Wyoming">Wyoming CV Pilot Team</mat-radio-button>
+      </div>
+      <div style='width: 100%;padding-top: 15px;'>
+        <p>Are you a member of the CV Pilot Independent Evaluation Team?</p>
+        <mat-radio-group name="isCVPilotIETMember" id="isCVPilotIETMember" required [(ngModel)]="messageModel.isCVPilotIETMember">
+          <mat-radio-button value="true">Yes</mat-radio-button>
+          <br/><mat-radio-button value="false">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.isCVPilotTeamMember === 'false' && messageModel.isCVPilotIETMember === 'false'">
+          <p>If you answered no to both the questions, please provide the following information</p>
+          <p>Please indicate which CV Pilot you are requesting data access for: </p>
+          <mat-radio-group name="cvPilotDataSets" id="cvPilotDataSets" required [(ngModel)]="messageModel.cvPilotDataSets">
+            <mat-radio-button value="Wyoming">Wyoming</mat-radio-button>
+            <br/><mat-radio-button value="Tampa">Tampa Hillsborough Expressway Authority</mat-radio-button>
+            <br/><mat-radio-button value="NYC">New York City DOT</mat-radio-button>
+            <br/><mat-radio-button value="All">All Sites</mat-radio-button>
+          </mat-radio-group>
+          <p>Please provide a brief explanation on the reason for the request</p>
+          <div>
+            <textarea style='width: 100%' matInput name="accessReason" id="accessReason" placeholder="Enter the explanation here" [(ngModel)]="messageModel.accessReason"></textarea>
+          </div>
+      </div>
+      <hr>
+      <mat-checkbox [(ngModel)]="agreed"></mat-checkbox>
+      <p>By clicking accept, the user agrees to the terms and conditions set forth by the CV Pilot data providers. For the CVP deployment team and the IE, please refer to your data use agreements with the CV Pilot sites. For other users, please note that the access to CV Pilot evaluation data on the SDC is made on a case-by-case basis by the individual CV Pilot sites. If data access is provided, additional agreements may be necessary to ensure that the CV Pilot data protection needs are satisfied.</p>
+    </mat-dialog-content>
+  <hr>
+  <mat-dialog-actions>
+    <button class="btn btn-primary dotBtn" [disabled]="!agreed" (click)="sendMail()">SEND REQUEST</button>&nbsp;
+    <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
+  </mat-dialog-actions>
+</div>
 
 <!--Publish Dataset / Algorithm Request Dialogbox-->
 <div *ngIf="mailType == 'Dataset publish Mail'">
