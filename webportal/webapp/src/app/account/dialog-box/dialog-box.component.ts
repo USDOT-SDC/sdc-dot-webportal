@@ -27,6 +27,8 @@ export class DialogBoxComponent implements OnInit {
         {value: 'published', viewValue: 'Published'},
     ];
 
+    //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites") 
+
     messageModel = {
         name: '',
         stateList: '',
@@ -41,7 +43,12 @@ export class DialogBoxComponent implements OnInit {
         readmeFileName: '',
         geographicScope: '',
         dataAvailability: '',
-        ProgrammingTool: ''
+        ProgrammingTool: '',
+        isCVPilotTeamMember : '',
+        cvPilotTeamName : '',
+        isCVPilotIETMember : '',
+        accessReason : '',
+        cvPilotDataSets : ''
     };
     constructor(private gatewayService: ApiGatewayService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
@@ -65,11 +72,12 @@ export class DialogBoxComponent implements OnInit {
     }
 
     sendMail() {
-        if (this.mailType === 'Access Request Mail') {
+        if (this.mailType === 'Access Request Mail' && this.datasetName != 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets') {
             this.message =  '<div>' +
                 '    Hello,<br><br>' +
                 '    Please approve the request for Dataset Access.<br>' +
                 '    <ul>' +
+                '        <li>Dataset Name = ' + this.datasetName + '</li>' +
                 '        <li>Bucket Name = ' + this.messageModel.bucketName + '</li>' +
                 '        <li>User is a USDOT employee or researcher = ' + this.messageModel.dotEmployee + '</li> <br>' +
                 '        <li>USDOT employee email address = ' + this.messageModel.dotEmployeeEmail + '</li> <br>' +
@@ -81,7 +89,24 @@ export class DialogBoxComponent implements OnInit {
                 '    Thanks, <br>' + this.userName +
                 '</div>';
         } else {
-            if (this.messageModel.type == 'dataset') {
+            if (this.mailType === 'Access Request Mail' && this.datasetName == 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets') {
+                this.message =  '<div>' +
+                    '    Hello,<br><br>' +
+                    '    Please approve the request for Dataset Access.<br>' +
+                    '    <ul>' +
+                    '        <li>Dataset Name = ' + this.datasetName + '</li>' +
+                    '        <li>Bucket Name = ' + this.messageModel.bucketName + '</li>' +
+                    '        <li>User is a member of either the NYC, THEA or Wyoming CV Pilot Team? = ' + this.messageModel.isCVPilotTeamMember + '</li> <br>' +
+                    '        <li>User is affiliated with CV Pilot Team = ' + this.messageModel.cvPilotTeamName + '</li> <br>' +
+                    '        <li>User is a member of the CV Pilot Independent Evaluation Team? = ' + this.messageModel.isCVPilotIETMember + '</li> <br>' +
+                    '        <li>User is requesting data access to CV Pilot datasets = ' + this.messageModel.cvPilotDataSets + '</li> <br>' +
+                    '        <li>Reason for data access request to CV Pilot datasets = ' + this.messageModel.accessReason + '</li> <br>' +
+                    '        <li>Sender Name = ' + this.userName + '</li>' +
+                    '        <li>Sender E-mail id = ' + this.userEmail + '</li>' +
+                    '    </ul>' +
+                    '    Thanks, <br>' + this.userName +
+                    '</div>';
+            } else if (this.messageModel.type == 'dataset') {
                 this.message = '<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>' +
                     '    <ul>' +
                     '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
