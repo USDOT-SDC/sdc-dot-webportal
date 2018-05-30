@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ApiGatewayService} from '../../../services/apigateway.service';
 import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
 import {MatSnackBar} from '@angular/material';
+import { CognitoService } from '../../../services/cognito.service';
 
 @Component({
   selector: 'app-workstation',
@@ -18,6 +19,7 @@ export class WorkstationComponent implements OnInit {
 
     constructor(
         private gatewayService: ApiGatewayService,
+        private cognitoService: CognitoService,
         public snackBar: MatSnackBar) { }
 
     ngOnInit() {
@@ -54,23 +56,9 @@ export class WorkstationComponent implements OnInit {
         );
     }
 
-    // launchWorkstation(stack: any) {
-    //     this.selectedStack = stack.stack_name;
-    //     var fleetName = stack.fleet_name;
-    //     this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
-    //         (response: any) => {
-    //             this.streamingUrl = response;
-    //             if (this.streamingUrl != null) {
-    //                 window.open(this.streamingUrl);
-    //             } else {
-    //                 console.log('Failed to launch stack!');
-    //             }
-    //         }
-    //     );
-    // }
-
     launchWorkstation(stack: any) {
-        this.streamingUrl = "https://stream.securedatacommons.com/guacamole/"
+        this.streamingUrl = "https://stream.securedatacommons.com/guacamole/";
+        let authToken = this.cognitoService.getIdToken();
         window.open(this.streamingUrl)
     }
 }

@@ -3,10 +3,15 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RoutingModule } from './app.routes';
 import { HttpModule } from '@angular/http';
-// import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatTableModule, MatRadioModule } from '@angular/material';
+import { BrowserXhr } from '@angular/http';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule } from '@angular/material';
 import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
+import { CdkTableModule } from '@angular/cdk/table';
+import { TableModule } from 'primeng/table';
+import { FileUploadModule } from 'primeng/fileupload';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
@@ -47,6 +52,7 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     RoutingModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatMenuModule,
@@ -63,13 +69,18 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     MatOptionModule,
     MatRadioModule,
     MatCheckboxModule,
+    CdkTableModule,
+    TableModule,
+    FileUploadModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
   ],
   exports: [BrowserModule, ToastyModule],
   providers: [
     CognitoService,
-    ApiGatewayService
+    ApiGatewayService,
+    //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
+   // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
   ],
   entryComponents: [DialogBoxComponent],
   bootstrap: [AppComponent]

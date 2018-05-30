@@ -1,6 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import { HttpClient, HttpHeaders , HttpRequest , HttpEventType, HttpResponse} from '@angular/common/http';
+import {FileUpload} from 'primeng/fileupload';
+//import { ProgressHttp } from "angular-progress-http";
+//import { Headers, RequestOptions } from '@angular/http';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatRadioModule, MatCheckboxModule} from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
+import { CognitoService } from '../../../services/cognito.service';
 
 @Component({
   selector: 'app-dialog-box',
@@ -8,14 +13,22 @@ import { ApiGatewayService } from '../../../services/apigateway.service';
   styleUrls: ['./dialog-box.component.css']
 })
 export class DialogBoxComponent implements OnInit {
+  //protected options: RequestOptions;
     fileName: string;
     mailType: string;
+    requestType: string;
+    userBucketName: string;
+    //selectedFiles: FileList;
+    selectedFiles: any[] = [];
     message: string;
     datasetName: string;
     userEmail: string;
     userName: string;
     showDataset: boolean;
     showAlgorithm: boolean;
+    uploadedFilesCount:number = 0;
+    @ViewChild("fileUpload") fileUpload: FileUpload;
+  
     dataTypes = [
         {value: 'dataset', viewValue: 'Dataset'},
         {value: 'algorithm', viewValue: 'Algorithm'},
@@ -27,14 +40,14 @@ export class DialogBoxComponent implements OnInit {
         {value: 'published', viewValue: 'Published'},
     ];
 
-    //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites") 
+    //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
     messageModel = {
         name: '',
         stateList: '',
         dotEmployee: '',
         dotEmployeeEmail: '',
-        dotEmployeeExistingContract: '',        
+        dotEmployeeExistingContract: '',
         fileFolderName: '',
         type: 'dataset',
         category : '',
@@ -50,12 +63,15 @@ export class DialogBoxComponent implements OnInit {
         accessReason : '',
         cvPilotDataSets : ''
     };
-    constructor(private gatewayService: ApiGatewayService, public snackBar: MatSnackBar,
+
+    constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {    this.messageModel.bucketName = data.bucketName;
                                                         this.mailType = data.mailType;
                                                         this.datasetName = data.datasetName;
                                                         this.messageModel.fileFolderName = data.datasetName;
+                                                        this.requestType = data.requestType;
+                                                        this.userBucketName = data.userBucketName;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -63,7 +79,6 @@ export class DialogBoxComponent implements OnInit {
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
-
     }
 
     validateEmailRegex(email) {
@@ -149,4 +164,54 @@ export class DialogBoxComponent implements OnInit {
         );
     }
 
+    /*selectFile(event){
+        //this.selectedFiles = event.target.files;
+        for(let file of event.files){
+          this.selectedFiles.push(file);
+      }
+    }*/
+
+    uploadFiles(event1) {
+        let totalFilesCount = event1.files.length;   
+        for(let file of event1.files) {
+            
+            console.log("Bucket name is = "+ this.userBucketName)
+            console.log("File name is = " + file.name);
+            this.gatewayService.getPresignedUrl('presigned_url?file_name=' + file.name + '&file_type=' + file.type + '&bucket_name=' + this.userBucketName).subscribe(
+                (response: any) => {
+ 
+                    const req = new HttpRequest('PUT', response, file, {
+                            reportProgress: true,
+                            headers: new HttpHeaders().set('Content-Type', file.type)
+                    });
+                      
+                      this.http.request(req).subscribe(event => {
+                        // Via this API, you get access to the raw event stream.
+                        // Look for upload progress events.
+                        if (event.type === HttpEventType.UploadProgress) {
+                          // This is an upload progress event. Compute and show the % done:
+                          const percentDone = Math.round(100 * event.loaded / event.total);
+                          this.fileUpload.progress = percentDone;
+                          console.log('File is ${percentDone}% uploaded.', percentDone);
+                        } else if (event instanceof HttpResponse) {
+                          this.selectedFiles.push(file);  
+                          event1.files.forEach((file1, index) => {
+                                if(file1.name === file.name) {
+                                    this.fileUpload.remove(event1.files,index);
+                                }
+                          });
+                          this.uploadedFilesCount ++
+                          console.log('File is completely uploaded!');
+                          if(this.uploadedFilesCount === totalFilesCount) {
+                            this.snackBar.open('Your file(s) has been uploaded successfully', 'close', {
+                                duration: 2000,
+                            });
+                            this.onNoClick();
+                          }
+                        }
+                      });
+                }
+            )
+      }
+   }
 }

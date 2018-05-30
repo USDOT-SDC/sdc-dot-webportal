@@ -14,26 +14,66 @@
               are not available to anyone else unless you publish the dataset. <a [routerLink]="['/account/faq']" fragment="datasetPublish">Learn more </a> on how to upload your
               datasets / algorithms and publish them for other users.
             </span><hr>
-            <table class="table" *ngIf="myDatasets">
-              <thead class="thead-inverse">
-              <tr>
-                <th>Dataset / Algorithm Name</th>
-                <th>Publish</th>
-              </tr>
-              </thead>
-              <tbody>
-              <ng-template ngFor let-myDataset [ngForOf]="myDatasets">
-                <tr>
-                  <td>{{myDataset}}</td>
-                  <td><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset)">backup</i></td>
-                </tr>
+            <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
+            <hr>
+            <!-- <div class="datasets-container mat-elevation-z8">
+              <mat-table #table [dataSource]="dataSource">
+                <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="filename">
+                  <th mat-header-cell *matHeaderCellDef>Filename</th>
+                  <td mat-cell *matCellDef="let myDataset">{{ myDataset }}</td>
+                </ng-container>
+                <ng-container matColumnDef="publish">
+                  <th mat-header-cell *matHeaderCellDef>Publish</th>
+                  <td mat-cell *matCellDef="let myDataset"><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset)">cloud_upload</i></td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                            (click)="selection.toggle(row)">
+              </mat-table>
+            </div> -->
+            <span style="color:grey">Only files with extensions (pdf, html, csv) can be downloaded</span>
+            <p-table #dt [columns]="cols" [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="myDatasets.length"  dataKey="filename">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th style="width: 2.25em">
+                          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                      </th>
+                      <th *ngFor="let col of columns">
+                          {{col.header}} <br/>
+                          <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+                      </th>
+                  </tr>
               </ng-template>
-              </tbody>
-            </table>
+              <ng-template pTemplate="body" let-myDataset let-columns="columns">
+                  <tr [pSelectableRow]="myDataset" *ngIf="!myDataset.filename.endsWith('/')">
+                      <td>
+                          <p-tableCheckbox [value]="myDataset"></p-tableCheckbox>
+                      </td>
+                      <td>{{myDataset.filename}}</td>
+                      <td><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          <hr />
+          <button class="btn btn-primary dotBtn" [disabled]="selectedFiles.length==0" (click)=requestDownload()>Download Files</button>
           </mat-expansion-panel>
 
           <!--Curated Datasets table-->
-          <mat-expansion-panel style="margin-top: 40px;">
+          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 SDC Datasets

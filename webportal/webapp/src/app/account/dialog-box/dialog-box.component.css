@@ -9,3 +9,15 @@
 .mat-dialog-container {
     border: solid 2px #0b264db8 !important;
 }
+
+/* FileUpload */
+.ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget, .ui-fileupload-choose.ui-button .ui-state-default {
+      background-color: #0275d8;
+      border: 1px solid #0275d8;
+      color: #ffffff;
+}
+
+.ui-fileupload-choose.ui-button.ui-state-hover, .ui-fileupload-choose.ui-button.ui-state-focus, .ui-fileupload-choose.ui-button.ui-state-active {
+      background-color: #025aa5;
+      border-color: #01549b;
+}

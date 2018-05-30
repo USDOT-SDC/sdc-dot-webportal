@@ -28,9 +28,11 @@ export class AccountComponent implements OnInit {
             sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
             sessionStorage.setItem('datasets', JSON.stringify(response.datasets));
             sessionStorage.setItem('roles', response.role);
+
             for (var i = 0; i < response.stacks.length; i++) {
               if (response.stacks[i].instance_id) {
                 sessionStorage.setItem('instance-id', response.stacks[i].instance_id);
+                sessionStorage.setItem('team_bucket_name', response.stacks[i].team_bucket_name);
               }
             }
         }
