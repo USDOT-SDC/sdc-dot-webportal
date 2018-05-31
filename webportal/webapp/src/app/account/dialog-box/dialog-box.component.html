@@ -226,7 +226,7 @@
 
 
   <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)"
-  multiple="multiple" accept="image/*,.zip" maxFileSize="1000000000">
+  multiple="multiple">
     <ng-template pTemplate="content">
       <ul *ngIf="selectedFiles.length">
           <li *ngFor="let file of selectedFiles"><b> Uploaded {{file.name}} - {{file.size}} bytes </b> </li>
