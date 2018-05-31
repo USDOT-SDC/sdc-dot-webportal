@@ -54,7 +54,7 @@
                       </th>
                       <th *ngFor="let col of columns">
                           {{col.header}} <br/>
-                          <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+                          <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
                       </th>
                   </tr>
               </ng-template>
