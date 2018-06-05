@@ -16,36 +16,8 @@
             </span><hr>
             <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
             <hr>
-            <!-- <div class="datasets-container mat-elevation-z8">
-              <mat-table #table [dataSource]="dataSource">
-                <ng-container matColumnDef="select">
-                  <th mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
-                    </mat-checkbox>
-                  </th>
-                  <td mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                                  (change)="$event ? selection.toggle(row) : null"
-                                  [checked]="selection.isSelected(row)">
-                    </mat-checkbox>
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="filename">
-                  <th mat-header-cell *matHeaderCellDef>Filename</th>
-                  <td mat-cell *matCellDef="let myDataset">{{ myDataset }}</td>
-                </ng-container>
-                <ng-container matColumnDef="publish">
-                  <th mat-header-cell *matHeaderCellDef>Publish</th>
-                  <td mat-cell *matCellDef="let myDataset"><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset)">cloud_upload</i></td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                            (click)="selection.toggle(row)">
-              </mat-table>
-            </div> -->
-            <span style="color:grey">Only files with extensions (pdf, html, csv) can be downloaded</span>
+            <p>Files from Bucket name - <b>{{ userBucketName }}</b></p>
+            <span style="color:grey">Any file type can be downloaded.</span>
             <p-table #dt [columns]="cols" [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="myDatasets.length"  dataKey="filename">
               <ng-template pTemplate="header" let-columns>
                   <tr>

@@ -183,47 +183,10 @@
   </mat-dialog-actions>
 </div>
 
-<!-- <div *ngIf="requestType == 'Upload Files To S3'">
-  <ng-progress
-    [positionUsing]="'marginLeft'"
-    [direction]="'leftToRightIncreased'"
-    [color]="'#4286f4'"
-    [trickleSpeed]="500"
-    [thick]="true"
-    [ease]="'easeInSine'"></ng-progress>
-  <h4>Upload files to SDC platform</h4>
-  <hr>
-  <p>Files will be uploaded to the bucket - <b>{{ userBucketName }}</b></p>
-  <label class="btn btn-default">
-    <input type="file" (change)="selectFile($event)">
-  </label>
-  <button class="btn btn-primary dotBtn" [disabled]="!selectedFiles" (click)="uploadFiles(userBucketName)">Upload</button>
-</div> -->
-
 <div *ngIf="requestType == 'Upload Files To S3'">
     <h4>Upload files to SDC platform</h4>
     <hr>
     <p>Files will be uploaded to the bucket - <b>{{ userBucketName }}</b></p>
-   
-    <!--<p-fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)"
-    multiple="multiple" accept="image/*,.zip" maxFileSize="1000000000">
-      <ng-template pTemplate="content">
-          <ul *ngIf="selectedFiles.length">
-              <li *ngFor="let file of selectedFiles">{{file.name}} - {{file.size}} bytes</li>
-          </ul>
-      </ng-template>
-  </p-fileUpload>-->
-
-
-  <!--<p-fileUpload name="selectedFiles[]" (onBeforeSend) = "onBeforeUpload($event)" (onSelect) ="onSelect($event)"  (onError)="onUpload($event)" 
-  multiple="multiple" accept="image/*" maxFileSize="1000000">
-    <ng-template pTemplate="content">
-      <ul *ngIf="uploadedFiles.length">
-          <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-      </ul>
-    </ng-template>        
-  </p-fileUpload>-->
-
 
   <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)"
   multiple="multiple">
@@ -233,14 +196,4 @@
       </ul>
     </ng-template>
 </p-fileUpload>
-
-  
-  <!--<p-fileUpload name="selectedFiles[]" mode="advanced" customUpload="true" (uploadHandler)="uploadFiles($event)"
-        multiple="multiple" accept="image/*,.zip" maxFileSize="1000000000" styleClass="ui-fileupload, ui-fileupload-buttonbar, ui-fileupload-content">
-    <ng-template pTemplate="content">
-        <ul *ngIf="selectedFiles.length">
-            <li *ngFor="let file of selectedFiles">{{file.name}} - {{file.size}} bytes</li>
-        </ul>
-    </ng-template>
-</p-fileUpload>-->
 </div>

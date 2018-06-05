@@ -65,28 +65,12 @@ export class DatasetsComponent implements OnInit {
             (response: any) => {
                // this.myDatasets = response;
             for(let x of response) {
-                this.myDatasets.push({'filename':x}); 
+                this.myDatasets.push({'filename':x});
              }
              console.log(this.myDatasets);
             }
         );
     }
-
-    // displayedColumns = ['select', 'filename', 'publish'];
-    // dataSource = new MatTableDataSource(this.myDatasets);
-    // selection = new SelectionModel(true, []);
-    //
-    // isAllSelected(){
-    //   const numSelected = this.selection.selected.length;
-    //   const numRows = this.dataSource.data.length;
-    //   return numSelected === numRows;
-    // }
-    //
-    // masterToggle(){
-    //   this.isAllSelected() ?
-    //       this.selection.clear() :
-    //       this.dataSource.data.forEach(row => this.selection.select(row));
-    // }
 
 
     selectsdcDataset(dataset) {
@@ -128,15 +112,15 @@ export class DatasetsComponent implements OnInit {
     }
 
     requestDownload() {
- 
+
       for(let selectedFile of this.selectedFiles){
         this.gatewayService.getDownloadUrl('download_url?bucket_name=' + this.userBucketName + '&file_name=' + selectedFile.filename).subscribe(
           (response: any) => {
             window.open(response, "_blank");
         });
-      } 
-    } 
-    
+      }
+    }
+
     parseQueryString(queryString: string): Map<string, string> {
         var params = new Map<string, string>();
         queryString = queryString.split("?")[1];

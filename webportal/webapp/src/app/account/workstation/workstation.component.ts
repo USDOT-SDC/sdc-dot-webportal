@@ -57,8 +57,23 @@ export class WorkstationComponent implements OnInit {
     }
 
     launchWorkstation(stack: any) {
-        this.streamingUrl = "https://stream.securedatacommons.com/guacamole/";
+      this.selectedStack = stack.stack_name;
+      if (this.selectedStack == "Programming_Stack_1"){
+        var fleetName = stack.fleet_name;
+        this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
+            (response: any) => {
+                this.streamingUrl = response;
+                if (this.streamingUrl != null) {
+                    window.open(this.streamingUrl);
+                } else {
+                    console.log('Failed to launch stack!');
+                }
+            }
+        );
+      } else {
         let authToken = this.cognitoService.getIdToken();
+        this.streamingUrl = "https://dev-stream.securedatacommons.com:8443/guacamole/?authToken="+authToken;
         window.open(this.streamingUrl)
+      }
     }
 }

@@ -10,7 +10,7 @@ import 'rxjs/add/observable/throw';
 export class ApiGatewayService {
 
     protected options: RequestOptions;
-    private static _API_ENDPOINT = ''; // AWS API gateway base endpoint
+    private static _API_ENDPOINT = 'https://u2zksemc1h.execute-api.us-east-1.amazonaws.com/api/'; // AWS API gateway base endpoint
 
     apiResponse: any;
     extractData: any;
@@ -99,7 +99,7 @@ export class ApiGatewayService {
             .map(this.extractData)
             .catch(this.handleError);
     }
-    
+
     getPresignedUrl(url: string){
         this.setRequestHeaders();
         return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)

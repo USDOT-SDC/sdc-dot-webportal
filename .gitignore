@@ -16,6 +16,7 @@ webportal/webapp/.c9/
 webportal/webapp/*.launch
 webportal/webapp/.settings/
 webportal/webapp/*.sublime-workspace
+webportal/webapp/package-lock.json
 
 # IDE - VSCode
 webportal/webapp/.vscode/*
@@ -37,3 +38,6 @@ webportal/webapp/e2e/*.map
 webportal/webapp/.DS_Store
 webportal/webapp/Thumbs.db
 
+# Backend files
+webportal/lambda/__pycache__
+webportal/lambda/.chalice
