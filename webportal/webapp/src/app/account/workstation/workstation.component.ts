@@ -17,6 +17,8 @@ export class WorkstationComponent implements OnInit {
     instanceState: string;
     instanceData: any = [];
 
+    private static STREAMING_URL=""; //Apache Guacamole Streaming Url
+
     constructor(
         private gatewayService: ApiGatewayService,
         private cognitoService: CognitoService,
@@ -72,7 +74,7 @@ export class WorkstationComponent implements OnInit {
         );
       } else {
         let authToken = this.cognitoService.getIdToken();
-        this.streamingUrl = "https://dev-stream.securedatacommons.com:8443/guacamole/?authToken="+authToken;
+        this.streamingUrl = WorkstationComponent.STREAMING_URL + authToken;
         window.open(this.streamingUrl)
       }
     }
