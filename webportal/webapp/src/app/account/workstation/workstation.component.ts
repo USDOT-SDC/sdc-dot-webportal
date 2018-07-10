@@ -13,8 +13,9 @@ export class WorkstationComponent implements OnInit {
     selectedStack: string;
     stacks: any = [];
     streamingUrl: any;
-    instanceId: any;
-    instanceState: string;
+    //instanceId: any;
+    instanceStates: any = {};
+    statusProcessing: any = {};
     instanceData: any = [];
 
     private static STREAMING_URL=""; //Apache Guacamole Streaming Url
@@ -25,32 +26,47 @@ export class WorkstationComponent implements OnInit {
         public snackBar: MatSnackBar) { }
 
     ngOnInit() {
-        this.instanceId = sessionStorage.getItem('instance-id');
+       // this.instanceId = sessionStorage.getItem('instance-id');
         var stacksString = sessionStorage.getItem('stacks');
         this.stacks = JSON.parse(stacksString);
-        if (this.instanceId) {
-            this.getInstanceState();
+
+        for (let stack of this.stacks) {
+            if(stack.instance_id) {
+                this.getInstanceState(stack.instance_id);
+            }
         }
+        /*if (this.instanceId) {
+            this.getInstanceState();
+        }*/
     }
 
-    getInstanceState() {
-        this.gatewayService.get('instancestatus?instance_id=' + this.instanceId).subscribe(
+    getInstanceState(instanceId:any) {
+        this.gatewayService.get('instancestatus?instance_id=' + instanceId).subscribe(
             (response: any) => {
                 this.instanceData = response.Status.InstanceStatuses;
                 if (this.instanceData.length > 0) {
-                    this.instanceState = response.Status.InstanceStatuses[0].InstanceState.Name;
+                    this.instanceStates[instanceId] = response.Status.InstanceStatuses[0].InstanceState.Name;
+                    this.statusProcessing[instanceId] = false;
                 } else {
-                    this.instanceState = 'stop';
+                    this.instanceStates[instanceId] = 'stop';
+                    this.statusProcessing[instanceId] = false;
                 }
+            },
+            err => {
+                this.instanceStates[instanceId] = 'error';
+                this.statusProcessing[instanceId] = false;
             }
         );
-
     }
 
-    instanceAction(action) {
-        this.gatewayService.post('instance?instance_id=' + this.instanceId + '&action=' + action).subscribe(
+    instanceAction(instanceId:any,action) {
+        this.gatewayService.post('instance?instance_id=' + instanceId + '&action=' + action).subscribe(
             (response: any) => {
-                this.getInstanceState();
+                this.statusProcessing[instanceId] = true;
+                setTimeout(() =>  {
+                   this.getInstanceState(instanceId);
+                },
+                15000);   
                 this.snackBar.open('Instance ' + action + ' successfully', 'close', {
                     duration: 2000,
                 });
