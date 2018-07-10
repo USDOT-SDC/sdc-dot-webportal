@@ -66,7 +66,7 @@ export class WorkstationComponent implements OnInit {
                 setTimeout(() =>  {
                    this.getInstanceState(instanceId);
                 },
-                15000);   
+                15000);  
                 this.snackBar.open('Instance ' + action + ' successfully', 'close', {
                     duration: 2000,
                 });
