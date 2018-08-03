@@ -24,24 +24,28 @@
                       <th style="width: 2.25em">
                           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                       </th>
-                      <th *ngFor="let col of columns">
+                      <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
                           {{col.header}} <br/>
                           <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
                       </th>
                   </tr>
               </ng-template>
               <ng-template pTemplate="body" let-myDataset let-columns="columns">
-                  <tr [pSelectableRow]="myDataset" *ngIf="!myDataset.filename.endsWith('/')">
+                  <tr *ngIf="!myDataset.filename.endsWith('/')">
                       <td>
-                          <p-tableCheckbox [value]="myDataset"></p-tableCheckbox>
+                          <p-tableCheckbox [value]="myDataset" [disabled]="!myDataset.download"></p-tableCheckbox>
                       </td>
                       <td>{{myDataset.filename}}</td>
-                      <td><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
+                      <td><i class="material-icons iconFont material-icons md-dark md-inactive" >exit_to_app</i></td>
+                      <td *ngIf="myDataset.publish=='true'"><i class="material-icons iconFont"  (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
+                      <td *ngIf="myDataset.download=='true'"><i class="material-icons iconFont" (click)=requestDownload()>cloud_download</i></td>
+                      <td *ngIf="!myDataset.publish"><i class="material-icons iconFont material-icons md-dark md-inactive">cloud_upload</i></td>
+                      <td *ngIf="!myDataset.download"><i class="material-icons iconFont material-icons md-dark md-inactive">cloud_download</i></td>
                   </tr>
               </ng-template>
           </p-table>
           <hr />
-          <button class="btn btn-primary dotBtn" [disabled]="selectedFiles.length==0" (click)=requestDownload()>Download Files</button>
+          <button class="btn btn-primary dotBtn" [disabled]="this.selectedFiles.length==0" (click)=requestDownload()>Download Files</button>
           </mat-expansion-panel>
 
           <!--Curated Datasets table-->

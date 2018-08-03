@@ -366,7 +366,7 @@ def get_presigned_url():
     params = app.current_request.query_params
     try:
         client_s3 = boto3.client('s3')
-        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': params['file_name'], 'ContentType': params['file_type']}, ExpiresIn=3600, HttpMethod='PUT')
+        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': params['file_name'], 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'request-export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
         logging.info("Response from pre-signed url - " + response)
     except BaseException as be:
         logging.exception("Error: Failed to generate presigned url" + str(be))
@@ -387,5 +387,22 @@ def get_download_url():
         logging.exception("Error: Failed to generate presigned url" + str(be))
         raise ChaliceViewError("Failed to get presigned url")
     return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+
+@app.route('/get_metadata_s3', authorizer=authorizer, cors=cors_config)
+def get_metadata_s3_object():
+    params = app.current_request.query_params
+    logger.setLevel("INFO")
+    logging.info("Params - " + params['bucket_name'])
+    logging.info("Params filename- " + params['file_name'])
+    try:
+        client_s3 = boto3.client('s3')
+        response = client_s3.get_object(Bucket=params['bucket_name'],Key=params['file_name'])
+        logging.info("S3 object metadata response - " + str(response["Metadata"]))
+    except BaseException as be:
+        logging.exception("Error: Failed to get S3 metadata" + str(be))
+        raise ChaliceViewError("Failed to get s3 metadata")
+    return Response(body=response["Metadata"],
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})

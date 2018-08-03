@@ -215,3 +215,9 @@
 .ui-table-tbody .ui-chkbox {
   pointer-events: none;
 }
+
+.smallWidth {
+    width: 20%;
+}
+
+.material-icons.md-dark.md-inactive { color: rgba(78, 79, 80, 0.26); }

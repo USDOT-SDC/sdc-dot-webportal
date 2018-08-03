@@ -22,6 +22,7 @@ export class DatasetsComponent implements OnInit {
     sdcDatasets: any = [];
     sdcAlgorithms: any = [];
     myDatasets = [];
+    metadata = {};
     user: any;
     selectedsdcDataset: any = {};
     dictionary: string;
@@ -54,25 +55,34 @@ export class DatasetsComponent implements OnInit {
             }
         });
         this.getMyDatasetsList();
+        
         this.cols = [
           { field: 'filename', header: 'Filename' },
-          { field: 'publish', header: 'Publish' }
+          { field: 'export', header: 'Export' },
+          { field: 'publish', header: 'Publish' },
+          { field: 'download', header: 'Download' }
         ]
     }
 
     getMyDatasetsList() {
         this.gatewayService.get('user_data?userBucketName=' + this.userBucketName).subscribe(
             (response: any) => {
-               // this.myDatasets = response;
             for(let x of response) {
-                this.myDatasets.push({'filename':x});
+                this.getMetadataForS3Objects(x).subscribe(
+                    metadata => {
+                        if (metadata != null){
+                            this.myDatasets.push({'filename':x, 'download': metadata["download"], 'request-export': metadata["request-export"], 'publish': metadata["publish"]});
+                        } else{
+                            this.myDatasets.push({'filename':x, 'download': null, 'request-export': null, 'publish': null});
+                        }
+                    }
+                );
              }
              console.log(this.myDatasets);
             }
         );
     }
-
-
+    
     selectsdcDataset(dataset) {
         this.selectedsdcDataset = dataset;
         this.showDictionary = true;
@@ -112,13 +122,27 @@ export class DatasetsComponent implements OnInit {
     }
 
     requestDownload() {
-
       for(let selectedFile of this.selectedFiles){
-        this.gatewayService.getDownloadUrl('download_url?bucket_name=' + this.userBucketName + '&file_name=' + selectedFile.filename).subscribe(
-          (response: any) => {
-            window.open(response, "_blank");
+        this.myDatasets.forEach((datasetObj, index) => {
+            if(selectedFile.filename == datasetObj["filename"]){
+                if (datasetObj["download"] == "true"){
+                    this.gatewayService.getDownloadUrl('download_url?bucket_name=' + this.userBucketName + '&file_name=' + selectedFile.filename).subscribe(
+                        (response: any) => {
+                        window.open(response, "_blank");
+                    });
+                }
+            }
         });
       }
+    }
+
+    getMetadataForS3Objects(filename: string): any{
+        var resp;
+        return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
+            (response: any) => {
+                resp=response;
+                return resp;
+        });     
     }
 
     parseQueryString(queryString: string): Map<string, string> {
