@@ -38,9 +38,7 @@
                       <td>{{myDataset.filename}}</td>
                       <td><i class="material-icons iconFont material-icons md-dark md-inactive" >exit_to_app</i></td>
                       <td *ngIf="myDataset.publish=='true'"><i class="material-icons iconFont"  (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
-                      <td *ngIf="myDataset.download=='true'"><i class="material-icons iconFont" (click)=requestDownload()>cloud_download</i></td>
                       <td *ngIf="!myDataset.publish"><i class="material-icons iconFont material-icons md-dark md-inactive">cloud_upload</i></td>
-                      <td *ngIf="!myDataset.download"><i class="material-icons iconFont material-icons md-dark md-inactive">cloud_download</i></td>
                   </tr>
               </ng-template>
           </p-table>

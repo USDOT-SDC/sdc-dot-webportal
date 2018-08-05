@@ -59,8 +59,7 @@ export class DatasetsComponent implements OnInit {
         this.cols = [
           { field: 'filename', header: 'Filename' },
           { field: 'export', header: 'Export' },
-          { field: 'publish', header: 'Publish' },
-          { field: 'download', header: 'Download' }
+          { field: 'publish', header: 'Publish' }
         ]
     }
 
