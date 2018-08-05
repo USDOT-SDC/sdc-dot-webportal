@@ -70,9 +70,9 @@ export class DatasetsComponent implements OnInit {
                 this.getMetadataForS3Objects(x).subscribe(
                     metadata => {
                         if (metadata != null){
-                            this.myDatasets.push({'filename':x, 'download': metadata["download"], 'request-export': metadata["request-export"], 'publish': metadata["publish"]});
+                            this.myDatasets.push({'filename':x, 'download': metadata["download"], 'export': metadata["export"], 'publish': metadata["publish"]});
                         } else{
-                            this.myDatasets.push({'filename':x, 'download': null, 'request-export': null, 'publish': null});
+                            this.myDatasets.push({'filename':x, 'download': null, 'export': null, 'publish': null});
                         }
                     }
                 );

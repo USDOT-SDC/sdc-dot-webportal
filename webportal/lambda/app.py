@@ -366,7 +366,7 @@ def get_presigned_url():
     params = app.current_request.query_params
     try:
         client_s3 = boto3.client('s3')
-        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': params['file_name'], 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'request-export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
+        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': params['file_name'], 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
         logging.info("Response from pre-signed url - " + response)
     except BaseException as be:
         logging.exception("Error: Failed to generate presigned url" + str(be))
