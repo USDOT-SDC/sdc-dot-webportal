@@ -450,9 +450,9 @@ def export():
 
         listOfPOC=combinedExportWorkflow[selctedDataSet][selectedDataProvider]['ListOfPOC']
         emailContent = ""
+        dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
         if 'trustedRequest' in params:
-            dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
             trustedUsersTable = dynamodb.Table(TABLENAME_TRUSTED)
 
             trustedStatus=params['trustedRequest']['trustedRequestStatus']
