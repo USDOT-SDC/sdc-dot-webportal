@@ -30,6 +30,8 @@ import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
+import {PanelModule,SharedModule} from 'primeng/primeng';
+import {RadioButtonModule} from 'primeng/primeng';
 
 @NgModule({
   declarations: [
@@ -73,6 +75,9 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     CdkTableModule,
     TableModule,
     FileUploadModule,
+    SharedModule,
+    PanelModule,
+    RadioButtonModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
   ],

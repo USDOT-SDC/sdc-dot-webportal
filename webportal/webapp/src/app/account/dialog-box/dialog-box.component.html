@@ -268,7 +268,7 @@
         <mat-dialog-actions>
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
-                    (click)="submitRequest()">NEXT
+                    (click)="onApprovalformClick()">NEXT
             </button>
           </span>&nbsp;
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
@@ -304,7 +304,7 @@
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
                     [disabled]="!messageModel.datasettype"
-                    (click)="submitRequest()">NEXT
+                    (click)="onApprovalformClick()">NEXT
             </button>
           </span>&nbsp;
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
@@ -313,6 +313,35 @@
       
     </mat-tab>
     <mat-tab label="Trusted Status">
+      <h2>Trusted Status</h2>
+      <hr>
+      <mat-dialog-content *ngIf="trustedStatus">
+        <p>Based on the dataset and datatype selection,you currently have Trusted Status from this Data Provider.We will notify the data provider about your request.</p>
+        </mat-dialog-content> 
+        
+        <mat-dialog-content *ngIf="!trustedStatus">
+        <p>Based on the dataset and datatype selection,you currently do not have a Trusted Status from this Data Provider.We will notify the data provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
+        <h5>Do you wish to request Trusted Status from the data provider?</h5>
+        
+        <br/>
+        <div class="ui-g">
+            <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="Yes" label="Yes" (onClick) = "onTrustedRequestGrpChange('Yes')" [(ngModel)]="trustedRequest"></p-radioButton> </div>
+            <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"  (onClick) = "onTrustedRequestGrpChange('No')" [(ngModel)]="trustedRequest"> </p-radioButton> </div>
+        </div>
+        <br/>
+    
+        <p-panel header="Acceptable Use Policy" >
+            <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="selectedDataSet && selectedDataProvider"></div>
+        </p-panel>
+        <br/>
+    
+        <div class="ui-g">
+            <div class="ui-g-3"><p-radioButton name="trustedAcceptableUseGrp" value="Yes" label="Accept" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="trustedAcceptableUse"></p-radioButton></div>
+            <div class="ui-g-3"><p-radioButton name="trustedAcceptableUseGrp" value="No" label="Decline"  [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="trustedAcceptableUse"></p-radioButton></div>
+        </div>
+        </mat-dialog-content> 
+        <br/><br/>
+        <div><button class="btn btn-primary dotBtn" (click)="submitRequest()">Submit</button></div>
     </mat-tab>
   </mat-tab-group>
 </div>

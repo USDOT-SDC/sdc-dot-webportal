@@ -42,12 +42,22 @@ export class DialogBoxComponent implements OnInit {
     justifyExport: string;
     trustedStatus: boolean;
     exportWorkflow: any;
+    expWorkflow: any;
     derivedDataSetname: string;
     dataprovider: string;
     datatype: string;
     export: any[] = [];
     allProvidersJson: any;
     allDataTypes: any;
+    trustedRequest:string;
+    trustedAcceptableUse:string;
+    trustedAcceptableUseDisabled:boolean;
+    approvalForm: string;
+    derivedDataSet: string;
+    dataType: string;
+    dataSources: string;
+    detailedDerivedDataset: string;
+    derivedDataSetName: string;
     @ViewChild("fileUpload") fileUpload: FileUpload;
   
     dataTypes = [
@@ -61,28 +71,11 @@ export class DialogBoxComponent implements OnInit {
         {value: 'published', viewValue: 'Published'},
     ];
 
-    dataSetTypes = [
-        // {value: 'CVP', viewValue: 'CVP'},
-        // {value: 'Waze', viewValue: 'Waze'},
-    ];
+    dataSetTypes = [];
 
-    dataProviderNames = [
-        // {value: 'nyc', viewValue: 'nyc'},
-        // {value: 'thea', viewValue: 'thea'},
-        // {value: 'wydot', viewValue: 'wydot'},
-    ];
-    subDataSets = [
-        // {value: 'alert', viewValue: 'alert'},
-        // {value: 'jams', viewValue: 'jams'},
-        // {value: 'irregularity', viewValue: 'irregularity'},
-    ];
-    subDataSetsWydot = [
-        // {value: 'Closures', viewValue: 'Closures'},
-        // {value: 'Corridor', viewValue: 'Corridor'},
-        // {value: 'Count', viewValue: 'Count'},
-        // {value: 'Crash', viewValue: 'Crash'},
-        // {value: 'Speed', viewValue: 'Speed'},
-    ];
+    dataProviderNames = [];
+    subDataSets = [];
+    subDataSetsWydot = [];
 
     //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
@@ -129,14 +122,9 @@ export class DialogBoxComponent implements OnInit {
                                                         this.requestType = data.requestType;
                                                         this.userBucketName = data.userBucketName;
                                                         this.datasettype = data.datasettype;
-                                                        // this.selectedDataSet = data.datasettype;
-                                                        // this.selectedDataProvider =  data.dataProviderName;
-                                                        // this.selectedDatatype =  data.subDataSet;
-                                                        // this.datasources =  data.datasources;
-                                                        // this.deriveddataset =  data.deriveddataset;
-                                                        // this.detailedderiveddataset =  data.detailedderiveddataset;
-                                                        // this.tags =  data.tags;
-                                                        // this.justifyExport =  data.justifyExport;
+                                                        this.trustedRequest = "";
+                                                        this.trustedAcceptableUse = "";
+                                                        this.trustedAcceptableUseDisabled = false;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -144,8 +132,14 @@ export class DialogBoxComponent implements OnInit {
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
+        
         let trustedStatus = sessionStorage.getItem('userTrustedStatus');
+        console.log("Trusted status"+trustedStatus);
         this.userTrustedStatus = JSON.parse(trustedStatus);
+        console.log("Trusted status"+this.userTrustedStatus);
+        let expWorkflow = sessionStorage.getItem('exportWorkflow');
+        this.expWorkflow = JSON.parse(expWorkflow);
+        
         this.exportWorkflow = JSON.parse(sessionStorage.getItem('datasets'));
         console.log(this.exportWorkflow);
         for (var i=0; i < this.exportWorkflow.length; i++) {
@@ -214,13 +208,26 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
         console.log("SelectedDataType:"+this.selectedDatatype);
-        // let key = this.selectedDataSet + "-" + this.selectedDataProvider + "-" + this.selectedDatatype;
-        // this.trustedStatus = key in this.userTrustedStatus;
+        let key = this.selectedDataSet + "-" + this.selectedDataProvider + "-" + this.selectedDatatype;
+        this.trustedStatus = key in this.userTrustedStatus;
         // add the trusted status logic here
-        this.trustedStatus = true;
+        // this.trustedStatus = true;
         this.selectedIndex=1;
     }
     onApprovalformClick(){
+        this.selectedDataSet = this.messageModel.datasettype;
+        this.selectedDataProvider = this.messageModel.dataProviderName;
+        this.selectedDatatype = this.messageModel.subDataSet;
+
+        console.log(this.userBucketName);
+        this.derivedDataSetName = this.messageModel.derivedDatasetname;
+        this.dataType = this.messageModel.datatype;
+        this.dataSources = this.messageModel.datasources;
+        this.derivedDataSet = this.messageModel.deriveddataset;
+        this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
+        this.tags = this.messageModel.tags;
+        this.justifyExport = this.messageModel.justifyExport;
+        
         this.selectedIndex=2;
     }
     validateEmailRegex(email) {
@@ -322,36 +329,36 @@ export class DialogBoxComponent implements OnInit {
         
         let approvalForm = {};
 
-        if (this.messageModel.derivedDatasetname){
-            approvalForm["derivedDataSetname"] = this.messageModel.derivedDatasetname;
+        if (this.derivedDataSetName){
+            approvalForm["derivedDataSetname"] = this.derivedDataSetName;
         }
         if (this.selectedDataProvider){
             approvalForm["dataprovider"] = this.selectedDataProvider;
         }
-        if (this.messageModel.datatype){
-            approvalForm["datatype"] = this.messageModel.datatype;
+        if (this.datatype){
+            approvalForm["datatype"] = this.datatype;
         }
-        if (this.messageModel.datasources){
-            approvalForm["datasources"] = this.messageModel.datasources;
+        if (this.datasources){
+            approvalForm["datasources"] = this.datasources;
         }
-        if (this.messageModel.deriveddataset){
-            approvalForm["deriveddataset"] = this.messageModel.deriveddataset;
+        if (this.deriveddataset){
+            approvalForm["deriveddataset"] = this.deriveddataset;
         }
-        if (this.messageModel.detailedderiveddataset){
-            approvalForm["detailedderiveddataset"] = this.messageModel.detailedderiveddataset;
+        if (this.detailedderiveddataset){
+            approvalForm["detailedderiveddataset"] = this.detailedderiveddataset;
         }
-        if (this.messageModel.tags){
-            approvalForm["tags"] = this.messageModel.tags;
+        if (this.tags){
+            approvalForm["tags"] = this.tags;
         }
-        if (this.messageModel.justifyExport){
-            approvalForm["justifyExport"] = this.messageModel.justifyExport; 
+        if (this.justifyExport){
+            approvalForm["justifyExport"] = this.justifyExport; 
         }
         
         // Submit API gateway request
         let reqBody = {};
-        reqBody['S3KeyHash'] = this.messageModel.fileFolderName;//Md5.hashStr('');//add s3 key inside
+        // reqBody['S3KeyHash'] = this.messageModel.fileFolderName;//Md5.hashStr('');//add s3 key inside
         reqBody['RequestedBy_Epoch'] = new Date().getTime();
-        reqBody['DataSet_DataProvider_Datatype'] = this.selectedDataSet + "-" + this.selectedDataProvider + "-" + this.selectedDatatype; 
+        // reqBody['DataSet_DataProvider_Datatype'] = this.selectedDataSet + "-" + this.selectedDataProvider + "-" + this.selectedDatatype; 
         reqBody['ReqReceivedtimestamp'] = null;
         reqBody['RequestedBy'] = null;
         reqBody['WorkflowStatus'] = null;
@@ -362,19 +369,43 @@ export class DialogBoxComponent implements OnInit {
         reqBody['TeamBucket'] = this.userBucketName; //check this
         reqBody['RequestID'] = null;
         reqBody['ApprovalForm'] = approvalForm;
+        reqBody['UserID'] = this.userName;
+        reqBody['selectedDataInfo'] = {"selectedDataSet" : this.selectedDataSet, "selectedDataProvider" : this.selectedDataProvider,"selectedDatatype" : this.selectedDatatype }
         
-        this.gatewayService.sendExportRequest("export?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
-            (response: any) => {
-                this.snackBar.open("Your request has been sent successfully", 'close', {
-                    duration: 2000,
-                });
-                this.onNoClick();
-                console.log('Request Sent Successfully');
+        if(this.trustedRequest === "Yes" && (this.trustedAcceptableUse === "No" || this.trustedAcceptableUse == "")) {
+            //alert("Usage policy to continue"); // Ribbon...
+            this.snackBar.open('Acceptable use policy should be accepted to request trusted status', 'close', {
+                duration: 2000,
+            });
+        } else {
+            if(this.trustedRequest === "Yes") {
+               // Submit API gateway request 
+               reqBody['trustedRequest'] = {"trustedRequestStatus" : "Submitted" }    
             }
-        );  
-        this.selectedIndex=2;
+            this.gatewayService.sendExportRequest("export?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+                (response: any) => {
+                    this.snackBar.open("Your request has been sent successfully", 'close', {
+                        duration: 2000,
+                    });
+                    this.onNoClick();
+                    console.log('Request Sent Successfully');
+                }
+            );
+        }
     }
     
+    onTrustedRequestGrpChange(selectedVal: any) {
+        if(selectedVal === "No") {
+         this.trustedAcceptableUseDisabled = true;
+         this.trustedAcceptableUse = "No";
+         this.trustedRequest =  "No";
+        } else {
+            this.trustedAcceptableUseDisabled = false;
+            this.trustedAcceptableUse = ""
+            this.trustedRequest =  "Yes";
+        }  
+    }
+
     uploadFiles(event1) {
         let totalFilesCount = event1.files.length;   
         for(let file of event1.files) {

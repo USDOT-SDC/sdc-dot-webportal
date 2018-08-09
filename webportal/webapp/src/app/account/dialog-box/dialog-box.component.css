@@ -37,3 +37,5 @@ mat_tab_style{
       background-color: #025aa5;
       border-color: #01549b;
 }
+
+.panel-div {max-height:150px;overflow:scroll;}
