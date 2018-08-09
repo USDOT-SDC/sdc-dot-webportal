@@ -9,7 +9,23 @@
 .mat-dialog-container {
     border: solid 2px #0b264db8 !important;
 }
-
+mat_tab_style{
+    height: 451px;
+}
+/deep/ .mat-tab-body-content {
+    overflow: hidden !important;
+}
+.mat-dialog-actions {
+    display: block !important;
+}
+.request-exportNextBtn {
+    float: right;
+    margin-left: 7px;
+}
+.request-exportCancelBtn {
+    float: right;
+    margin-left: 40px;
+}
 /* FileUpload */
 .ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget, .ui-fileupload-choose.ui-button .ui-state-default {
       background-color: #0275d8;

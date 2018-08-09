@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule } from '@angular/material';
 import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -69,6 +69,7 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     MatOptionModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatTabsModule,
     CdkTableModule,
     TableModule,
     FileUploadModule,

@@ -108,6 +108,18 @@ export class DatasetsComponent implements OnInit {
         });
     }
 
+    requestExport(BucketName, mailType, datasetName) {
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            width: '700px',
+            height: '550px',
+            data: { userBucketName: this.userBucketName, mailType: mailType, datasetName: datasetName }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+
     uploadFilesToS3(requestType) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '500px',

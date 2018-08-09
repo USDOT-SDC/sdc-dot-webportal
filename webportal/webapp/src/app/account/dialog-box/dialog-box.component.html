@@ -183,6 +183,140 @@
   </mat-dialog-actions>
 </div>
 
+<!--Request Export Dataset Dialogbox-->
+<div *ngIf="mailType == 'Dataset export Mail'">
+  <h3>Export Data</h3>
+  <hr>
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
+    <mat-tab label="Select Dataset">
+      <mat-dialog-content style="height: 100%;">
+        <hr>
+        <mat-form-field style='width: 100%'>
+          <mat-select placeholder='Type' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
+            <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value" required>
+              {{ dataSetType.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!messageModel.datasettype">Please select dataset name</mat-error>
+        </mat-form-field>
+
+        <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
+          <mat-select placeholder='Data Provider Name' [(ngModel)]="messageModel.dataProviderName" (selectionChange)="setSubDatasets($event)">
+            <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value" required>
+              {{ dataProviderName.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!messageModel.dataProviderName">Please select Data Provider Name</mat-error>
+        </mat-form-field>
+
+        <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
+          <mat-select placeholder='Sub Dataset' [(ngModel)]="messageModel.subDataSet">
+            <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value" required>
+              {{ subDataSet.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!messageModel.subDataSet">Please select Sub DataSet Type </mat-error>
+        </mat-form-field>
+        <hr>
+        <mat-dialog-actions>
+          <span>
+            <button class="btn btn-primary dotBtn request-exportNextBtn"
+                    [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet"
+                    (click)="onSelectionOfDataset()">NEXT
+            </button>
+          </span>&nbsp;
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+        </mat-dialog-actions>
+      </mat-dialog-content>
+      <hr>
+    </mat-tab>
+    <mat-tab label="Approval Form">
+      <hr>
+      <mat-dialog-content *ngIf="!trustedStatus">
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
+          <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
+          <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Specific sub-datasets or data types used" [(ngModel)]="messageModel.datatype" value="{{messageModel.datatype}}" required>
+          <mat-error align="end" *ngIf="!messageModel.datatype">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}" required>
+          <mat-error align="end" *ngIf="!messageModel.datasources">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="High level description of derived dataset" [(ngModel)]="messageModel.deriveddataset" value="{{messageModel.deriveddataset}}" required>
+          <mat-error align="end" *ngIf="!messageModel.deriveddataset">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}" required>
+          <mat-error align="end" *ngIf="!messageModel.detailedderiveddataset">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Justification of Export" [(ngModel)]="messageModel.justifyExport" value="{{messageModel.justifyExport}}" required>
+          <mat-error align="end" *ngIf="!messageModel.justifyExport">Required</mat-error>
+        </mat-form-field>
+        <hr>
+        <mat-dialog-actions>
+          <span>
+            <button class="btn btn-primary dotBtn request-exportNextBtn"
+                    (click)="submitRequest()">NEXT
+            </button>
+          </span>&nbsp;
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+        </mat-dialog-actions>
+      </mat-dialog-content>
+      <mat-dialog-content *ngIf="trustedStatus">
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
+          <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
+          <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Specific sub-datasets or data types used" [(ngModel)]="messageModel.datatype" value="{{messageModel.datatype}}" required>
+          <mat-error align="end" *ngIf="!messageModel.datatype">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}">
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="High level description of derived dataset" [(ngModel)]="messageModel.deriveddataset" value="{{messageModel.deriveddataset}}">
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}">
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
+        </mat-form-field>
+        <hr>
+        <mat-dialog-actions>
+          <span>
+            <button class="btn btn-primary dotBtn request-exportNextBtn"
+                    [disabled]="!messageModel.datasettype"
+                    (click)="submitRequest()">NEXT
+            </button>
+          </span>&nbsp;
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+        </mat-dialog-actions>
+      </mat-dialog-content>
+      
+    </mat-tab>
+    <mat-tab label="Trusted Status">
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
 <div *ngIf="requestType == 'Upload Files To S3'">
     <h4>Upload files to SDC platform</h4>
     <hr>
