@@ -39,3 +39,7 @@ mat_tab_style{
 }
 
 .panel-div {max-height:150px;overflow:scroll;}
+
+.exportSelect {
+    margin-top: 20px;
+}

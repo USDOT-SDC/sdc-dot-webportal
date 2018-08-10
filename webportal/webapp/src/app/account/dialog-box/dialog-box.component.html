@@ -192,7 +192,7 @@
       <mat-dialog-content style="height: 100%;">
         <hr>
         <mat-form-field style='width: 100%'>
-          <mat-select placeholder='Type' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
+          <mat-select class="exportSelect" placeholder='Type' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
             <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value" required>
               {{ dataSetType.viewValue }}
             </mat-option>
@@ -201,7 +201,7 @@
         </mat-form-field>
 
         <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
-          <mat-select placeholder='Data Provider Name' [(ngModel)]="messageModel.dataProviderName" (selectionChange)="setSubDatasets($event)">
+          <mat-select class="exportSelect" placeholder='Data Provider Name' [(ngModel)]="messageModel.dataProviderName" (selectionChange)="setSubDatasets($event)">
             <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value" required>
               {{ dataProviderName.viewValue }}
             </mat-option>
@@ -210,7 +210,7 @@
         </mat-form-field>
 
         <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
-          <mat-select placeholder='Sub Dataset' [(ngModel)]="messageModel.subDataSet">
+          <mat-select class="exportSelect" placeholder='Sub Dataset' [(ngModel)]="messageModel.subDataSet">
             <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value" required>
               {{ subDataSet.viewValue }}
             </mat-option>
