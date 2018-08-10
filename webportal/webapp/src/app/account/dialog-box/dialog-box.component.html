@@ -285,8 +285,7 @@
           <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
         </mat-form-field>
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Specific sub-datasets or data types used" [(ngModel)]="messageModel.datatype" value="{{messageModel.datatype}}" required>
-          <mat-error align="end" *ngIf="!messageModel.datatype">Required</mat-error>
+          <input matInput placeholder="Specific sub-datasets or data types used" [(ngModel)]="messageModel.datatype" value="{{messageModel.datatype}}">
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}">
@@ -304,7 +303,7 @@
         <mat-dialog-actions>
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
-            [disabled]="!messageModel.derivedDatasetname || !messageModel.datatype"
+            [disabled]="!messageModel.derivedDatasetname"
                     (click)="onApprovalformClick()">NEXT
             </button>
           </span>&nbsp;
