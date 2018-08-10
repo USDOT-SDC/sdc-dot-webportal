@@ -219,7 +219,6 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
 
-        console.log(this.userBucketName);
         this.derivedDataSetName = this.messageModel.derivedDatasetname;
         this.dataType = this.messageModel.datatype;
         this.dataSources = this.messageModel.datasources;
@@ -335,17 +334,17 @@ export class DialogBoxComponent implements OnInit {
         if (this.selectedDataProvider){
             approvalForm["dataprovider"] = this.selectedDataProvider;
         }
-        if (this.datatype){
-            approvalForm["datatype"] = this.datatype;
+        if (this.dataType){
+            approvalForm["datatype"] = this.dataType;
         }
-        if (this.datasources){
-            approvalForm["datasources"] = this.datasources;
+        if (this.dataSources){
+            approvalForm["datasources"] = this.dataSources;
         }
-        if (this.deriveddataset){
-            approvalForm["deriveddataset"] = this.deriveddataset;
+        if (this.derivedDataSet){
+            approvalForm["deriveddataset"] = this.derivedDataSet;
         }
-        if (this.detailedderiveddataset){
-            approvalForm["detailedderiveddataset"] = this.detailedderiveddataset;
+        if (this.detailedDerivedDataset){
+            approvalForm["detailedderiveddataset"] = this.detailedDerivedDataset;
         }
         if (this.tags){
             approvalForm["tags"] = this.tags;
@@ -353,7 +352,6 @@ export class DialogBoxComponent implements OnInit {
         if (this.justifyExport){
             approvalForm["justifyExport"] = this.justifyExport; 
         }
-        
         // Submit API gateway request
         let reqBody = {};
         // reqBody['S3KeyHash'] = this.messageModel.fileFolderName;//Md5.hashStr('');//add s3 key inside

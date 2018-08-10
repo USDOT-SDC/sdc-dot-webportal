@@ -188,7 +188,7 @@
   <h3>Export Data</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
-    <mat-tab label="Select Dataset">
+    <mat-tab label="Select Dataset" #tab1 [disabled]='!tab1.isActive'>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <mat-form-field style='width: 100%'>
@@ -230,7 +230,7 @@
       </mat-dialog-content>
       <hr>
     </mat-tab>
-    <mat-tab label="Approval Form">
+    <mat-tab label="Approval Form" #tab2 [disabled]='!tab2.isActive'>
       <hr>
       <mat-dialog-content *ngIf="!trustedStatus">
         <mat-form-field style='width: 100%'>
@@ -268,6 +268,7 @@
         <mat-dialog-actions>
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
+                    [disabled]="!messageModel.derivedDatasetname || !messageModel.datatype || !messageModel.justifyExport || !messageModel.detailedderiveddataset || !messageModel.deriveddataset || !messageModel.datasources"
                     (click)="onApprovalformClick()">NEXT
             </button>
           </span>&nbsp;
@@ -303,7 +304,7 @@
         <mat-dialog-actions>
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
-                    [disabled]="!messageModel.datasettype"
+            [disabled]="!messageModel.derivedDatasetname || !messageModel.datatype"
                     (click)="onApprovalformClick()">NEXT
             </button>
           </span>&nbsp;
@@ -312,7 +313,7 @@
       </mat-dialog-content>
       
     </mat-tab>
-    <mat-tab label="Trusted Status">
+    <mat-tab label="Trusted Status" #tab3 [disabled]='!tab3.isActive'>
       <h2>Trusted Status</h2>
       <hr>
       <mat-dialog-content *ngIf="trustedStatus">
