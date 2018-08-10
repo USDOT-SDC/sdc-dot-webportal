@@ -23,10 +23,10 @@ cors_config = CORSConfig(
 TABLENAME = ''
 TABLENAME_DATASET = ''
 APPSTREAM_S3_BUCKET_NAME = ''
-APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
-APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
-APPSTREAM_DATASET_PATH = 'user/custom/'
-RECEIVER = 'support@securedatacommons.com'
+APPSTREAM_DATASET_FOLDER_NAME = ''
+APPSTREAM_ALGORITHM_FOLDER_NAME = ''
+APPSTREAM_DATASET_PATH = ''
+RECEIVER = ''
 PROVIDER_ARNS = ''
 RESTAPIID = ''
 AUTHORIZERID = ''
@@ -451,13 +451,19 @@ def export():
         listOfPOC=combinedExportWorkflow[selctedDataSet][selectedDataProvider]['ListOfPOC']
         emailContent = ""
         dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+        acceptableUse = 'Decline'
+        if 'acceptableUse' in params and params['acceptableUse']:
+            acceptableUse = params['acceptableUse']
 
         if 'trustedRequest' in params:
             trustedUsersTable = dynamodb.Table(TABLENAME_TRUSTED)
 
             trustedStatus=params['trustedRequest']['trustedRequestStatus']
 
-            if trustedWorkflowStatus == 'Notify':
+            if acceptableUse == 'Decline':
+                trustedStatus = 'NonTrusted'
+                emailContent = "<br/>Trusted status has been declined to <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
+            elif trustedWorkflowStatus == 'Notify':
                 trustedStatus='Trusted'
                 emailContent="<br/>Trusted status has been approved to <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
             else:
@@ -468,7 +474,7 @@ def export():
                     'UserID': userID,
                     'Dataset-DataProvider-Datatype': combinedDataInfo,
                     'TrustedStatus': trustedStatus,
-                    'UsagePolicyStatus': 'Accepted',
+                    'UsagePolicyStatus': acceptableUse,
                     'ReqReviewTimestamp': datetime.utcnow().strftime("%Y%m%d"),
                     'LastUpdatedTimestamp': datetime.utcnow().strftime("%Y%m%d")
                 }

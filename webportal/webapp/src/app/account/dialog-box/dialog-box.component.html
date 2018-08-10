@@ -326,8 +326,8 @@
             
             <br/>
             <div class="ui-g">
-                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="Yes" label="Yes" (onClick) = "onTrustedRequestGrpChange('Yes')" [(ngModel)]="trustedRequest"></p-radioButton> </div>
-                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"  (onClick) = "onTrustedRequestGrpChange('No')" [(ngModel)]="trustedRequest"> </p-radioButton> </div>
+                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="Yes" label="Yes"  (onClick) = "onTrustedRequestGrpChange('Yes')" [(ngModel)]="trustedRequest"></p-radioButton> </div>
+                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"   (onClick) = "onTrustedRequestGrpChange('No')"  [(ngModel)]="trustedRequest"> </p-radioButton> </div>
             </div>
             <br/>
           </div>
@@ -338,8 +338,8 @@
           <br/>
           <div *ngIf="!trustedStatus">
             <div class="ui-g">
-                <div class="ui-g-3"><p-radioButton name="trustedAcceptableUseGrp" value="Yes" label="Accept" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="trustedAcceptableUse"></p-radioButton></div>
-                <div class="ui-g-3"><p-radioButton name="trustedAcceptableUseGrp" value="No" label="Decline"  [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="trustedAcceptableUse"></p-radioButton></div>
+                <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
+                <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
             </div>
           </div>
         </mat-dialog-content> 

@@ -50,14 +50,14 @@ export class DialogBoxComponent implements OnInit {
     allProvidersJson: any;
     allDataTypes: any;
     trustedRequest:string;
-    trustedAcceptableUse:string;
-    trustedAcceptableUseDisabled:boolean;
+    acceptableUse:string;
     approvalForm: string;
     derivedDataSet: string;
     dataType: string;
     dataSources: string;
     detailedDerivedDataset: string;
     derivedDataSetName: string;
+    trustedAcceptableUseDisabled:boolean;
     @ViewChild("fileUpload") fileUpload: FileUpload;
   
     dataTypes = [
@@ -123,7 +123,7 @@ export class DialogBoxComponent implements OnInit {
                                                         this.userBucketName = data.userBucketName;
                                                         this.datasettype = data.datasettype;
                                                         this.trustedRequest = "";
-                                                        this.trustedAcceptableUse = "";
+                                                        this.acceptableUse = "";
                                                         this.trustedAcceptableUseDisabled = false;
                                                     }
     onNoClick(): void {
@@ -368,14 +368,14 @@ export class DialogBoxComponent implements OnInit {
         reqBody['RequestID'] = null;
         reqBody['ApprovalForm'] = approvalForm;
         reqBody['UserID'] = this.userName;
-        reqBody['selectedDataInfo'] = {"selectedDataSet" : this.selectedDataSet, "selectedDataProvider" : this.selectedDataProvider,"selectedDatatype" : this.selectedDatatype }
-        
-        if(this.trustedRequest === "Yes" && (this.trustedAcceptableUse === "No" || this.trustedAcceptableUse == "")) {
+        reqBody['selectedDataInfo'] = { "selectedDataSet" : this.selectedDataSet, "selectedDataProvider" : this.selectedDataProvider,"selectedDatatype" : this.selectedDatatype };
+        reqBody["acceptableUse"] = this.acceptableUse
+        /*if(this.trustedRequest === "Yes" && (this.acceptableUse === "No" || this.acceptableUse == "")) {
             //alert("Usage policy to continue"); // Ribbon...
             this.snackBar.open('Acceptable use policy should be accepted to request trusted status', 'close', {
                 duration: 2000,
             });
-        } else {
+        } else { */
             if(this.trustedRequest === "Yes") {
                // Submit API gateway request 
                reqBody['trustedRequest'] = {"trustedRequestStatus" : "Submitted" }    
@@ -389,21 +389,21 @@ export class DialogBoxComponent implements OnInit {
                     console.log('Request Sent Successfully');
                 }
             );
-        }
+        //}
     }
-    
+
     onTrustedRequestGrpChange(selectedVal: any) {
         if(selectedVal === "No") {
          this.trustedAcceptableUseDisabled = true;
-         this.trustedAcceptableUse = "No";
+         this.acceptableUse = "Decline";
          this.trustedRequest =  "No";
         } else {
             this.trustedAcceptableUseDisabled = false;
-            this.trustedAcceptableUse = ""
+            this.acceptableUse = "Accept";
             this.trustedRequest =  "Yes";
         }  
     }
-
+    
     uploadFiles(event1) {
         let totalFilesCount = event1.files.length;   
         for(let file of event1.files) {

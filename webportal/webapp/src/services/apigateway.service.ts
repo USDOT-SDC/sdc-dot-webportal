@@ -113,4 +113,19 @@ export class ApiGatewayService {
             .map(this.extractData)
             .catch(this.handleError);
     }
+
+    getMetadataOfS3Object(url: string){
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    sendExportRequest(url: string) {
+        this.setRequestHeaders();
+        console.log("sending request 2 " + ApiGatewayService._API_ENDPOINT + url ) 
+        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
+        .map(this.extractData)
+        .catch(this.handleError);
+    }
 }
