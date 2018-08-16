@@ -1,0 +1,79 @@
+<div class="container">
+    <mat-card>
+     <div class="row">
+        <div class="col-md-12">
+          <!-- Export Requests-->
+          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Export File Requests
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngIf="!exportFileRequests">No export file requests</div>
+            <span style="color:grey">This section displays the list of export requests</span><hr>
+           <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
+            <p-table #dt [columns]="cols" [value]="exportFileRequests" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="exportFileRequests.length"  dataKey="filename">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                          {{col.header}} <br/>
+                          <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-exportFileRequest let-columns="columns">
+                  <tr>
+                      <td>{{exportFileRequest.userFullName}}</td>
+                      <td>{{exportFileRequest.description}}</td>
+                      <td>{{exportFileRequest.team}}</td>
+                      <td>{{exportFileRequest.dataset}}</td>
+                      <td>{{exportFileRequest.reviewFile}}</td>
+                      <td>
+                            <i class="material-icons iconFont" (click)="submitApproval('TrustedApproved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('TrustedRejected',exportFileRequest)" >close</i>
+                        <!--<button class="btn btn-primary dotBtn"  (click)="submitApproval('TrustedApproved',exportFileRequest)" >Approve</button><button class="btn btn-primary dotBtn"  (click)="submitApproval('TrustedRejected',exportFileRequest)">Reject</button></td>-->
+                     
+                        <td>
+                                <i class="material-icons iconFont" (click)="submitApproval('Approved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportFileRequest)" >close</i>
+                                
+                            <!--<button class="btn btn-primary dotBtn"  (click)="submitApproval('Approved',exportFileRequest)">Approve</button><button class="btn btn-primary dotBtn"  (click)="submitApproval('Rejected',exportFileRequest)">Reject</button></td>-->
+                      <td>{{exportFileRequest.details}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          <hr />
+          </mat-expansion-panel>
+
+         <!-- Trust Requests-->
+         <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Trusted Requests
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngIf="!trustedRequests">No Trusted Requests</div>
+          <span style="color:grey">This section displays the list of Trusted Requests</span><hr>
+         <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
+          <p-table #dt [columns]="colsTrusted" [value]="trustedRequests" [paginator]="true" [rows]="10" [totalRecords]="trustedRequests.length"  dataKey="filename">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                        {{col.header}} <br/>
+                        <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-trustedRequest let-columns="columns">
+                <tr>
+                    <td>{{trustedRequest.userFullName}}</td>
+                    <td>{{trustedRequest.dataset}}</td>
+                    <td>
+                        <i class="material-icons iconFont" (click)="submitTrustedApproval('Trusted',trustedRequest.userFullName,trustedRequest.dataset)" >done</i><i class="material-icons iconFont" (click)="submitTrustedApproval('NonTrusted',trustedRequest.userFullName,trustedRequest.dataset)" >close</i>
+                </tr>
+            </ng-template>
+        </p-table>
+        <hr />
+        </mat-expansion-panel>
+        </div>
+      </div>
+    </mat-card>
+</div>

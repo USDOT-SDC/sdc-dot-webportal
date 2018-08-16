@@ -31,6 +31,7 @@ export class DatasetsComponent implements OnInit {
     stacks: any = [];
     cols: any = [];
     selectedFiles: any = [];
+    userTrustedStatus: any;
 
     ngOnInit() {
         var sdcDatasetsString = sessionStorage.getItem('datasets');
@@ -61,6 +62,10 @@ export class DatasetsComponent implements OnInit {
           { field: 'export', header: 'Export' },
           { field: 'publish', header: 'Publish' }
         ]
+        let trustedStatus = sessionStorage.getItem('userTrustedStatus');
+        console.log("Trusted status"+trustedStatus);
+        this.userTrustedStatus = JSON.parse(trustedStatus);
+        console.log("Trusted status"+ JSON.stringify(this.userTrustedStatus));
     }
 
     getMyDatasetsList() {
@@ -69,9 +74,21 @@ export class DatasetsComponent implements OnInit {
             for(let x of response) {
                 this.getMetadataForS3Objects(x).subscribe(
                     metadata => {
-                        if (metadata != null){
-                            this.myDatasets.push({'filename':x, 'download': metadata["download"], 'export': metadata["export"], 'publish': metadata["publish"]});
-                        } else{
+                        if (metadata != null) {
+                               let  trusted = false;
+                                // check if user is trutsted for a dataset
+                                for( var dt in this.userTrustedStatus) {
+                                    //console.log(dt);
+                                    //console.log()
+                                    if(dt in metadata) {
+                                        this.myDatasets.push({'filename':x, 'download': 'true', 'export': 'false', 'publish': 'true'});
+                                        trusted = true;
+                                    }
+                                }
+                                if(!trusted) {
+                                    this.myDatasets.push({'filename':x, 'download': metadata["download"], 'export': metadata["export"], 'publish': metadata["publish"]});
+                                }
+                        } else {
                             this.myDatasets.push({'filename':x, 'download': null, 'export': null, 'publish': null});
                         }
                     }

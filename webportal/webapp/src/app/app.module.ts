@@ -32,6 +32,8 @@ import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 import {PanelModule,SharedModule} from 'primeng/primeng';
 import {RadioButtonModule} from 'primeng/primeng';
+import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
+
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import {RadioButtonModule} from 'primeng/primeng';
     AccountComponent,
     AccountHomeComponent,
     DatasetsComponent,
+    ExportRequestsComponent,
     WorkstationComponent,
     RegisterComponent,
     DialogBoxComponent,

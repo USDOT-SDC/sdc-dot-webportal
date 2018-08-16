@@ -26,6 +26,7 @@ export interface Callback {
 
 @Injectable()
 export class CognitoService {
+   
     public static _REGION = "" // User pool AWS region
     public static _USER_POOL_ID = "" // User pool ID
     public static _CLIENT_ID = "" // App client ID
