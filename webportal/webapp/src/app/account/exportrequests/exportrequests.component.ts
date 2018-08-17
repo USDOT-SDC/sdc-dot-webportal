@@ -34,18 +34,18 @@ export class ExportRequestsComponent implements OnInit {
         this.getExportFileRequests();
         
         this.cols = [
-          { field: 'userFullName', header: 'UserFullName' },
+          { field: 'userFullName', header: 'User Full Name' },
           { field: 'description', header: 'Description' },
           { field: 'team', header: 'Team' },
-          { field: 'dataset', header: 'dataset' },
-          { field: 'reviewFile', header: 'reviewFile' },
+          { field: 'dataset', header: 'Dataset' },
+          { field: 'reviewFile', header: 'Review File' },
           { field: 'trustedApproval', header: 'Trusted Approval' },
           { field: 'approval', header: 'Approval' },
           { field: 'details', header: 'Details' }
         ];
 
         this.colsTrusted = [
-            { field: 'userFullName', header: 'UserFullName' },
+            { field: 'userFullName', header: 'User Full Name' },
             { field: 'dataset', header: 'Dataset' },
             { field: 'approval', header: 'Approval' }
             
