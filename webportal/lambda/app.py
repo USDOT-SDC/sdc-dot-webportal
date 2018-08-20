@@ -22,20 +22,21 @@ cors_config = CORSConfig(
 )
 
 #Parameters used to deploy production setup
-TABLENAME = ''
-TABLENAME_DATASET = ''
-APPSTREAM_S3_BUCKET_NAME = ''
-APPSTREAM_DATASET_FOLDER_NAME = ''
-APPSTREAM_ALGORITHM_FOLDER_NAME = ''
-APPSTREAM_DATASET_PATH = ''
-RECEIVER = ''
-PROVIDER_ARNS = ''
-RESTAPIID = ''
-AUTHORIZERID = ''
-TABLENAME_EXPORT_FILE_REQUEST = ''
-TABLENAME_TRUSTED = ''
+TABLENAME = 'dev-UserStacksTable'
+TABLENAME_DATASET = 'dev-AvailableDataset'
+APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
+APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
+APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
+APPSTREAM_DATASET_PATH = 'user/custom/'
+RECEIVER = 'support@securedatacommons.com'
+PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY'
+RESTAPIID = 'u2zksemc1h'
+AUTHORIZERID = 'n0nf3v'
+TABLENAME_TRUSTED = 'dev-TrustedUsers'
+TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExport'
+
 authorizer = CognitoUserPoolAuthorizer(
-    '', provider_arns=[PROVIDER_ARNS])
+    'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
 
 
 app = Chalice(app_name='webportal')
@@ -599,15 +600,13 @@ def getSubmittedRequests():
         for userdataset in userdatasets:
             exportFileRequestResponse = exportFileRequestTable.query(
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
-                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset),
-                FilterExpression=Attr('RequestReviewStatus').eq('Submitted'))
+                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
             if exportFileRequestResponse['Items']:
                 response['exportRequests'].append(exportFileRequestResponse['Items'])
 
             trustedRequestResponse = trustedRequestTable.query(
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
-                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset),
-                FilterExpression=Attr('TrustedStatus').eq('Submitted'))
+                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
 
             if trustedRequestResponse['Items']:
                 response['trustedRequests'].append(trustedRequestResponse['Items'])

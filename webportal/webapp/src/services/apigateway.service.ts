@@ -5,12 +5,13 @@ import { CognitoService } from './cognito.service';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/throw';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class ApiGatewayService {
 
     protected options: RequestOptions;
-    private static _API_ENDPOINT = ''; // AWS API gateway base endpoint
+    private static _API_ENDPOINT = environment.API_ENDPOINT; // AWS API gateway base endpoint
 
     apiResponse: any;
     extractData: any;

@@ -33,6 +33,7 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 import {PanelModule,SharedModule} from 'primeng/primeng';
 import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
+import {MessageModule} from 'primeng/message';
 
 
 @NgModule({
@@ -81,6 +82,7 @@ import { ExportRequestsComponent } from './account/exportrequests/exportrequests
     SharedModule,
     PanelModule,
     RadioButtonModule,
+    MessageModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
   ],

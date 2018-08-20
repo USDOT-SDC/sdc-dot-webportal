@@ -89,7 +89,8 @@ export class ExportRequestsComponent implements OnInit {
                             'S3KeyHash' : item['S3KeyHash'],
                             'RequestedBy_Epoch':item['RequestedBy_Epoch'],
                             'S3Key' : item['S3Key'],
-                            'TeamBucket' : item['TeamBucket']
+                            'TeamBucket' : item['TeamBucket'],
+                            'RequestReviewStatus': item['RequestReviewStatus']
                            }
                         );
                         console.log(item);
@@ -99,7 +100,8 @@ export class ExportRequestsComponent implements OnInit {
                     for(let item of items) {
                          //console.log(item);
                          this.trustedRequests.push({'userFullName' : item['UserID'], 
-                                                    'dataset' : item['Dataset-DataProvider-Datatype']});
+                                                    'dataset' : item['Dataset-DataProvider-Datatype'],
+                                                    'TrustedStatus' : item['TrustedStatus']});
                     } 
                 }  
                 console.log('Request Sent Successfully');

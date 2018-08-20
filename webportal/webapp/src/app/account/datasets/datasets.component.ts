@@ -134,6 +134,8 @@ export class DatasetsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
+            this.myDatasets = [];
+            this.getMyDatasetsList();
         });
     }
 

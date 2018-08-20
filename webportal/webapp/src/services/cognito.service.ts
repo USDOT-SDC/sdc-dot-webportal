@@ -4,12 +4,14 @@ import {
     CognitoIdentityServiceProvider,
     CognitoUser,
     CognitoUserAttribute,
-    CognitoUserPool,
+    CognitoUserPool
 } from "amazon-cognito-identity-js";
 import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth";
 import * as AWS from "aws-sdk";
 import * as awsservice from "aws-sdk/lib/service";
 import * as CognitoIdentity from "aws-sdk/clients/cognitoidentity";
+import { environment } from '../environments/environment';
+
 
 export interface CognitoCallback {
     cognitoCallback(message: string, result: any): void;
@@ -27,13 +29,13 @@ export interface Callback {
 @Injectable()
 export class CognitoService {
    
-    public static _REGION = "" // User pool AWS region
-    public static _USER_POOL_ID = "" // User pool ID
-    public static _CLIENT_ID = "" // App client ID
-    public static _IDENTITY_PROVIDER = "" // User pool Identity provider name
-    public static _APP_DOMAIN = "" // App domain name
+    public static _REGION = environment.REGION // User pool AWS region
+    public static _USER_POOL_ID = environment.USER_POOL_ID // User pool ID
+    public static _CLIENT_ID = environment.CLIENT_ID // App client ID
+    public static _IDENTITY_PROVIDER = environment.IDENTITY_PROVIDER // User pool Identity provider name
+    public static _APP_DOMAIN = environment.APP_DOMAIN // App domain name
     public static _IDP_ENDPOINT = "cognito-idp." + CognitoService._REGION + ".amazonaws.com/" + CognitoService._USER_POOL_ID
-    public static _REDIRECT_URL = "" // Re-direct URL for the user pool
+    public static _REDIRECT_URL = environment.REDIRECT_URL // Re-direct URL for the user pool
 
     public static _POOL_DATA:any = {
         UserPoolId: CognitoService._USER_POOL_ID,
