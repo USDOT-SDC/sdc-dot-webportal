@@ -12,7 +12,7 @@
             <div *ngIf="!exportFileRequests">No export file requests</div>
             <span style="color:grey">This section displays the list of export requests</span><hr>
            <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
-            <p-table #dt [columns]="cols" [value]="exportFileRequests" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="exportFileRequests.length"  dataKey="filename">
+            <p-table #dt [columns]="cols" [value]="exportFileRequests" [paginator]="true" [rows]="10" [totalRecords]="exportFileRequests.length"  dataKey="filename">
               <ng-template pTemplate="header" let-columns>
                   <tr>
                       <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
