@@ -122,9 +122,10 @@ export class DialogBoxComponent implements OnInit {
                                                         this.requestType = data.requestType;
                                                         this.userBucketName = data.userBucketName;
                                                         this.datasettype = data.datasettype;
-                                                        this.trustedRequest = "";
+                                                        this.trustedRequest = "No";
                                                         this.acceptableUse = "";
                                                         this.trustedAcceptableUseDisabled = false;
+                                                        this.approvalForm = data.approvalForm;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -165,11 +166,11 @@ export class DialogBoxComponent implements OnInit {
     setDataProviders(event){
         console.log(event.value);
         this.dataProviderNames = [];
+        this.subDataSets = [];
         this.selectedDataSet = this.messageModel.datasettype;
         for (var j=0; j < this.exportWorkflow.length; j++){
             var exportW = this.exportWorkflow[j];
             if (exportW.exportWorkflow && exportW.exportWorkflow[event.value]){
-                console.log("Yay");
                 this.allProvidersJson = exportW.exportWorkflow[event.value]
                 for (var j=0; j < Object.keys(this.allProvidersJson).length; j++){
                     var dataProvider = {};
@@ -328,6 +329,9 @@ export class DialogBoxComponent implements OnInit {
         
         let approvalForm = {};
 
+        if (this.selectedDataSet){
+            approvalForm["datasetName"] = this.selectedDataSet;
+        }
         if (this.derivedDataSetName){
             approvalForm["derivedDataSetname"] = this.derivedDataSetName;
         }
@@ -380,6 +384,16 @@ export class DialogBoxComponent implements OnInit {
                // Submit API gateway request 
                reqBody['trustedRequest'] = {"trustedRequestStatus" : "Submitted" }    
             }
+            //***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
+            if(this.trustedRequest === "Yes" && this.acceptableUse == "Decline") {
+                // Submit API gateway request 
+                this.snackBar.open("Your request has been sent  but you have declined the acceptable usage policy", 'close', {
+                    duration: 2000,
+                });
+                this.onNoClick();
+                console.log('Declined acceptable usage policy');
+                return
+            }
             this.gatewayService.sendExportRequest("export?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
                 (response: any) => {
                     this.snackBar.open("Your request has been sent successfully", 'close', {
@@ -393,15 +407,18 @@ export class DialogBoxComponent implements OnInit {
     }
 
     onTrustedRequestGrpChange(selectedVal: any) {
-        if(selectedVal === "No") {
-         this.trustedAcceptableUseDisabled = true;
-         this.acceptableUse = "Decline";
-         this.trustedRequest =  "No";
-        } else {
-            this.trustedAcceptableUseDisabled = false;
-            this.acceptableUse = "Accept";
+        // if(selectedVal === "No") {
+        // //  this.trustedAcceptableUseDisabled = true;
+        // //  this.acceptableUse = "Decline";
+        //     this.trustedRequest =  "No";
+        // } else {
+        //     // this.trustedAcceptableUseDisabled = false;
+        //     // this.acceptableUse = "Accept";
+        //     this.trustedRequest =  "Yes";
+        // }  
+        if(selectedVal === "Yes"){
             this.trustedRequest =  "Yes";
-        }  
+        }
     }
     
     uploadFiles(event1) {

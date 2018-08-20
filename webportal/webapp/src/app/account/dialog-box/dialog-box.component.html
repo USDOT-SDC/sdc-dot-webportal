@@ -188,7 +188,7 @@
   <h3>Export Data</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
-    <mat-tab label="Select Dataset" #tab1 [disabled]='!tab1.isActive'>
+    <mat-tab label="Select Dataset" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <mat-form-field style='width: 100%'>
@@ -230,7 +230,9 @@
       </mat-dialog-content>
       <hr>
     </mat-tab>
-    <mat-tab label="Approval Form" #tab2 [disabled]='!tab2.isActive'>
+    <mat-tab label="Approval Form" #tab2 [disabled]='selectedIndex==0'>
+      <br>
+      <label style="float:right"> * All fields are mandatory </label>
       <hr>
       <mat-dialog-content *ngIf="!trustedStatus">
         <mat-form-field style='width: 100%'>
@@ -242,7 +244,7 @@
           <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error>
         </mat-form-field>
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Specific sub-datasets or data types used" [(ngModel)]="messageModel.datatype" value="{{messageModel.datatype}}" required>
+          <input matInput placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype" required>
           <mat-error align="end" *ngIf="!messageModel.datatype">Required</mat-error>
         </mat-form-field>
         <mat-form-field style='width: 100%'>
@@ -268,7 +270,7 @@
         <mat-dialog-actions>
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
-                    [disabled]="!messageModel.derivedDatasetname || !messageModel.datatype || !messageModel.justifyExport || !messageModel.detailedderiveddataset || !messageModel.deriveddataset || !messageModel.datasources"
+                    [disabled]="!messageModel.derivedDatasetname || !messageModel.justifyExport || !messageModel.detailedderiveddataset || !messageModel.deriveddataset || !messageModel.datasources"
                     (click)="onApprovalformClick()">NEXT
             </button>
           </span>&nbsp;
@@ -285,7 +287,7 @@
           <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
         </mat-form-field>
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Specific sub-datasets or data types used" [(ngModel)]="messageModel.datatype" value="{{messageModel.datatype}}">
+          <input matInput placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype">
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}">
@@ -312,7 +314,7 @@
       </mat-dialog-content>
       
     </mat-tab>
-    <mat-tab label="Trusted Status" #tab3 [disabled]='!tab3.isActive'>
+    <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex!=2'>
       <h2>Trusted Status</h2>
       <hr>
       <mat-dialog-content *ngIf="trustedStatus">
@@ -327,13 +329,13 @@
             <br/>
             <div class="ui-g">
                 <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="Yes" label="Yes"  (onClick) = "onTrustedRequestGrpChange('Yes')" [(ngModel)]="trustedRequest"></p-radioButton> </div>
-                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"   (onClick) = "onTrustedRequestGrpChange('No')"  [(ngModel)]="trustedRequest"> </p-radioButton> </div>
+                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"   (onClick) = "onTrustedRequestGrpChange('No')"  [(ngModel)]="trustedRequest" checked> </p-radioButton> </div>
             </div>
             <br/>
           </div>
 
           <p-panel header="Acceptable Use Policy" >
-              <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="selectedDataSet && selectedDataProvider"></div>
+              <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
           </p-panel>
           <br/>
           <div *ngIf="!trustedStatus">
@@ -362,4 +364,36 @@
       </ul>
     </ng-template>
 </p-fileUpload>
+</div>
+
+<div *ngIf="mailType == 'Details for export request'">
+  <h3>Details for approval form</h3>
+  <hr>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Name or short description of your derived dataset" [value]="approvalForm.derivedDataSetname">
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="approvalForm.dataprovider">
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Specific sub-datasets or data types used" [value]="approvalForm.datatype">
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Additional datasources" [value]="approvalForm.datasources">
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="High level description of derived dataset" [value]="approvalForm.deriveddataset" >
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Detailed description of the derived dataset" [value]="approvalForm.detailedderiveddataset" >
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Tags" [value]="approvalForm.tags">
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Justification of Export" [value]="approvalForm.justifyExport" >
+    </mat-form-field>
+    <mat-dialog-actions>
+      <button class="btn btn-primary" style="float:right;" (click)="onNoClick()">CLOSE</button>
+    </mat-dialog-actions>
 </div>

@@ -26,6 +26,7 @@ export class ExportRequestsComponent implements OnInit {
     colsTrusted: any = [];
     userEmail: string;
     userName: string;
+    detailsOnclick: any;
 
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
@@ -34,7 +35,7 @@ export class ExportRequestsComponent implements OnInit {
         this.getExportFileRequests();
         
         this.cols = [
-          { field: 'userFullName', header: 'User Full Name' },
+          { field: 'userFullName', header: 'User' },
           { field: 'description', header: 'Description' },
           { field: 'team', header: 'Team' },
           { field: 'dataset', header: 'Dataset' },
@@ -45,7 +46,7 @@ export class ExportRequestsComponent implements OnInit {
         ];
 
         this.colsTrusted = [
-            { field: 'userFullName', header: 'User Full Name' },
+            { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
             { field: 'approval', header: 'Approval' }
             
@@ -83,7 +84,7 @@ export class ExportRequestsComponent implements OnInit {
                             'description' : justifyExport, 
                             'team' : item['TeamBucket'], 
                             'dataset' : item['Dataset-DataProvider-Datatype'], 
-                            'details' : 'Details',
+                            'details' : item['ApprovalForm'],
                             'reviewFile' : item['S3Key'],
                             'S3KeyHash' : item['S3KeyHash'],
                             'RequestedBy_Epoch':item['RequestedBy_Epoch'],
@@ -121,28 +122,48 @@ export class ExportRequestsComponent implements OnInit {
             }
         );*/
     }
+    renderApprovalForm(approvalForm) {
+        console.log(approvalForm.details);
+        this.detailsOnclick = 1;
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            width: '700px',
+            height: '640px',
+            data: { mailType: "Details for approval Form", approvalForm: approvalForm.details}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
     
+    requestDownload(exportFileRequest) {
+        this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
+            (response: any) => {
+            window.open(response);
+        });
+    }
+
     submitApproval(status,targetObj) {
            
-            console.log(status);
-            console.log(targetObj);
-            console.log(targetObj.S3KeyHash);
-            console.log(targetObj.RequestedBy_Epoch);
+        console.log(status);
+        console.log(targetObj);
+        console.log(targetObj.S3KeyHash);
+        console.log(targetObj.RequestedBy_Epoch);
 
-            let reqBody = {};
-            reqBody['status'] = status;
-            reqBody['key1'] = targetObj['S3KeyHash'];
-            reqBody['key2'] = targetObj['RequestedBy_Epoch'];
-            reqBody['datainfo'] = targetObj['dataset'];
-            reqBody['S3Key'] = targetObj['S3Key'];
-            reqBody['TeamBucket'] = targetObj['TeamBucket'];
+        let reqBody = {};
+        reqBody['status'] = status;
+        reqBody['key1'] = targetObj['S3KeyHash'];
+        reqBody['key2'] = targetObj['RequestedBy_Epoch'];
+        reqBody['datainfo'] = targetObj['dataset'];
+        reqBody['S3Key'] = targetObj['S3Key'];
+        reqBody['TeamBucket'] = targetObj['TeamBucket'];
 
-            this.gatewayService.post("export/requests/updatefilestatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
-                (response: any) => {
-                    this.getExportFileRequests();
-                    console.log('Request Sent Successfully');
-                }
-            );
+        this.gatewayService.post("export/requests/updatefilestatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+            (response: any) => {
+                this.getExportFileRequests();
+                console.log('Request Sent Successfully');
+            }
+        );
 
     }
     submitTrustedApproval(status,key1,key2) {

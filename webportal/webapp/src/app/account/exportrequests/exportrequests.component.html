@@ -27,7 +27,7 @@
                       <td>{{exportFileRequest.description}}</td>
                       <td>{{exportFileRequest.team}}</td>
                       <td>{{exportFileRequest.dataset}}</td>
-                      <td>{{exportFileRequest.reviewFile}}</td>
+                      <td><a style="cursor:pointer;" (click)="requestDownload(exportFileRequest)">{{exportFileRequest.reviewFile}}</a></td>
                       <td>
                             <i class="material-icons iconFont" (click)="submitApproval('TrustedApproved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('TrustedRejected',exportFileRequest)" >close</i>
                         <!--<button class="btn btn-primary dotBtn"  (click)="submitApproval('TrustedApproved',exportFileRequest)" >Approve</button><button class="btn btn-primary dotBtn"  (click)="submitApproval('TrustedRejected',exportFileRequest)">Reject</button></td>-->
@@ -36,7 +36,9 @@
                                 <i class="material-icons iconFont" (click)="submitApproval('Approved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportFileRequest)" >close</i>
                                 
                             <!--<button class="btn btn-primary dotBtn"  (click)="submitApproval('Approved',exportFileRequest)">Approve</button><button class="btn btn-primary dotBtn"  (click)="submitApproval('Rejected',exportFileRequest)">Reject</button></td>-->
-                      <td>{{exportFileRequest.details}}</td>
+                      <td>
+                        <i class="material-icons iconFont" (click)="renderApprovalForm(exportFileRequest)" >insert_drive_file</i>
+                      </td>
                   </tr>
               </ng-template>
           </p-table>
