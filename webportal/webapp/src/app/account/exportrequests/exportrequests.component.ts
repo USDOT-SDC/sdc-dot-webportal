@@ -128,7 +128,7 @@ export class ExportRequestsComponent implements OnInit {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '700px',
             height: '640px',
-            data: { mailType: "Details for approval Form", approvalForm: approvalForm.details}
+            data: { mailType: 'Details for export request', approvalForm: approvalForm.details}
         });
 
         dialogRef.afterClosed().subscribe(result => {
