@@ -22,21 +22,21 @@ cors_config = CORSConfig(
 )
 
 #Parameters used to deploy production setup
-TABLENAME = 'dev-UserStacksTable'
-TABLENAME_DATASET = 'dev-AvailableDataset'
-APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
+TABLENAME = ''
+TABLENAME_DATASET = ''
+APPSTREAM_S3_BUCKET_NAME = ''
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
 RECEIVER = 'support@securedatacommons.com'
-PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY'
-RESTAPIID = 'u2zksemc1h'
-AUTHORIZERID = 'n0nf3v'
-TABLENAME_TRUSTED = 'dev-TrustedUsers'
-TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExport'
+PROVIDER_ARNS = ''
+RESTAPIID = ''
+AUTHORIZERID = ''
+TABLENAME_TRUSTED = ''
+TABLENAME_EXPORT_FILE_REQUEST= ''
 
 authorizer = CognitoUserPoolAuthorizer(
-    'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
+    '', provider_arns=[PROVIDER_ARNS])
 
 
 app = Chalice(app_name='webportal')
