@@ -16,7 +16,8 @@
             </span><hr>
             <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
             <hr>
-            <p>Files from Bucket name - <b>{{ userBucketName }}</b></p>
+            <p> Team Bucket - <b>{{ userBucketName }}</b></p>
+            <p> Files from  <b>{{ userName }}</b><b>/uploaded_files</b> and folder <b>export_requests</b></p>
             <span style="color:grey">Any file type can be downloaded.</span>
             <p-table #dt [columns]="cols" [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="myDatasets.length"  dataKey="filename">
               <ng-template pTemplate="header" let-columns>

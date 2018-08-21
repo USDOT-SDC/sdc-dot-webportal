@@ -258,14 +258,22 @@ def get_my_datasets():
     try:
         client_s3 = boto3.client('s3')
         response = client_s3.list_objects(
-            Bucket=params['userBucketName']
+            Bucket=params['userBucketName'],
+            Prefix='{}/uploaded_files/'.format(params['username'])
+        )
+        export_response = client_s3.list_objects(
+            Bucket=params['userBucketName'],
+            Prefix='export_requests/'
         )
         total_content = {}
+        total_export_content = {}
+        if 'Contents' in export_response:
+            total_export_content = export_response['Contents']
         if 'Contents' in response:
             total_content=response['Contents']
-
-
         for c in total_content:
+            content.add(c['Key'])
+        for c in total_export_content:
             content.add(c['Key'])
 
     except BaseException as ce:
@@ -383,7 +391,7 @@ def get_presigned_url():
     params = app.current_request.query_params
     try:
         client_s3 = boto3.client('s3')
-        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': params['file_name'], 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
+        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': '{}/uploaded_files/{}'.format(params["username"], params['file_name']), 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
         logging.info("Response from pre-signed url - " + response)
     except BaseException as be:
         logging.exception("Error: Failed to generate presigned url" + str(be))
@@ -531,8 +539,8 @@ def export():
 
 
     except BaseException as be:
-        logging.exception("Error: Failed to generate presigned url" + str(be))
-        raise ChaliceViewError("Failed to get presigned url")
+        logging.exception("Error: Failed to process export request" + str(be))
+        raise ChaliceViewError("Failed to process export request")
 
     return Response(body=response,
                     status_code=200,

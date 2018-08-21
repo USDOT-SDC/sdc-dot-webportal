@@ -427,7 +427,7 @@ export class DialogBoxComponent implements OnInit {
             
             console.log("Bucket name is = "+ this.userBucketName)
             console.log("File name is = " + file.name);
-            this.gatewayService.getPresignedUrl('presigned_url?file_name=' + file.name + '&file_type=' + file.type + '&bucket_name=' + this.userBucketName).subscribe(
+            this.gatewayService.getPresignedUrl('presigned_url?file_name=' + file.name + '&file_type=' + file.type + '&bucket_name=' + this.userBucketName + '&username=' + this.userName).subscribe(
                 (response: any) => {
  
                     const req = new HttpRequest('PUT', response, file, {

@@ -32,12 +32,14 @@ export class DatasetsComponent implements OnInit {
     cols: any = [];
     selectedFiles: any = [];
     userTrustedStatus: any;
+    userName: any;
 
     ngOnInit() {
         var sdcDatasetsString = sessionStorage.getItem('datasets');
         this.sdcElements = JSON.parse(sdcDatasetsString);
         var stacksString = sessionStorage.getItem('stacks');
         this.userBucketName = sessionStorage.getItem('team_bucket_name');
+        this.userName = sessionStorage.getItem('username');
         this.sortedSdcElements= this.sdcElements.reverse();
         this.sortedSdcElements.forEach(element => {
             if (element.Type == "Algorithm")
@@ -69,7 +71,7 @@ export class DatasetsComponent implements OnInit {
     }
 
     getMyDatasetsList() {
-        this.gatewayService.get('user_data?userBucketName=' + this.userBucketName).subscribe(
+        this.gatewayService.get('user_data?userBucketName=' + this.userBucketName + '&username=' + this.userName).subscribe(
             (response: any) => {
             for(let x of response) {
                 this.getMetadataForS3Objects(x).subscribe(
@@ -156,7 +158,7 @@ export class DatasetsComponent implements OnInit {
         this.myDatasets.forEach((datasetObj, index) => {
             if(selectedFile.filename == datasetObj["filename"]){
                 if (datasetObj["download"] == "true"){
-                    this.gatewayService.getDownloadUrl('download_url?bucket_name=' + this.userBucketName + '&file_name=' + selectedFile.filename).subscribe(
+                    this.gatewayService.getDownloadUrl('download_url?bucket_name=' + this.userBucketName + '&file_name=' + selectedFile.filename + '&username=' + this.userName).subscribe(
                         (response: any) => {
                         window.open(response, "_blank");
                     });
