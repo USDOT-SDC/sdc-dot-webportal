@@ -338,8 +338,8 @@ export class DialogBoxComponent implements OnInit {
         if (this.selectedDataProvider){
             approvalForm["dataprovider"] = this.selectedDataProvider;
         }
-        if (this.dataType){
-            approvalForm["datatype"] = this.dataType;
+        if (this.selectedDatatype){
+            approvalForm["datatype"] = this.selectedDatatype;
         }
         if (this.dataSources){
             approvalForm["datasources"] = this.dataSources;
