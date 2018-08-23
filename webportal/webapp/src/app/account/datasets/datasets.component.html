@@ -16,8 +16,10 @@
             </span><hr>
             <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
             <hr>
-            <p> Team Bucket - <b>{{ userBucketName }}</b></p>
-            <p> Files from  <b>{{ userName }}</b><b>/uploaded_files</b> and folder <b>export_requests</b></p>
+            <p> The files shown in the below table are available in the team bucket assigned to your workstation.</p>
+            <p> Team bucket name - <b>{{ userBucketName }}</b></p>
+            <p> Files that are uploaded from the web portal will be saved in the folder - <b>{{ userName }}</b><b>/uploaded_files</b></p>
+            <p> Files that you would like to export out of the system must be uploaded to the folder - <b>export_requests</b></p>
             <span style="color:grey">Any file type can be downloaded.</span>
             <p-table #dt [columns]="cols" [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="myDatasets.length"  dataKey="filename">
               <ng-template pTemplate="header" let-columns>

@@ -185,14 +185,18 @@
 
 <!--Request Export Dataset Dialogbox-->
 <div *ngIf="mailType == 'Dataset export Mail'">
-  <h3>Export Data</h3>
+  <h3>Request to Export Data Workflow</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
-    <mat-tab label="Select Dataset" #tab1>
+    <mat-tab label="Select Project" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
+        <p><b>Please select the project, provider and the primary sub-dataset/data type, that you have used to create your derived dataset. This will help us to route your request to the appropriate data provider for approval.</b></p>
+        <span style="color:grey; font-style: italic;">Note - If your derived dataset is created using multiple sub-datasets/data types, that are available within SDC or external datasets/data sources that you have uploaded into the system, you will be provided an option to list all such datasets/data types in the next section of the workflow.</span>
+        <br>
+        <br>
         <mat-form-field style='width: 100%'>
-          <mat-select class="exportSelect" placeholder='Type' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
+          <mat-select class="exportSelect" placeholder='Project/Dataset' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
             <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value" required>
               {{ dataSetType.viewValue }}
             </mat-option>
@@ -201,7 +205,7 @@
         </mat-form-field>
 
         <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
-          <mat-select class="exportSelect" placeholder='Data Provider Name' [(ngModel)]="messageModel.dataProviderName" (selectionChange)="setSubDatasets($event)">
+          <mat-select class="exportSelect" placeholder='Data Provider' [(ngModel)]="messageModel.dataProviderName" (selectionChange)="setSubDatasets($event)">
             <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value" required>
               {{ dataProviderName.viewValue }}
             </mat-option>
@@ -210,7 +214,7 @@
         </mat-form-field>
 
         <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
-          <mat-select class="exportSelect" placeholder='Sub Dataset' [(ngModel)]="messageModel.subDataSet">
+          <mat-select class="exportSelect" placeholder='Sub-Dataset/Data Type' [(ngModel)]="messageModel.subDataSet">
             <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value" required>
               {{ subDataSet.viewValue }}
             </mat-option>
@@ -231,6 +235,8 @@
       <hr>
     </mat-tab>
     <mat-tab label="Approval Form" #tab2 [disabled]='selectedIndex==0'>
+      <br>
+      <p><b>Please provide additional information pertaining to your request for exporting data, by filling out the fields below. These details will be shared with the data provider to help them review our request and provide their decision.</b></p>
       <br>
       <label style="float:right"> * All fields are mandatory </label>
       <hr>
@@ -315,15 +321,19 @@
       
     </mat-tab>
     <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex!=2'>
-      <h2>Trusted Status</h2>
       <hr>
+      <p><b>Trusted Status is a mechanism to get a passport from the data provider, which allows analysts to export their data immediately, as opposed to waiting for the review and approval by the data provider for similar kinds of export requests. </b>
+      <br>
+      <b>An analyst must have trusted status per combination of Project + Data Provider + Sub-Dataset / Data type.</b></p>
       <mat-dialog-content *ngIf="trustedStatus">
-        <p>Based on the dataset and datatype selection,you currently have Trusted Status from this Data Provider.We will notify the data provider about your request.</p>
-        </mat-dialog-content> 
+        <br>
+        <p>Note - Based on the dataset and datatype selection, you currently have Trusted Status from this Data Provider. We will notify the data provider about your request.</p>
+      </mat-dialog-content> 
         
-        <mat-dialog-content>
+      <mat-dialog-content>
           <div *ngIf="!trustedStatus">
-            <p>Based on the dataset and datatype selection,you currently do not have a Trusted Status from this Data Provider.We will notify the data provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
+            <br>
+            <p>Based on the dataset and datatype selection, you currently do not have a Trusted Status from this Data Provider. We will notify the data provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
             <h5>Do you wish to request Trusted Status from the data provider?</h5>
             
             <br/>
