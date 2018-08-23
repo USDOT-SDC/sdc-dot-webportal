@@ -40,7 +40,6 @@ export class ExportRequestsComponent implements OnInit {
           { field: 'team', header: 'Team' },
           { field: 'dataset', header: 'Dataset' },
           { field: 'reviewFile', header: 'Review File' },
-          { field: 'trustedApproval', header: 'Trusted Approval' },
           { field: 'approval', header: 'Approval' },
           { field: 'details', header: 'Details' }
         ];

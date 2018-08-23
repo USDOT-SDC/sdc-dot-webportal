@@ -28,7 +28,7 @@ APPSTREAM_S3_BUCKET_NAME = ''
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
-RECEIVER = 'support@securedatacommons.com'
+RECEIVER = ''
 PROVIDER_ARNS = ''
 RESTAPIID = ''
 AUTHORIZERID = ''
@@ -82,6 +82,19 @@ def get_datasets():
         logging.exception("Error: Failed to get dataset" + str(be) )
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
+def get_user_trustedstatus(userid):
+    trustedUsersTable = dynamodb_client.Table(TABLENAME_TRUSTED)
+
+    response = trustedUsersTable.query(
+        KeyConditionExpression=Key('UserID').eq(userid),
+        FilterExpression=Attr('TrustedStatus').eq('Trusted')
+    )
+    userTrustedStatus = {}
+    for x in response['Items']:
+        userTrustedStatus[x['Dataset-DataProvider-Datatype']] = 'Trusted'
+
+    return userTrustedStatus
+
 @app.route('/user', authorizer=authorizer, cors=cors_config)
 def get_user_info():
 
@@ -94,17 +107,7 @@ def get_user_info():
         user_info['email']=info_dict['email']
         user_info['username']=info_dict['username']
         user_info['datasets']=get_datasets()['datasets']['Items']
-        trustedUsersTable = dynamodb_client.Table(TABLENAME_TRUSTED)
-
-        response = trustedUsersTable.query(
-            KeyConditionExpression=Key('UserID').eq(info_dict['username']),
-            FilterExpression=Attr('TrustedStatus').eq('Trusted')
-        )
-        userTrustedStatus = {}
-        for x in response['Items']:
-            userTrustedStatus[x['Dataset-DataProvider-Datatype']] = 'Trusted'
-
-        user_info['userTrustedStatus'] = userTrustedStatus
+        user_info['userTrustedStatus'] = get_user_trustedstatus(info_dict['username'])
     except BaseException as be:
         logging.exception("Error: Failed to get user details from token or datasets and algorithm." + str(be) )
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
@@ -467,6 +470,12 @@ def export():
         emailContent = ""
         dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
         acceptableUse = 'Decline'
+
+        # verify if user is already trusted for selected combinedDataInfo
+        userTrustedStatus = get_user_trustedstatus(userID)
+        userTrustedStatusForSelectedDataset = combinedDataInfo in userTrustedStatus and userTrustedStatus[combinedDataInfo] == 'Trusted';
+
+
         if 'acceptableUse' in params and params['acceptableUse']:
             acceptableUse = params['acceptableUse']
 
@@ -476,7 +485,7 @@ def export():
             trustedStatus=params['trustedRequest']['trustedRequestStatus']
 
             if acceptableUse == 'Decline':
-                trustedStatus = 'NonTrusted'
+                trustedStatus = 'Untrusted'
                 emailContent = "<br/>Trusted status has been declined to <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
             elif trustedWorkflowStatus == 'Notify':
                 trustedStatus='Trusted'
@@ -498,7 +507,7 @@ def export():
         download = 'false'
         export = 'true'
         publish = 'false'
-        if nonTrustedWorkflowStatus == 'Notify':
+        if nonTrustedWorkflowStatus == 'Notify' or userTrustedStatusForSelectedDataset is True:
             requestReviewStatus = 'Approved'
             download = 'true'
             publish = 'true'
