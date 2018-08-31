@@ -185,14 +185,14 @@
 
 <!--Request Export Dataset Dialogbox-->
 <div *ngIf="mailType == 'Dataset export Mail'">
-  <h3>Request to Export Data Workflow</h3>
+  <h3>Request to Export Data</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
     <mat-tab label="Select Project" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
-        <p><b>Please select the project, provider and the primary sub-dataset/data type, that you have used to create your derived dataset. This will help us to route your request to the appropriate data provider for approval.</b></p>
-        <span style="color:grey; font-style: italic;">Note - If your derived dataset is created using multiple sub-datasets/data types, that are available within SDC or external datasets/data sources that you have uploaded into the system, you will be provided an option to list all such datasets/data types in the next section of the workflow.</span>
+        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to create your derived dataset. This will help us to route your request to the appropriate Data Provider for approval.</b></p>
+        <span style="color:grey; font-style: italic;">Note - If your derived Dataset is created using multiple Sub-Datasets/Data Types, that are available within SDC or external Datasets/Data Sources that you have uploaded into the system, you will be provided an option to list all such Datasets/Data Types in the next section of the workflow.</span>
         <br>
         <br>
         <mat-form-field style='width: 100%'>
@@ -236,7 +236,7 @@
     </mat-tab>
     <mat-tab label="Approval Form" #tab2 [disabled]='selectedIndex==0'>
       <br>
-      <p><b>Please provide additional information pertaining to your request for exporting data, by filling out the fields below. These details will be shared with the data provider to help them review your request and provide their decision.</b></p>
+      <p><b>Please provide additional information pertaining to your request for exporting data, by filling out the fields below. These details will be shared with the Data Provider to help them review your request and provide their decision.</b></p>
       <br>
       <label style="float:right"> * All fields are mandatory </label>
       <hr>
@@ -322,19 +322,19 @@
     </mat-tab>
     <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex!=2'>
       <hr>
-      <p><b>Trusted Status is a mechanism to get a passport from the data provider, which allows analysts to export their data immediately, as opposed to waiting for the review and approval by the data provider for similar kinds of export requests. </b>
+      <p><b>Trusted Status is a mechanism for analysts to obtain a passport from a data provider. Obtaining this passport allows analyst to export their data immediately (for subsequent similar requests), as opposed to waiting for the review and approval of a data provider.</b>
       <br>
-      <b>An analyst must have trusted status per combination of Project + Data Provider + Sub-Dataset / Data type.</b></p>
+      <b>This status is acquired per Project + Data Provider + Sub-Dataset/Data Type.</b></p>
       <mat-dialog-content *ngIf="trustedStatus">
         <br>
-        <p>Note - Based on the dataset and datatype selection, you currently have Trusted Status from this Data Provider. We will notify the data provider about your request.</p>
+        <p>Note - Based on the dataset and datatype selection, you currently have Trusted Status from this Data Provider. We will notify the Data Provider about your request.</p>
       </mat-dialog-content> 
         
       <mat-dialog-content>
           <div *ngIf="!trustedStatus">
             <br>
-            <p>Based on the dataset and datatype selection, you currently do not have a Trusted Status from this Data Provider. We will notify the data provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
-            <h5>Do you wish to request Trusted Status from the data provider?</h5>
+            <p>Note - Based on the dataset and datatype selection, you currently do not have a Trusted Status from this Data Provider. We will notify the Data Provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
+            <h5>Do you wish to request Trusted Status from the Data Provider?</h5>
             
             <br/>
             <div class="ui-g">
