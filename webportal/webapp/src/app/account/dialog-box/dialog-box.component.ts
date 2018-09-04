@@ -392,7 +392,7 @@ export class DialogBoxComponent implements OnInit {
                 });
                 this.onNoClick();
                 console.log('Declined acceptable usage policy');
-               // return
+                return
             }
             this.gatewayService.sendExportRequest("export?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
                 (response: any) => {
