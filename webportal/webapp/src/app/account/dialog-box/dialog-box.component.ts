@@ -386,13 +386,13 @@ export class DialogBoxComponent implements OnInit {
             }
             //***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
             if(this.trustedRequest === "Yes" && this.acceptableUse == "Decline") {
-                // Submit API gateway request 
-                this.snackBar.open("Your request has been sent  but you have declined the acceptable usage policy", 'close', {
-                    duration: 2000,
-                });
-                this.onNoClick();
                 console.log('Declined acceptable usage policy');
-                return
+                reqBody['trustedRequest'] = {"trustedRequestStatus" : "Untrusted"};
+                reqBody['RequestReviewStatus'] = 'Rejected';
+            }
+            if(this.trustedRequest === "No" && this.acceptableUse == "Decline"){
+                console.log('Declined acceptable usage policy');
+                reqBody['RequestReviewStatus'] = 'Rejected';
             }
             this.gatewayService.sendExportRequest("export?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
                 (response: any) => {
