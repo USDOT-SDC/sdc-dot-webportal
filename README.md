@@ -130,18 +130,18 @@ NOTE - Do not check in configuration value into project repository for the secur
 ```
 
 Cognito configuration
-    * cd ../webapp/src/environments
-    * open `environment.ts` service file
-    * Add below configuration value
-        - production - Boolean value for the type of environment
-        - REGION - User pool AWS region
-        - USER_POOL_ID - User pool ID
-        - CLIENT_ID - App client ID
-        - IDENTITY_PROVIDER - User pool Identity provider name
-        - APP_DOMAIN - App domain name
-        - REDIRECT_URL - Re-direct URL for the user pool
-        - API_ENDPOINT - URL for the API endpoint
-        - STREAMING_URL - Streaming URL for the webportal
+* cd ../webapp/src/environments
+* open `environment.ts` service file
+* Add below configuration value
+    - production - Boolean value for the type of environment
+    - REGION - User pool AWS region
+    - USER_POOL_ID - User pool ID
+    - CLIENT_ID - App client ID
+    - IDENTITY_PROVIDER - User pool Identity provider name
+    - APP_DOMAIN - App domain name
+    - REDIRECT_URL - Re-direct URL for the user pool
+    - API_ENDPOINT - URL for the API endpoint
+    - STREAMING_URL - Streaming URL for the webportal
 
 ## Deployment steps for the application UI
 
