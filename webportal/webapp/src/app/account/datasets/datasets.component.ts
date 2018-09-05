@@ -35,6 +35,7 @@ export class DatasetsComponent implements OnInit {
     userName: any;
 
     ngOnInit() {
+        this.getUserInfo();
         var sdcDatasetsString = sessionStorage.getItem('datasets');
         this.sdcElements = JSON.parse(sdcDatasetsString);
         var stacksString = sessionStorage.getItem('stacks');
@@ -69,7 +70,36 @@ export class DatasetsComponent implements OnInit {
         this.userTrustedStatus = JSON.parse(trustedStatus);
         console.log("Trusted status"+ JSON.stringify(this.userTrustedStatus));
     }
-
+    getUserInfo() {
+        this.gatewayService.getUserInfo('user').subscribe(
+            (response: any) => {
+                sessionStorage.setItem('username', response.username);
+                sessionStorage.setItem('email', response.email);
+                sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
+                sessionStorage.setItem('datasets', JSON.stringify(response.datasets));
+                sessionStorage.setItem('roles', response.role);
+                sessionStorage.setItem('userTrustedStatus', JSON.stringify(response.userTrustedStatus));
+                console.log("User info:"+response.userTrustedStatus);
+                // Extract and exportWorkflow all exportWorkflow from datasets
+                let combinedEW = {};
+                for (let dset in response.datasets) {
+                  //alert(JSON.stringify(response.datasets[dset]));
+                  let key = "exportWorkflow";
+                  let dtEWExists =  key in response.datasets[dset];
+                    if(dtEWExists) {
+                      $.extend(combinedEW,response.datasets[dset]["exportWorkflow"]);
+                    }
+                }
+                sessionStorage.setItem('exportWorkflow', JSON.stringify(combinedEW));
+                for (var i = 0; i < response.stacks.length; i++) {
+                  if (response.stacks[i].instance_id) {
+                    sessionStorage.setItem('instance-id', response.stacks[i].instance_id);
+                    sessionStorage.setItem('team_bucket_name', response.stacks[i].team_bucket_name);
+                  }
+                }
+            }
+        );
+    }
     getMyDatasetsList() {
         this.gatewayService.get('user_data?userBucketName=' + this.userBucketName + '&username=' + this.userName).subscribe(
             (response: any) => {
