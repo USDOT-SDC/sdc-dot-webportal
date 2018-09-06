@@ -112,7 +112,7 @@ The following instructions describe the procedure to build and deploy the webpor
 
 2. Install NPM:-
    * sudo npm install -g npm
-   * Install Angular CLI `sudo npm install -g @angular/cli@6.0.8`
+   * Install Angular CLI `sudo npm install -g @angular/cli@1.7.4`
    * Install TSLint `sudo npm install -g tslint typescript`
    * Install Protractor for e2e testing `sudo npm install -g protractor`
    * `sudo npm i -g typings`
