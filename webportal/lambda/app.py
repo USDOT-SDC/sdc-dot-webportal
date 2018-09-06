@@ -380,7 +380,7 @@ def get_dataset_dictionary():
         Bucket=params['readmebucket'],
         Key=params['readmepathkey']
         )
-        data = response['Body'].read()
+        data = response['Body'].read().decode('utf-8')
     except BaseException as be:
         logging.exception("Error: Failed to get data from s3 file" + str(be) )
         raise ChaliceViewError("Internal error at server side")
