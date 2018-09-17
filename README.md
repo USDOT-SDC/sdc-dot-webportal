@@ -103,6 +103,43 @@ Published datasets are created by researchers to disseminate their research for 
 
 The following instructions describe the procedure to build and deploy the webportal.
 
+### Deploy the Backend -
+
+To deploy run below command at the lambda folder:
+
+```sh
+chalice deploy --stage <stage_name> --no-autogen-policy --profile us-dot
+```
+
+where, `stage_name` can be `dev`, `prod` and so on.
+
+##### Deploy the metadata lambda function - 
+
+**Step 1**: Create a script with below contents e.g(sdc-add-metadata-to-s3-object
+.sh)
+```#!/bin/sh
+
+cd sdc-dot-webportal/webportal/lambda
+zipFileName="sdc-add-metadata-to-s3-object.zip"
+
+zip -r9 $zipFileName add_metadata.py
+```
+
+**Step 3**: Change the permission of the script file
+
+```
+chmod u+x sdc-add-metadata-to-s3-object.sh
+```
+
+**Step 4** Run the script file
+./sdc-add-metadata-to-s3-object.sh
+
+**Step 5**: Upload the sdc-add-metadata-to-s3-object.zip generated from Step 4 to a lambda function via aws console.
+
+**Step 6**: Attach a DataProcessingRole to this lambda function from the AWS console
+
+**Step7**: Add S3 bucket triggers ObjectCreatedByPut and ObjectCreatedByCompleteMultipartUpload to this lambda function for all the team buckets.
+
 ### Installation steps for UI first-time build -
 
 ##### Goto ../webapp/ folder and run the command below -
