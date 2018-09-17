@@ -1,7 +1,7 @@
 import boto3
 import logging
 import os
-
+from urllib.parse import unquote_plus
 
 def lambda_handler(event, context):
     bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
@@ -10,6 +10,7 @@ def lambda_handler(event, context):
     print("S3 object key:"+s3_object_key)
     logger = logging.getLogger()
     logger.setLevel("INFO")
+    s3_object_key = unquote_plus(s3_object_key)
     logger.info("EVENT:"+str(s3_object_key))
     name_of_export_requests_folder = os.environ["EXPORT_REQUEST_FOLDER"]
     extensions = os.environ["FILE_EXTENSIONS"].split(",")
