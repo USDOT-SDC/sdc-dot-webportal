@@ -134,7 +134,7 @@ chmod u+x sdc-add-metadata-to-s3-object.sh
 **Step 3** Run the script file
 ./sdc-add-metadata-to-s3-object.sh
 
-**Step 4**: Upload the sdc-add-metadata-to-s3-object.zip generated from Step 4 to a lambda function via aws console.
+**Step 4**: Upload the sdc-add-metadata-to-s3-object.zip generated from Step 3 to a lambda function via aws console.
 
 **Step 5**: Attach a DataProcessingRole to this lambda function from the AWS console
 
