@@ -125,20 +125,20 @@ zipFileName="sdc-add-metadata-to-s3-object.zip"
 zip -r9 $zipFileName add_metadata.py
 ```
 
-**Step 3**: Change the permission of the script file
+**Step 2**: Change the permission of the script file
 
 ```
 chmod u+x sdc-add-metadata-to-s3-object.sh
 ```
 
-**Step 4** Run the script file
+**Step 3** Run the script file
 ./sdc-add-metadata-to-s3-object.sh
 
-**Step 5**: Upload the sdc-add-metadata-to-s3-object.zip generated from Step 4 to a lambda function via aws console.
+**Step 4**: Upload the sdc-add-metadata-to-s3-object.zip generated from Step 4 to a lambda function via aws console.
 
-**Step 6**: Attach a DataProcessingRole to this lambda function from the AWS console
+**Step 5**: Attach a DataProcessingRole to this lambda function from the AWS console
 
-**Step7**: Add S3 bucket triggers ObjectCreatedByPut and ObjectCreatedByCompleteMultipartUpload to this lambda function for all the team buckets.
+**Step 6**: Add S3 bucket triggers ObjectCreatedByPut and ObjectCreatedByCompleteMultipartUpload to this lambda function for all the team buckets.
 
 ### Installation steps for UI first-time build -
 
