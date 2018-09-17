@@ -15,6 +15,9 @@ mat_tab_style{
 /deep/ .mat-tab-body-content {
     overflow: hidden !important;
 }
+/deep/ .mat-dialog-content {
+    max-height: 200vh !important;
+}
 .mat-dialog-actions {
     display: block !important;
 }

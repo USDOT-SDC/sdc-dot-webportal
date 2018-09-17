@@ -274,12 +274,10 @@
         </mat-form-field>
         <hr>
         <mat-dialog-actions>
-          <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
                     [disabled]="!messageModel.derivedDatasetname || !messageModel.justifyExport || !messageModel.detailedderiveddataset || !messageModel.deriveddataset || !messageModel.datasources"
                     (click)="onApprovalformClick()">NEXT
             </button>
-          </span>&nbsp;
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
         </mat-dialog-actions>
       </mat-dialog-content>
@@ -309,12 +307,10 @@
         </mat-form-field>
         <hr>
         <mat-dialog-actions>
-          <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
             [disabled]="!messageModel.derivedDatasetname"
                     (click)="onApprovalformClick()">NEXT
             </button>
-          </span>&nbsp;
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
         </mat-dialog-actions>
       </mat-dialog-content>
