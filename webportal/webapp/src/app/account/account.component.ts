@@ -16,6 +16,7 @@ export class AccountComponent implements OnInit {
     private gatewayService: ApiGatewayService,
     private router: Router
   ) { }
+  isDataProvider: any;
 
   ngOnInit() {
     this.getUserInfo();
@@ -33,6 +34,7 @@ export class AccountComponent implements OnInit {
             console.log("User info:"+response.userTrustedStatus);
             // Extract and exportWorkflow all exportWorkflow from datasets
             let combinedEW = {};
+            var isDataProvider = "false";
             for (let dset in response.datasets) {
               //alert(JSON.stringify(response.datasets[dset]));
               let key = "exportWorkflow";
@@ -40,6 +42,11 @@ export class AccountComponent implements OnInit {
                 if(dtEWExists) {
                   $.extend(combinedEW,response.datasets[dset]["exportWorkflow"]);
                 }
+              var exportWorkflow = JSON.stringify(response.datasets[dset]["exportWorkflow"]);
+              if (exportWorkflow && exportWorkflow.includes(response.email)){
+                 this.isDataProvider = "true";
+                 sessionStorage.setItem('isDataProvider', isDataProvider);
+              }
             }
             sessionStorage.setItem('exportWorkflow', JSON.stringify(combinedEW));
             for (var i = 0; i < response.stacks.length; i++) {
