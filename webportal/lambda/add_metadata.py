@@ -30,6 +30,11 @@ def lambda_handler(event, context):
                 s3_object.metadata.update({'download':'false','export':'true','publish':'false'})
                 s3_object.copy_from(CopySource={'Bucket': bucket_name, 'Key': s3_object_key}, Metadata=s3_object.metadata, MetadataDirective='REPLACE')
                 logger.info("Adding metadata to S3 object has been completed successfully")
+        else:
+            s3_object = s3.Object(bucket_name, s3_object_key)
+            s3_object.metadata.update({'download':'false','export':'true','publish':'false'})
+            s3_object.copy_from(CopySource={'Bucket': bucket_name, 'Key': s3_object_key}, Metadata=s3_object.metadata, MetadataDirective='REPLACE')
+            logger.info("Adding metadata to S3 object has been completed successfully")
     else:
         logger.info("Ignored this file with key:"+s3_object_key)
     
