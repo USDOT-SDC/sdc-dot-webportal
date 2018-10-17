@@ -89,7 +89,8 @@ export class ExportRequestsComponent implements OnInit {
                             'RequestedBy_Epoch':item['RequestedBy_Epoch'],
                             'S3Key' : item['S3Key'],
                             'TeamBucket' : item['TeamBucket'],
-                            'RequestReviewStatus': item['RequestReviewStatus']
+                            'RequestReviewStatus': item['RequestReviewStatus'],
+                            'ReqReceivedTimestamp' : item['ReqReceivedTimestamp']
                            }
                         );
                         console.log(item);
@@ -100,10 +101,17 @@ export class ExportRequestsComponent implements OnInit {
                          //console.log(item);
                          this.trustedRequests.push({'userFullName' : item['UserID'], 
                                                     'dataset' : item['Dataset-DataProvider-Datatype'],
-                                                    'TrustedStatus' : item['TrustedStatus']});
+                                                    'TrustedStatus' : item['TrustedStatus'],
+                                                    'ReqReceivedTimestamp': item['ReqReceivedTimestamp']});
                     } 
                 }  
                 console.log('Request Sent Successfully');
+                this.exportFileRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
+                });
+                this.trustedRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
+                });
             }
         );
         /*this.gatewayService.get('user_data?userBucketName=' + this.userBucketName).subscribe(

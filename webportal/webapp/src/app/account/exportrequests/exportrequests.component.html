@@ -27,8 +27,8 @@
                       <td>{{exportFileRequest.description}}</td>
                       <td>{{exportFileRequest.team}}</td>
                       <td>{{exportFileRequest.dataset}}</td>
-                      <td><a style="cursor:pointer;word-break:break-all;" (click)="requestDownload(exportFileRequest)">{{exportFileRequest.reviewFile}}</a></td>
-                         
+                      <!-- <td><a style="cursor:pointer;word-break:break-all;" (click)="requestDownload(exportFileRequest)">{{exportFileRequest.reviewFile}}</a></td> -->
+                      <td><a style="cursor:pointer;word-break:break-all;">{{exportFileRequest.reviewFile}}</a></td>   
                         <td>
                             <div *ngIf="exportFileRequest.RequestReviewStatus == 'Submitted'"><i class="material-icons iconFont" (click)="submitApproval('Approved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportFileRequest)" >close</i></div>
                            
