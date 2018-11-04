@@ -33,6 +33,8 @@ export class DatasetsComponent implements OnInit {
     selectedFiles: any = [];
     userTrustedStatus: any;
     userName: any;
+    userEmail: any;
+    requestReviewStatus: any;
 
     ngOnInit() {
         this.getUserInfo();
@@ -63,7 +65,8 @@ export class DatasetsComponent implements OnInit {
         this.cols = [
           { field: 'filename', header: 'Filename' },
           { field: 'export', header: 'Export' },
-          { field: 'publish', header: 'Publish' }
+          { field: 'publish', header: 'Publish' },
+          { field: 'exportRequestStatus', header: 'Export Request Status'}
         ]
         let trustedStatus = sessionStorage.getItem('userTrustedStatus');
         console.log("Trusted status"+trustedStatus);
@@ -113,12 +116,12 @@ export class DatasetsComponent implements OnInit {
                                     //console.log(dt);
                                     //console.log()
                                     if(dt in metadata) {
-                                        this.myDatasets.push({'filename':x, 'download': 'true', 'export': 'false', 'publish': 'true'});
+                                        this.myDatasets.push({'filename':x, 'download': 'true', 'export': 'false', 'publish': 'true', 'requestReviewStatus': metadata["requestReviewStatus"]});
                                         trusted = true;
                                     }
                                 }
                                 if(!trusted) {
-                                    this.myDatasets.push({'filename':x, 'download': metadata["download"], 'export': metadata["export"], 'publish': metadata["publish"]});
+                                    this.myDatasets.push({'filename':x, 'download': metadata["download"], 'export': metadata["export"], 'publish': metadata["publish"], 'requestReviewStatus': metadata["requestReviewStatus"]});
                                 }
                         } else {
                             this.myDatasets.push({'filename':x, 'download': null, 'export': null, 'publish': null});
@@ -130,7 +133,16 @@ export class DatasetsComponent implements OnInit {
             }
         );
     }
-    
+    getRequestReviewStatus(filename) {
+        let reqBody = {};
+        this.userEmail = sessionStorage.getItem("email");
+        reqBody['userEmail'] = this.userEmail;
+        reqBody['filename'] = filename;
+        this.gatewayService.get("exportrequeststatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+            (response: any) => {
+            var resp = response["Items"][0];
+        });
+    }
     selectsdcDataset(dataset) {
         this.selectedsdcDataset = dataset;
         this.showDictionary = true;

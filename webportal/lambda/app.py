@@ -36,8 +36,7 @@ TABLENAME_TRUSTED = ''
 TABLENAME_EXPORT_FILE_REQUEST= ''
 
 authorizer = CognitoUserPoolAuthorizer(
-    '', provider_arns=[PROVIDER_ARNS])
-
+   '', provider_arns=[PROVIDER_ARNS])
 
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
@@ -428,6 +427,17 @@ def get_metadata_s3_object():
         client_s3 = boto3.client('s3')
         response = client_s3.get_object(Bucket=params['bucket_name'],Key=params['file_name'])
         logging.info("S3 object metadata response - " + str(response["Metadata"]))
+
+        exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
+        exportFileRequestResponse = exportFileRequestTable.scan(
+            Select= 'ALL_ATTRIBUTES',
+            FilterExpression=Attr('S3Key').eq(params['file_name'])
+        )
+        if exportFileRequestResponse["Items"]:
+            response["Metadata"]["requestReviewStatus"] = exportFileRequestResponse["Items"][0]["RequestReviewStatus"]
+        else:
+            response["Metadata"]["requestReviewStatus"] = "-1"
+
     except BaseException as be:
         logging.exception("Error: Failed to get S3 metadata" + str(be))
         raise ChaliceViewError("Failed to get s3 metadata")
@@ -443,6 +453,15 @@ def get_combined_export_workflow():
             combinedExportWorkflow.update(dataset['exportWorkflow'])
     return combinedExportWorkflow
 
+def get_user_details_from_username(username):
+    try:
+        table = dynamodb_client.Table(TABLENAME)  
+        response_table = table.get_item(Key={'username': username })
+        team_name = response_table['Item']['teamName']
+    except BaseException as be:
+        logging.exception("Error: Failed to get the team name for the user" + str(be))
+        raise ChaliceViewError("Failed to get the team name for the user")
+    return team_name
 
 @app.route('/export', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def export():
@@ -457,6 +476,11 @@ def export():
         selectedDatatype=params['selectedDataInfo']['selectedDatatype']
         combinedDataInfo=selctedDataSet + "-" + selectedDataProvider + "-" + selectedDatatype
         userID=params['UserID']
+        team_name = get_user_details_from_username(userID)
+
+        id_token = app.current_request.headers['authorization']
+        info_dict=get_user_details(id_token)
+        user_email=info_dict['email']
 
         combinedExportWorkflow = get_combined_export_workflow()
 
@@ -496,6 +520,7 @@ def export():
             response = trustedUsersTable.put_item(
                 Item = {
                     'UserID': userID,
+                    'UserEmail': user_email,
                     'Dataset-DataProvider-Datatype': combinedDataInfo,
                     'TrustedStatus': trustedStatus,
                     'UsagePolicyStatus': acceptableUse,
@@ -529,7 +554,10 @@ def export():
                 'RequestedBy_Epoch': userID + "_" + str(timemills),
                 'RequestedBy': userID,
                 'TeamBucket': params['TeamBucket'],
-                'ReqReceivedTimestamp': timemills
+                'ReqReceivedTimestamp': timemills,
+                'UserEmail': user_email,
+                "TeamName": team_name,
+                'ReqReceivedDate': datetime.now().strftime('%Y-%m-%d')
                 # 'RequestID' : params['RequestID']
             }
         )
@@ -651,6 +679,7 @@ def updatefilestatus():
         s3KeyHash=params['key1']
         requestedBy_Epoch=params['key2']
         datainfo = params['datainfo']
+        userEmail = params['userEmail']
 
 
         download = 'false'
@@ -687,10 +716,46 @@ def updatefilestatus():
         s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
                             Metadata=metadata,
                             MetadataDirective='REPLACE')
+        # Send notification to the analyst if his request is approved or rejected
+        listOfPOC = []
+        listOfPOC.append(userEmail)
+        emailContent = "<br/>The Status of the Export Request made by you for the file <b>" + params['S3Key'] + "</b> has been changed to <b>" + params['status'] + "</b>"
+        send_notification(listOfPOC, emailContent)
 
     except BaseException as be:
         logging.exception("Error: Failed to updatefilestatus" + str(be))
         raise ChaliceViewError("Failed to updatefilestatus")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})
+
+@app.route('/export/requests/exportFileforReview', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def exportFileforReview():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    response = {}
+    try:
+        provider_team_bucket = params['provider_team_bucket']
+        team_bucket=params['team_bucket']
+        s3Key=params['s3Key']
+        team_name = params['teamName']
+        fileName = s3Key.split('/')[-1]
+        s3 = boto3.resource('s3')
+        copy_source = {
+            'Bucket': params['team_bucket'],
+            'Key': params['s3Key']
+        }
+        bucket = s3.Bucket(provider_team_bucket)
+        review_path_for_provider = params['userName'] + "/" + "export_reviews/" + team_name + "/" + fileName
+        bucket.copy(copy_source, review_path_for_provider)
+
+    except BaseException as be:
+        logging.exception("Error: Failed to export file for review" + str(be))
+        raise ChaliceViewError("Failed to export file for review")
 
     return Response(body=response,
                     status_code=200,
@@ -708,6 +773,7 @@ def updatetrustedtatus():
         status=params['status']
         key1=params['key1']
         key2=params['key2']
+        userEmail = params['userEmail']
 
         trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED)
         trustedRequestTable.update_item(
@@ -721,6 +787,11 @@ def updatetrustedtatus():
                             },
                             ReturnValues="UPDATED_NEW"
                         )
+        # Send notification to the analyst if his request is approved or rejected
+        listOfPOC = []
+        listOfPOC.append(userEmail)
+        emailContent = "<br/>The Status of the Trusted Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>"
+        send_notification(listOfPOC, emailContent)
 
     except BaseException as be:
         logging.exception("Error: Failed to updatetrustedtatus" + str(be))

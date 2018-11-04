@@ -27,6 +27,7 @@ export class ExportRequestsComponent implements OnInit {
     userEmail: string;
     userName: string;
     detailsOnclick: any;
+    userBucketName: string;
 
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
@@ -35,13 +36,15 @@ export class ExportRequestsComponent implements OnInit {
         this.getExportFileRequests();
         
         this.cols = [
+          { field: 'Date', header: 'Date' },
           { field: 'userFullName', header: 'User' },
           { field: 'description', header: 'Description' },
           { field: 'team', header: 'Team' },
           { field: 'dataset', header: 'Dataset' },
           { field: 'reviewFile', header: 'Review File' },
           { field: 'approval', header: 'Approval' },
-          { field: 'details', header: 'Details' }
+          { field: 'details', header: 'Details' },
+          { field: 'exportFileForReview', header: 'Export File for Review'}
         ];
 
         this.colsTrusted = [
@@ -90,7 +93,10 @@ export class ExportRequestsComponent implements OnInit {
                             'S3Key' : item['S3Key'],
                             'TeamBucket' : item['TeamBucket'],
                             'RequestReviewStatus': item['RequestReviewStatus'],
-                            'ReqReceivedTimestamp' : item['ReqReceivedTimestamp']
+                            'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
+                            'UserEmail': item['UserEmail'],
+                            'TeamName': item['TeamName'],
+                            'ReqReceivedDate': item['ReqReceivedDate']
                            }
                         );
                         console.log(item);
@@ -102,7 +108,8 @@ export class ExportRequestsComponent implements OnInit {
                          this.trustedRequests.push({'userFullName' : item['UserID'], 
                                                     'dataset' : item['Dataset-DataProvider-Datatype'],
                                                     'TrustedStatus' : item['TrustedStatus'],
-                                                    'ReqReceivedTimestamp': item['ReqReceivedTimestamp']});
+                                                    'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
+                                                    'UserEmail': item['UserEmail']});
                     } 
                 }  
                 console.log('Request Sent Successfully');
@@ -144,6 +151,25 @@ export class ExportRequestsComponent implements OnInit {
             console.log('The dialog was closed');
         });
     }
+
+    copyFileToTeamBucket(exportFileForReview) {
+        var team_bucket = exportFileForReview.TeamBucket;
+        var s3Key = exportFileForReview.S3Key;
+        let export_details = {};
+        this.userBucketName = sessionStorage.getItem('team_bucket_name');
+        export_details["provider_team_bucket"] = this.userBucketName;
+        export_details["team_bucket"] = team_bucket;
+        export_details["s3Key"] = s3Key;
+        export_details["userName"] = this.userName;
+        export_details["teamName"] = exportFileForReview.TeamName;
+        this.gatewayService.post("export/requests/exportFileforReview?message=" + encodeURI(JSON.stringify(export_details))).subscribe(
+            (response: any) => {
+                this.snackBar.open("File is exported for the data provider for review under the export_reviews folder for the team "+ export_details["teamName"], 'close', {
+                    duration: 12000,
+                });
+            }
+        );
+    }
     
     requestDownload(exportFileRequest) {
         this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
@@ -153,12 +179,6 @@ export class ExportRequestsComponent implements OnInit {
     }
 
     submitApproval(status,targetObj) {
-           
-        console.log(status);
-        console.log(targetObj);
-        console.log(targetObj.S3KeyHash);
-        console.log(targetObj.RequestedBy_Epoch);
-
         let reqBody = {};
         reqBody['status'] = status;
         reqBody['key1'] = targetObj['S3KeyHash'];
@@ -166,6 +186,7 @@ export class ExportRequestsComponent implements OnInit {
         reqBody['datainfo'] = targetObj['dataset'];
         reqBody['S3Key'] = targetObj['S3Key'];
         reqBody['TeamBucket'] = targetObj['TeamBucket'];
+        reqBody['userEmail'] = targetObj['UserEmail'];
 
         this.gatewayService.post("export/requests/updatefilestatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
@@ -175,15 +196,12 @@ export class ExportRequestsComponent implements OnInit {
         );
 
     }
-    submitTrustedApproval(status,key1,key2) {
-        console.log(status);
-        console.log(key1);
-        console.log(key2);
-
+    submitTrustedApproval(status,key1,key2,trustedRequest) {
         let reqBody = {};
         reqBody['status'] = status;
         reqBody['key1'] = key1;
         reqBody['key2'] = key2;
+        reqBody['userEmail'] = trustedRequest['UserEmail'];
 
         this.gatewayService.post("export/requests/updatetrustedtatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
             (response: any) => {

@@ -23,6 +23,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-exportFileRequest let-columns="columns">
                   <tr>
+                      <td>{{exportFileRequest.ReqReceivedDate}}</td>
                       <td>{{exportFileRequest.userFullName}}</td>
                       <td>{{exportFileRequest.description}}</td>
                       <td>{{exportFileRequest.team}}</td>
@@ -42,9 +43,11 @@
                         </td>
                         
                         <td>
-
-                        <i class="material-icons iconFont" (click)="renderApprovalForm(exportFileRequest)">insert_drive_file</i>
-                      </td>
+                            <i class="material-icons iconFont" (click)="renderApprovalForm(exportFileRequest)">insert_drive_file</i>
+                        </td>
+                        <td>
+                            <i class="material-icons iconFont" (click)="copyFileToTeamBucket(exportFileRequest)">file_copy</i>
+                        </td>
                   </tr>
               </ng-template>
           </p-table>
@@ -75,7 +78,7 @@
                     <td>{{trustedRequest.userFullName}}</td>
                     <td>{{trustedRequest.dataset}}</td>
                     <td>
-                        <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'"> <i class="material-icons iconFont" (click)="submitTrustedApproval('Trusted',trustedRequest.userFullName,trustedRequest.dataset)" >done</i><i class="material-icons iconFont" (click)="submitTrustedApproval('Untrusted',trustedRequest.userFullName,trustedRequest.dataset)" >close</i></div>
+                        <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'"> <i class="material-icons iconFont" (click)="submitTrustedApproval('Trusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >done</i><i class="material-icons iconFont" (click)="submitTrustedApproval('Untrusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >close</i></div>
                         <div *ngIf="trustedRequest.TrustedStatus == 'Trusted'">
                                 <p-message severity="success" text="{{trustedRequest.TrustedStatus}}"></p-message> 
                         </div> 
