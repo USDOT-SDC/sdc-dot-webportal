@@ -11,7 +11,7 @@ import { WorkstationComponent } from './account/workstation/workstation.componen
 import { RegisterComponent } from './main/register/register.component';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
-
+import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 
 const appRoutes: Routes = [
     {
@@ -30,6 +30,7 @@ const appRoutes: Routes = [
             { path: '', redirectTo: 'accounthome', pathMatch: 'prefix' },
             { path: 'accounthome', component: AccountHomeComponent },
             { path: 'datasets', component: DatasetsComponent },
+            { path: 'exportrequests', component: ExportRequestsComponent },
             { path: 'workstation', component: WorkstationComponent },
             { path: 'faq', component: FaqComponent },
         ],

@@ -5,9 +5,14 @@ import logging
 from botocore.exceptions import ClientError
 from chalice import BadRequestError, NotFoundError, ChaliceViewError, ForbiddenError
 from chalice import CognitoUserPoolAuthorizer
+import traceback
 #import urllib2
 import hashlib
+from datetime import datetime
+from boto3.dynamodb.conditions import Attr, Key
 from chalice import CORSConfig
+import time
+
 cors_config = CORSConfig(
     allow_origin='*',
     allow_headers=['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token','Access-Control-Allow-Origin'],
@@ -23,13 +28,15 @@ APPSTREAM_S3_BUCKET_NAME = ''
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
-RECEIVER = 'support@securedatacommons.com'
+RECEIVER = ''
 PROVIDER_ARNS = ''
 RESTAPIID = ''
 AUTHORIZERID = ''
+TABLENAME_TRUSTED = ''
+TABLENAME_EXPORT_FILE_REQUEST= ''
 
 authorizer = CognitoUserPoolAuthorizer(
-    '', provider_arns=[PROVIDER_ARNS])
+   '', provider_arns=[PROVIDER_ARNS])
 
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
@@ -74,6 +81,19 @@ def get_datasets():
         logging.exception("Error: Failed to get dataset" + str(be) )
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
+def get_user_trustedstatus(userid):
+    trustedUsersTable = dynamodb_client.Table(TABLENAME_TRUSTED)
+
+    response = trustedUsersTable.query(
+        KeyConditionExpression=Key('UserID').eq(userid),
+        FilterExpression=Attr('TrustedStatus').eq('Trusted')
+    )
+    userTrustedStatus = {}
+    for x in response['Items']:
+        userTrustedStatus[x['Dataset-DataProvider-Datatype']] = 'Trusted'
+
+    return userTrustedStatus
+
 @app.route('/user', authorizer=authorizer, cors=cors_config)
 def get_user_info():
 
@@ -86,8 +106,7 @@ def get_user_info():
         user_info['email']=info_dict['email']
         user_info['username']=info_dict['username']
         user_info['datasets']=get_datasets()['datasets']['Items']
-
-
+        user_info['userTrustedStatus'] = get_user_trustedstatus(info_dict['username'])
     except BaseException as be:
         logging.exception("Error: Failed to get user details from token or datasets and algorithm." + str(be) )
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
@@ -241,14 +260,22 @@ def get_my_datasets():
     try:
         client_s3 = boto3.client('s3')
         response = client_s3.list_objects(
-            Bucket=params['userBucketName']
+            Bucket=params['userBucketName'],
+            Prefix='{}/uploaded_files/'.format(params['username'])
+        )
+        export_response = client_s3.list_objects(
+            Bucket=params['userBucketName'],
+            Prefix='export_requests/'
         )
         total_content = {}
+        total_export_content = {}
+        if 'Contents' in export_response:
+            total_export_content = export_response['Contents']
         if 'Contents' in response:
             total_content=response['Contents']
-
-
         for c in total_content:
+            content.add(c['Key'])
+        for c in total_export_content:
             content.add(c['Key'])
 
     except BaseException as ce:
@@ -352,7 +379,7 @@ def get_dataset_dictionary():
         Bucket=params['readmebucket'],
         Key=params['readmepathkey']
         )
-        data = response['Body'].read()
+        data = response['Body'].read().decode('utf-8')
     except BaseException as be:
         logging.exception("Error: Failed to get data from s3 file" + str(be) )
         raise ChaliceViewError("Internal error at server side")
@@ -366,7 +393,7 @@ def get_presigned_url():
     params = app.current_request.query_params
     try:
         client_s3 = boto3.client('s3')
-        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': params['file_name'], 'ContentType': params['file_type']}, ExpiresIn=3600, HttpMethod='PUT')
+        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': '{}/uploaded_files/{}'.format(params["username"], params['file_name']), 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
         logging.info("Response from pre-signed url - " + response)
     except BaseException as be:
         logging.exception("Error: Failed to generate presigned url" + str(be))
@@ -389,3 +416,387 @@ def get_download_url():
     return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
+
+@app.route('/get_metadata_s3', authorizer=authorizer, cors=cors_config)
+def get_metadata_s3_object():
+    params = app.current_request.query_params
+    logger.setLevel("INFO")
+    logging.info("Params - " + params['bucket_name'])
+    logging.info("Params filename- " + params['file_name'])
+    try:
+        client_s3 = boto3.client('s3')
+        response = client_s3.get_object(Bucket=params['bucket_name'],Key=params['file_name'])
+        logging.info("S3 object metadata response - " + str(response["Metadata"]))
+
+        exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
+        exportFileRequestResponse = exportFileRequestTable.scan(
+            Select= 'ALL_ATTRIBUTES',
+            FilterExpression=Attr('S3Key').eq(params['file_name'])
+        )
+        if exportFileRequestResponse["Items"]:
+            response["Metadata"]["requestReviewStatus"] = exportFileRequestResponse["Items"][0]["RequestReviewStatus"]
+        else:
+            response["Metadata"]["requestReviewStatus"] = "-1"
+
+    except BaseException as be:
+        logging.exception("Error: Failed to get S3 metadata" + str(be))
+        raise ChaliceViewError("Failed to get s3 metadata")
+    return Response(body=response["Metadata"],
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+
+def get_combined_export_workflow():
+    availableDatasets = get_datasets()['datasets']['Items']
+    combinedExportWorkflow = {}
+    for dataset in availableDatasets:
+        if 'exportWorkflow' in dataset:
+            combinedExportWorkflow.update(dataset['exportWorkflow'])
+    return combinedExportWorkflow
+
+def get_user_details_from_username(username):
+    try:
+        table = dynamodb_client.Table(TABLENAME)  
+        response_table = table.get_item(Key={'username': username })
+        team_name = response_table['Item']['teamName']
+    except BaseException as be:
+        logging.exception("Error: Failed to get the team name for the user" + str(be))
+        raise ChaliceViewError("Failed to get the team name for the user")
+    return team_name
+
+@app.route('/export', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def export():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    try:
+        selctedDataSet=params['selectedDataInfo']['selectedDataSet']
+        selectedDataProvider=params['selectedDataInfo']['selectedDataProvider']
+        selectedDatatype=params['selectedDataInfo']['selectedDatatype']
+        combinedDataInfo=selctedDataSet + "-" + selectedDataProvider + "-" + selectedDatatype
+        userID=params['UserID']
+        team_name = get_user_details_from_username(userID)
+
+        id_token = app.current_request.headers['authorization']
+        info_dict=get_user_details(id_token)
+        user_email=info_dict['email']
+
+        combinedExportWorkflow = get_combined_export_workflow()
+
+        trustedWorkflowStatus = \
+        combinedExportWorkflow[selctedDataSet][selectedDataProvider]['datatypes'][selectedDatatype]['Trusted']['WorkflowStatus']
+
+        nonTrustedWorkflowStatus = \
+            combinedExportWorkflow[selctedDataSet][selectedDataProvider]['datatypes'][selectedDatatype]['NonTrusted']['WorkflowStatus']
+
+        listOfPOC=combinedExportWorkflow[selctedDataSet][selectedDataProvider]['ListOfPOC']
+        emailContent = ""
+        dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+        acceptableUse = 'Decline'
+
+        # verify if user is already trusted for selected combinedDataInfo
+        userTrustedStatus = get_user_trustedstatus(userID)
+        userTrustedStatusForSelectedDataset = combinedDataInfo in userTrustedStatus and userTrustedStatus[combinedDataInfo] == 'Trusted';
+
+
+        if 'acceptableUse' in params and params['acceptableUse']:
+            acceptableUse = params['acceptableUse']
+
+        if 'trustedRequest' in params:
+            trustedUsersTable = dynamodb.Table(TABLENAME_TRUSTED)
+
+            trustedStatus=params['trustedRequest']['trustedRequestStatus']
+
+            if acceptableUse == 'Decline':
+                trustedStatus = 'Untrusted'
+                emailContent = "<br/>Trusted status has been declined to <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
+            elif trustedWorkflowStatus == 'Notify':
+                trustedStatus='Trusted'
+                emailContent="<br/>Trusted status has been approved to <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
+            else:
+                emailContent = "<br/>Trusted status has been requested by <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
+
+            response = trustedUsersTable.put_item(
+                Item = {
+                    'UserID': userID,
+                    'UserEmail': user_email,
+                    'Dataset-DataProvider-Datatype': combinedDataInfo,
+                    'TrustedStatus': trustedStatus,
+                    'UsagePolicyStatus': acceptableUse,
+                    'ReqReceivedTimestamp': int(time.time()),
+                    'LastUpdatedTimestamp': datetime.utcnow().strftime("%Y%m%d")
+                }
+            )
+        requestReviewStatus = params['RequestReviewStatus']
+        download = 'false'
+        export = 'true'
+        publish = 'false'
+        if nonTrustedWorkflowStatus == 'Notify' or userTrustedStatusForSelectedDataset is True:
+            requestReviewStatus = 'Approved'
+            download = 'true'
+            publish = 'true'
+            export = 'false'
+            emailContent += "<br/>Export request has been approved to <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
+        else:
+            emailContent += "<br/>Export request has been requested by <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
+
+        exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
+        hashed_object = hashlib.md5(params['S3Key'].encode())
+        timemills = int(time.time())
+        response = exportFileRequestTable.put_item(
+            Item={
+                'S3KeyHash': hashed_object.hexdigest(),
+                'Dataset-DataProvider-Datatype': combinedDataInfo,
+                'ApprovalForm': params['ApprovalForm'],
+                'RequestReviewStatus': requestReviewStatus,
+                'S3Key': params['S3Key'],
+                'RequestedBy_Epoch': userID + "_" + str(timemills),
+                'RequestedBy': userID,
+                'TeamBucket': params['TeamBucket'],
+                'ReqReceivedTimestamp': timemills,
+                'UserEmail': user_email,
+                "TeamName": team_name,
+                'ReqReceivedDate': datetime.now().strftime('%Y-%m-%d')
+                # 'RequestID' : params['RequestID']
+            }
+        )
+        availableDatasets = get_datasets()['datasets']['Items']
+        logging.info("Available datasets:" + str(availableDatasets))
+
+        s3 = boto3.resource('s3')
+        s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
+        #s3_object.metadata.update()
+        s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
+                            Metadata={'download': download, 'export': export, 'publish': publish},
+                            MetadataDirective='REPLACE')
+
+        #send email to List of POC
+        send_notification(listOfPOC,emailContent)
+
+
+    except BaseException as be:
+        logging.exception("Error: Failed to process export request" + str(be))
+        raise ChaliceViewError("Failed to process export request")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+
+def send_notification(listOfPOC, emailContent):
+    ses_client = boto3.client('ses')
+    sender = RECEIVER
+
+    try:
+        response = ses_client.send_email(
+            Destination={
+                'BccAddresses': [
+                ],
+                'CcAddresses': [
+                ],
+                'ToAddresses': listOfPOC,
+            },
+            Message={
+                'Body': {
+                    'Html': {
+                        'Charset': 'UTF-8',
+                        'Data': emailContent,
+                    },
+                    'Text': {
+                        'Charset': 'UTF-8',
+                        'Data': 'This is the notification message body in text format.',
+                    },
+                },
+                'Subject': {
+                    'Charset': 'UTF-8',
+                    'Data': 'Export Notification',
+                },
+            },
+            Source=sender
+        )
+    except BaseException as ke:
+        logging.exception("Failed to send notification "+ str(ke))
+        raise NotFoundError("Failed to send notification")
+
+@app.route('/export/requests', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def getSubmittedRequests():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+
+    useremail = params['userEmail']
+    userdatasets = []
+    response = {"exportRequests": [], "trustedRequests": []}
+    try:
+        combinedExportWorkflow = get_combined_export_workflow()
+
+        for dataset in combinedExportWorkflow:
+            for dataprovider in combinedExportWorkflow[dataset]:
+                listOfPOC = combinedExportWorkflow[dataset][dataprovider]['ListOfPOC']
+                if listOfPOC and useremail in listOfPOC:
+                    for datatype in combinedExportWorkflow[dataset][dataprovider]['datatypes']:
+                        userdatasets.append(dataset + "-" + dataprovider + "-" + datatype)
+
+        #Query all submitted requests for the selected datatype
+        exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
+        trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED)
+        for userdataset in userdatasets:
+            exportFileRequestResponse = exportFileRequestTable.query(
+                IndexName='DataInfo-ReqReceivedtimestamp-index',
+                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
+            if exportFileRequestResponse['Items']:
+                response['exportRequests'].append(exportFileRequestResponse['Items'])
+
+            trustedRequestResponse = trustedRequestTable.query(
+                IndexName='DataInfo-ReqReceivedtimestamp-index',
+                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
+
+            if trustedRequestResponse['Items']:
+                response['trustedRequests'].append(trustedRequestResponse['Items'])
+
+
+        logging.info(response)
+    except BaseException as be:
+        logging.exception("Error: Failed to get submit requests" + str(be))
+        raise ChaliceViewError("Failed to get submit requests")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})
+
+@app.route('/export/requests/updatefilestatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def updatefilestatus():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    response = {}
+    try:
+        status=params['status']
+        s3KeyHash=params['key1']
+        requestedBy_Epoch=params['key2']
+        datainfo = params['datainfo']
+        userEmail = params['userEmail']
+
+
+        download = 'false'
+        export = 'true'
+        publish = 'false'
+        metadata = {'download': download, 'export': export, 'publish': publish}
+
+        if status == "Approved":
+            download = 'true'
+            publish = 'true'
+            export = 'false'
+            metadata = {'download': download, 'export': export, 'publish': publish}
+        elif status == "TrustedApproved":
+            metadata = {'download': download, 'export': export, 'publish': publish , datainfo : 'true'}
+
+        logging.info(metadata)
+        logging.info(params)
+
+        exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
+        exportFileRequestTable.update_item(
+                            Key={
+                                'S3KeyHash': s3KeyHash,
+                                'RequestedBy_Epoch': requestedBy_Epoch
+                            },
+                            UpdateExpression="set RequestReviewStatus = :val",
+                            ExpressionAttributeValues = {
+                                ':val': status
+                            },
+                            ReturnValues="UPDATED_NEW"
+                        )
+        s3 = boto3.resource('s3')
+        s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
+        #s3_object.metadata.update(metadata)
+        s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
+                            Metadata=metadata,
+                            MetadataDirective='REPLACE')
+        # Send notification to the analyst if his request is approved or rejected
+        listOfPOC = []
+        listOfPOC.append(userEmail)
+        emailContent = "<br/>The Status of the Export Request made by you for the file <b>" + params['S3Key'] + "</b> has been changed to <b>" + params['status'] + "</b>"
+        send_notification(listOfPOC, emailContent)
+
+    except BaseException as be:
+        logging.exception("Error: Failed to updatefilestatus" + str(be))
+        raise ChaliceViewError("Failed to updatefilestatus")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})
+
+@app.route('/export/requests/exportFileforReview', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def exportFileforReview():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    response = {}
+    try:
+        provider_team_bucket = params['provider_team_bucket']
+        team_bucket=params['team_bucket']
+        s3Key=params['s3Key']
+        team_name = params['teamName']
+        fileName = s3Key.split('/')[-1]
+        s3 = boto3.resource('s3')
+        copy_source = {
+            'Bucket': params['team_bucket'],
+            'Key': params['s3Key']
+        }
+        bucket = s3.Bucket(provider_team_bucket)
+        review_path_for_provider = params['userName'] + "/" + "export_reviews/" + team_name + "/" + fileName
+        bucket.copy(copy_source, review_path_for_provider)
+
+    except BaseException as be:
+        logging.exception("Error: Failed to export file for review" + str(be))
+        raise ChaliceViewError("Failed to export file for review")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})
+
+@app.route('/export/requests/updatetrustedtatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def updatetrustedtatus():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    response = {}
+    try:
+        status=params['status']
+        key1=params['key1']
+        key2=params['key2']
+        userEmail = params['userEmail']
+
+        trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED)
+        trustedRequestTable.update_item(
+                            Key={
+                                'UserID': key1,
+                                'Dataset-DataProvider-Datatype': key2
+                            },
+                            UpdateExpression="set TrustedStatus = :val",
+                            ExpressionAttributeValues = {
+                                ':val': status
+                            },
+                            ReturnValues="UPDATED_NEW"
+                        )
+        # Send notification to the analyst if his request is approved or rejected
+        listOfPOC = []
+        listOfPOC.append(userEmail)
+        emailContent = "<br/>The Status of the Trusted Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>"
+        send_notification(listOfPOC, emailContent)
+
+    except BaseException as be:
+        logging.exception("Error: Failed to updatetrustedtatus" + str(be))
+        raise ChaliceViewError("Failed to updatetrustedtatus")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})

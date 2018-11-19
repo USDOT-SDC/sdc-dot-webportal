@@ -5,12 +5,13 @@ import { CognitoService } from './cognito.service';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/throw';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class ApiGatewayService {
 
     protected options: RequestOptions;
-    private static _API_ENDPOINT = ''; // AWS API gateway base endpoint
+    private static _API_ENDPOINT = environment.API_ENDPOINT; // AWS API gateway base endpoint
 
     apiResponse: any;
     extractData: any;
@@ -112,5 +113,20 @@ export class ApiGatewayService {
         return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
             .map(this.extractData)
             .catch(this.handleError);
+    }
+
+    getMetadataOfS3Object(url: string){
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    sendExportRequest(url: string) {
+        this.setRequestHeaders();
+        console.log("sending request 2 " + ApiGatewayService._API_ENDPOINT + url ) 
+        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
+        .map(this.extractData)
+        .catch(this.handleError);
     }
 }

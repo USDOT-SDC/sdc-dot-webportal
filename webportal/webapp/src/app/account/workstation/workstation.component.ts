@@ -3,6 +3,8 @@ import {ApiGatewayService} from '../../../services/apigateway.service';
 import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
 import {MatSnackBar} from '@angular/material';
 import { CognitoService } from '../../../services/cognito.service';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-workstation',
@@ -18,7 +20,7 @@ export class WorkstationComponent implements OnInit {
     statusProcessing: any = {};
     instanceData: any = [];
 
-    private static STREAMING_URL=""; //Apache Guacamole Streaming Url
+    private static STREAMING_URL= environment.STREAMING_URL; //Apache Guacamole Streaming Url
 
     constructor(
         private gatewayService: ApiGatewayService,

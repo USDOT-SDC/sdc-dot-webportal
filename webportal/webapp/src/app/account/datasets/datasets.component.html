@@ -16,7 +16,10 @@
             </span><hr>
             <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
             <hr>
-            <p>Files from Bucket name - <b>{{ userBucketName }}</b></p>
+            <p> The files shown in the below table are available in the team bucket assigned to your workstation.</p>
+            <p> Team bucket name - <b>{{ userBucketName }}</b></p>
+            <p> Files that are uploaded from the web portal will be saved in the folder - <b>{{ userName }}</b><b>/uploaded_files</b></p>
+            <p> Files that you would like to export out of the system must be uploaded to the folder - <b>export_requests</b></p>
             <span style="color:grey">Any file type can be downloaded.</span>
             <p-table #dt [columns]="cols" [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="myDatasets.length"  dataKey="filename">
               <ng-template pTemplate="header" let-columns>
@@ -24,24 +27,32 @@
                       <th style="width: 2.25em">
                           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                       </th>
-                      <th *ngFor="let col of columns">
+                      <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
                           {{col.header}} <br/>
                           <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
                       </th>
                   </tr>
               </ng-template>
               <ng-template pTemplate="body" let-myDataset let-columns="columns">
-                  <tr [pSelectableRow]="myDataset" *ngIf="!myDataset.filename.endsWith('/')">
+                  <tr *ngIf="!myDataset.filename.endsWith('/')">
                       <td>
-                          <p-tableCheckbox [value]="myDataset"></p-tableCheckbox>
+                          <p-tableCheckbox [value]="myDataset" [disabled]="!myDataset.download || myDataset.download=='false'"></p-tableCheckbox>
                       </td>
                       <td>{{myDataset.filename}}</td>
-                      <td><i class="material-icons iconFont" (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
+                      
+                      <td *ngIf="myDataset.export=='true' && myDataset.requestReviewStatus=='-1'"><i class="material-icons iconFont" (click)="requestExport('','Dataset export Mail', myDataset.filename)" >exit_to_app</i></td>
+                      <td *ngIf="!myDataset.export || myDataset.export=='false' || myDataset.requestReviewStatus!='-1'"><i class="material-icons iconFont material-icons md-dark md-inactive" >exit_to_app</i></td>
+                      <td *ngIf="myDataset.publish=='true'"><i class="material-icons iconFont"  (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
+                      <td *ngIf="!myDataset.publish || myDataset.publish=='false'"><i class="material-icons iconFont material-icons md-dark md-inactive">cloud_upload</i></td>
+                      <td *ngIf="myDataset.requestReviewStatus=='Approved'">Approved</td>
+                      <td *ngIf="myDataset.requestReviewStatus=='Rejected'">Rejected</td>
+                      <td *ngIf="myDataset.requestReviewStatus=='Submitted'">Submitted</td>
+                      <td *ngIf="myDataset.requestReviewStatus=='-1'">-</td>
                   </tr>
               </ng-template>
           </p-table>
           <hr />
-          <button class="btn btn-primary dotBtn" [disabled]="selectedFiles.length==0" (click)=requestDownload()>Download Files</button>
+          <button class="btn btn-primary dotBtn" [disabled]="this.selectedFiles.length==0" (click)=requestDownload()>Download Files</button>
           </mat-expansion-panel>
 
           <!--Curated Datasets table-->

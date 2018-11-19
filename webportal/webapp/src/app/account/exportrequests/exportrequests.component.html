@@ -1,0 +1,97 @@
+<div class="container">
+    <mat-card>
+     <div class="row">
+        <div class="col-md-12">
+          <!-- Export Requests-->
+          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Export File Requests
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngIf="!exportFileRequests">No export file requests</div>
+            <span style="color:grey">This section displays the list of export requests</span><hr>
+           <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
+            <p-table #dt [columns]="cols" [value]="exportFileRequests" [paginator]="true" [rows]="10" [totalRecords]="exportFileRequests.length"  dataKey="filename">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                          {{col.header}} <br/>
+                          <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-exportFileRequest let-columns="columns">
+                  <tr>
+                      <td>{{exportFileRequest.ReqReceivedDate}}</td>
+                      <td>{{exportFileRequest.userFullName}}</td>
+                      <td>{{exportFileRequest.description}}</td>
+                      <td>{{exportFileRequest.team}}</td>
+                      <td>{{exportFileRequest.dataset}}</td>
+                      <!-- <td><a style="cursor:pointer;word-break:break-all;" (click)="requestDownload(exportFileRequest)">{{exportFileRequest.reviewFile}}</a></td> -->
+                      <td><div style="word-break:break-all;">{{exportFileRequest.reviewFile}}</div></td>   
+                        <td>
+                            <div *ngIf="exportFileRequest.RequestReviewStatus == 'Submitted'"><i class="material-icons iconFont" (click)="submitApproval('Approved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportFileRequest)" >close</i></div>
+                           
+                            <div *ngIf="exportFileRequest.RequestReviewStatus == 'Approved'">
+                                    <p-message severity="success" text="{{exportFileRequest.RequestReviewStatus}}"></p-message> 
+                            </div> 
+                            <div *ngIf="exportFileRequest.RequestReviewStatus == 'Rejected'">
+                                        <p-message severity="error" text="{{exportFileRequest.RequestReviewStatus}}"></p-message> 
+                            </div>
+                            <!--<button class="btn btn-primary dotBtn"  (click)="submitApproval('Approved',exportFileRequest)">Approve</button><button class="btn btn-primary dotBtn"  (click)="submitApproval('Rejected',exportFileRequest)">Reject</button></td>-->
+                        </td>
+                        
+                        <td>
+                            <i class="material-icons iconFont" (click)="renderApprovalForm(exportFileRequest)">insert_drive_file</i>
+                        </td>
+                        <td>
+                            <i class="material-icons iconFont" (click)="copyFileToTeamBucket(exportFileRequest)">file_copy</i>
+                        </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          <hr />
+          </mat-expansion-panel>
+
+         <!-- Trust Requests-->
+         <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Trusted Requests
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngIf="!trustedRequests">No Trusted Requests</div>
+          <span style="color:grey">This section displays the list of Trusted Requests</span><hr>
+         <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
+          <p-table #dt [columns]="colsTrusted" [value]="trustedRequests" [paginator]="true" [rows]="10" [totalRecords]="trustedRequests.length"  dataKey="filename">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                        {{col.header}} <br/>
+                        <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-trustedRequest let-columns="columns">
+                <tr>
+                    <td>{{trustedRequest.userFullName}}</td>
+                    <td>{{trustedRequest.dataset}}</td>
+                    <td>
+                        <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'"> <i class="material-icons iconFont" (click)="submitTrustedApproval('Trusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >done</i><i class="material-icons iconFont" (click)="submitTrustedApproval('Untrusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >close</i></div>
+                        <div *ngIf="trustedRequest.TrustedStatus == 'Trusted'">
+                                <p-message severity="success" text="{{trustedRequest.TrustedStatus}}"></p-message> 
+                        </div> 
+                        <div *ngIf="trustedRequest.TrustedStatus == 'Untrusted'">
+                                    <p-message severity="error" text="{{trustedRequest.TrustedStatus}}"></p-message> 
+                        </div>
+                    </td>        
+                    </tr>
+            </ng-template>
+        </p-table>
+        <hr />
+        </mat-expansion-panel>
+        </div>
+      </div>
+    </mat-card>
+</div>

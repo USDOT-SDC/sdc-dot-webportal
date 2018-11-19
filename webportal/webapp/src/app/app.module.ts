@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule } from '@angular/material';
 import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -30,6 +30,11 @@ import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
+import {PanelModule,SharedModule} from 'primeng/primeng';
+import {RadioButtonModule} from 'primeng/primeng';
+import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
+import {MessageModule} from 'primeng/message';
+
 
 @NgModule({
   declarations: [
@@ -40,6 +45,7 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     AccountComponent,
     AccountHomeComponent,
     DatasetsComponent,
+    ExportRequestsComponent,
     WorkstationComponent,
     RegisterComponent,
     DialogBoxComponent,
@@ -69,9 +75,14 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
     MatOptionModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatTabsModule,
     CdkTableModule,
     TableModule,
     FileUploadModule,
+    SharedModule,
+    PanelModule,
+    RadioButtonModule,
+    MessageModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
   ],
