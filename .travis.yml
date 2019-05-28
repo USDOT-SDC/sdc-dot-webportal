@@ -1,0 +1,19 @@
+language: python
+python:
+    - 3.6
+install:
+    - pip install boto3
+    - pip install utils
+    - pip install moto
+    - pip install psycopg2
+branches:
+    only:
+        - master
+        - develop
+addons:
+    sonarcloud:
+        organization: "usdot-jpo-sdc"
+        token:
+            secure: "dRlRYxmrH2O8FTt7A3B6F/dPchR1L08oRo2ICp9EBlxpSwIagEWl5EvgDy0LDmxT1OVF9azPT1X1WKt1A2wlDcH1MKIdeikcLbDBCThr1C6O2qC3l8ogVMZcY3lQMpTbHhgJNiv0kKEvn3DsBOc+4ZqKUAbqHnUKPhG+BatBs8KK8dkW2lhWQ1/OZiyP1purkpJLyieW/Fi85m+vmrWV70tANy9wt5svv4+xYW65w0fUpEKZ4QYBfCEH0a4mzyT4YdsJhKPq1UfXu1RAoZ9mwkAO3uc47tCUEhzoTnKV5Ej7QPavu51sBWDUs0tbXdP4ZQz8kdHUiZJvNP4o4GFOG2oi7dHVX+bxY9Rt5fR22ZcsNoWYZmMhQpMlG5f6LdXelw7iS94G0zcLoH5JDdBGWTiayRLgRDwrOn/SKfslJyPpC5QJWNPkLL+b8BBYEmKukBsmryH1AQGNzY4IKm9VF25pqSe1cwHUWoAlN+xN+gbYlLQHSauD/PkMF/NiM8qlgvSXc/lsxK1614dkzZk1mO8O4N8yL9bHy1Qv1iMzML5bodjHdE8YUR1v9rA3T/GYWDmFjKzLMNQyJaXKlz/cbocNXwUpWq/NDEck0vy+o5Pwfkj5Ey7n7heQAomVtDlzFjQ1lQCw7gxBOkOycxbh870J+2xxdhh09g3VzGyGipk="
+script: 
+    - sonar-scanner
