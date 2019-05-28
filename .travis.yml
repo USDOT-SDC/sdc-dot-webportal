@@ -5,7 +5,6 @@ install:
     - pip install boto3
     - pip install utils
     - pip install moto
-    - pip install psycopg2
 branches:
     only:
         - master
@@ -14,6 +13,6 @@ addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
         token:
-            secure: "dRlRYxmrH2O8FTt7A3B6F/dPchR1L08oRo2ICp9EBlxpSwIagEWl5EvgDy0LDmxT1OVF9azPT1X1WKt1A2wlDcH1MKIdeikcLbDBCThr1C6O2qC3l8ogVMZcY3lQMpTbHhgJNiv0kKEvn3DsBOc+4ZqKUAbqHnUKPhG+BatBs8KK8dkW2lhWQ1/OZiyP1purkpJLyieW/Fi85m+vmrWV70tANy9wt5svv4+xYW65w0fUpEKZ4QYBfCEH0a4mzyT4YdsJhKPq1UfXu1RAoZ9mwkAO3uc47tCUEhzoTnKV5Ej7QPavu51sBWDUs0tbXdP4ZQz8kdHUiZJvNP4o4GFOG2oi7dHVX+bxY9Rt5fR22ZcsNoWYZmMhQpMlG5f6LdXelw7iS94G0zcLoH5JDdBGWTiayRLgRDwrOn/SKfslJyPpC5QJWNPkLL+b8BBYEmKukBsmryH1AQGNzY4IKm9VF25pqSe1cwHUWoAlN+xN+gbYlLQHSauD/PkMF/NiM8qlgvSXc/lsxK1614dkzZk1mO8O4N8yL9bHy1Qv1iMzML5bodjHdE8YUR1v9rA3T/GYWDmFjKzLMNQyJaXKlz/cbocNXwUpWq/NDEck0vy+o5Pwfkj5Ey7n7heQAomVtDlzFjQ1lQCw7gxBOkOycxbh870J+2xxdhh09g3VzGyGipk="
+            secure: "pHGfaqO/ufvItycFpf00Mp9ezLSZnF1nXFJbS9xJoLITBZcOg1AuWs0blup4GNGG2PrPFp3/9pmTqjcsbLKewKFbfDMI+Aq930L9/Sbr82GBG7WXmQEVM3pEJYD8SOZq0Jy17YcReHa/TwlEoKLIFl984XP4+XY+5cetJo5tibUOTL2yM1T5L9gFX9E0F6rpiIf/UJBVlOKTZUcBMkyMAoXYylJ496t737J+a18DfIUmcKen25mXpbsnVcC7LC/MA2LyZjaLa0iyDC0tuOzpywPHDVglsODodMhAgGGl8Szu4AkV5CL8zCqUoC57hOawJi+HjddogD1HTcVxcnqNHs2mRWqUYme1MarjUHHidnUEdelVTyfD1lfd0TmWvI2xeS0dFMJmfUHGP2JYKTYWTwWlWBTjWPOEbymyxZZiyvGCslxpZNqj17HpaeaDQvmbMTr1g8hkQBCYHxMYMd5K5o6Q9/9D3TgHX3R8BiXg6ZhRjDEOs2GNdzmjvgl+5aCDiq9V8YE5Q1p8r2X7+NPwMs3xX3UnhDO85DNIUuzd+hhAP//1xy/X8GFloG13FfIPzOp9PjpWZyyXwKsEfAWw2euE8FsmzgAUCHYqSjcNOqIDt87nITO5KaKTh4+Txj657jdM/H+D0Qq2HLIgG7U9XHoMcJ9WawrQpoXul/TiNOM="
 script: 
     - sonar-scanner
