@@ -5,6 +5,10 @@ install:
     - pip install boto3
     - pip install utils
     - pip install moto
+branches:
+    only:
+        - master
+        - develop
 addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
