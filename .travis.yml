@@ -5,6 +5,5 @@ install:
     - pip install boto3
     - pip install utils
     - pip install moto
-branches:
-    only:
-        - master
+script: 
+    - sonar-scanner
