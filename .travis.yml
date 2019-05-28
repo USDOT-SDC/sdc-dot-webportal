@@ -1,0 +1,12 @@
+language: python
+python:
+    - 3.6
+install:
+    - pip install boto3
+    - pip install utils
+    - pip install moto
+    - pip install psycopg2
+branches:
+    only:
+        - master
+        - develop
