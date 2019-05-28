@@ -5,5 +5,10 @@ install:
     - pip install boto3
     - pip install utils
     - pip install moto
+addons:
+    sonarcloud:
+        organization: "usdot-jpo-sdc"
+        token:
+            secure: "pHGfaqO/ufvItycFpf00Mp9ezLSZnF1nXFJbS9xJoLITBZcOg1AuWs0blup4GNGG2PrPFp3/9pmTqjcsbLKewKFbfDMI+Aq930L9/Sbr82GBG7WXmQEVM3pEJYD8SOZq0Jy17YcReHa/TwlEoKLIFl984XP4+XY+5cetJo5tibUOTL2yM1T5L9gFX9E0F6rpiIf/UJBVlOKTZUcBMkyMAoXYylJ496t737J+a18DfIUmcKen25mXpbsnVcC7LC/MA2LyZjaLa0iyDC0tuOzpywPHDVglsODodMhAgGGl8Szu4AkV5CL8zCqUoC57hOawJi+HjddogD1HTcVxcnqNHs2mRWqUYme1MarjUHHidnUEdelVTyfD1lfd0TmWvI2xeS0dFMJmfUHGP2JYKTYWTwWlWBTjWPOEbymyxZZiyvGCslxpZNqj17HpaeaDQvmbMTr1g8hkQBCYHxMYMd5K5o6Q9/9D3TgHX3R8BiXg6ZhRjDEOs2GNdzmjvgl+5aCDiq9V8YE5Q1p8r2X7+NPwMs3xX3UnhDO85DNIUuzd+hhAP//1xy/X8GFloG13FfIPzOp9PjpWZyyXwKsEfAWw2euE8FsmzgAUCHYqSjcNOqIDt87nITO5KaKTh4+Txj657jdM/H+D0Qq2HLIgG7U9XHoMcJ9WawrQpoXul/TiNOM="
 script: 
     - sonar-scanner
