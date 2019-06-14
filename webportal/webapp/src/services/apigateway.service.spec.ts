@@ -1,11 +1,14 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { ApiGatewayService } from './apigateway.service';
+import { HttpModule } from '@angular/http';
+import { CognitoService } from './cognito.service';
 
 describe('ApiGatewayService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ApiGatewayService]
+      imports: [HttpModule],
+      providers: [ApiGatewayService, CognitoService]
     });
   });
 

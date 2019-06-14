@@ -6,6 +6,7 @@ import {FileUpload} from 'primeng/fileupload';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatRadioModule, MatCheckboxModule, MatTabsModule} from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
+import { NgModel } from '@angular/forms';
 // import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
