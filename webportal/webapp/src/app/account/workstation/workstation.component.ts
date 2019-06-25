@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {ApiGatewayService} from '../../../services/apigateway.service';
 import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
 import {MatSnackBar} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { CognitoService } from '../../../services/cognito.service';
 import { environment } from '../../../environments/environment';
+import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 
 
 @Component({
@@ -19,12 +21,14 @@ export class WorkstationComponent implements OnInit {
     instanceStates: any = {};
     statusProcessing: any = {};
     instanceData: any = [];
-
+    allowReSize = true;
+    
     private static STREAMING_URL= environment.STREAMING_URL; //Apache Guacamole Streaming Url
 
     constructor(
         private gatewayService: ApiGatewayService,
         private cognitoService: CognitoService,
+        public dialog: MatDialog,
         public snackBar: MatSnackBar) { }
 
     ngOnInit() {
@@ -40,6 +44,18 @@ export class WorkstationComponent implements OnInit {
         /*if (this.instanceId) {
             this.getInstanceState();
         }*/
+    }
+
+    renderReSizeDialog() {
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            width: '700px',
+            height: '630px',
+            data: { mailType: 'reSize Request' }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 
     getInstanceState(instanceId:any) {

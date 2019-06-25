@@ -357,6 +357,172 @@
   </mat-tab-group>
 </div>
 
+<div *ngIf="mailType == 'reSize Request'">
+  <h3>{{getTabHeading()}}</h3>
+  <hr>
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
+    <mat-tab label="Resize Work Space" #tab1>
+      <mat-dialog-content style="height: 100%;">
+        <hr>
+        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
+            create your derived dataset. This will help us to route your request to the appropriate Data Provider for
+            approval.</b></p>
+        <hr>
+        <div class="resize-form-container">
+          <div class="resize-filters-section">
+            <div>
+              <p><b>Filters Section</b></p>
+            </div>
+            <div class="resize-filters-form">
+              <mat-form-field style='width: 42%; max-width: 42%;'>
+                <mat-select class="exportSelect" placeholder='CPU' [(ngModel)]="resize.cpu">
+                  <mat-option *ngFor="let dataSetType of cpuOptions" [value]="dataSetType" required>
+                    {{ dataSetType }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!messageModel.datasettype">Please select CPU</mat-error>
+              </mat-form-field>
+
+              <mat-form-field style='width: 42%; max-width: 42%;'>
+                <mat-select class="exportSelect" placeholder='Memory' [(ngModel)]="resize.memory">
+                  <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" required>
+                    {{ dataSetType.toString().concat(' GB') }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!messageModel.datasettype">Please select memory</mat-error>
+              </mat-form-field>
+
+              <button *ngIf='!resizeFilterFormSubmitted' (click)="hadleResizeFilterFormSubmit()" class="btn btn-primary dotBtn"
+                style='width: 10%;'>Submit</button>
+              <div style='width: 10%;' *ngIf='resizeFilterFormSubmitted'>
+
+              </div>
+            </div>
+
+            <div class="resize-filter-start-workspace">
+              <mat-checkbox></mat-checkbox>
+              <p style="padding-left: 10px;">
+                <b>
+                  Please Start my workspace after resize
+                </b>
+              </p>
+            </div>
+
+          </div>
+          <div class="resoize-general-purpose">
+            <p><b>General Purpose</b></p>
+          </div>
+          <br>
+          <div *ngIf='resizeFilterFormSubmitted' class="resize-filter-button-group">
+            <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
+            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(1)" class="btn btn-primary dotBtn">Next</button>
+          </div>
+        </div>
+      </mat-dialog-content>
+    </mat-tab>
+    <mat-tab label="Disk Space" #tab2>
+      <mat-dialog-content style="height: 100%;">
+        <hr>
+        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
+            create
+            your derived dataset. This will help us to route your request to the appropriate Data Provider for
+            approval.</b></p>
+        <span style="color:grey; font-style: italic;">Note - If your derived Dataset is created using multiple
+          Sub-Datasets/Data Types, that are available within SDC or external Datasets/Data Sources that you have
+          uploaded
+          into the system, you will be provided an option to list all such Datasets/Data Types in the next section of
+          the
+          workflow.</span>
+
+        <hr>
+
+        <p>
+          <b>
+            Selected Desired Disk Space
+          </b>
+        </p>
+
+        <div class="resize-disk-space-container">
+          <mat-radio-group name="diskSize" id="diskSize" required [(ngModel)]="diskSizeChange">
+            <mat-radio-button value=''>No Change</mat-radio-button>
+            <br />
+            <mat-radio-button value="true">Additional Disk Space</mat-radio-button>
+          </mat-radio-group>
+          <div class="resize-disk-space-edit">
+            <mat-form-field style='width: 42%; max-width: 42%;'>
+              <mat-select class="exportSelect" placeholder='Memory' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
+                <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" required>
+                  {{ dataSetType.toString().concat(' GB') }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="!messageModel.datasettype">Please select memory</mat-error>
+            </mat-form-field>
+          </div>
+          <div *ngIf='resizeFilterFormSubmitted' class="resize-filter-button-group">
+            <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
+            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Next</button>
+          </div>
+        </div>
+      </mat-dialog-content>
+
+    </mat-tab>
+    <mat-tab label="Schedule Date" #tab3>
+      <mat-dialog-content>
+        <hr>
+        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
+            create
+            your derived dataset. This will help us to route your request to the appropriate Data Provider for
+            approval.</b>
+          <hr>
+          <p>
+            <b>
+              Work-Space Resize-Schedule
+            </b>
+          </p>
+          <div class="resize-date-form">
+            <mat-form-field style='width: 42%;'>
+              <input matInput [matDatepicker]="picker" placeholder="From date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field style="width: 42%">
+              <input matInput [matDatepicker]="picker2" placeholder="To date">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <div style='width: 10%;'></div>
+          </div>
+          <hr>
+          <p>
+            <b>
+              Disk-Space Resize-Schedule
+            </b>
+          </p>
+          <div class="resize-date-form">
+            <mat-form-field style="width: 42%">
+              <input matInput [matDatepicker]="picker3" placeholder="From date">
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field style="width: 42%">
+              <input matInput [matDatepicker]="picker4" placeholder="To date">
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+
+            <div style='width: 10%;'></div>
+          </div>
+          <div class="resize-filter-button-group">
+            <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
+            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Next</button>
+          </div>
+      </mat-dialog-content>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
 <div *ngIf="requestType == 'Upload Files To S3'">
     <h4>Upload files to SDC platform</h4>
     <hr>

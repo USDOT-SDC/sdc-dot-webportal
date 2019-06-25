@@ -46,3 +46,50 @@ mat_tab_style{
 .exportSelect {
     margin-top: 20px;
 }
+
+.resize-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.resize-filters-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.resize-filters-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.resize-filter-start-workspace {
+    display: flex;
+    flex-direction: row;
+}
+
+.padding-right {
+    padding-right: 10px;
+}
+
+.resize-filter-button-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.resize-disk-space-container {
+    position: relative;
+    height: 100px;
+}
+
+.resize-disk-space-edit {
+    position: absolute;
+    top: 0;
+    right: 30%;
+}
+
+.resize-date-form {
+    display: flex;
+    justify-content: space-between;
+}

@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 export class ApiGatewayService {
 
     protected options: RequestOptions;
-    private static _API_ENDPOINT = environment.API_ENDPOINT; // AWS API gateway base endpoint
+    private static _API_ENDPOINT = 'https://u2zksemc1h.execute-api.us-east-1.amazonaws.com/api/';
 
     apiResponse: any;
     extractData: any;

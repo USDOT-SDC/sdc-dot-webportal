@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders , HttpRequest , HttpEventType, HttpResponse} fr
 import {FileUpload} from 'primeng/fileupload';
 //import { ProgressHttp } from "angular-progress-http";
 //import { Headers, RequestOptions } from '@angular/http';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatRadioModule, MatCheckboxModule, MatTabsModule} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule} from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
 // import {Md5} from 'ts-md5/dist/md5';
@@ -58,6 +58,10 @@ export class DialogBoxComponent implements OnInit {
     detailedDerivedDataset: string;
     derivedDataSetName: string;
     trustedAcceptableUseDisabled:boolean;
+    resizeFilterFormSubmitted = false;
+    diskSizeChange = '';
+    cpuOptions = [1, 2, 3, 4, 5, 6, 7, 8];
+    memoryOptions = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
     @ViewChild("fileUpload") fileUpload: FileUpload;
   
     dataTypes = [
@@ -111,6 +115,11 @@ export class DialogBoxComponent implements OnInit {
         derivedDatasetname: '',
         dataprovider: '',
         datatype: ''
+    };
+
+    resize = {
+        cpu: '',
+        memory: ''
     };
 
     constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
@@ -319,6 +328,24 @@ export class DialogBoxComponent implements OnInit {
           this.selectedFiles.push(file);
       }
     }*/
+
+    handleResizeWorkNext(e) {
+        this.selectedIndexChange(e);
+    }
+
+    hadleResizeFilterFormSubmit() {
+        this.resizeFilterFormSubmitted = true;
+    }
+
+    getTabHeading() {
+
+        if (this.selectedIndex === 1) {
+            return 'Select Desired DiskSpace';
+        } else {
+            return 'Resize Work Space';
+        }
+    }
+
     submitRequest() {
         // alert(this.trustedAcceptableUse);
         this.selectedDataSet = this.messageModel.datasettype;
