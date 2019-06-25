@@ -60,8 +60,12 @@ export class DialogBoxComponent implements OnInit {
     trustedAcceptableUseDisabled:boolean;
     resizeFilterFormSubmitted = false;
     diskSizeChange = '';
-    cpuOptions = [1, 2, 3, 4, 5, 6, 7, 8];
-    memoryOptions = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+    cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
+    memoryOptions = [2, 3.75,4, 5.25, 7.5, 8, 10.5, 15, 15.25, 16, 21, 30, 30.5, 32, 42, 61, 64, 72, 96, 128, 144, 160, 192, 256, 384, 768];
+    operatingSystem: string;
+    defaultInstanceType: string;
+    selectedCpu: string;
+    selectedMemory: string;
     @ViewChild("fileUpload") fileUpload: FileUpload;
   
     dataTypes = [
@@ -119,7 +123,9 @@ export class DialogBoxComponent implements OnInit {
 
     resize = {
         cpu: '',
-        memory: ''
+        memory: '',
+        defaultInstanceType: '',
+        operatingSystem: ''
     };
 
     constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
@@ -333,8 +339,19 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndexChange(e);
     }
 
-    hadleResizeFilterFormSubmit() {
+    handleResizeFilterFormSubmit() {
         this.resizeFilterFormSubmitted = true;
+        this.selectedCpu = this.resize.cpu;
+        this.selectedMemory = this.resize.memory;
+        this.gatewayService.getDesiredInstanceTypesAndCosts('get_desired_instance_types?cpu=' + this.selectedCpu + '&memory=' + this.selectedMemory + '&os=' + this.operatingSystem).subscribe(
+            (response: any) => {
+                this.snackBar.open('Your request has been sent successfully', 'close', {
+                    duration: 2000,
+                });
+                this.onNoClick();
+                console.log('Access Request Sent Successfully');
+            }
+        );
     }
 
     getTabHeading() {
@@ -491,4 +508,6 @@ export class DialogBoxComponent implements OnInit {
             )
       }
    }
+
+
 }

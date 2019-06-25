@@ -22,21 +22,21 @@ cors_config = CORSConfig(
 )
 
 #Parameters used to deploy production setup
-TABLENAME = ''
-TABLENAME_DATASET = ''
-APPSTREAM_S3_BUCKET_NAME = ''
+TABLENAME = 'dev-UserStacksTable'
+TABLENAME_DATASET = 'dev-AvailableDataset'
+APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
-RECEIVER = ''
-PROVIDER_ARNS = ''
-RESTAPIID = ''
-AUTHORIZERID = ''
-TABLENAME_TRUSTED = ''
-TABLENAME_EXPORT_FILE_REQUEST= ''
+RECEIVER = 'support@securedatacommons.com'
+PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY'
+RESTAPIID = 'u2zksemc1h'
+AUTHORIZERID = 'pby0gw'
+TABLENAME_TRUSTED = 'dev-TrustedUsersTable'
+TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExportTable'
 
 authorizer = CognitoUserPoolAuthorizer(
-   '', provider_arns=[PROVIDER_ARNS])
+   'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
 
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
@@ -800,3 +800,68 @@ def updatetrustedtatus():
     return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
+
+def parse_column(price,name):
+  col_position = price.find(name)
+  col_length = len(name)
+  string_len = len(price)
+  string_beg = col_position + col_length + 2 
+  cls_price = price.replace('}',' ')
+  cls_price1 = cls_price.replace('\"',' ')
+  new_line = (cls_price1[string_beg:string_len])
+  pull_column = new_line.split(',')
+  val = pull_column[0]
+  val1 = val.rstrip()
+  value = val1.lstrip()
+  return(value)
+
+
+@app.route('/get_desired_instance_types', authorizer=authorizer, cors=cors_config)
+def get_desired_instance_types_costs():
+    params = app.current_request.query_params
+    logging.info("CPU value - {}".format(params['cpu']))
+    instances = {}
+    try:
+        pricing = boto3.client('pricing')
+        desired_memory = params['memory'] + ' GiB'
+        response = pricing.get_products(
+            ServiceCode='AmazonEC2',
+            Filters = [
+                {'Type' :'TERM_MATCH', 'Field':'vcpu',            'Value':params['cpu']            },
+                {'Type' :'TERM_MATCH', 'Field':'memory',          'Value':desired_memory        },
+                {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'}
+            ]
+        )
+
+        instances['pricing'] = []
+        for price in response['PriceList']:
+        #### skip RHEL and SUSE
+            if (price.find('RHEL') != -1):
+                continue
+            if (price.find('SUSE') != -1):
+                continue
+        ### Parse each column.... 
+            search_column = 'instanceFamily'
+            instanceFamily=parse_column(price, search_column)
+        ###########
+            search_column = 'instanceType'
+            instanceType=parse_column(price, search_column)
+        ###########
+            search_column = 'operatingSystem'
+            operatingSystem=parse_column(price, search_column)
+        ###########
+            search_column = 'USD'
+            usd=parse_column(price,search_column)
+        # exit()
+            info = {"instanceFamily" : instanceFamily, "instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : params['cpu'], "memory" : desired_memory, "cost" : usd}
+            instances['pricing'].append(info)
+
+        ##  print(json.dumps(instances,indent=2))
+    except BaseException as be:
+        logging.exception("Error: Failed to get instance types and associated costs" + str(be))
+        raise ChaliceViewError("Failed to get instance types and costs")
+    return Response(body=instances,
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+
+

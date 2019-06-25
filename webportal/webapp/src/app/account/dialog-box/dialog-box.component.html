@@ -364,14 +364,12 @@
     <mat-tab label="Resize Work Space" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
-        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
-            create your derived dataset. This will help us to route your request to the appropriate Data Provider for
-            approval.</b></p>
+        <p><b>Please choose the appropriate workstation size by selecting the desired cpu and memory.</b></p>
         <hr>
         <div class="resize-form-container">
           <div class="resize-filters-section">
             <div>
-              <p><b>Filters Section</b></p>
+              <p><b>Select desired CPU / Memory</b></p>
             </div>
             <div class="resize-filters-form">
               <mat-form-field style='width: 42%; max-width: 42%;'>
@@ -392,7 +390,7 @@
                 <mat-error *ngIf="!messageModel.datasettype">Please select memory</mat-error>
               </mat-form-field>
 
-              <button *ngIf='!resizeFilterFormSubmitted' (click)="hadleResizeFilterFormSubmit()" class="btn btn-primary dotBtn"
+              <button *ngIf='!resizeFilterFormSubmitted' (click)="handleResizeFilterFormSubmit()" class="btn btn-primary dotBtn"
                 style='width: 10%;'>Submit</button>
               <div style='width: 10%;' *ngIf='resizeFilterFormSubmitted'>
 

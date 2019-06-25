@@ -129,4 +129,11 @@ export class ApiGatewayService {
         .map(this.extractData)
         .catch(this.handleError);
     }
+
+    getDesiredInstanceTypesAndCosts(url: string){
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
 }
