@@ -141,6 +141,7 @@ export class DialogBoxComponent implements OnInit {
                                                         this.acceptableUse = "";
                                                         this.trustedAcceptableUseDisabled = false;
                                                         this.approvalForm = data.approvalForm;
+                                                        this.operatingSystem = data.stack && data.stack.operating_system;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -345,6 +346,7 @@ export class DialogBoxComponent implements OnInit {
         this.selectedMemory = this.resize.memory;
         this.gatewayService.getDesiredInstanceTypesAndCosts('get_desired_instance_types?cpu=' + this.selectedCpu + '&memory=' + this.selectedMemory + '&os=' + this.operatingSystem).subscribe(
             (response: any) => {
+                console.log(response);
                 this.snackBar.open('Your request has been sent successfully', 'close', {
                     duration: 2000,
                 });
@@ -355,9 +357,10 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTabHeading() {
-
         if (this.selectedIndex === 1) {
             return 'Select Desired DiskSpace';
+        } else if (this.selectedIndex === 2) {
+            return 'Schedule Date Work Space';
         } else {
             return 'Resize Work Space';
         }

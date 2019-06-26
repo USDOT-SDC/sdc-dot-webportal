@@ -44,9 +44,8 @@
                 <!--<button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack)">Launch</button>-->
                 <a class="btn btn-primary dotBtn" style="cursor: pointer;" (click)="launchWorkstation(stack)" target="_blank"> Launch </a>
               </td>
-              <td *ngIf="allowReSize">
-                <!--<button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack)">Launch</button>-->
-                <a class="btn btn-primary dotBtn" (click)="renderReSizeDialog()" style="cursor: pointer;" target="_blank"> Resize </a>
+              <td *ngIf="stack.allow_resize">
+                <a class="btn btn-primary dotBtn" (click)="renderReSizeDialog(stack)" style="cursor: pointer;" target="_blank"> Resize </a>
               </td>
             </tr>
           </ng-template>

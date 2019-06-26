@@ -444,9 +444,9 @@
           <mat-radio-group name="diskSize" id="diskSize" required [(ngModel)]="diskSizeChange">
             <mat-radio-button value=''>No Change</mat-radio-button>
             <br />
-            <mat-radio-button value="true">Additional Disk Space</mat-radio-button>
+           <!-- <mat-radio-button value="true">Additional Disk Space</mat-radio-button> -->
           </mat-radio-group>
-          <div class="resize-disk-space-edit">
+          <div *ngIf="false" class="resize-disk-space-edit">
             <mat-form-field style='width: 42%; max-width: 42%;'>
               <mat-select class="exportSelect" placeholder='Memory' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
                 <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" required>
@@ -492,12 +492,12 @@
             <div style='width: 10%;'></div>
           </div>
           <hr>
-          <p>
+          <p *ngIf="false">
             <b>
               Disk-Space Resize-Schedule
             </b>
           </p>
-          <div class="resize-date-form">
+          <div *ngIf="false" class="resize-date-form">
             <mat-form-field style="width: 42%">
               <input matInput [matDatepicker]="picker3" placeholder="From date">
               <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>

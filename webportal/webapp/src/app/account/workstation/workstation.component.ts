@@ -21,7 +21,6 @@ export class WorkstationComponent implements OnInit {
     instanceStates: any = {};
     statusProcessing: any = {};
     instanceData: any = [];
-    allowReSize = true;
     
     private static STREAMING_URL= environment.STREAMING_URL; //Apache Guacamole Streaming Url
 
@@ -46,11 +45,11 @@ export class WorkstationComponent implements OnInit {
         }*/
     }
 
-    renderReSizeDialog() {
+    renderReSizeDialog(stack) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '700px',
             height: '630px',
-            data: { mailType: 'reSize Request' }
+            data: { mailType: 'reSize Request', stack }
         });
 
         dialogRef.afterClosed().subscribe(result => {
