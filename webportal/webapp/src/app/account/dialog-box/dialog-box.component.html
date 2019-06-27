@@ -390,9 +390,9 @@
                 <mat-error *ngIf="!messageModel.datasettype">Please select memory</mat-error>
               </mat-form-field>
 
-              <button *ngIf='!resizeFilterFormSubmitted' (click)="handleResizeFilterFormSubmit()" class="btn btn-primary dotBtn"
+              <button (click)="handleResizeFilterFormSubmit()" class="btn btn-primary dotBtn"
                 style='width: 10%;'>Submit</button>
-              <div style='width: 10%;' *ngIf='resizeFilterFormSubmitted'>
+              <div style='width: 10%;' *ngIf='resizeFilterFormSubmitted && false'>
 
               </div>
             </div>
@@ -407,13 +407,48 @@
             </div>
 
           </div>
-          <div class="resoize-general-purpose">
-            <p><b>General Purpose</b></p>
+          <hr>
+          <div *ngIf="pricing.length" class="pricing-container">
+            <div class="resize-general-purpose">
+              <p><b>General Purpose</b></p>
+              <div class="general-purpose-pricing">
+                <div class="general-pricing-headers">
+                  <div>
+                    Instance Name
+                  </div>
+                  <div>
+                    CPU
+                  </div>
+                  <div>
+                    Memory
+                  </div>
+                  <div style="margin-right: 62px;">
+                    COST
+                  </div>
+                </div>
+                <div class="general-purpose-body" *ngFor="let item of pricing; let i = index">
+                  <div class="pricing-instance">
+                    <input (click)="handlePricingSelection(i)" type="radio" name="pricing" value="i">
+                    <span style="margin-left: 3px;">{{item.instanceType}}</span>
+                  </div>
+                  <div>
+                    {{item.vcpu}}
+                  </div>
+                  <div>
+                    {{getTransformedMemory(item.memory)}}
+                  </div>
+                  <div>
+                    {{getTransformedPrice(item.cost)}}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+          
           <br>
           <div *ngIf='resizeFilterFormSubmitted' class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(1)" class="btn btn-primary dotBtn">Next</button>
+            <button [disabled]="!hasPriceSelection()" style="margin-left: 10px;" (click)="handleResizeWorkNext(1)" class="btn btn-primary dotBtn">Next</button>
           </div>
         </div>
       </mat-dialog-content>

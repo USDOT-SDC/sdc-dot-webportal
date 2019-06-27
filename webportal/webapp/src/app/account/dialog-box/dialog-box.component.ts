@@ -81,6 +81,9 @@ export class DialogBoxComponent implements OnInit {
 
     dataSetTypes = [];
 
+    pricing = [];
+    priceSelection = undefined;
+
     dataProviderNames = [];
     subDataSets = [];
     subDataSetsWydot = [];
@@ -340,17 +343,41 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndexChange(e);
     }
 
+    handlePricingSelection(index) {
+        this.priceSelection = index;
+    }
+
+    hasPriceSelection() {
+        if (this.priceSelection) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    getTransformedPrice(cost) {
+       return ('$' + (parseFloat(cost)).toFixed(4) + ' per Hour');
+    }
+
+    getTransformedMemory(memory) {
+        return memory.split(' ')[0].concat(' GB');
+    }
+
     handleResizeFilterFormSubmit() {
         this.resizeFilterFormSubmitted = true;
+        this.priceSelection = undefined;
         this.selectedCpu = this.resize.cpu;
         this.selectedMemory = this.resize.memory;
+        // tslint:disable-next-line:max-line-length
         this.gatewayService.getDesiredInstanceTypesAndCosts('get_desired_instance_types?cpu=' + this.selectedCpu + '&memory=' + this.selectedMemory + '&os=' + this.operatingSystem).subscribe(
             (response: any) => {
                 console.log(response);
-                this.snackBar.open('Your request has been sent successfully', 'close', {
-                    duration: 2000,
-                });
-                this.onNoClick();
+                this.pricing = response && response.pricing;
+
+                // this.snackBar.open('Your request has been sent successfully', 'close', {
+                //     duration: 2000,
+                // });
+                // this.onNoClick();
                 console.log('Access Request Sent Successfully');
             }
         );

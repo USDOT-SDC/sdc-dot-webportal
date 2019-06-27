@@ -93,3 +93,29 @@ mat_tab_style{
     display: flex;
     justify-content: space-between;
 }
+
+.general-purpose-pricing {
+    display: flex;
+    flex-direction: column;
+    margin: 12px;
+}
+
+.general-pricing-headers {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #7a7a7a;
+    margin-bottom: 8px;
+    color: #7a7a7a;
+}
+
+.general-purpose-body {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 8px;
+}
+
+.pricing-instance {
+    width: 17%;
+}
