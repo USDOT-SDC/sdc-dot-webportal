@@ -74,6 +74,7 @@ mat_tab_style{
 }
 
 .resize-filter-button-group {
+    margin-top: 40px;
     display: flex;
     justify-content: flex-end;
 }

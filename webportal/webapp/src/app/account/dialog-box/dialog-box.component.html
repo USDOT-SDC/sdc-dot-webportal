@@ -405,46 +405,54 @@
                 </b>
               </p>
             </div>
-
           </div>
-          <hr>
-          <div *ngIf="pricing.length" class="pricing-container">
-            <div class="resize-general-purpose">
-              <p><b>General Purpose</b></p>
-              <div class="general-purpose-pricing">
-                <div class="general-pricing-headers">
-                  <div>
-                    Instance Name
-                  </div>
-                  <div>
-                    CPU
-                  </div>
-                  <div>
-                    Memory
-                  </div>
-                  <div style="margin-right: 62px;">
-                    COST
-                  </div>
-                </div>
-                <div class="general-purpose-body" *ngFor="let item of pricing; let i = index">
-                  <div class="pricing-instance">
-                    <input (click)="handlePricingSelection(i)" type="radio" name="pricing" value="i">
-                    <span style="margin-left: 3px;">{{item.instanceType}}</span>
-                  </div>
-                  <div>
-                    {{item.vcpu}}
-                  </div>
-                  <div>
-                    {{getTransformedMemory(item.memory)}}
-                  </div>
-                  <div>
-                    {{getTransformedPrice(item.cost)}}
+          <div *ngFor="let instanceType of instanceFamilyList; let j = index">
+            <mat-expansion-panel style="margin-top: 40px;">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{instanceType}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="pricing-container">
+                <div class="resize-general-purpose">
+                  <div class="general-purpose-pricing">
+                    <div class="general-pricing-headers">
+                      <div>
+                        Instance Name
+                      </div>
+                      <div>
+                        CPU
+                      </div>
+                      <div>
+                        Memory
+                      </div>
+                      <div style="margin-right: 62px;">
+                        COST
+                      </div>
+                    </div>
+                    <div class="general-purpose-body" *ngFor="let item of pricingGroups[j]; let i = index">
+                      <div class="pricing-instance">
+                        <input (click)="handlePricingSelection(j,i)" type="radio" name="pricing">
+                        <span style="margin-left: 3px;">{{item.instanceType}}</span>
+                      </div>
+                      <div>
+                        {{item.vcpu}}
+                      </div>
+                      <div>
+                        {{getTransformedMemory(item.memory)}}
+                      </div>
+                      <div>
+                        {{getTransformedPrice(item.cost)}}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </mat-expansion-panel>
           </div>
-          
+          <div *ngIf="pricing.length === 0 && resizeFilterFormSubmitted">
+            No Pricing data available, please try with different CPU/Memory combinations.
+          </div>
           <br>
           <div *ngIf='resizeFilterFormSubmitted' class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
@@ -453,7 +461,7 @@
         </div>
       </mat-dialog-content>
     </mat-tab>
-    <mat-tab label="Disk Space" #tab2>
+    <mat-tab label="Disk Space" #tab2 [disabled]='selectedIndex==0'>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
@@ -499,7 +507,7 @@
       </mat-dialog-content>
 
     </mat-tab>
-    <mat-tab label="Schedule Date" #tab3>
+    <mat-tab label="Schedule Date" #tab3 [disabled]='selectedIndex!=2'>
       <mat-dialog-content>
         <hr>
         <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
@@ -514,13 +522,13 @@
           </p>
           <div class="resize-date-form">
             <mat-form-field style='width: 42%;'>
-              <input matInput [matDatepicker]="picker" placeholder="From date">
+              <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="workSpaceFromDate">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field style="width: 42%">
-              <input matInput [matDatepicker]="picker2" placeholder="To date">
+              <input matInput [matDatepicker]="picker2" placeholder="To date" [(ngModel)]="workSpaceToDate">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
@@ -549,7 +557,7 @@
           </div>
           <div class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Next</button>
+            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Submit</button>
           </div>
       </mat-dialog-content>
     </mat-tab>

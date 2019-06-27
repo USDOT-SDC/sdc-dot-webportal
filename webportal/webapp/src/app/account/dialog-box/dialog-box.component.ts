@@ -83,6 +83,10 @@ export class DialogBoxComponent implements OnInit {
 
     pricing = [];
     priceSelection = undefined;
+    instanceFamilyList = [];
+    pricingGroups = [];
+    workSpaceFromDate = null;
+    workSpaceToDate = null;
 
     dataProviderNames = [];
     subDataSets = [];
@@ -341,10 +345,13 @@ export class DialogBoxComponent implements OnInit {
 
     handleResizeWorkNext(e) {
         this.selectedIndexChange(e);
+        if (e === 2) {
+            this.postResizeJSON();
+        }
     }
 
-    handlePricingSelection(index) {
-        this.priceSelection = index;
+    handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
+        this.priceSelection = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex];
     }
 
     hasPriceSelection() {
@@ -363,6 +370,39 @@ export class DialogBoxComponent implements OnInit {
         return memory.split(' ')[0].concat(' GB');
     }
 
+    transformPricing(pricingList) {
+        let instanceFamilyList = pricingList.map(e => {
+            return e.instanceFamily;
+        });
+        this.instanceFamilyList = Array.from(new Set(instanceFamilyList));
+        console.log('-----------------', this.instanceFamilyList);
+        // for feach of types = make list
+        let pricingGroups = [];
+        this.instanceFamilyList.forEach(element => {
+            let innerArray = [];
+            this.pricing.forEach(e => {
+                if (e.instanceFamily === element) {
+                    innerArray.push(e);
+                }
+            });
+            pricingGroups.push(innerArray);
+        });
+        this.pricingGroups = [...pricingGroups];
+        console.log('-----------------', this.pricingGroups);
+    }
+
+    postResizeJSON() {
+        // diskSizeChange priceSelection workSpaceFromDate workSpaceToDate
+        const postObj = {
+            priceSelection: this.priceSelection,
+            diskSizeChange: this.diskSizeChange,
+            workSpaceFromDate: this.workSpaceFromDate,
+            workSpaceToDate: this.workSpaceToDate
+        };
+
+        console.log('Make API call with ', postObj);
+    }
+
     handleResizeFilterFormSubmit() {
         this.resizeFilterFormSubmitted = true;
         this.priceSelection = undefined;
@@ -373,7 +413,7 @@ export class DialogBoxComponent implements OnInit {
             (response: any) => {
                 console.log(response);
                 this.pricing = response && response.pricing;
-
+                this.transformPricing(this.pricing);
                 // this.snackBar.open('Your request has been sent successfully', 'close', {
                 //     duration: 2000,
                 // });
