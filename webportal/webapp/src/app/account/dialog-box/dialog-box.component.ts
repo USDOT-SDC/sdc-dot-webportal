@@ -64,6 +64,7 @@ export class DialogBoxComponent implements OnInit {
     memoryOptions = [2, 3.75,4, 5.25, 7.5, 8, 10.5, 15, 15.25, 16, 21, 30, 30.5, 32, 42, 61, 64, 72, 96, 128, 144, 160, 192, 256, 384, 768];
     operatingSystem: string;
     defaultInstanceType: string;
+    instanceId: string;
     selectedCpu: string;
     selectedMemory: string;
     @ViewChild("fileUpload") fileUpload: FileUpload;
@@ -82,7 +83,11 @@ export class DialogBoxComponent implements OnInit {
     dataSetTypes = [];
 
     pricing = [];
-    priceSelection = undefined;
+    requestedInstanceType = undefined;
+    instanceFamilyList = [];
+    pricingGroups = [];
+    workSpaceFromDate = null;
+    workSpaceToDate = null;
 
     dataProviderNames = [];
     subDataSets = [];
@@ -145,6 +150,8 @@ export class DialogBoxComponent implements OnInit {
                                                         this.trustedAcceptableUseDisabled = false;
                                                         this.approvalForm = data.approvalForm;
                                                         this.operatingSystem = data.stack && data.stack.operating_system;
+                                                        this.defaultInstanceType = data.stack && data.stack.instance_type;
+                                                        this.instanceId = data.stack && data.stack.instanceId;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -223,6 +230,7 @@ export class DialogBoxComponent implements OnInit {
     selectedIndexChange(val :number ){
         this.selectedIndex=val;
     }
+
     onSelectionOfDataset(){
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
@@ -341,14 +349,17 @@ export class DialogBoxComponent implements OnInit {
 
     handleResizeWorkNext(e) {
         this.selectedIndexChange(e);
+        if (e === 2) {
+            this.postResizeJSON();
+        }
     }
 
-    handlePricingSelection(index) {
-        this.priceSelection = index;
+    handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
+        this.requestedInstanceType = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex];
     }
 
     hasPriceSelection() {
-        if (this.priceSelection) {
+        if (this.requestedInstanceType) {
             return true;
         } else {
             return false;
@@ -363,9 +374,51 @@ export class DialogBoxComponent implements OnInit {
         return memory.split(' ')[0].concat(' GB');
     }
 
+    transformPricing(pricingList) {
+        let instanceFamilyList = pricingList.map(e => {
+            return e.instanceFamily;
+        });
+        this.instanceFamilyList = Array.from(new Set(instanceFamilyList));
+        console.log('-----------------', this.instanceFamilyList);
+        // for feach of types = make list
+        let pricingGroups = [];
+        this.instanceFamilyList.forEach(element => {
+            let innerArray = [];
+            this.pricing.forEach(e => {
+                if (e.instanceFamily === element) {
+                    innerArray.push(e);
+                }
+            });
+            pricingGroups.push(innerArray);
+        });
+        this.pricingGroups = [...pricingGroups];
+        console.log('-----------------', this.pricingGroups);
+    }
+
+    postResizeJSON() {
+        let message = {}
+        message['requested_instance_type'] = this.requestedInstanceType;
+        message['username'] = this.userName;
+        message['user_email'] = this.userEmail;
+        message['default_instance_type'] = this.defaultInstanceType;
+        message['instance_id'] = this.instanceId;
+        message['operating_system'] = this.operatingSystem;
+        message['schedule_from_date'] = this.workSpaceFromDate;
+        message['schedule_to_date'] = this.workSpaceToDate
+        this.gatewayService.modifyUserWorkstation("manage_user_workstation?managews=" + encodeURI(JSON.stringify(message))).subscribe(
+            (response: any) => {
+                this.snackBar.open("Your request has been sent successfully", 'close', {
+                    duration: 5000,
+                });
+                this.onNoClick();
+                console.log('Request Sent Successfully');
+            }
+        );
+    }
+
     handleResizeFilterFormSubmit() {
         this.resizeFilterFormSubmitted = true;
-        this.priceSelection = undefined;
+        this.requestedInstanceType = undefined;
         this.selectedCpu = this.resize.cpu;
         this.selectedMemory = this.resize.memory;
         // tslint:disable-next-line:max-line-length
@@ -373,7 +426,7 @@ export class DialogBoxComponent implements OnInit {
             (response: any) => {
                 console.log(response);
                 this.pricing = response && response.pricing;
-
+                this.transformPricing(this.pricing);
                 // this.snackBar.open('Your request has been sent successfully', 'close', {
                 //     duration: 2000,
                 // });
