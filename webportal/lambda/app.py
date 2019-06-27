@@ -2,6 +2,7 @@ from chalice import Chalice, Response
 import boto3
 import json, ast
 import logging
+import uuid
 from botocore.exceptions import ClientError
 from chalice import BadRequestError, NotFoundError, ChaliceViewError, ForbiddenError
 from chalice import CognitoUserPoolAuthorizer
@@ -829,7 +830,8 @@ def get_desired_instance_types_costs():
             Filters = [
                 {'Type' :'TERM_MATCH', 'Field':'vcpu',            'Value':params['cpu']            },
                 {'Type' :'TERM_MATCH', 'Field':'memory',          'Value':desired_memory        },
-                {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'}
+                {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'},
+                {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':params['os'] }
             ]
         )
 
@@ -851,7 +853,7 @@ def get_desired_instance_types_costs():
             operatingSystem=parse_column(price, search_column)
         ###########
             search_column = 'USD'
-            usd=parse_column(price,search_column)
+            usd = round(float(parse_column(price,search_column)), 2)
         # exit()
             info = {"instanceFamily" : instanceFamily, "instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : params['cpu'], "memory" : desired_memory, "cost" : usd}
             instances['pricing'].append(info)
@@ -864,4 +866,98 @@ def get_desired_instance_types_costs():
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
 
+@app.route('/manage_user_workstation', authorizer=authorizer, cors=cors_config)
+def manage_user_workstation():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['wsrequest']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    response = {}
+    try:
+        insert_request_to_table(params)
+        resize_workstation(params)
+    except BaseException as be:
+        logging.exception("Error: Failed to process manage workstation request" + str(be))
+        raise ChaliceViewError("Failed to process manage workstation request")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})
+
+
+def resize_workstation(params):
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('dev-ManageUserWorkstationTable')
+    index_name = 'dev-username-index'
+    try:
+        state = get_ec2_instances(params['instance_id'])
+        instance_id = params['instance_id']
+        requested_instance_type = params['requested_instance_type']
+        if state == "running":
+            stop_ec2_instance(instance_id)
+            modify_instance(instance_id, requested_instance_type)
+            start_ec2_instance(instance_id)
+
+    except ClientError as e:
+        logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
+
+def get_ec2_instances(instance_id):
+    ec2 = boto3.resource('ec2', region_name='us-east-1')
+    instances = ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': [state]}])
+    for instance in instances:
+       if instance_id == instance.id:
+         print(instance.id, instance.instance_type)  
+         return state
+
+    return 'None'
+
+def ec2_instance_stop(instance_id):
+    print("stopping instance_id: " + instance_id)  
+    client = boto3.client('ec2',region_name='us-east-1')
+
+# Stop the instance
+    client.stop_instances(InstanceIds=[instance_id])
+    waiter=client.get_waiter('instance_stopped')
+    waiter.wait(InstanceIds=[instance_id])
+
+def ec2_instance_start(instance_id, instance_type):
+    print("Starting instance_id: " + instance_id)  
+    client = boto3.client('ec2',region_name='us-east-1')
+    try:
+        response = client.start_instances(InstanceIds=[instance_id])
+    except ClientError as e:
+        print(e)
+
+def modify_instance(instance_id, request_instance_type):
+    print("Starting instance_id: " + instance_id)  
+    client = boto3.client('ec2',region_name='us-east-1')
+    try:
+        client.modify_instance_attribute(InstanceId=instance_id,Attribute='instanceType', Value=request_instance_type)
+    except ClientError as e:
+        print(e)   
+
+def insert_request_to_table(params):
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('dev-ManageUserWorkstationTable')
+    try:
+        request_date = datetime.datetime.now()
+        request_date = str(request_date)
+        table.put_item(
+            Item={
+                    'RequestId': str(uuid.uuid4)
+                    'username': params['username'],
+                    'user_email': params['user_email']
+                    'instance_id': params['instance_id'],
+                    'default_instance_type': params['instance_type'],
+                    'requested_instance_type': params['requested_instance_type'],
+                    'operating_system': params['operating_system'],
+                    'request_date': request_date,
+                    'schedule_from_date': params['schedule_from_date'],
+                    'schedule_to_date': params['schedule_to_date'],
+                    'is_active': True
+                }
+            )
+    except ClientError as e:
+        logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
