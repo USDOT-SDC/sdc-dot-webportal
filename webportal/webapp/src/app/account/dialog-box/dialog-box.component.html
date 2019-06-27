@@ -456,19 +456,8 @@
     <mat-tab label="Disk Space" #tab2>
       <mat-dialog-content style="height: 100%;">
         <hr>
-        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
-            create
-            your derived dataset. This will help us to route your request to the appropriate Data Provider for
-            approval.</b></p>
-        <span style="color:grey; font-style: italic;">Note - If your derived Dataset is created using multiple
-          Sub-Datasets/Data Types, that are available within SDC or external Datasets/Data Sources that you have
-          uploaded
-          into the system, you will be provided an option to list all such Datasets/Data Types in the next section of
-          the
-          workflow.</span>
-
+        <p><b>Please specify additional disk space that you would like to be added to the Workstation</b></p>
         <hr>
-
         <p>
           <b>
             Selected Desired Disk Space
@@ -502,10 +491,7 @@
     <mat-tab label="Schedule Date" #tab3>
       <mat-dialog-content>
         <hr>
-        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
-            create
-            your derived dataset. This will help us to route your request to the appropriate Data Provider for
-            approval.</b>
+        <p><b>Please select the schedule between what dates you would want the workstation to be in resized state. An email notification will be sent after the resize is completed.</b>
           <hr>
           <p>
             <b>
@@ -549,7 +535,7 @@
           </div>
           <div class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Next</button>
+            <button style="margin-left: 10px;" (click)="handleResizeWorkstation()" class="btn btn-primary dotBtn">Submit</button>
           </div>
       </mat-dialog-content>
     </mat-tab>
