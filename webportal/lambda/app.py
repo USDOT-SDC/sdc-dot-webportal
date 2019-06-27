@@ -10,6 +10,7 @@ import traceback
 #import urllib2
 import hashlib
 from datetime import datetime
+import datetime
 from boto3.dynamodb.conditions import Attr, Key
 from chalice import CORSConfig
 import time
@@ -831,7 +832,11 @@ def get_desired_instance_types_costs():
                 {'Type' :'TERM_MATCH', 'Field':'vcpu',            'Value':params['cpu']            },
                 {'Type' :'TERM_MATCH', 'Field':'memory',          'Value':desired_memory        },
                 {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'},
-                {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':params['os'] }
+                {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':params['os'] },
+                {'Type' :'TERM_MATCH', 'Field':'licenseModel',   'Value':'No License required'  },
+                {'Type' :'TERM_MATCH', 'Field':'storage' ,       'Value':'EBS only'       },
+                {'Type' :'TERM_MATCH', 'Field':'tenancy' ,      'Value':'Shared'       },
+                {'Type' :'TERM_MATCH', 'Field':'preInstalledSw', 'Value':'NA'       },
             ]
         )
 
@@ -841,6 +846,8 @@ def get_desired_instance_types_costs():
             if (price.find('RHEL') != -1):
                 continue
             if (price.find('SUSE') != -1):
+                continue
+            if (price.find('per On Demand') == -1):
                 continue
         ### Parse each column.... 
             search_column = 'instanceFamily'
@@ -852,8 +859,12 @@ def get_desired_instance_types_costs():
             search_column = 'operatingSystem'
             operatingSystem=parse_column(price, search_column)
         ###########
-            search_column = 'USD'
-            usd = round(float(parse_column(price,search_column)), 2)
+            search_column = 'description'
+            tmp_usd=parse_column(price,search_column)
+            usd = tmp_usd.replace('$','')
+            i = usd.find('per')
+            usd = usd[0:i]
+            usd = usd.rstrip()
         # exit()
             info = {"instanceFamily" : instanceFamily, "instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : params['cpu'], "memory" : desired_memory, "cost" : usd}
             instances['pricing'].append(info)
@@ -898,11 +909,14 @@ def resize_workstation(params):
             stop_ec2_instance(instance_id)
             modify_instance(instance_id, requested_instance_type)
             start_ec2_instance(instance_id)
+        elif state == "None":
+            modify_instance(instance_id, requested_instance_type)
 
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
 def get_ec2_instances(instance_id):
+    state = 'None'
     ec2 = boto3.resource('ec2', region_name='us-east-1')
     instances = ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': [state]}])
     for instance in instances:
@@ -945,11 +959,11 @@ def insert_request_to_table(params):
         request_date = str(request_date)
         table.put_item(
             Item={
-                    'RequestId': str(uuid.uuid4)
+                    'RequestId': str(uuid.uuid4()),
                     'username': params['username'],
-                    'user_email': params['user_email']
+                    'user_email': params['user_email'],
                     'instance_id': params['instance_id'],
-                    'default_instance_type': params['instance_type'],
+                    'default_instance_type': params['default_instance_type'],
                     'requested_instance_type': params['requested_instance_type'],
                     'operating_system': params['operating_system'],
                     'request_date': request_date,

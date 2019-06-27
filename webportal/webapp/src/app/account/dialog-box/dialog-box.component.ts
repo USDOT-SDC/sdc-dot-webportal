@@ -151,7 +151,7 @@ export class DialogBoxComponent implements OnInit {
                                                         this.approvalForm = data.approvalForm;
                                                         this.operatingSystem = data.stack && data.stack.operating_system;
                                                         this.defaultInstanceType = data.stack && data.stack.instance_type;
-                                                        this.instanceId = data.stack && data.stack.instanceId;
+                                                        this.instanceId = data.stack && data.stack.instance_id;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -355,7 +355,7 @@ export class DialogBoxComponent implements OnInit {
     }
 
     handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
-        this.requestedInstanceType = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex];
+        this.requestedInstanceType = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]["instanceType"];
     }
 
     hasPriceSelection() {
@@ -405,7 +405,7 @@ export class DialogBoxComponent implements OnInit {
         message['operating_system'] = this.operatingSystem;
         message['schedule_from_date'] = this.workSpaceFromDate;
         message['schedule_to_date'] = this.workSpaceToDate
-        this.gatewayService.modifyUserWorkstation("manage_user_workstation?managews=" + encodeURI(JSON.stringify(message))).subscribe(
+        this.gatewayService.modifyUserWorkstation("manage_user_workstation?wsrequest=" + encodeURI(JSON.stringify(message))).subscribe(
             (response: any) => {
                 this.snackBar.open("Your request has been sent successfully", 'close', {
                     duration: 5000,
