@@ -356,7 +356,7 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTransformedPrice(cost) {
-       return ('$' + (parseFloat(cost)).toFixed(4) + ' per Hour');
+       return ('$' + (parseFloat(cost)).toFixed(2) + ' per Hour');
     }
 
     getTransformedMemory(memory) {
