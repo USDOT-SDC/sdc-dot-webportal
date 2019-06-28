@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HomeComponent } from './home.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
@@ -71,4 +70,5 @@ describe('HomeComponent', () => {
     component.isLoggedIn('some message', false);
     expect(mockObjectMap['router'].navigate).toHaveBeenCalledTimes(0);
   });
+  
 });

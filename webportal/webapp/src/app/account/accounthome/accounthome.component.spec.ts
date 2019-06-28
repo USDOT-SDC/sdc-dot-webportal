@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountHomeComponent } from './accounthome.component';
-import { MatButtonModule, MatMenuModule, MatCardModule, MatToolbarModule, MatIconModule, MatTableModule, MatExpansionModule, MatSnackBarModule, MatInputModule, MatFormFieldModule, MatDialogModule, MatSelectModule, MatOptionModule, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
-import { RouterModule } from '@angular/router';
-import { RoutingModule } from '../../app.routes';
+import { MatCardModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AccountComponent } from '../account.component';
 import { MainComponent } from '../../main/main.component';
@@ -21,30 +19,15 @@ import { APP_BASE_HREF } from '@angular/common';
 
 describe('MyAccountComponent', () => {
   let component: AccountHomeComponent;
-  let fixture: ComponentFixture<AccountHomeComponent>;
+  let fixture: ComponentFixture<AccountHomeComponent>;  
 
   beforeEach(async(() => {
     
-    TestBed.configureTestingModule({
-      imports: [
-        RouterModule,        
-        RoutingModule,
-        MatButtonModule,
-        MatMenuModule,
-        MatCardModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatTableModule,
-        MatExpansionModule,
-        MatSnackBarModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatDialogModule,
-        MatSelectModule,
-        MatOptionModule,
-        MatRadioModule,
-        MatCheckboxModule,
-        MatTabsModule ],
+    TestBed.configureTestingModule({      
+      imports: [        
+        RouterTestingModule,
+        MatCardModule
+      ],
       declarations: [ 
         AccountComponent,
         MainComponent,
@@ -57,9 +40,12 @@ describe('MyAccountComponent', () => {
         DatasetsComponent,
         ExportRequestsComponent,
         WorkstationComponent,
-        FaqComponent ],
+        FaqComponent
+       ],
         schemas: [ NO_ERRORS_SCHEMA ],
-        providers: [{provide: APP_BASE_HREF, useValue : '/' }]  
+        providers: [
+          {provide: APP_BASE_HREF, useValue : '/' },         
+        ]  
     })
     .compileComponents();
   }));
@@ -73,4 +59,5 @@ describe('MyAccountComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

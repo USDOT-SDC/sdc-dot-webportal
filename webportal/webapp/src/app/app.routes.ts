@@ -1,5 +1,4 @@
 import { Routes, RouterModule } from '@angular/router';
-
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
 import { AboutComponent } from './main/about/about.component';
