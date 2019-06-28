@@ -834,7 +834,6 @@ def get_desired_instance_types_costs():
                 {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'},
                 {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':params['os'] },
                 {'Type' :'TERM_MATCH', 'Field':'licenseModel',   'Value':'No License required'  },
-                {'Type' :'TERM_MATCH', 'Field':'storage' ,       'Value':'EBS only'       },
                 {'Type' :'TERM_MATCH', 'Field':'tenancy' ,      'Value':'Shared'       },
                 {'Type' :'TERM_MATCH', 'Field':'preInstalledSw', 'Value':'NA'       },
             ]
