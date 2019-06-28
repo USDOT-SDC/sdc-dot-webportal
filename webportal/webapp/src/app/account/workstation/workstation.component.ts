@@ -45,6 +45,10 @@ export class WorkstationComponent implements OnInit {
         }*/
     }
 
+    getBoolean(str) {
+        return Boolean(str);
+    }
+
     renderReSizeDialog(stack) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '700px',

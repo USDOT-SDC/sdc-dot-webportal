@@ -86,12 +86,15 @@ export class DialogBoxComponent implements OnInit {
     requestedInstanceType = undefined;
     instanceFamilyList = [];
     pricingGroups = [];
-    workSpaceFromDate = null;
+    systemDate = new Date();
+    workSpaceFromDate = new Date();
     workSpaceToDate = null;
+    callResolved = false;
 
     dataProviderNames = [];
     subDataSets = [];
     subDataSetsWydot = [];
+    currentConfigurations = [];
 
     //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
@@ -136,6 +139,8 @@ export class DialogBoxComponent implements OnInit {
         operatingSystem: ''
     };
 
+    currentStack = {};
+
     constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {    this.messageModel.bucketName = data.bucketName;
@@ -152,6 +157,7 @@ export class DialogBoxComponent implements OnInit {
                                                         this.operatingSystem = data.stack && data.stack.operating_system;
                                                         this.defaultInstanceType = data.stack && data.stack.instance_type;
                                                         this.instanceId = data.stack && data.stack.instance_id;
+                                                        this.currentStack = data.stack;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -159,7 +165,7 @@ export class DialogBoxComponent implements OnInit {
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
-        
+        this.setDisableCurrentConfigurations();
         let trustedStatus = sessionStorage.getItem('userTrustedStatus');
         console.log("Trusted status"+trustedStatus);
         this.userTrustedStatus = JSON.parse(trustedStatus);
@@ -349,9 +355,6 @@ export class DialogBoxComponent implements OnInit {
 
     handleResizeWorkNext(e) {
         this.selectedIndexChange(e);
-        if (e === 2) {
-            this.postResizeJSON();
-        }
     }
 
     handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
@@ -416,7 +419,17 @@ export class DialogBoxComponent implements OnInit {
         );
     }
 
+    setDisableCurrentConfigurations() {
+        // "CPUs:2,Memory(GiB):4".split(",")[0].split(":")[1]
+        this.currentStack['configuration'].split(',').forEach(element => {
+            // tslint:disable-next-line:radix
+            this.currentConfigurations.push(Number(element.split(':')[1]));
+        });
+    }
+
     handleResizeFilterFormSubmit() {
+        // console.log(this.data.stack) configuration
+        this.callResolved = false;
         this.resizeFilterFormSubmitted = true;
         this.requestedInstanceType = undefined;
         this.selectedCpu = this.resize.cpu;
@@ -427,6 +440,7 @@ export class DialogBoxComponent implements OnInit {
                 console.log(response);
                 this.pricing = response && response.pricing;
                 this.transformPricing(this.pricing);
+                this.callResolved = true;
                 // this.snackBar.open('Your request has been sent successfully', 'close', {
                 //     duration: 2000,
                 // });

@@ -364,17 +364,22 @@
     <mat-tab label="Resize Work Space" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
-        <p><b>Please choose the appropriate workstation size by selecting the desired cpu and memory.</b></p>
+        <p>
+          <b>
+           Current Configuration is {{currentConfigurations[0]}} CPU (GiB) and {{currentConfigurations[1]}} GB RAM
+          </b>
+        </p>
+        <p><b>Please choose the appropriate workstation size by selecting the desired CPU and RAM.</b></p>
         <hr>
         <div class="resize-form-container">
           <div class="resize-filters-section">
             <div>
-              <p><b>Select desired CPU / Memory</b></p>
+              <p><b>Select desired CPU / Memory </b></p>
             </div>
             <div class="resize-filters-form">
               <mat-form-field style='width: 42%; max-width: 42%;'>
                 <mat-select class="exportSelect" placeholder='CPU' [(ngModel)]="resize.cpu">
-                  <mat-option *ngFor="let dataSetType of cpuOptions" [value]="dataSetType" required>
+                  <mat-option *ngFor="let dataSetType of cpuOptions" [value]="dataSetType" [disabled]="dataSetType === currentConfigurations[0]" required>
                     {{ dataSetType }}
                   </mat-option>
                 </mat-select>
@@ -382,12 +387,12 @@
               </mat-form-field>
 
               <mat-form-field style='width: 42%; max-width: 42%;'>
-                <mat-select class="exportSelect" placeholder='Memory' [(ngModel)]="resize.memory">
-                  <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" required>
+                <mat-select class="exportSelect" placeholder='RAM' [(ngModel)]="resize.memory">
+                  <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" [disabled]="dataSetType === currentConfigurations[1]" required>
                     {{ dataSetType.toString().concat(' GB') }}
                   </mat-option>
                 </mat-select>
-                <mat-error *ngIf="!messageModel.datasettype">Please select memory</mat-error>
+                <mat-error *ngIf="!messageModel.datasettype">Please select RAM</mat-error>
               </mat-form-field>
 
               <button (click)="handleResizeFilterFormSubmit()" class="btn btn-primary dotBtn"
@@ -450,7 +455,7 @@
               </div>
             </mat-expansion-panel>
           </div>
-          <div *ngIf="pricing.length === 0 && resizeFilterFormSubmitted">
+          <div *ngIf="pricing.length === 0 && resizeFilterFormSubmitted && callResolved">
             No Pricing data available, please try with different CPU/Memory combinations.
           </div>
           <br>
@@ -508,13 +513,13 @@
           </p>
           <div class="resize-date-form">
             <mat-form-field style='width: 42%;'>
-              <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="workSpaceFromDate">
+              <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="workSpaceFromDate" [min]="systemDate">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field style="width: 42%">
-              <input matInput [matDatepicker]="picker2" placeholder="To date" [(ngModel)]="workSpaceToDate">
+              <input matInput [matDatepicker]="picker2" placeholder="To date" [min]="workSpaceFromDate" [(ngModel)]="workSpaceToDate">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
@@ -543,7 +548,7 @@
           </div>
           <div class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Submit</button>
+            <button style="margin-left: 10px;" (click)="postResizeJSON()" class="btn btn-primary dotBtn">Submit</button>
           </div>
       </mat-dialog-content>
     </mat-tab>
