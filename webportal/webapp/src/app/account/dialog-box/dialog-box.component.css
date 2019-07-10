@@ -81,13 +81,16 @@ mat_tab_style{
 
 .resize-disk-space-container {
     position: relative;
-    height: 100px;
 }
 
 .resize-disk-space-edit {
     position: absolute;
-    top: 0;
-    right: 30%;
+    top: -5px;
+    right: 32%;
+}
+
+.exportSelect {
+    margin-top: 4px !important;
 }
 
 .resize-date-form {
@@ -119,4 +122,12 @@ mat_tab_style{
 
 .pricing-instance {
     width: 17%;
+}
+
+.manage-selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 140px;
 }

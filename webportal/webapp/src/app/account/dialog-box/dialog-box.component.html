@@ -361,12 +361,51 @@
   <h3>{{getTabHeading()}}</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
-    <mat-tab label="Resize Work Space" #tab1>
+    <mat-tab label="Manage Work Space" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <p>
           <b>
-           Current Configuration is {{currentConfigurations[0]}} CPU (GB) and {{currentConfigurations[1]}} GB RAM
+            Select Options to Manage.
+          </b>
+        </p>
+        <hr>
+        <div class="manage-selection-container">
+          <div class="resize-filter-start-workspace">
+            <mat-checkbox [(ngModel)]="resizeWorkSpaceOnly"></mat-checkbox>
+            <p style="padding-left: 10px;">
+              <b>
+                Resize Work Space
+              </b>
+            </p>
+          </div>
+          <div class="resize-filter-start-workspace">
+            <mat-checkbox [(ngModel)]="resizeAddDiskOnly"></mat-checkbox>
+            <p style="padding-left: 10px;">
+              <b>
+                Add Additional Disk
+              </b>
+            </p>
+          </div>
+          <div class="resize-filter-start-workspace">
+            <mat-checkbox [(ngModel)]="ManageBoth"></mat-checkbox>
+            <p style="padding-left: 10px;">
+              <b>
+                Manage Both
+              </b>
+            </p>
+          </div>
+          <button [disabled]="!ManageBoth && !resizeWorkSpaceOnly && !resizeAddDiskOnly" style="align-self: flex-end; margin-right: 24px;" (click)="handleResizeWorkNext(1)"
+            class="btn btn-primary dotBtn">Next</button>
+        </div>
+      </mat-dialog-content>
+    </mat-tab>
+    <mat-tab *ngIf="(resizeWorkSpaceOnly || ManageBoth)" label="Resize Work Space" #tab2 [disabled]='selectedIndex==0 || (!resizeWorkSpaceOnly && !ManageBoth)'>
+      <mat-dialog-content style="height: 100%;">
+        <hr>
+        <p>
+          <b>
+            Current Configuration is {{currentConfigurations[0]}} CPU (GB) and {{currentConfigurations[1]}} GB RAM
           </b>
         </p>
         <p><b>Please choose the appropriate workstation size by selecting the desired CPU and RAM.</b></p>
@@ -459,14 +498,14 @@
             No Pricing data available, please try with different CPU/Memory combinations.
           </div>
           <br>
-          <div *ngIf='resizeFilterFormSubmitted' class="resize-filter-button-group">
+          <div *ngIf='resizeFilterFormSubmitted && callResolved' class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button [disabled]="!hasPriceSelection()" style="margin-left: 10px;" (click)="handleResizeWorkNext(1)" class="btn btn-primary dotBtn">Next</button>
+            <button [disabled]="!hasPriceSelection()" style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Next</button>
           </div>
         </div>
       </mat-dialog-content>
     </mat-tab>
-    <!-- <mat-tab label="Disk Space" #tab2 [disabled]='selectedIndex==0'>
+    <mat-tab *ngIf="(resizeAddDiskOnly || ManageBoth)" label="Disk Space" #tab3 [disabled]='selectedIndex==0 || selectedIndex==1 || (!resizeAddDiskOnly && !ManageBoth)'>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <p><b>Please specify additional disk space that you would like to be added to the Workstation</b></p>
@@ -483,68 +522,75 @@
             <br />
            <mat-radio-button value="true">Additional Disk Space</mat-radio-button>
           </mat-radio-group>
-          <div *ngIf="false" class="resize-disk-space-edit">
-            <mat-form-field style='width: 42%; max-width: 42%;'>
-              <mat-select class="exportSelect" placeholder='Memory' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
-                <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" required>
+          <div *ngIf="diskSizeChange" class="resize-disk-space-edit">
+            <mat-form-field style='width: 82%;'>
+              <mat-select class="exportSelect" placeholder='100 X' [(ngModel)]="additionalDiskSpace" (selectionChange)="setDataProviders($event)">
+                <mat-option *ngFor="let dataSetType of additionalDiskSizeOptions" [value]="dataSetType" required>
                   {{ dataSetType.toString().concat(' GB') }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="!messageModel.datasettype">Please select memory</mat-error>
             </mat-form-field>
+            <span style="margin-left: 4px;">GB</span>
           </div>
-          <div *ngIf='resizeFilterFormSubmitted' class="resize-filter-button-group">
+          <div class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Next</button>
+            <button style="margin-left: 10px;" [disabled]='diskSizeChange && !additionalDiskSpace' (click)="handleResizeWorkNext(3)" class="btn btn-primary dotBtn">Next</button>
           </div>
         </div>
       </mat-dialog-content>
 
-    </mat-tab> -->
-    <mat-tab label="Schedule Date" #tab3 [disabled]='selectedIndex!=2'>
+    </mat-tab>
+    <mat-tab *ngIf="(resizeAddDiskOnly || resizeWorkSpaceOnly || ManageBoth)" label="Schedule Date" #tab4 [disabled]='selectedIndex!=3'>
       <mat-dialog-content>
         <hr>
-        <p><b>Please select the schedule between what dates you would want the workstation to be in resized state. An email notification will be sent after the resize is completed.</b>
+        <p><b>Please select the schedule between what dates you would want the workstation to be in resized state. An email
+            notification will be sent after the resize is completed.</b>
           <hr>
-          <p>
-            <b>
-              Work-Space Resize-Schedule
-            </b>
-          </p>
-          <div class="resize-date-form">
-            <mat-form-field style='width: 42%;'>
-              <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="workSpaceFromDate" [min]="systemDate">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-
-            <mat-form-field style="width: 42%">
-              <input matInput [matDatepicker]="picker2" placeholder="To date" [min]="workSpaceFromDate" [(ngModel)]="workSpaceToDate">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-            <div style='width: 10%;'></div>
+          <div *ngIf="!(!resizeWorkSpaceOnly && !ManageBoth)">
+            <p>
+              <b>
+                Work-Space Resize-Schedule
+              </b>
+            </p>
+            <div class="resize-date-form">
+              <mat-form-field style='width: 42%;'>
+                <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="workSpaceFromDate"
+                  [min]="systemDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+    
+              <mat-form-field style="width: 42%">
+                <input matInput [matDatepicker]="picker2" placeholder="To date" [min]="workSpaceFromDate"
+                  [(ngModel)]="workSpaceToDate">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+              <div style='width: 10%;'></div>
+            </div>
+            <hr>
           </div>
-          <hr>
-          <p *ngIf="false">
-            <b>
-              Disk-Space Resize-Schedule
-            </b>
-          </p>
-          <div *ngIf="false" class="resize-date-form">
-            <mat-form-field style="width: 42%">
-              <input matInput [matDatepicker]="picker3" placeholder="From date">
-              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-              <mat-datepicker #picker3></mat-datepicker>
-            </mat-form-field>
-
-            <mat-form-field style="width: 42%">
-              <input matInput [matDatepicker]="picker4" placeholder="To date">
-              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-              <mat-datepicker #picker4></mat-datepicker>
-            </mat-form-field>
-
-            <div style='width: 10%;'></div>
+          <div *ngIf="!(!resizeAddDiskOnly && !ManageBoth)">
+            <p>
+              <b>
+                Disk-Space Resize-Schedule
+              </b>
+            </p>
+            <div class="resize-date-form">
+              <mat-form-field style="width: 42%">
+                <input matInput [matDatepicker]="picker3" placeholder="From date" [(ngModel)]="diskSpaceFromDate" [min]="systemDate">
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
+    
+              <mat-form-field style="width: 42%">
+                <input matInput [matDatepicker]="picker4" placeholder="To date" [(ngModel)]="diskSpaceToDate" [min]="diskSpaceFromDate">
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+              </mat-form-field>
+    
+              <div style='width: 10%;'></div>
+            </div>
           </div>
           <div class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
