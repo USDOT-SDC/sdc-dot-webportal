@@ -834,6 +834,7 @@ def get_desired_instance_types_costs():
                 {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'},
                 {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':params['os'] },
                 {'Type' :'TERM_MATCH', 'Field':'licenseModel',   'Value':'No License required'  },
+                {'Type' :'TERM_MATCH', 'Field':'storage' ,       'Value':'EBS only'       },
                 {'Type' :'TERM_MATCH', 'Field':'tenancy' ,      'Value':'Shared'       },
                 {'Type' :'TERM_MATCH', 'Field':'preInstalledSw', 'Value':'NA'       },
             ]
@@ -905,9 +906,9 @@ def resize_workstation(params):
         instance_id = params['instance_id']
         requested_instance_type = params['requested_instance_type']
         if state == "running":
-            stop_ec2_instance(instance_id)
+            ec2_instance_stop(instance_id)
             modify_instance(instance_id, requested_instance_type)
-            start_ec2_instance(instance_id)
+            ec2_instance_start(instance_id)
         elif state == "None":
             modify_instance(instance_id, requested_instance_type)
 
@@ -973,4 +974,159 @@ def insert_request_to_table(params):
             )
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
+
+@app.route('/manage_user_disk_volume', authorizer=authorizer, cors=cors_config)
+def manage_user_disk_volume():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['wsrequest']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    try:
+      state=get_ec2_instance_state(params)
+      if state != 'running':
+        ec2_instance_start(params)
+      attach_ebs_volume(params)
+    except BaseException as be:
+        logging.exception("Error: Failed to process manage workstation request" + str(be))
+        raise ChaliceViewError("Failed to process manage workstation request")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})
+
+def number_of_ec2_volumes(instance_id):
+  i = 0
+  ec2 = boto3.resource('ec2', region_name='us-east-1')
+  instance = ec2.Instance(instance_id)
+  volumes = instance.volumes.all()
+  for v in volumes:
+  ##  print(v.id)
+    i = i + 1
+  return i
+
+def create_ebs_volume(instance_id,platform,zone,size):
+  tag = str(platform) + str(instance_id) 
+  client = boto3.client('ec2',region_name='us-east-1')
+  ec2 = boto3.resource('ec2', region_name='us-east-1')
+  volume = ec2.create_volume(
+    AvailabilityZone=zone,
+    Encrypted=True,
+    Size=size,
+    VolumeType='gp2',
+    TagSpecifications=[
+        {
+         'ResourceType': 'volume',
+            'Tags': [
+                {
+                    'Key': 'Name',
+                    'Value': tag 
+                },
+            ]
+        },
+    ]
+    )
+  print(volume)
+  V = str(volume)
+  vol,vol1 = V.split("=", 1)
+  vol = vol1.replace('\'','')
+  volume = vol.replace(')','')
+  client.get_waiter('volume_available').wait(VolumeIds=[volume])
+  return volume
+
+############
+def attach_ebs_volume(params):
+  instance_id = params['instance_id']
+  size = int(params['size'])
+### check if instance has more than one volumes 
+  vol_number=number_of_ec2_volumes(instance_id)
+  if vol_number > 1:
+    print("Instance " + instance_id + " " + " has " + str(vol_number) + " volumes already")
+    return vol_number
+  client = boto3.client('ec2',region_name='us-east-1')
+  zone=ec2_instance_availability_zone(instance_id)
+  print(zone)
+  platform=ec2_instance_platform(instance_id)
+  if platform != 'windows':
+    platform = 'linux'
+  print(platform)
+### create and get volume_id
+  volume_id=create_ebs_volume(instance_id,platform,zone,size)
+  response = client.attach_volume(
+     Device='/dev/sdb',
+     InstanceId=instance_id,
+     VolumeId=volume_id)
+  waiter = client.get_waiter('volume_in_use')
+  waiter.wait(VolumeIds=[volume_id])
+#### format volume or mount
+  if platform == 'windows':
+    ssm_ec2_instance_windows(instance_id)
+  if platform == 'linux':
+    ssm_ec2_instance_linux(instance_id)
+  print(response)
+
+############
+def ssm_ec2_instance_windows(instance_id):
+  print("Initializing disk2 on instance_id: " + instance_id)
+  ssm = boto3.client('ssm' )    
+  response = ssm.send_command( InstanceIds=[instance_id],
+            DocumentName='AWS-RunPowerShellScript',
+            Parameters={ "commands":[ """Get-Disk | Where partitionstyle -eq ‘raw’ |
+                                     Initialize-Disk -PartitionStyle MBR -PassThru |
+                                     New-Partition -AssignDriveLetter -UseMaximumSize |
+                                     Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$false""" ]  } )
+  command_id = response['Command']['CommandId']
+  print(command_id)
+
+def ssm_ec2_instance_linux(instance_id):
+  print("mounting on instance_id: " + instance_id)
+  ssm = boto3.client('ssm',region_name='us-east-1' )    
+###            Parameters={ "commands":[ "mkfs -t ext4 /dev/xvdf;mkdir /data1;mount /dev/xvdf /data1/" ]  } )
+  response = ssm.send_command( InstanceIds=[instance_id],
+            DocumentName='AWS-RunShellScript',
+            Parameters={ "commands":[ """sleep 3;lsblk;
+sudo mkfs -t ext4 /dev/xvdb
+cd /
+mkdir -p /data1
+sudo mount /dev/xvdb  /data1/
+echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /tmp/fstab """
+]  } )
+  command_id = response['Command']['CommandId']
+  #print(command_id)
+  print(response)
+
+
+def ec2_instance_platform(instance_id):
+  ec2 = boto3.resource('ec2')
+  instance = ec2.Instance(instance_id)
+  return instance.platform
+
+def ec2_instance_availability_zone(instance_id):
+  client = boto3.client('ec2')
+  responses = client.describe_instances(InstanceIds=[instance_id])
+  for response in responses["Reservations"]:
+      for instance in response["Instances"]:
+            availability_zone = instance["Placement"]["AvailabilityZone"]
+            return availability_zone
+
+def get_ec2_instance_state(params):
+  instance_id = params['instance_id']
+  ec2 = boto3.resource('ec2', region_name='us-east-1')
+  instance = ec2.Instance(instance_id)
+  return instance.state['Name']
+
+#################
+def ec2_instance_start(instance_id):
+  instance_id = params['instance_id']
+  print("Starting instance_id: " + instance_id)
+  client = boto3.client('ec2',region_name='us-east-1')
+
+# Start the instance
+  try:
+    client.start_instances(InstanceIds=[instance_id])
+    waiter=client.get_waiter('instance_running')
+    waiter.wait(InstanceIds=[instance_id])
+  except ClientError as e:
+    print(e)
+
 

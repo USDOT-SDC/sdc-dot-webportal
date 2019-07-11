@@ -6,6 +6,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@a
 import { CognitoService } from '../../../services/cognito.service';
 import { environment } from '../../../environments/environment';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
+import { Bool } from 'aws-sdk/clients/inspector';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class WorkstationComponent implements OnInit {
     instanceStates: any = {};
     statusProcessing: any = {};
     instanceData: any = [];
+    allow_resize: Bool;
     
     private static STREAMING_URL= environment.STREAMING_URL; //Apache Guacamole Streaming Url
 
@@ -36,13 +38,12 @@ export class WorkstationComponent implements OnInit {
         this.stacks = JSON.parse(stacksString);
 
         for (let stack of this.stacks) {
+            this.allow_resize = Boolean(stack.allow_resize)
             if(stack.instance_id) {
                 this.getInstanceState(stack.instance_id);
+
             }
         }
-        /*if (this.instanceId) {
-            this.getInstanceState();
-        }*/
     }
 
     getBoolean(str) {
@@ -51,7 +52,7 @@ export class WorkstationComponent implements OnInit {
 
     renderReSizeDialog(stack) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
-            width: '720px',
+            width: '700px',
             height: '630px',
             data: { mailType: 'reSize Request', stack }
         });
