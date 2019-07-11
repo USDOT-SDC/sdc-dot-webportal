@@ -408,9 +408,11 @@
             Your current workstation configuration is {{currentConfigurations[0]}} CPU (GB) and {{currentConfigurations[1]}} GB RAM
           </b>
         </p>
-        <p><b>Please choose the appropriate instance type by selecting the desired CPU and RAM.</b>
+        <div><b>Please choose the appropriate instance type by selecting the desired CPU and RAM. For pricing related details <a href="https://aws.amazon.com/ec2/pricing/on-demand/" target="_blank">click here</a>.</b>
+          <p>
           <i>Note: Your workstation will be stopped, if it's currently running in order to resize the workstation. Please save your work before requesting the resize for workstation.</i>
-        </p>
+          </p>
+        </div>
         <hr>
         <div class="resize-form-container">
           <div class="resize-filters-section">
@@ -525,13 +527,10 @@
            <mat-radio-button value="true">Additional Diskspace</mat-radio-button>
           </mat-radio-group>
           <div *ngIf="diskSizeChange" class="resize-disk-space-edit">
-            <mat-form-field style='width: 82%;'>
-              <mat-select class="exportSelect" placeholder='100 X' [(ngModel)]="additionalDiskSpace" (selectionChange)="setDataProviders($event)">
-                <mat-option *ngFor="let dataSetType of additionalDiskSizeOptions" [value]="dataSetType" required>
-                  {{ dataSetType.toString().concat(' GB') }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+              <mat-form-field style='width: 82%;'>
+                  <input matInput placeholder="100 X" [(ngModel)]="additionalDiskSpace">
+                </mat-form-field>              
+          
             <span style="margin-left: 4px;">GB</span>
           </div>
           <div class="resize-filter-button-group">

@@ -98,6 +98,7 @@ export class DialogBoxComponent implements OnInit {
     diskSpaceToDate = null;
     workSpaceToDate = null;
     callResolved = false;
+    instanceState = '';
 
     dataProviderNames = [];
     subDataSets = [];
@@ -148,6 +149,7 @@ export class DialogBoxComponent implements OnInit {
     };
 
     currentStack = {};
+    states = {};
 
     constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
@@ -166,6 +168,7 @@ export class DialogBoxComponent implements OnInit {
                                                         this.defaultInstanceType = data.stack && data.stack.instance_type;
                                                         this.instanceId = data.stack && data.stack.instance_id;
                                                         this.currentStack = data.stack;
+                                                        this.states = data.states;
                                                     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -200,6 +203,7 @@ export class DialogBoxComponent implements OnInit {
             }
         }
         console.log(this.dataSetTypes);
+        this.instanceState = this.states[this.instanceId];
         // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
         // this.exportWorkflow = JSON.parse(exportWorkflow);
     }
@@ -383,6 +387,11 @@ export class DialogBoxComponent implements OnInit {
             return;
         }
         */
+        if (this.selectedIndex === 0 && this.instanceState.toLowerCase().trim() === 'running') {
+            this.snackBar.open('The instance will be stopped for size changes', 'close', {
+                duration: 5000,
+            });
+        }
         this.selectedIndexChange(e);
     }
 
@@ -429,24 +438,62 @@ export class DialogBoxComponent implements OnInit {
 
     postResizeJSON() {
         // added additionalDiskSpace, diskSpaceFromDate , diskSpaceToDate
-        let message = {};
-        message['requested_instance_type'] = this.requestedInstanceType;
-        message['username'] = this.userName;
-        message['user_email'] = this.userEmail;
-        message['default_instance_type'] = this.defaultInstanceType;
-        message['instance_id'] = this.instanceId;
-        message['operating_system'] = this.operatingSystem;
-        message['schedule_from_date'] = this.workSpaceFromDate;
-        message['schedule_to_date'] = this.workSpaceToDate
-        this.gatewayService.modifyUserWorkstation("manage_user_workstation?wsrequest=" + encodeURI(JSON.stringify(message))).subscribe(
-            (response: any) => {
-                this.snackBar.open("Your request has been sent successfully", 'close', {
-                    duration: 5000,
-                });
-                this.onNoClick();
-                console.log('Request Sent Successfully');
-            }
-        );
+        if (this.resizeWorkSpaceOnly || this.ManageBoth) {
+            let message = {};
+            message['requested_instance_type'] = this.requestedInstanceType;
+            message['username'] = this.userName;
+            message['user_email'] = this.userEmail;
+            message['default_instance_type'] = this.defaultInstanceType;
+            message['instance_id'] = this.instanceId;
+            message['operating_system'] = this.operatingSystem;
+            message['schedule_from_date'] = this.workSpaceFromDate;
+            message['schedule_to_date'] = this.workSpaceToDate;
+            this.gatewayService.modifyUserWorkstation('manage_user_workstation?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
+                (response: any) => {
+                    if (!this.resizeAddDiskOnly && !this.ManageBoth) {
+                        this.successHandler();
+                    }
+                    console.log('Request Sent Successfully');
+                },
+                (error) => {
+                    this.failureHandler();
+                }
+            );
+        }
+        if ((this.resizeAddDiskOnly || this.ManageBoth) && this.diskSizeChange) {
+            /*
+                API: manage_user_disk_volume
+                parameter epxected: instnace_id and disk size being requested.
+            */
+            let message = {};
+            message['instance_id'] = this.instanceId;
+            message['disk_size'] = this.additionalDiskSpace;
+            this.gatewayService.modifyUserWorkstation('manage_user_disk_volume?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
+                (response: any) => {
+                    this.successHandler();
+                    console.log('Request Sent Successfully');
+                },
+                (error) => {
+                    this.failureHandler();
+                }
+            );
+        } else {
+            this.onNoClick();
+        }
+    }
+
+    successHandler() {
+        this.snackBar.open('Your request has been sent successfully', 'close', {
+            duration: 5000,
+        });
+        this.onNoClick();
+    }
+
+    failureHandler() {
+        this.snackBar.open('Oops Something went wrong, please try again.', 'close', {
+            duration: 5000,
+        });
+        this.onNoClick();
     }
 
     setDisableCurrentConfigurations() {
@@ -486,7 +533,7 @@ export class DialogBoxComponent implements OnInit {
         } else if (this.selectedIndex === 1) {
             return 'Add Additional Diskspace';
         } else if (this.selectedIndex === 2) {
-            return 'Diskspace Management';
+            return 'Additional Diskspace';
         } else if (this.selectedIndex === 3) {
             return 'Select schedule';
         } else {
@@ -505,31 +552,31 @@ export class DialogBoxComponent implements OnInit {
         let approvalForm = {};
 
         if (this.selectedDataSet){
-            approvalForm["datasetName"] = this.selectedDataSet;
+            approvalForm['datasetName'] = this.selectedDataSet;
         }
         if (this.derivedDataSetName){
-            approvalForm["derivedDataSetname"] = this.derivedDataSetName;
+            approvalForm['derivedDataSetname'] = this.derivedDataSetName;
         }
         if (this.selectedDataProvider){
-            approvalForm["dataprovider"] = this.selectedDataProvider;
+            approvalForm['dataprovider'] = this.selectedDataProvider;
         }
         if (this.selectedDatatype){
-            approvalForm["datatype"] = this.selectedDatatype;
+            approvalForm['datatype'] = this.selectedDatatype;
         }
         if (this.dataSources){
-            approvalForm["datasources"] = this.dataSources;
+            approvalForm['datasources'] = this.dataSources;
         }
         if (this.derivedDataSet){
-            approvalForm["deriveddataset"] = this.derivedDataSet;
+            approvalForm['deriveddataset'] = this.derivedDataSet;
         }
         if (this.detailedDerivedDataset){
-            approvalForm["detailedderiveddataset"] = this.detailedDerivedDataset;
+            approvalForm['detailedderiveddataset'] = this.detailedDerivedDataset;
         }
         if (this.tags){
-            approvalForm["tags"] = this.tags;
+            approvalForm['tags'] = this.tags;
         }
         if (this.justifyExport){
-            approvalForm["justifyExport"] = this.justifyExport; 
+            approvalForm['justifyExport'] = this.justifyExport; 
         }
         // Submit API gateway request
         let reqBody = {};
@@ -547,31 +594,31 @@ export class DialogBoxComponent implements OnInit {
         reqBody['RequestID'] = null;
         reqBody['ApprovalForm'] = approvalForm;
         reqBody['UserID'] = this.userName;
-        reqBody['selectedDataInfo'] = { "selectedDataSet" : this.selectedDataSet, "selectedDataProvider" : this.selectedDataProvider,"selectedDatatype" : this.selectedDatatype };
-        reqBody["acceptableUse"] = this.acceptableUse
+        reqBody['selectedDataInfo'] = { 'selectedDataSet' : this.selectedDataSet, 'selectedDataProvider' : this.selectedDataProvider,'selectedDatatype' : this.selectedDatatype };
+        reqBody['acceptableUse'] = this.acceptableUse
         /*if(this.trustedRequest === "Yes" && (this.acceptableUse === "No" || this.acceptableUse == "")) {
             //alert("Usage policy to continue"); // Ribbon...
             this.snackBar.open('Acceptable use policy should be accepted to request trusted status', 'close', {
                 duration: 2000,
             });
         } else { */
-            if(this.trustedRequest === "Yes") {
+            if(this.trustedRequest === 'Yes') {
                // Submit API gateway request 
-               reqBody['trustedRequest'] = {"trustedRequestStatus" : "Submitted" }    
+               reqBody['trustedRequest'] = {'trustedRequestStatus' : 'Submitted' }    
             }
             //***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
-            if(this.trustedRequest === "Yes" && this.acceptableUse == "Decline") {
+            if(this.trustedRequest === 'Yes' && this.acceptableUse == 'Decline') {
                 console.log('Declined acceptable usage policy');
-                reqBody['trustedRequest'] = {"trustedRequestStatus" : "Untrusted"};
+                reqBody['trustedRequest'] = {'trustedRequestStatus' : 'Untrusted'};
                 reqBody['RequestReviewStatus'] = 'Rejected';
             }
-            if(this.trustedRequest === "No" && this.acceptableUse == "Decline"){
+            if(this.trustedRequest === 'No' && this.acceptableUse == 'Decline'){
                 console.log('Declined acceptable usage policy');
                 reqBody['RequestReviewStatus'] = 'Rejected';
             }
-            this.gatewayService.sendExportRequest("export?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+            this.gatewayService.sendExportRequest('export?message=' + encodeURI(JSON.stringify(reqBody))).subscribe(
                 (response: any) => {
-                    this.snackBar.open("Your request has been sent successfully", 'close', {
+                    this.snackBar.open('Your request has been sent successfully', 'close', {
                         duration: 2000,
                     });
                     this.onNoClick();
@@ -591,8 +638,8 @@ export class DialogBoxComponent implements OnInit {
         //     // this.acceptableUse = "Accept";
         //     this.trustedRequest =  "Yes";
         // }  
-        if(selectedVal === "Yes"){
-            this.trustedRequest =  "Yes";
+        if(selectedVal === 'Yes'){
+            this.trustedRequest =  'Yes';
         }
     }
     
@@ -600,8 +647,8 @@ export class DialogBoxComponent implements OnInit {
         let totalFilesCount = event1.files.length;   
         for(let file of event1.files) {
             
-            console.log("Bucket name is = "+ this.userBucketName)
-            console.log("File name is = " + file.name);
+            console.log('Bucket name is = '+ this.userBucketName)
+            console.log('File name is = ' + file.name);
             this.gatewayService.getPresignedUrl('presigned_url?file_name=' + file.name + '&file_type=' + file.type + '&bucket_name=' + this.userBucketName + '&username=' + this.userName).subscribe(
                 (response: any) => {
  
