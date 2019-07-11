@@ -361,12 +361,12 @@
   <h3>{{getTabHeading()}}</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
-    <mat-tab label="Manage Work Space" #tab1>
+    <mat-tab label="Manage Workstation" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <p>
           <b>
-            Select Options to Manage.
+            Please select one or multiple options below for managing your workstation. The appropriate workflow will be displayed based on the selection.
           </b>
         </p>
         <hr>
@@ -375,7 +375,7 @@
             <mat-checkbox [(ngModel)]="resizeWorkSpaceOnly"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
-                Resize Work Space
+                Resize Workstation
               </b>
             </p>
           </div>
@@ -383,37 +383,39 @@
             <mat-checkbox [(ngModel)]="resizeAddDiskOnly"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
-                Add Additional Disk
+                Add Additional Diskspace
               </b>
             </p>
           </div>
-          <div class="resize-filter-start-workspace">
+          <!-- <div class="resize-filter-start-workspace">
             <mat-checkbox [(ngModel)]="ManageBoth"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
                 Manage Both
               </b>
             </p>
-          </div>
-          <button [disabled]="!ManageBoth && !resizeWorkSpaceOnly && !resizeAddDiskOnly" style="align-self: flex-end; margin-right: 24px;" (click)="handleResizeWorkNext(1)"
+          </div> -->
+          <button [disabled]="!resizeWorkSpaceOnly && !resizeAddDiskOnly" style="align-self: flex-end; margin-right: 24px;" (click)="handleResizeWorkNext(1)"
             class="btn btn-primary dotBtn">Next</button>
         </div>
       </mat-dialog-content>
     </mat-tab>
-    <mat-tab *ngIf="(resizeWorkSpaceOnly || ManageBoth)" label="Resize Work Space" #tab2 [disabled]='selectedIndex==0 || (!resizeWorkSpaceOnly && !ManageBoth)'>
+    <mat-tab *ngIf="(resizeWorkSpaceOnly)" label="Resize Workstation" #tab2 [disabled]='selectedIndex==0 || (!resizeWorkSpaceOnly)'>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <p>
           <b>
-            Current Configuration is {{currentConfigurations[0]}} CPU (GB) and {{currentConfigurations[1]}} GB RAM
+            Your current workstation configuration is {{currentConfigurations[0]}} CPU (GB) and {{currentConfigurations[1]}} GB RAM
           </b>
         </p>
-        <p><b>Please choose the appropriate workstation size by selecting the desired CPU and RAM.</b></p>
+        <p><b>Please choose the appropriate instance type by selecting the desired CPU and RAM.</b>
+          <i>Note: Your workstation will be stopped, if it's currently running in order to resize the workstation. Please save your work before requesting the resize for workstation.</i>
+        </p>
         <hr>
         <div class="resize-form-container">
           <div class="resize-filters-section">
             <div>
-              <p><b>Select desired CPU / Memory </b></p>
+              <p><b>Select desired CPU / Memory</b></p>
             </div>
             <div class="resize-filters-form">
               <mat-form-field style='width: 42%; max-width: 42%;'>
@@ -445,7 +447,7 @@
               <mat-checkbox></mat-checkbox>
               <p style="padding-left: 10px;">
                 <b>
-                  Please Start my workspace after resize
+                  Please start my workstation after resizing to the new configuration
                 </b>
               </p>
             </div>
@@ -508,11 +510,11 @@
     <mat-tab *ngIf="(resizeAddDiskOnly || ManageBoth)" label="Disk Space" #tab3 [disabled]='selectedIndex==0 || selectedIndex==1 || (!resizeAddDiskOnly && !ManageBoth)'>
       <mat-dialog-content style="height: 100%;">
         <hr>
-        <p><b>Please specify additional disk space that you would like to be added to the Workstation</b></p>
+        <p><b>Please specify additional disk space that should be added to the workstation</b></p>
         <hr>
         <p>
           <b>
-            Selected Desired Disk Space
+            Selected Desired Diskspace
           </b>
         </p>
 
@@ -520,7 +522,7 @@
           <mat-radio-group name="diskSize" id="diskSize" required [(ngModel)]="diskSizeChange">
             <mat-radio-button value=''>No Change</mat-radio-button>
             <br />
-           <mat-radio-button value="true">Additional Disk Space</mat-radio-button>
+           <mat-radio-button value="true">Additional Diskspace</mat-radio-button>
           </mat-radio-group>
           <div *ngIf="diskSizeChange" class="resize-disk-space-edit">
             <mat-form-field style='width: 82%;'>
@@ -549,7 +551,7 @@
           <div *ngIf="!(!resizeWorkSpaceOnly && !ManageBoth)">
             <p>
               <b>
-                Work-Space Resize-Schedule
+                Workspace resize schedule
               </b>
             </p>
             <div class="resize-date-form">
@@ -573,7 +575,7 @@
           <div *ngIf="!(!resizeAddDiskOnly && !ManageBoth)">
             <p>
               <b>
-                Disk-Space Resize-Schedule
+                Additional diskspace schedule
               </b>
             </p>
             <div class="resize-date-form">

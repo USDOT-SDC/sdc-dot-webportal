@@ -482,15 +482,15 @@ export class DialogBoxComponent implements OnInit {
 
     getTabHeading() {
         if (this.selectedIndex === 0) {
-            return `Manage Work Space`;
+            return `Manage Workstation`;
         } else if (this.selectedIndex === 1) {
-            return 'Select Desired DiskSpace';
+            return 'Add Additional Diskspace';
         } else if (this.selectedIndex === 2) {
-            return 'Disk Space Management';
+            return 'Diskspace Management';
         } else if (this.selectedIndex === 3) {
-            return 'Schedule Date Work Space';
+            return 'Select schedule';
         } else {
-            return 'Resize Work Space';
+            return 'Resize Workstation';
         }
     }
 
