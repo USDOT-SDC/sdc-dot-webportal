@@ -51,7 +51,7 @@ export class WorkstationComponent implements OnInit {
 
     renderReSizeDialog(stack) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
-            width: '700px',
+            width: '720px',
             height: '630px',
             data: { mailType: 'reSize Request', stack }
         });

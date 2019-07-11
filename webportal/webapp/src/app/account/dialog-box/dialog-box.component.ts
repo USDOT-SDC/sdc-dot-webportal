@@ -62,11 +62,17 @@ export class DialogBoxComponent implements OnInit {
     diskSizeChange = '';
     cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
     memoryOptions = [2, 3.75,4, 5.25, 7.5, 8, 10.5, 15, 15.25, 16, 21, 30, 30.5, 32, 42, 61, 64, 72, 96, 128, 144, 160, 192, 256, 384, 768];
+    // tslint:disable-next-line:max-line-length
+    additionalDiskSizeOptions = [2, 3.75,4, 5.25, 7.5, 8, 10.5, 15, 15.25, 16, 21, 30, 30.5, 32, 42, 61, 64, 72, 96, 128, 144, 160, 192, 256, 384, 768];
     operatingSystem: string;
     defaultInstanceType: string;
     instanceId: string;
     selectedCpu: string;
     selectedMemory: string;
+    resizeWorkSpaceOnly = false;
+    resizeAddDiskOnly = false;
+    ManageBoth = false;
+    additionalDiskSpace = '';
     @ViewChild("fileUpload") fileUpload: FileUpload;
   
     dataTypes = [
@@ -88,6 +94,8 @@ export class DialogBoxComponent implements OnInit {
     pricingGroups = [];
     systemDate = new Date();
     workSpaceFromDate = new Date();
+    diskSpaceFromDate = new Date();
+    diskSpaceToDate = null;
     workSpaceToDate = null;
     callResolved = false;
 
@@ -354,6 +362,27 @@ export class DialogBoxComponent implements OnInit {
     }*/
 
     handleResizeWorkNext(e) {
+        /*
+
+        ****Logic to navigate if need not hide tabs but disable based on manage selection****
+
+        if (e === 1) {
+            if (this.ManageBoth || this.resizeWorkSpaceOnly) {
+                this.selectedIndexChange(1);
+                return;
+            } else if (!this.ManageBoth && !this.resizeWorkSpaceOnly) {
+                this.selectedIndexChange(2);
+                return;
+            }
+        } else if (e === 2) {
+            if (this.ManageBoth || this.resizeAddDiskOnly) {
+                this.selectedIndexChange(2);
+            } else {
+                this.selectedIndexChange(3);
+            }
+            return;
+        }
+        */
         this.selectedIndexChange(e);
     }
 
@@ -399,7 +428,8 @@ export class DialogBoxComponent implements OnInit {
     }
 
     postResizeJSON() {
-        let message = {}
+        // added additionalDiskSpace, diskSpaceFromDate , diskSpaceToDate
+        let message = {};
         message['requested_instance_type'] = this.requestedInstanceType;
         message['username'] = this.userName;
         message['user_email'] = this.userEmail;
@@ -451,9 +481,13 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTabHeading() {
-        if (this.selectedIndex === 1) {
+        if (this.selectedIndex === 0) {
+            return `Manage Work Space`;
+        } else if (this.selectedIndex === 1) {
             return 'Select Desired DiskSpace';
         } else if (this.selectedIndex === 2) {
+            return 'Disk Space Management';
+        } else if (this.selectedIndex === 3) {
             return 'Schedule Date Work Space';
         } else {
             return 'Resize Work Space';
