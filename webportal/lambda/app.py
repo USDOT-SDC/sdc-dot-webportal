@@ -1084,12 +1084,16 @@ def ssm_ec2_instance_linux(instance_id):
 ###            Parameters={ "commands":[ "mkfs -t ext4 /dev/xvdf;mkdir /data1;mount /dev/xvdf /data1/" ]  } )
   response = ssm.send_command( InstanceIds=[instance_id],
             DocumentName='AWS-RunShellScript',
-            Parameters={ "commands":[ """sleep 3;lsblk;
+            Parameters={ "commands":[ """lsblk;
 sudo mkfs -t ext4 /dev/xvdb
 cd /
 mkdir -p /data1
 sudo mount /dev/xvdb  /data1/
-echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /tmp/fstab """
+cat /etc/fstab | grep data1
+if [ $? -ne 0 ]; then
+echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
+fi
+"""
 ]  } )
   command_id = response['Command']['CommandId']
   #print(command_id)
