@@ -1,40 +1,42 @@
 [![Build Status](https://travis-ci.com/usdot-jpo-sdc/sdc-dot-webportal.svg?branch=develop)](https://travis-ci.com/usdot-jpo-sdc/sdc-dot-webportal)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-webportal&metric=alert_status)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-webportal)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-webportal&metric=coverage)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-webportal)
-# BigDataAsAPlatform
 
 # sdc-dot-webportal
-The Secure Data Commons is an online data warehousing and analysis platform for transportation researchers. On this portal, researchers can take advantage of pre-established programming environments to access and analyze a growing set of transportation-related data sets.
-The SDC platform provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
+sdc-dot-webportal is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
+
+
+The Secure Data Commons (SDC) is a cloud-based analytics platform that enables access to traffic engineers, researchers, and data scientists to various transportation related datasets. The SDC platform is a prototype created as part of the U.S. Department of Transportation (USDOT) research project.  The objective of this prototype is to provide a secure platform, which will enable USDOT and the broader transportation sector to share and collaborate their research, tools, algorithms, analysis, and more around sensitive datasets using modern, commercially available tools without the need to install tools or software locally.  Secure Data Commons (SDC) enables collaborative but controlled integration and analysis of research data at the moderate sensitivity level (PII & CBI).
+
 
 ## Table of Contents
 
 [I. Release Notes](#release-notes)
+[II. Usage Example](#usage-example)
+[III. Configuration](#configuration)
+[IV. Installation](#installation)
+[V. Design and Architecture](#design-architecture)
+[VI. Unit Tests](#unit-tests)
+[VII.  File Manifest](#file-manifest)
+[VIII.  Development Setup](#development-setup)
+[IX.  Release History](#release-history)
+[X. Contact Information](#contact-information)
+[XI. Contributing](#contributing)
+[XII. Known Bugs](#known-bugs)
+[XIII. Credits and Acknowledgment](#credits-and-acknowledgement)
+[XIV.  CODE.GOV Registration Info](#code-gov-registration-info)
 
-[II. Overview](#overview)
-
-[III. Design Diagram](#design-diagram)
-
-[IV. Getting Started](#getting-started)
-
-[V. Unit Tests](#unit-tests)
-
-[VI. Support](#support)
-
----
 
 <a name="release-notes"/>
+## Release Notes
+To be updated...
 
 
-## [I. Release Notes](ReleaseNotes.md)
-TO BE UPDATED
-
-<a name="overview"/>
-
-## II. Overview
-This is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
+<a name="usage-example"/>
+## Usage Example
 
 **[1. Onboarding process for users to the SDC system](#onboarding-users)**
+
 Onboarding a user to the SDC system involves the following steps:
 
 **Step 1- User Request**
@@ -95,15 +97,16 @@ Data curation is a process of integrating the raw data collected from various so
 **3. Published datasets**
 Published datasets are created by researchers to disseminate their research for other users to verify and reuse them beyond the original purpose for which they were collected. Published datasets are a result of combining analysis on curated datasets available in SDC platform along with other datasets or algorithms that is owned/created by a researcher or data scientist.
 
-<a name="design-diagram"/>
 
-## III. Accessing portal
 
-![sdc-dot-webportal](images/sdc-dot-webportal.png)
+<a name="configuration"/>
+## Configuration
 
-<a name="getting-started"/>
+Configuration Instructions
 
-## IV. Getting Started
+
+<a name="installation"/>
+## Installation
 
 The following instructions describe the procedure to build and deploy the webportal.
 
@@ -198,22 +201,202 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 2. Run the command below for Production Deployment -
    * Goto `../webapp/`
    * Run `./prod_deploy.sh`
-   
+
+
+
+<a name="file-manifest"/>
+## File Manifest
+A list of included files and technologies (frameworks, libraries, etc) ideally with links
+
+
+<a name="development-setup"/>
+## Development Setup
+
 ### Prerequisites
-* NA 
 
----
-<a name="unit-tests"/>
 
-## V. Unit Tests
 
-TO BE UPDATED
----
----
-<a name="support"/>
+<a name="release-history"/>
+## Release History
 
-## VI. Support
+
+<a name="contact-information"/>
+## Contact Information
+Your Name – @YourTwitter – YourEmail@example.com
+Distributed under the XYZ license. See LICENSE for more information.
+https://github.com/yourname/github-link
 
 For any queries you can reach to support@securedatacommons.com
----
-[Back to top](#toc)
+
+
+<a name="contributing"/>
+## Contributing
+1. Fork it (https://github.com/yourname/yourproject/fork)
+2. Create your feature branch (git checkout -b feature/fooBar)
+3. Commit your changes (git commit -am 'Add some fooBar')
+4. Push to the branch (git push origin feature/fooBar)
+5. Create a new Pull Request
+
+<a name="known-bugs"/>
+## Known Bugs
+
+
+<a name="credits-and-acknowledgement"/>
+## Credits and Acknowledgment
+Thank you to the Department of Transportation for funding to develop this project.
+
+
+<a name="code-gov-registration-info">
+## CODE.GOV REGISTRATION INFO
+Agency:  DOT
+Short Description:  This is a one or two sentence description of the project
+Status: Beta 
+Tags: transportation, connected vehicles, intelligent transportation systems, java
+Labor Hours: 200
+Contact Name: Jane Doe
+Contact Phone: 555-555-5555
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+![Logo of the project](https://raw.githubusercontent.com/jehna/readme-best-practices/master/sample-logo.png)
+
+# Name of the project
+> Additional information or tagline
+
+A brief description of your project, what it is used for and how does life get
+awesome when someone starts to use it.
+
+## Installing / Getting started
+
+A quick introduction of the minimal setup you need to get a hello world up &
+running.
+
+```shell
+packagemanager install awesome-project
+awesome-project start
+awesome-project "Do something!"  # prints "Nah."
+```
+
+Here you should say what actually happens when you execute the code above.
+
+### Initial Configuration
+
+Some projects require initial configuration (e.g. access tokens or keys, `npm i`).
+This is the section where you would document those requirements.
+
+## Developing
+
+Here's a brief intro about what a developer must do in order to start developing
+the project further:
+
+```shell
+git clone https://github.com/your/awesome-project.git
+cd awesome-project/
+packagemanager install
+```
+
+And state what happens step-by-step.
+
+### Building
+
+If your project needs some additional steps for the developer to build the
+project after some code changes, state them here:
+
+```shell
+./configure
+make
+make install
+```
+
+Here again you should state what actually happens when the code above gets
+executed.
+
+### Deploying / Publishing
+
+In case there's some step you have to take that publishes this project to a
+server, this is the right time to state it.
+
+```shell
+packagemanager deploy awesome-project -s server.com -u username -p password
+```
+
+And again you'd need to tell what the previous code actually does.
+
+## Features
+
+What's all the bells and whistles this project can perform?
+* What's the main functionality
+* You can also do another thing
+* If you get really randy, you can even do this
+
+## Configuration
+
+Here you should write what are all of the configurations a user can enter when
+using the project.
+
+#### Argument 1
+Type: `String`  
+Default: `'default value'`
+
+State what an argument does and how you can use it. If needed, you can provide
+an example below.
+
+Example:
+```bash
+awesome-project "Some other value"  # Prints "You're nailing this readme!"
+```
+
+#### Argument 2
+Type: `Number|Boolean`  
+Default: 100
+
+Copy-paste as many of these as you need.
+
+## Contributing
+
+When you publish something open source, one of the greatest motivations is that
+anyone can just jump in and start contributing to your project.
+
+These paragraphs are meant to welcome those kind souls to feel that they are
+needed. You should state something like:
+
+"If you'd like to contribute, please fork the repository and use a feature
+branch. Pull requests are warmly welcome."
+
+If there's anything else the developer needs to know (e.g. the code style
+guide), you should link it here. If there's a lot of things to take into
+consideration, it is common to separate this section to its own file called
+`CONTRIBUTING.md` (or similar). If so, you should say that it exists here.
+
+## Links
+
+Even though this information can be found inside the project on machine-readable
+format like in a .json file, it's good to include a summary of most useful
+links to humans using your project. You can include links like:
+
+- Project homepage: https://your.github.com/awesome-project/
+- Repository: https://github.com/your/awesome-project/
+- Issue tracker: https://github.com/your/awesome-project/issues
+  - In case of sensitive bugs like security vulnerabilities, please contact
+    my@email.com directly instead of using issue tracker. We value your effort
+    to improve the security and privacy of this project!
+- Related projects:
+  - Your other project: https://github.com/your/other-project/
+  - Someone else's project: https://github.com/someones/awesome-project/
+
+
+## Licensing
+
+One really important part: Give your project a proper license. Here you should
+state what the license is and how to find the text version of the license.
+Something like:
+
+"The code in this project is licensed under MIT license."
