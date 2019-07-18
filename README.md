@@ -41,12 +41,14 @@ The Secure Data Commons (SDC) is a cloud-based analytics platform that enables a
 
 
 <a name="release-notes"/>
+
 ## Release Notes
 
 To be updated...
 
 
 <a name="usage-example"/>
+
 ## Usage Example
 
 **[1. Onboarding process for users to the SDC system](#onboarding-users)**
@@ -114,6 +116,7 @@ Published datasets are created by researchers to disseminate their research for 
 
 
 <a name="configuration"/>
+
 ## Configuration
 
 To be updated...
@@ -121,6 +124,7 @@ To be updated...
 
 
 <a name="installation"/>
+
 ## Installation
 
 The following instructions describe the procedure to build and deploy the webportal.
@@ -220,6 +224,7 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 
 
 <a name="file-manifest"/>
+
 ## File Manifest
 
 To be updated...
@@ -227,6 +232,7 @@ To be updated...
 
 
 <a name="development-setup"/>
+
 ## Development Setup
 
 To be updated...
@@ -237,6 +243,7 @@ N/A
 
 
 <a name="release-history"/>
+
 ## Release History
 
 To be updated...
@@ -244,6 +251,7 @@ To be updated...
 
 
 <a name="contact-information"/>
+
 ## Contact Information
 Your Name – @YourTwitter – YourEmail@example.com
 Distributed under the XYZ license. See LICENSE for more information.
@@ -253,6 +261,7 @@ For any queries you can reach to support@securedatacommons.com
 
 
 <a name="contributing"/>
+
 ## Contributing
 1. Fork it (https://github.com/yourname/yourproject/fork)
 2. Create your feature branch (git checkout -b feature/fooBar)
@@ -261,15 +270,18 @@ For any queries you can reach to support@securedatacommons.com
 5. Create a new Pull Request
 
 <a name="known-bugs"/>
+
 ## Known Bugs
 
 
 <a name="credits-and-acknowledgement"/>
+
 ## Credits and Acknowledgment
 Thank you to the Department of Transportation for funding to develop this project.
 
 
 <a name="code-gov-registration-info">
+
 ## CODE.GOV REGISTRATION INFO
 Agency:  DOT
 Short Description:  This is a one or two sentence description of the project
