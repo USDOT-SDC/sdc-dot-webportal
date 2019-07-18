@@ -3,12 +3,15 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-webportal&metric=coverage)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-webportal)
 
 # sdc-dot-webportal
-sdc-dot-webportal is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
+sdc-dot-webportal is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
 The Secure Data Commons (SDC) is a cloud-based analytics platform that enables access to traffic engineers, researchers, and data scientists to various transportation related datasets. The SDC platform is a prototype created as part of the U.S. Department of Transportation (USDOT) research project.  The objective of this prototype is to provide a secure platform, which will enable USDOT and the broader transportation sector to share and collaborate their research, tools, algorithms, analysis, and more around sensitive datasets using modern, commercially available tools without the need to install tools or software locally.  Secure Data Commons (SDC) enables collaborative but controlled integration and analysis of research data at the moderate sensitivity level (PII & CBI).
 
+
+<!---                           -->
 <!---     Table of Contents     -->
+<!---                           -->
 ## Table of Contents
 
 [I. Release Notes](#release-notes)
@@ -40,10 +43,18 @@ The Secure Data Commons (SDC) is a cloud-based analytics platform that enables a
 [XIV.  CODE.GOV Registration Info](#code-gov-registration-info)
 
 
+<!---                           -->
+<!---     Release Notes         -->
+<!---                           -->
+
 <a name="release-notes"/>
 
 ## Release Notes
 
+
+<!---                           -->
+<!---     Usage Example         -->
+<!---                           -->
 
 <a name="usage-example"/>
 
@@ -112,11 +123,17 @@ Data curation is a process of integrating the raw data collected from various so
 Published datasets are created by researchers to disseminate their research for other users to verify and reuse them beyond the original purpose for which they were collected. Published datasets are a result of combining analysis on curated datasets available in SDC platform along with other datasets or algorithms that is owned/created by a researcher or data scientist.
 
 
+<!---                           -->
+<!---     Configuration         -->
+<!---                           -->
 
 <a name="configuration"/>
 
 ## Configuration
 
+<!---                           -->
+<!---     Installation          -->
+<!---                           -->
 
 <a name="installation"/>
 
@@ -217,57 +234,72 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
    * Run `./prod_deploy.sh`
 
 
-
+<!---                           -->
+<!---     File Manifest         -->
+<!---                           -->
 
 <a name="file-manifest"/>
 
 ## File Manifest
 
 
-
+<!---                           -->
+<!---     Development Setup     -->
+<!---                           -->
 
 <a name="development-setup"/>
 
 ## Development Setup
-
-
 
 ### Prerequisites
 
 N/A
 
 
+<!---                           -->
+<!---     Release History       -->
+<!---                           -->
+
 <a name="release-history"/>
 
 ## Release History
 
 
-
-
+<!---                             -->
+<!---     Contact Information     -->
+<!---                             -->
 
 <a name="contact-information"/>
 
 ## Contact Information
-Your Name – @YourTwitter – YourEmail@example.com
+<!-- Your Name – @YourTwitter – YourEmail@example.com
 Distributed under the XYZ license. See LICENSE for more information.
-https://github.com/yourname/github-link
+https://github.com/yourname/github-link -->
 
 For any queries you can reach to support@securedatacommons.com
 
 
+<!---                           -->
+<!---     Contributing          -->
+<!---                           -->
+
 <a name="contributing"/>
 
 ## Contributing
-1. Fork it (https://github.com/yourname/yourproject/fork)
-2. Create your feature branch (git checkout -b feature/fooBar)
-3. Commit your changes (git commit -am 'Add some fooBar')
-4. Push to the branch (git push origin feature/fooBar)
-5. Create a new Pull Request
+
+
+<!---                           -->
+<!---     Known Bugs            -->
+<!---                           -->
 
 <a name="known-bugs"/>
 
 ## Known Bugs
 
+
+<!---                                    -->
+<!---     Credits and Acknowledgment     -->
+<!---                                    -->
 
 <a name="credits-and-acknowledgement"/>
 
@@ -275,14 +307,18 @@ For any queries you can reach to support@securedatacommons.com
 Thank you to the Department of Transportation for funding to develop this project.
 
 
+<!---                                    -->
+<!---     CODE.GOV Registration Info     -->
+<!---                                    -->
+
 <a name="code-gov-registration-info">
 
-## CODE.GOV REGISTRATION INFO
+## CODE.GOV Registration Info
 Agency:  DOT
-Short Description:  This is a one or two sentence description of the project
+Short Description:  sdc-dot-webportal is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 Status: Beta 
-Tags: transportation, connected vehicles, intelligent transportation systems, java
-Labor Hours: 200
-Contact Name: Jane Doe
-Contact Phone: 555-555-5555
+Tags: transportation, connected vehicles, intelligent transportation systems
+Labor Hours:
+Contact Name: support@securedatacommons.com
+<!-- Contact Phone: -->
 
