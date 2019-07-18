@@ -12,18 +12,31 @@ The Secure Data Commons (SDC) is a cloud-based analytics platform that enables a
 ## Table of Contents
 
 [I. Release Notes](#release-notes)
+
 [II. Usage Example](#usage-example)
+
 [III. Configuration](#configuration)
+
 [IV. Installation](#installation)
+
 [V. Design and Architecture](#design-architecture)
+
 [VI. Unit Tests](#unit-tests)
+
 [VII.  File Manifest](#file-manifest)
+
 [VIII.  Development Setup](#development-setup)
+
 [IX.  Release History](#release-history)
+
 [X. Contact Information](#contact-information)
+
 [XI. Contributing](#contributing)
+
 [XII. Known Bugs](#known-bugs)
+
 [XIII. Credits and Acknowledgment](#credits-and-acknowledgement)
+
 [XIV.  CODE.GOV Registration Info](#code-gov-registration-info)
 
 
