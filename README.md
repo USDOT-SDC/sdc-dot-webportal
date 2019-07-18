@@ -8,7 +8,7 @@ sdc-dot-webportal is a online data warehousing and analysis platform, which prov
 
 The Secure Data Commons (SDC) is a cloud-based analytics platform that enables access to traffic engineers, researchers, and data scientists to various transportation related datasets. The SDC platform is a prototype created as part of the U.S. Department of Transportation (USDOT) research project.  The objective of this prototype is to provide a secure platform, which will enable USDOT and the broader transportation sector to share and collaborate their research, tools, algorithms, analysis, and more around sensitive datasets using modern, commercially available tools without the need to install tools or software locally.  Secure Data Commons (SDC) enables collaborative but controlled integration and analysis of research data at the moderate sensitivity level (PII & CBI).
 
-
+<!---     Table of Contents     -->
 ## Table of Contents
 
 [I. Release Notes](#release-notes)
@@ -43,8 +43,6 @@ The Secure Data Commons (SDC) is a cloud-based analytics platform that enables a
 <a name="release-notes"/>
 
 ## Release Notes
-
-To be updated...
 
 
 <a name="usage-example"/>
@@ -119,9 +117,6 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## Configuration
 
-To be updated...
-
-
 
 <a name="installation"/>
 
@@ -186,7 +181,7 @@ chmod u+x sdc-add-metadata-to-s3-object.sh
    * open `http://localhost:4200`
    
    
-## Configuration UI changes
+### Configuration UI changes
 
 ```sh 
 NOTE - Do not check in configuration value into project repository for the security purpose
@@ -206,7 +201,7 @@ Cognito configuration
     - API_ENDPOINT - URL for the API endpoint
     - STREAMING_URL - Streaming URL for the webportal
 
-## Deployment steps for the application UI
+### Deployment steps for the application UI
 
    
 ```sh 
@@ -223,11 +218,11 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 
 
 
+
 <a name="file-manifest"/>
 
 ## File Manifest
 
-To be updated...
 
 
 
@@ -235,7 +230,7 @@ To be updated...
 
 ## Development Setup
 
-To be updated...
+
 
 ### Prerequisites
 
@@ -246,7 +241,7 @@ N/A
 
 ## Release History
 
-To be updated...
+
 
 
 
