@@ -315,10 +315,17 @@ Thank you to the Department of Transportation for funding to develop this projec
 
 ## CODE.GOV Registration Info
 Agency:  DOT
+
 Short Description:  sdc-dot-webportal is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
-Status: Beta 
+
+Status: Beta
+
 Tags: transportation, connected vehicles, intelligent transportation systems
+
 Labor Hours:
+
 Contact Name: support@securedatacommons.com
+
 <!-- Contact Phone: -->
+
 
