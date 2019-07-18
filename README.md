@@ -49,7 +49,7 @@ The Secure Data Commons (SDC) is a cloud-based analytics platform that enables a
 
 <a name="release-notes"/>
 
-## Release Notes
+## I. Release Notes
 
 
 <!---                           -->
@@ -58,7 +58,7 @@ The Secure Data Commons (SDC) is a cloud-based analytics platform that enables a
 
 <a name="usage-example"/>
 
-## Usage Example
+## II. Usage Example
 
 **[1. Onboarding process for users to the SDC system](#onboarding-users)**
 
@@ -129,7 +129,8 @@ Published datasets are created by researchers to disseminate their research for 
 
 <a name="configuration"/>
 
-## Configuration
+## III. Configuration
+
 
 <!---                           -->
 <!---     Installation          -->
@@ -137,7 +138,7 @@ Published datasets are created by researchers to disseminate their research for 
 
 <a name="installation"/>
 
-## Installation
+## IV. Installation
 
 The following instructions describe the procedure to build and deploy the webportal.
 
@@ -234,13 +235,33 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
    * Run `./prod_deploy.sh`
 
 
+<!---                                 -->
+<!---     Design and Architecture     -->
+<!---                                 -->
+
+<a name="design-architecture"/>
+
+## V. Design and Architecture
+
+
+<!---                           -->
+<!---     Unit Tests          -->
+<!---                           -->
+
+<a name="unit-tests"/>
+
+## VI. Unit Tests
+
+
+
+
 <!---                           -->
 <!---     File Manifest         -->
 <!---                           -->
 
 <a name="file-manifest"/>
 
-## File Manifest
+## VII. File Manifest
 
 
 <!---                           -->
@@ -249,7 +270,7 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 
 <a name="development-setup"/>
 
-## Development Setup
+## VIII. Development Setup
 
 ### Prerequisites
 
@@ -262,7 +283,7 @@ N/A
 
 <a name="release-history"/>
 
-## Release History
+## IX. Release History
 
 
 <!---                             -->
@@ -271,7 +292,8 @@ N/A
 
 <a name="contact-information"/>
 
-## Contact Information
+## X. Contact Information
+
 <!-- Your Name – @YourTwitter – YourEmail@example.com
 Distributed under the XYZ license. See LICENSE for more information.
 https://github.com/yourname/github-link -->
@@ -285,7 +307,7 @@ For any queries you can reach to support@securedatacommons.com
 
 <a name="contributing"/>
 
-## Contributing
+## XI. Contributing
 
 
 <!---                           -->
@@ -294,7 +316,7 @@ For any queries you can reach to support@securedatacommons.com
 
 <a name="known-bugs"/>
 
-## Known Bugs
+## XII. Known Bugs
 
 
 <!---                                    -->
@@ -303,7 +325,7 @@ For any queries you can reach to support@securedatacommons.com
 
 <a name="credits-and-acknowledgement"/>
 
-## Credits and Acknowledgment
+## XIII. Credits and Acknowledgment
 Thank you to the Department of Transportation for funding to develop this project.
 
 
@@ -313,10 +335,10 @@ Thank you to the Department of Transportation for funding to develop this projec
 
 <a name="code-gov-registration-info">
 
-## CODE.GOV Registration Info
+## XIV. CODE.GOV Registration Info
 Agency:  DOT
 
-Short Description:  sdc-dot-webportal is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
+Short Description: sdc-dot-webportal is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
 Status: Beta
 
@@ -327,5 +349,3 @@ Labor Hours:
 Contact Name: support@securedatacommons.com
 
 <!-- Contact Phone: -->
-
-
