@@ -12,8 +12,9 @@
           <br/><mat-radio-button value="false">No</mat-radio-button>
         </mat-radio-group>
       </div>
-      <mat-form-field style='width: 100%' *ngIf="messageModel.dotEmployee === 'true'">
-          <input matInput placeholder="If yes, please provide valid USDOT email address" (ngModelChange)="isEmailValid=validateEmailRegex()" [(ngModel)]="messageModel.dotEmployeeEmail" value="{{messageModel.dotEmployeeEmail}}" required>
+      <mat-form-field style='width: 100%' *ngIf="messageModel.dotEmployee === 'true'" appearance="outline">
+          <mat-label>If yes, please provide valid USDOT email address.</mat-label>
+          <input matInput placeholder="enter valid email address" (ngModelChange)="isEmailValid=validateEmailRegex()" [(ngModel)]="messageModel.dotEmployeeEmail" value="{{messageModel.dotEmployeeEmail}}" required>
           <mat-error align="start" *ngIf="!isEmailValid">Please enter a valid email address</mat-error>
           <!-- <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
               Please enter a valid email address
@@ -35,8 +36,9 @@
       </div>
       <hr>
       <h5 style="font-size:16px;padding-top: 10px;">Geographic Extent of Access</h5>
-      <mat-form-field style='width: 100%'>
-        <textarea matInput name="stateList" id="stateList" placeholder="Enter the state(s) for which you would like to request access." [(ngModel)]="messageModel.stateList" required></textarea>
+      <mat-form-field style='width: 100%' appearance="outline">
+        <mat-label>Enter the state(s) for which you would like to request access.</mat-label>
+        <textarea matInput name="stateList" id="stateList" placeholder="enter states" [(ngModel)]="messageModel.stateList" required></textarea>
         <mat-error align="end" *ngIf="!messageModel.stateList">Required</mat-error>
       </mat-form-field>
       <p style="margin-top: -15px;color: #a09e9e;font-size: 12px;"> use commas when requesting multiple states (e.g. KN, VI)</p>

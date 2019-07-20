@@ -9,6 +9,9 @@
 .mat-dialog-container {
     border: solid 2px #0b264db8 !important;
 }
+mat-label {
+    color: black;
+}
 mat_tab_style{
     height: 451px;
 }
