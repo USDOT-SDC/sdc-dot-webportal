@@ -1133,4 +1133,154 @@ def ec2_instance_start(instance_id):
   except ClientError as e:
     print(e)
 
+@app.route('/user_recommened_instances_list', authorizer=authorizer, cors=cors_config)
+def user_recommened_instances_list():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['wsrequest']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+#########
+    try:
+      response=get_instnances_prices(params)
+    except BaseException as be:
+        logging.exception("Error: Failed to process manage workstation request" + str(be))
+        raise ChaliceViewError("Failed to process manage workstation request")
 
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})
+
+
+
+print("Recommended EC2 instances ")
+print("=====================")
+def instance_family_compare_cost(famList,instances): 
+  lowestCostList = [] 
+  listIndex = -1 
+  prvlistIndex = -1 
+  for instance in instances['pricelist']:
+    listIndex = listIndex + 1
+    if instance['instnaceFamily'] != famList: 
+       continue
+    if prvlistIndex >= 0:
+       if instances['pricelist'][prvlistIndex]['cost'] > instances['pricelist'][listIndex]['cost']:
+          lowestCostList = instances['pricelist'][listIndex] 
+          prvlistIndex = listIndex 
+          continue
+       if instances['pricelist'][prvlistIndex]['cost'] < instances['pricelist'][listIndex]['cost']:
+          lowestCostList = instances['pricelist'][prvlistIndex] 
+          continue
+       if instances['pricelist'][listIndex]['cost'] == instances['pricelist'][prvlistIndex]['cost']:
+          str_storage=instances['pricelist'][prvlistIndex]['storage']
+          if (str_storage.find('EBS') != -1):
+             lowestCostList = instances['pricelist'][prvlistIndex] 
+             continue
+          else:
+            lowestCostList = instances['pricelist'][listIndex] 
+    prvlistIndex = listIndex 
+  return lowestCostList
+######
+def get_cost_per_family(familyList,instances): 
+  lowestCostList = [] 
+  recommenedInstances = {}
+  recommenedInstances['pricelist'] = []
+  for famList in familyList: 
+    famList = famList.lstrip()
+    famNum = 0
+    listIndex = -1
+    for instance in instances['pricelist']:
+      if instance['instnaceFamily'] != famList: 
+         listIndex = listIndex + 1
+         continue
+      famNum = famNum + 1
+### one instnace and nothing to compare 
+    if famNum == 1: 
+      lowestCostList=instances['pricelist'][listIndex]
+      recommenedInstances['pricelist'].append(lowestCostList)
+### multiple instance families found
+    if famNum >= 1: 
+      lowestCostList=instance_family_compare_cost(famList,instances) 
+      recommenedInstances['pricelist'].append(lowestCostList)
+
+  return recommenedInstances
+       
+####### function to get unique values 
+def family_unique_list(tempList): 
+# intilize a null list 
+  unique_list = [] 
+# traverse for all elements 
+  for x in tempList: 
+      # check if exists in unique_list or not 
+     if x not in unique_list: 
+       unique_list.append(x) 
+  return unique_list
+
+####
+def get_instnances_prices(params):
+  VCPU = params['vcpu']
+  memory = params['memory']
+  MEMORY = memory + ' GiB'
+  operatingSystem = params['operatingSystem']
+  pricing = boto3.client('pricing')
+  response = pricing.get_products(
+    ServiceCode='AmazonEC2',
+    Filters = [
+       {'Type' :'TERM_MATCH', 'Field':'licenseModel',   'Value':'No License required'  },
+       {'Type' :'TERM_MATCH', 'Field':'tenancy' ,      'Value':'Shared'       },  
+       {'Type' :'TERM_MATCH', 'Field':'preInstalledSw', 'Value':'NA'       },  
+       {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':operatingSystem       },  
+       {'Type' :'TERM_MATCH', 'Field':'vcpu',            'Value':VCPU            },
+       {'Type' :'TERM_MATCH', 'Field':'memory',          'Value':MEMORY          },
+       {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'}
+    ]
+    )
+
+  instances = {}
+  instances['pricelist'] = []
+  for pricelist in response['PriceList']:
+    if (pricelist.find('per On Demand') == -1):
+      continue
+    product = json.loads(pricelist)
+    productfamily = product['product']['productFamily']
+    data = json.dumps(product['product'])
+    attributes = json.loads(data)
+    instanceFamily = attributes['attributes']['instanceFamily']
+    instanceType = attributes['attributes']['instanceType']
+    storage =  attributes['attributes']['storage']
+    ### move up the jason string
+    data = json.dumps(product['terms'])
+    terms = json.loads(data)
+    data = json.dumps(terms['OnDemand'])
+    terms = json.loads(data)
+    for key in terms:
+      data = terms[key]
+    data1 = json.dumps(data)
+    terms = json.loads(data1)
+    data = json.dumps(terms['priceDimensions'])
+    terms = json.loads(data)
+    for key in terms:
+      data = terms[key]
+    for key in terms:
+      data = terms[key]
+    data1 = json.dumps(data)
+    terms = json.loads(data1)
+    pricePerUnit=(round(float(terms['pricePerUnit']['USD']),4))
+    info = {"instnaceFamily" : instanceFamily,"instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : VCPU, "memory" : MEMORY,"storage" : storage, "cost" : pricePerUnit}
+
+    instances['pricelist'].append(info)
+
+### sort by lowest cost
+  familyList = []
+  for instance in instances['pricelist']:
+    familyList.append(str(instance['cost']) + ' : ' + instance['instnaceFamily'])
+  familyList.sort()
+# make a unique list
+  tempList = []
+  for InsFamily in familyList: 
+    tempList.append(InsFamily.split(':')[1])
+    
+  familyList = family_unique_list(tempList) 
+  response=get_cost_per_family(familyList,instances) 
+  return response 
+  
