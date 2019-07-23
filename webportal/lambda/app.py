@@ -803,79 +803,6 @@ def updatetrustedtatus():
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
 
-def parse_column(price,name):
-  col_position = price.find(name)
-  col_length = len(name)
-  string_len = len(price)
-  string_beg = col_position + col_length + 2 
-  cls_price = price.replace('}',' ')
-  cls_price1 = cls_price.replace('\"',' ')
-  new_line = (cls_price1[string_beg:string_len])
-  pull_column = new_line.split(',')
-  val = pull_column[0]
-  val1 = val.rstrip()
-  value = val1.lstrip()
-  return(value)
-
-
-@app.route('/get_desired_instance_types', authorizer=authorizer, cors=cors_config)
-def get_desired_instance_types_costs():
-    params = app.current_request.query_params
-    logging.info("CPU value - {}".format(params['cpu']))
-    instances = {}
-    try:
-        pricing = boto3.client('pricing')
-        desired_memory = params['memory'] + ' GiB'
-        response = pricing.get_products(
-            ServiceCode='AmazonEC2',
-            Filters = [
-                {'Type' :'TERM_MATCH', 'Field':'vcpu',            'Value':params['cpu']            },
-                {'Type' :'TERM_MATCH', 'Field':'memory',          'Value':desired_memory        },
-                {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'},
-                {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':params['os'] },
-                {'Type' :'TERM_MATCH', 'Field':'licenseModel',   'Value':'No License required'  },
-                {'Type' :'TERM_MATCH', 'Field':'storage' ,       'Value':'EBS only'       },
-                {'Type' :'TERM_MATCH', 'Field':'tenancy' ,      'Value':'Shared'       },
-                {'Type' :'TERM_MATCH', 'Field':'preInstalledSw', 'Value':'NA'       },
-            ]
-        )
-
-        instances['pricing'] = []
-        for price in response['PriceList']:
-        #### skip RHEL and SUSE
-            if (price.find('RHEL') != -1):
-                continue
-            if (price.find('SUSE') != -1):
-                continue
-            if (price.find('per On Demand') == -1):
-                continue
-        ### Parse each column.... 
-            search_column = 'instanceFamily'
-            instanceFamily=parse_column(price, search_column)
-        ###########
-            search_column = 'instanceType'
-            instanceType=parse_column(price, search_column)
-        ###########
-            search_column = 'operatingSystem'
-            operatingSystem=parse_column(price, search_column)
-        ###########
-            search_column = 'description'
-            tmp_usd=parse_column(price,search_column)
-            usd = tmp_usd.replace('$','')
-            i = usd.find('per')
-            usd = usd[0:i]
-            usd = usd.rstrip()
-        # exit()
-            info = {"instanceFamily" : instanceFamily, "instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : params['cpu'], "memory" : desired_memory, "cost" : usd}
-            instances['pricing'].append(info)
-
-        ##  print(json.dumps(instances,indent=2))
-    except BaseException as be:
-        logging.exception("Error: Failed to get instance types and associated costs" + str(be))
-        raise ChaliceViewError("Failed to get instance types and costs")
-    return Response(body=instances,
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})
 
 @app.route('/manage_user_workstation', authorizer=authorizer, cors=cors_config)
 def manage_user_workstation():
@@ -1133,25 +1060,24 @@ def ec2_instance_start(instance_id):
   except ClientError as e:
     print(e)
 
-@app.route('/user_recommened_instances_list', authorizer=authorizer, cors=cors_config)
-def user_recommened_instances_list():
-    paramsQuery = app.current_request.query_params
-    paramsString = paramsQuery['wsrequest']
-    logger.setLevel("INFO")
-    logging.info("Received request {}".format(paramsString))
-    params = json.loads(paramsString)
+
+@app.route('/get_desired_instance_types', authorizer=authorizer, cors=cors_config)
+def get_desired_instance_types_costs():
+  paramsQuery = app.current_request.query_params
+  paramsString = paramsQuery['wsrequest']
+  logger.setLevel("INFO")
+  logging.info("Received request {}".format(paramsString))
+  params = json.loads(paramsString)
 #########
-    try:
-      response=get_instnances_prices(params)
-    except BaseException as be:
+  try:
+    response=get_instnances_prices(params)
+  except BaseException as be:
         logging.exception("Error: Failed to process manage workstation request" + str(be))
         raise ChaliceViewError("Failed to process manage workstation request")
 
-    return Response(body=response,
+  return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
-
-
 
 print("Recommended EC2 instances ")
 print("=====================")
@@ -1184,7 +1110,7 @@ def instance_family_compare_cost(famList,instances):
 def get_cost_per_family(familyList,instances): 
   lowestCostList = [] 
   recommenedInstances = {}
-  recommenedInstances['pricelist'] = []
+  recommenedInstances['recommendedlist'] = []
   for famList in familyList: 
     famList = famList.lstrip()
     famNum = 0
@@ -1197,13 +1123,14 @@ def get_cost_per_family(familyList,instances):
 ### one instnace and nothing to compare 
     if famNum == 1: 
       lowestCostList=instances['pricelist'][listIndex]
-      recommenedInstances['pricelist'].append(lowestCostList)
+      recommenedInstances['recommendedlist'].append(lowestCostList)
 ### multiple instance families found
     if famNum >= 1: 
       lowestCostList=instance_family_compare_cost(famList,instances) 
-      recommenedInstances['pricelist'].append(lowestCostList)
+      recommenedInstances['recommendedlist'].append(lowestCostList)
 
   return recommenedInstances
+  #print(json.dumps(recommenedInstances,indent=2))
        
 ####### function to get unique values 
 def family_unique_list(tempList): 
@@ -1282,5 +1209,5 @@ def get_instnances_prices(params):
     
   familyList = family_unique_list(tempList) 
   response=get_cost_per_family(familyList,instances) 
-  return response 
+  return (instances,response)
   
