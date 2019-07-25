@@ -1062,7 +1062,7 @@ def ec2_instance_start(instance_id):
 
 
 @app.route('/get_desired_instance_types', authorizer=authorizer, cors=cors_config)
-def get_desired_instance_types_costs():
+def get_desired_instance_types():
   paramsQuery = app.current_request.query_params
   paramsString = paramsQuery['wsrequest']
   logger.setLevel("INFO")
