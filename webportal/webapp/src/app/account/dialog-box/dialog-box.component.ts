@@ -6,6 +6,7 @@ import {FileUpload} from 'primeng/fileupload';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule} from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
+import { element } from 'protractor';
 // import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
@@ -91,6 +92,7 @@ export class DialogBoxComponent implements OnInit {
     pricing = [];
     requestedInstanceType = undefined;
     instanceFamilyList = [];
+    recommendedInstanceFamilyList = [];
     pricingGroups = [];
     systemDate = new Date();
     workSpaceFromDate = new Date();
@@ -416,24 +418,47 @@ export class DialogBoxComponent implements OnInit {
     }
 
     transformPricing(pricingList) {
-        let instanceFamilyList = pricingList.map(e => {
-            return e.instanceFamily;
+        let instanceFamilyList = pricingList.map(e=>{
+            return e.pricelist;
         });
+
+        let recommendedInstanceFamilyList = pricingList.map(e =>{
+            return e.recommendedlist;
+        });
+
         this.instanceFamilyList = Array.from(new Set(instanceFamilyList));
-        console.log('-----------------', this.instanceFamilyList);
-        // for feach of types = make list
+        console.log("instance family price list - ", this.instanceFamilyList)
         let pricingGroups = [];
         this.instanceFamilyList.forEach(element => {
             let innerArray = [];
-            this.pricing.forEach(e => {
-                if (e.instanceFamily === element) {
-                    innerArray.push(e);
-                }
+            element.array.forEach(g => {
+                console.log(g.instanceFamily)
             });
+            console.log("Inner array - ", innerArray);
             pricingGroups.push(innerArray);
-        });
+        });  
         this.pricingGroups = [...pricingGroups];
         console.log('-----------------', this.pricingGroups);
+        
+        // let instanceFamilyList = pricingList.map(e => {
+        //     console.log("Value of e - ", e)
+        //     return e.pricelist;
+        // });
+        // this.instanceFamilyList = Array.from(new Set(instanceFamilyList));
+        // console.log('-----------------', this.instanceFamilyList);
+        // // for feach of types = make list
+        // let pricingGroups = [];
+        // this.instanceFamilyList.forEach(element => {
+        //     let innerArray = [];
+        //     this.pricing.forEach(e => {
+        //         if (e.instanceFamily === element) {
+        //             innerArray.push(e);
+        //         }
+        //     });
+        //     pricingGroups.push(innerArray);
+        // });
+        // this.pricingGroups = [...pricingGroups];
+        // console.log('-----------------', this.pricingGroups);
     }
 
     postResizeJSON() {
@@ -515,7 +540,7 @@ export class DialogBoxComponent implements OnInit {
         this.gatewayService.getDesiredInstanceTypesAndCosts('get_desired_instance_types?cpu=' + this.selectedCpu + '&memory=' + this.selectedMemory + '&os=' + this.operatingSystem).subscribe(
             (response: any) => {
                 console.log(response);
-                this.pricing = response && response.pricing;
+                this.pricing = response
                 this.transformPricing(this.pricing);
                 this.callResolved = true;
                 // this.snackBar.open('Your request has been sent successfully', 'close', {
