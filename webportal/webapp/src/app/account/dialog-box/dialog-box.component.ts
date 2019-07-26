@@ -104,6 +104,7 @@ export class DialogBoxComponent implements OnInit {
     subDataSets = [];
     subDataSetsWydot = [];
     currentConfigurations = [];
+    vcpu = '';
 
     //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
@@ -397,6 +398,7 @@ export class DialogBoxComponent implements OnInit {
 
     handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
         this.requestedInstanceType = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]["instanceType"];
+        this.vcpu = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]["vcpu"];
     }
 
     hasPriceSelection() {
@@ -441,6 +443,7 @@ export class DialogBoxComponent implements OnInit {
         if (this.resizeWorkSpaceOnly || this.ManageBoth) {
             let message = {};
             message['requested_instance_type'] = this.requestedInstanceType;
+            message['vcpu'] = this.vcpu;
             message['username'] = this.userName;
             message['user_email'] = this.userEmail;
             message['default_instance_type'] = this.defaultInstanceType;
