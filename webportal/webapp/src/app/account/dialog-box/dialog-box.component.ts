@@ -420,47 +420,24 @@ export class DialogBoxComponent implements OnInit {
     }
 
     transformPricing(pricingList) {
-        let instanceFamilyList = pricingList.map(e=>{
-            return e.pricelist;
+        this.pricingGroups = []
+        this.instanceFamilyList = []
+        let filteredPriceList = []
+        pricingList.map(e => {
+            if (e.pricelist) {
+                filteredPriceList = [...filteredPriceList, ...e.pricelist]
+            };
         });
-
-        let recommendedInstanceFamilyList = pricingList.map(e =>{
-            return e.recommendedlist;
+        let fileteredRecommendedInstanceFamilyList = []
+        pricingList.map(e => {
+            if (e.recommendedlist) {
+                fileteredRecommendedInstanceFamilyList = [...fileteredRecommendedInstanceFamilyList, ...e.recommendedlist]
+            };
         });
-
-        this.instanceFamilyList = Array.from(new Set(instanceFamilyList));
-        console.log("instance family price list - ", this.instanceFamilyList)
-        let pricingGroups = [];
-        this.instanceFamilyList.forEach(element => {
-            let innerArray = [];
-            element.array.forEach(g => {
-                console.log(g.instanceFamily)
-            });
-            console.log("Inner array - ", innerArray);
-            pricingGroups.push(innerArray);
-        });  
-        this.pricingGroups = [...pricingGroups];
-        console.log('-----------------', this.pricingGroups);
-        
-        // let instanceFamilyList = pricingList.map(e => {
-        //     console.log("Value of e - ", e)
-        //     return e.pricelist;
-        // });
-        // this.instanceFamilyList = Array.from(new Set(instanceFamilyList));
-        // console.log('-----------------', this.instanceFamilyList);
-        // // for feach of types = make list
-        // let pricingGroups = [];
-        // this.instanceFamilyList.forEach(element => {
-        //     let innerArray = [];
-        //     this.pricing.forEach(e => {
-        //         if (e.instanceFamily === element) {
-        //             innerArray.push(e);
-        //         }
-        //     });
-        //     pricingGroups.push(innerArray);
-        // });
-        // this.pricingGroups = [...pricingGroups];
-        // console.log('-----------------', this.pricingGroups);
+        this.pricingGroups.push(filteredPriceList)
+        this.pricingGroups.push(fileteredRecommendedInstanceFamilyList)
+        this.instanceFamilyList.push("Pricing List")
+        this.instanceFamilyList.push("Recomended List")
     }
 
     postResizeJSON() {

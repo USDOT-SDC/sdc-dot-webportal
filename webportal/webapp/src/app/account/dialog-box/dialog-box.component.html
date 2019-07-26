@@ -499,51 +499,6 @@
               </div>
             </mat-expansion-panel>
           </div>
-          <div *ngFor="let instanceType of instanceFamilyList; let j = index">
-            <mat-expansion-panel style="margin-top: 40px;">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{instanceType}}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <div class="pricing-container">
-                <div class="resize-general-purpose">
-                  <div class="general-purpose-pricing">
-                    <div class="general-pricing-headers">
-                      <div>
-                        Instance Name
-                      </div>
-                      <div>
-                        CPU
-                      </div>
-                      <div>
-                        Memory
-                      </div>
-                      <div style="margin-right: 62px;">
-                        COST
-                      </div>
-                    </div>
-                    
-                    <div class="general-purpose-body" *ngFor="let item of pricingGroups[j]; let i = index">
-                      <div class="pricing-instance">
-                        <input (click)="handlePricingSelection(j,i)" type="radio" name="pricing">
-                        <span style="margin-left: 3px;">{{item.instanceType}}</span>
-                      </div>
-                      <div>
-                        {{item.vcpu}}
-                      </div>
-                      <div>
-                        {{getTransformedMemory(item.memory)}}
-                      </div>
-                      <div>
-                        {{getTransformedPrice(item.cost)}}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </mat-expansion-panel>
-          </div>
           <div *ngIf="pricing.length === 0 && resizeFilterFormSubmitted && callResolved">
             No Pricing data available, please try with different CPU/Memory combinations.
           </div>
