@@ -435,10 +435,10 @@ export class DialogBoxComponent implements OnInit {
                 fileteredRecommendedInstanceFamilyList = [...fileteredRecommendedInstanceFamilyList, ...e.recommendedlist]
             };
         });
-        this.pricingGroups.push(filteredPriceList)
         this.pricingGroups.push(fileteredRecommendedInstanceFamilyList)
-        this.instanceFamilyList.push("Pricing List")
+        this.pricingGroups.push(filteredPriceList)
         this.instanceFamilyList.push("Recomended List")
+        this.instanceFamilyList.push("Pricing List")
     }
 
     postResizeJSON() {
