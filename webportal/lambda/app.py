@@ -1063,14 +1063,12 @@ def ec2_instance_start(instance_id):
 
 @app.route('/get_desired_instance_types', authorizer=authorizer, cors=cors_config)
 def get_desired_instance_types():
-  paramsQuery = app.current_request.query_params
-  paramsString = paramsQuery['wsrequest']
+  params = app.current_request.query_params
   logger.setLevel("INFO")
-  logging.info("Received request {}".format(paramsString))
-  params = json.loads(paramsString)
 #########
   try:
-    response=get_instnances_prices(params)
+    response=get_instances_prices(params['cpu'], params['memory'], params['os'])
+    logging.info("Respnse - " + str(response))
   except BaseException as be:
         logging.exception("Error: Failed to process manage workstation request" + str(be))
         raise ChaliceViewError("Failed to process manage workstation request")
@@ -1079,15 +1077,16 @@ def get_desired_instance_types():
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
 
-print("Recommended EC2 instances ")
-print("=====================")
+
 def instance_family_compare_cost(famList,instances): 
+  print("Recommended EC2 instances ")
+  print("=====================")
   lowestCostList = [] 
   listIndex = -1 
   prvlistIndex = -1 
   for instance in instances['pricelist']:
     listIndex = listIndex + 1
-    if instance['instnaceFamily'] != famList: 
+    if instance['instanceFamily'] != famList: 
        continue
     if prvlistIndex >= 0:
        if instances['pricelist'][prvlistIndex]['cost'] > instances['pricelist'][listIndex]['cost']:
@@ -1116,7 +1115,7 @@ def get_cost_per_family(familyList,instances):
     famNum = 0
     listIndex = -1
     for instance in instances['pricelist']:
-      if instance['instnaceFamily'] != famList: 
+      if instance['instanceFamily'] != famList: 
          listIndex = listIndex + 1
          continue
       famNum = famNum + 1
@@ -1144,11 +1143,11 @@ def family_unique_list(tempList):
   return unique_list
 
 ####
-def get_instnances_prices(params):
-  VCPU = params['vcpu']
-  memory = params['memory']
+def get_instances_prices(cpu, memory, os):
+  VCPU = cpu
+  memory = memory
   MEMORY = memory + ' GiB'
-  operatingSystem = params['operatingSystem']
+  operatingSystem = os
   pricing = boto3.client('pricing')
   response = pricing.get_products(
     ServiceCode='AmazonEC2',
@@ -1193,14 +1192,14 @@ def get_instnances_prices(params):
     data1 = json.dumps(data)
     terms = json.loads(data1)
     pricePerUnit=(round(float(terms['pricePerUnit']['USD']),4))
-    info = {"instnaceFamily" : instanceFamily,"instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : VCPU, "memory" : MEMORY,"storage" : storage, "cost" : pricePerUnit}
+    info = {"instanceFamily" : instanceFamily,"instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : VCPU, "memory" : MEMORY,"storage" : storage, "cost" : pricePerUnit}
 
     instances['pricelist'].append(info)
 
 ### sort by lowest cost
   familyList = []
   for instance in instances['pricelist']:
-    familyList.append(str(instance['cost']) + ' : ' + instance['instnaceFamily'])
+    familyList.append(str(instance['cost']) + ' : ' + instance['instanceFamily'])
   familyList.sort()
 # make a unique list
   tempList = []
@@ -1208,6 +1207,10 @@ def get_instnances_prices(params):
     tempList.append(InsFamily.split(':')[1])
     
   familyList = family_unique_list(tempList) 
-  response=get_cost_per_family(familyList,instances) 
-  return (instances,response)
+  recommended_list=get_cost_per_family(familyList,instances)
+  instance_types = []
+  instance_types.append(instances)
+  instance_types.append(recommended_list)
+  
+  return instance_types
   
