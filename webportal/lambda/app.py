@@ -1047,7 +1047,7 @@ def get_ec2_instance_state(params):
   return instance.state['Name']
 
 #################
-def ec2_instance_start(instance_id):
+def ec2_instance_start(params):
   instance_id = params['instance_id']
   print("Starting instance_id: " + instance_id)
   client = boto3.client('ec2',region_name='us-east-1')
