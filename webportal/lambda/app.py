@@ -913,7 +913,7 @@ def manage_user_disk_volume():
       state=get_ec2_instance_state(params)
       if state != 'running':
         ec2_instance_start(params)
-      attach_ebs_volume(params)
+      response=attach_ebs_volume(params)
     except BaseException as be:
         logging.exception("Error: Failed to process manage workstation request" + str(be))
         raise ChaliceViewError("Failed to process manage workstation request")
@@ -990,7 +990,7 @@ def attach_ebs_volume(params):
     ssm_ec2_instance_windows(instance_id)
   if platform == 'linux':
     ssm_ec2_instance_linux(instance_id)
-  print(response)
+  return response
 
 ############
 def ssm_ec2_instance_windows(instance_id):
@@ -1023,8 +1023,8 @@ fi
 """
 ]  } )
   command_id = response['Command']['CommandId']
-  #print(command_id)
-  print(response)
+  print(command_id)
+  #print(response)
 
 
 def ec2_instance_platform(instance_id):
