@@ -60,7 +60,7 @@ export class DialogBoxComponent implements OnInit {
     derivedDataSetName: string;
     trustedAcceptableUseDisabled: boolean;
     resizeFilterFormSubmitted = false;
-    diskSizeChange = '';
+    diskSizeChange = true;
     cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
     memoryOptions = [2, 3.75, 4, 5.25, 7.5, 8, 10.5, 15, 15.25, 16, 21, 30, 30.5, 32, 42, 61, 64, 72, 96, 128, 144, 160, 192, 256, 384, 768];
     // tslint:disable-next-line:max-line-length
@@ -473,7 +473,12 @@ export class DialogBoxComponent implements OnInit {
             */
             let message = {};
             message['instance_id'] = this.instanceId;
-            message['disk_size'] = this.additionalDiskSpace;
+            message['username'] = this.userName;
+            // message['user_email'] = this.userEmail;
+            // message['operating_system'] = this.operatingSystem;
+            message['size'] = this.additionalDiskSpace;
+            message['schedule_from_date'] = this.diskSpaceFromDate;
+            message['schedule_to_date'] = this.diskSpaceToDate;
             this.gatewayService.modifyUserWorkstation('manage_user_disk_volume?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
                 (response: any) => {
                     this.successHandler();
