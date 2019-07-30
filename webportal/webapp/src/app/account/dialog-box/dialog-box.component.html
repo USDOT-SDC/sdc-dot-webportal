@@ -522,21 +522,18 @@
         </p>
 
         <div class="resize-disk-space-container">
-          <mat-radio-group name="diskSize" id="diskSize" required [(ngModel)]="diskSizeChange">
-            <mat-radio-button value=''>No Change</mat-radio-button>
-            <br />
-           <mat-radio-button value="true">Additional Diskspace</mat-radio-button>
-          </mat-radio-group>
           <div *ngIf="diskSizeChange" class="resize-disk-space-edit">
-              <mat-form-field style='width: 82%;'>
-                  <input matInput placeholder="100 X" [(ngModel)]="additionalDiskSpace">
-                </mat-form-field>              
-          
+            <p style="font-weight: bold;">Additional Diskspace</p>
+            <mat-form-field style='margin-left: 12px; width: 80px;'>
+              <!-- 100 X placeholder: add placeholder="100 X" in below input tag -->
+              <input matInput [(ngModel)]="additionalDiskSpace">
+            </mat-form-field>
             <span style="margin-left: 4px;">GB</span>
           </div>
           <div class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button style="margin-left: 10px;" [disabled]='diskSizeChange && !additionalDiskSpace' (click)="handleResizeWorkNext(3)" class="btn btn-primary dotBtn">Next</button>
+            <button style="margin-left: 10px;" [disabled]='diskSizeChange && !additionalDiskSpace'
+              (click)="handleResizeWorkNext(3)" class="btn btn-primary dotBtn">Next</button>
           </div>
         </div>
       </mat-dialog-content>

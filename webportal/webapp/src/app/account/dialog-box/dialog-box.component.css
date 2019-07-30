@@ -84,9 +84,9 @@ mat_tab_style{
 }
 
 .resize-disk-space-edit {
-    position: absolute;
-    top: 0px;
-    right: 32%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .exportSelect {
