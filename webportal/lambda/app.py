@@ -36,6 +36,8 @@ RESTAPIID = 'u2zksemc1h'
 AUTHORIZERID = 'pby0gw'
 TABLENAME_TRUSTED = 'dev-TrustedUsersTable'
 TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExportTable'
+TABLENAME_MANAGE_USER = 'dev-ManageUserWorkstationTable'
+TABLENAME_MANAGE_DISK = 'dev-ManageDiskspaceRequestsTable'
 
 authorizer = CognitoUserPoolAuthorizer(
    'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
@@ -813,8 +815,7 @@ def manage_user_workstation():
     params = json.loads(paramsString)
     response = {}
     try:
-        insert_request_to_table(params)
-        resize_workstation(params)
+        user_requests_process(params)
     except BaseException as be:
         logging.exception("Error: Failed to process manage workstation request" + str(be))
         raise ChaliceViewError("Failed to process manage workstation request")
@@ -823,35 +824,51 @@ def manage_user_workstation():
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
 
+def user_requests_process(params):
+    manageWorkstaion = params['manageWorkstaion']
+    manageDiskspace = params['manageDiskspace']
+    manageWorkStaionAndDiskspace = params['manageWorkStaionAndDiskspace']
+    print(manageWorkstaion,manageDiskspace,manageWorkStaionAndDiskspace)
+    if manageWorkstaion == true:
+       resize_workstation(params)
+       insert_request_to_table(params)
+       update_configuration_type_to_table(params)
+    if manageDiskspace == true:
+       state=get_ec2_instance_state(params)
+       if state != 'running':
+         ec2_instance_start(params)
+       response=attach_ebs_volume(params)
+       update_configuration_type_to_table(params)
 
 def resize_workstation(params):
-    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table('dev-ManageUserWorkstationTable')
-    index_name = 'dev-username-index'
+#    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+#    table = dynamodb.Table('dev-ManageUserWorkstationTable')
+#    index_name = 'dev-username-index'
     try:
-        state = get_ec2_instances(params['instance_id'])
+        ##state = get_ec2_instances(params['instance_id'],'running')
+        state=get_ec2_instance_state(params)
         instance_id = params['instance_id']
         requested_instance_type = params['requested_instance_type']
         if state == "running":
-            ec2_instance_stop(instance_id)
-            modify_instance(instance_id, requested_instance_type)
-            ec2_instance_start(instance_id)
-        elif state == "None":
-            modify_instance(instance_id, requested_instance_type)
+           ec2_instance_stop(instance_id)
+           modify_instance(instance_id, requested_instance_type)
+           ec2_instance_start(params)
+        ##elif state == "None":
+        else:
+           modify_instance(instance_id, requested_instance_type)
 
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
-def get_ec2_instances(instance_id):
-    state = 'None'
-    ec2 = boto3.resource('ec2', region_name='us-east-1')
-    instances = ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': [state]}])
-    for instance in instances:
-       if instance_id == instance.id:
-         print(instance.id, instance.instance_type)  
-         return state
-
-    return 'None'
+#def get_ec2_instances(instance_id,state):
+#    ec2 = boto3.resource('ec2', region_name='us-east-1')
+#    instances = ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': [state]}])
+#    for instance in instances:
+#       if instance_id == instance.id:
+#         print(instance.id, instance.instance_type)  
+#         return state
+#
+#    return 'None'
 
 def ec2_instance_stop(instance_id):
     print("stopping instance_id: " + instance_id)  
@@ -862,13 +879,13 @@ def ec2_instance_stop(instance_id):
     waiter=client.get_waiter('instance_stopped')
     waiter.wait(InstanceIds=[instance_id])
 
-def ec2_instance_start(instance_id, instance_type):
-    print("Starting instance_id: " + instance_id)  
-    client = boto3.client('ec2',region_name='us-east-1')
-    try:
-        response = client.start_instances(InstanceIds=[instance_id])
-    except ClientError as e:
-        print(e)
+#def ec2_instance_start(instance_id, instance_type):
+#    print("Starting instance_id: " + instance_id)  
+#    client = boto3.client('ec2',region_name='us-east-1')
+#    try:
+#        response = client.start_instances(InstanceIds=[instance_id])
+#    except ClientError as e:
+#        print(e)
 
 def modify_instance(instance_id, request_instance_type):
     print("Starting instance_id: " + instance_id)  
@@ -880,7 +897,7 @@ def modify_instance(instance_id, request_instance_type):
 
 def insert_request_to_table(params):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table('dev-ManageUserWorkstationTable')
+    table = dynamodb.Table(TABLENAME_MANAGE_USER)
     try:
         request_date = datetime.datetime.now()
         request_date = str(request_date)
@@ -902,25 +919,113 @@ def insert_request_to_table(params):
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
-@app.route('/manage_user_disk_volume', authorizer=authorizer, cors=cors_config)
-def manage_user_disk_volume():
-    paramsQuery = app.current_request.query_params
-    paramsString = paramsQuery['wsrequest']
-    logger.setLevel("INFO")
-    logging.info("Received request {}".format(paramsString))
-    params = json.loads(paramsString)
+def insert_disk_request_to_table(params,volume_id,size):
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table(TABLENAME_MANAGE_DISK)
     try:
-      state=get_ec2_instance_state(params)
-      if state != 'running':
-        ec2_instance_start(params)
-      response=attach_ebs_volume(params)
-    except BaseException as be:
-        logging.exception("Error: Failed to process manage workstation request" + str(be))
-        raise ChaliceViewError("Failed to process manage workstation request")
+        request_date = datetime.datetime.now()
+        request_date = str(request_date)
+        table.put_item(
+            Item={
+                    'RequestId': str(uuid.uuid4()),
+                    'username': params['username'],
+                    'user_email': params['user_email'],
+                    'instance_id': params['instance_id'],
+                    'default_instance_type': params['default_instance_type'],
+                    'requested_instance_type': params['requested_instance_type'],
+                    'operating_system': params['operating_system'],
+                    'request_date': request_date,
+                    'schedule_from_date': params['diskspace_schedule_from_date'],
+                    'schedule_to_date': params['diskspace_schedule_to_date'],
+                    'volume_id': volume_id,
+                    'volume_size': size,
+                    'is_active': True
+                }
+            )
+    except ClientError as e:
+        logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
-    return Response(body=response,
-                    status_code=200,
-                    headers={'Content-Type': 'application/json'})
+def update_volume_number_to_table(params,vol_number):
+    instance_id = params['instance_id']
+    username = params['username']
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table(TABLENAME_TRUSTED)
+    try:
+      resp = table.query(KeyConditionExpression=Key('username').eq(username))
+
+      map = -1
+      map_num = -1
+      for item in resp['Items']:
+        for stack in (item['stacks']):
+          map_num = map_num + 1
+          if stack['instance_id'] == instance_id:
+            map = map_num
+      if map == -1:
+        print('Instance id ' instance_id + ' not found in '+ TABLENAME_TRUSTED)
+        return -1
+      table.update_item(
+         Key={
+          'username': username,
+           },
+           UpdateExpression='SET stacks[' + str(map) +'].volumes = :volumes',
+           ExpressionAttributeValues={':volumes': vol_number })
+    except ClientError as e:
+        logging.exception("Error: Failed to update record into Dynamo Db Table with exception - {}".format(e))
+
+def update_configuration_type_to_table(params):
+    vcpu = params['vcpu']
+    memory = params['memory']
+    instance_id = params['instance_id']
+    username = params['username']
+    current_configurationi = "CPUs:" + str(vcpu) + ",Memory(GiB):" + str(memory)
+    current_instance_type = params['default_instance_type']
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table(TABLENAME_TRUSTED)
+    try:
+      resp = table.query(KeyConditionExpression=Key('username').eq(username))
+
+      map = -1
+      map_num = -1
+      for item in resp['Items']:
+        for stack in (item['stacks']):
+          map_num = map_num + 1
+          if stack['instance_id'] == instance_id:
+            map = map_num
+      if map == -1:
+        print('Instance id ' instance_id + ' not found in '+ TABLENAME_TRUSTED)
+        return -1
+      table.update_item(
+         Key={
+          'username': username,
+           },
+           UpdateExpression='set stacks[' + str(map) + '].current_configuration = :conf,stacks[' + str(map) +'].current_instance_type = :type',
+             ExpressionAttributeValues={
+               ':conf': current_configuration,
+               ':type': current_instance_type 
+           })
+    except ClientError as e:
+        logging.exception("Error: Failed to update record into Dynamo Db Table with exception - {}".format(e))
+
+
+#@app.route('/manage_user_disk_volume', authorizer=authorizer, cors=cors_config)
+#def manage_user_disk_volume():
+#    paramsQuery = app.current_request.query_params
+#    paramsString = paramsQuery['wsrequest']
+#    logger.setLevel("INFO")
+#    logging.info("Received request {}".format(paramsString))
+#    params = json.loads(paramsString)
+#    try:
+#      state=get_ec2_instance_state(params)
+#      if state != 'running':
+#        ec2_instance_start(params)
+#      response=attach_ebs_volume(params)
+#    except BaseException as be:
+#        logging.exception("Error: Failed to process manage workstation request" + str(be))
+#        raise ChaliceViewError("Failed to process manage workstation request")
+#
+#    return Response(body=response,
+#                    status_code=200,
+#                    headers={'Content-Type': 'application/json'})
 
 def number_of_ec2_volumes(instance_id):
   i = 0
@@ -964,12 +1069,13 @@ def create_ebs_volume(instance_id,platform,zone,size):
 ############
 def attach_ebs_volume(params):
   instance_id = params['instance_id']
-  size = int(params['size'])
+  size = int(params['required_diskspace'])
 ### check if instance has more than one volumes 
   vol_number=number_of_ec2_volumes(instance_id)
   if vol_number > 1:
     print("Instance " + instance_id + " " + " has " + str(vol_number) + " volumes already")
     return vol_number
+  vol_number = vol_number + 1
   client = boto3.client('ec2',region_name='us-east-1')
   zone=ec2_instance_availability_zone(instance_id)
   print(zone)
@@ -985,6 +1091,8 @@ def attach_ebs_volume(params):
      VolumeId=volume_id)
   waiter = client.get_waiter('volume_in_use')
   waiter.wait(VolumeIds=[volume_id])
+  insert_disk_request_to_table(params,volume_id,size)
+  update_volume_number_to_table(params,vol_number)
 #### format volume or mount
   if platform == 'windows':
     ssm_ec2_instance_windows(instance_id)
