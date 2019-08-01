@@ -380,18 +380,18 @@
             </p>
           </div>
           <div class="resize-filter-start-workspace">
-            <mat-checkbox [(ngModel)]="resizeAddDiskOnly"></mat-checkbox>
+            <mat-checkbox [disabled]="blockVolumeManage" [(ngModel)]="resizeAddDiskOnly"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
                 Add Additional Diskspace
               </b>
             </p>
           </div>
-          <!-- <div class="resize-filter-start-workspace">
-            <mat-checkbox [(ngModel)]="ManageBoth"></mat-checkbox>
+          <!-- div class="resize-filter-start-workspace">
+            <mat-checkbox [(ngModel)]="scheduleUpTime"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
-                Manage Both
+                Schedule WorkStation Up Time
               </b>
             </p>
           </div> -->
