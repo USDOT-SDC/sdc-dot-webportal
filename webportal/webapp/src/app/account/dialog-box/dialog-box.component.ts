@@ -73,6 +73,8 @@ export class DialogBoxComponent implements OnInit {
     resizeWorkSpaceOnly = false;
     resizeAddDiskOnly = false;
     ManageBoth = false;
+    // TODO
+    scheduleUpTime = false;
     additionalDiskSpace = '';
     @ViewChild("fileUpload") fileUpload: FileUpload;
 
@@ -107,6 +109,8 @@ export class DialogBoxComponent implements OnInit {
     subDataSetsWydot = [];
     currentConfigurations = [];
     vcpu = '';
+    desiredMemory = '';
+    blockVolumeManage = false;
 
     //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
@@ -153,6 +157,7 @@ export class DialogBoxComponent implements OnInit {
 
     currentStack = {};
     states = {};
+    volumeCount = "";
 
     constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
@@ -196,12 +201,12 @@ export class DialogBoxComponent implements OnInit {
         }
         var datasets = [];
         for (var j = 0; j < this.export.length; j++) {
-            console.log("Inside:" + this.export[j]);
+            console.log('Inside:' + this.export[j]);
             if (this.export[j]) {
-                console.log("Inside:" + this.export[j]);
+                console.log('Inside:' + this.export[j]);
                 var dataset = {};
-                dataset["value"] = Object.keys(this.export[j])[0];
-                dataset["viewValue"] = Object.keys(this.export[j])[0];
+                dataset['value'] = Object.keys(this.export[j])[0];
+                dataset['viewValue'] = Object.keys(this.export[j])[0];
                 this.dataSetTypes.push(dataset);
                 // datasets.push(Object.keys(this.export[j]));
             }
@@ -210,7 +215,28 @@ export class DialogBoxComponent implements OnInit {
         this.instanceState = this.states[this.instanceId];
         // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
         // this.exportWorkflow = JSON.parse(exportWorkflow);
+       this.shouldAllowManageVolume();
     }
+
+    shouldAllowManageVolume() {
+        // Disable add disk space feature if user has already did 2 or more increase disk-space requests in last 1 hour.
+        if (localStorage.getItem('volumeCountLastModified')) {
+            // tslint:disable-next-line:max-line-length
+            // tslint:disable-next-line:radix
+            this.volumeCount = localStorage.getItem('volumeCount') ? (parseInt(localStorage.getItem('volumeCount')) + 0).toString() : '0';
+            // tslint:disable-next-line:radix
+            const currentDate = Date.parse(new Date().toString());
+            // tslint:disable-next-line:radix
+            const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));
+            if (((currentDate - lastUpdatTime) / (1000) / (60) / (60) ) < 1) {
+                // tslint:disable-next-line:radix
+                if (parseInt(this.volumeCount) >= 2) {
+                    this.blockVolumeManage = true;
+                }
+            }
+        }
+    }
+
     setDataProviders(event) {
         console.log(event.value);
         this.dataProviderNames = [];
@@ -222,8 +248,8 @@ export class DialogBoxComponent implements OnInit {
                 this.allProvidersJson = exportW.exportWorkflow[event.value]
                 for (var j = 0; j < Object.keys(this.allProvidersJson).length; j++) {
                     var dataProvider = {};
-                    dataProvider["value"] = Object.keys(this.allProvidersJson)[j];
-                    dataProvider["viewValue"] = Object.keys(this.allProvidersJson)[j];
+                    dataProvider['value'] = Object.keys(this.allProvidersJson)[j];
+                    dataProvider['viewValue'] = Object.keys(this.allProvidersJson)[j];
                     this.dataProviderNames.push(dataProvider);
                 }
             }
@@ -242,8 +268,8 @@ export class DialogBoxComponent implements OnInit {
             var allDataTypesForProvider = value.datatypes;
             for (var j = 0; j < Object.keys(allDataTypesForProvider).length; j++) {
                 var dataType = {};
-                dataType["value"] = Object.keys(allDataTypesForProvider)[j];
-                dataType["viewValue"] = Object.keys(allDataTypesForProvider)[j];
+                dataType['value'] = Object.keys(allDataTypesForProvider)[j];
+                dataType['viewValue'] = Object.keys(allDataTypesForProvider)[j];
                 this.subDataSets.push(dataType);
             }
         }
@@ -257,8 +283,8 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
-        console.log("SelectedDataType:" + this.selectedDatatype);
-        let key = this.selectedDataSet + "-" + this.selectedDataProvider + "-" + this.selectedDatatype;
+        console.log('SelectedDataType:' + this.selectedDatatype);
+        let key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
         this.trustedStatus = key in this.userTrustedStatus;
         // add the trusted status logic here
         // this.trustedStatus = true;
@@ -280,7 +306,7 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndex = 2;
     }
     validateEmailRegex(email) {
-        var regexEmail = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+        var regexEmail = new RegExp('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?');
         return regexEmail.test(email);
     }
 
@@ -400,8 +426,10 @@ export class DialogBoxComponent implements OnInit {
     }
 
     handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
-        this.requestedInstanceType = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]["instanceType"];
-        this.vcpu = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]["vcpu"];
+        this.requestedInstanceType = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]['instanceType'];
+        this.vcpu = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]['vcpu'];
+        this.desiredMemory = this.pricingGroups[instanceFamilyIndex][pricingGroupsIndex]['memory'];
+        this.desiredMemory = this.desiredMemory.length ? this.desiredMemory.split(' ')[0] : '';
     }
 
     hasPriceSelection() {
@@ -437,60 +465,57 @@ export class DialogBoxComponent implements OnInit {
         });
         this.pricingGroups.push(fileteredRecommendedInstanceFamilyList)
         this.pricingGroups.push(filteredPriceList)
-        this.instanceFamilyList.push("Recomended List")
-        this.instanceFamilyList.push("Pricing List")
+        this.instanceFamilyList.push('Recomended List')
+        this.instanceFamilyList.push('Pricing List')
     }
 
     postResizeJSON() {
-        // added additionalDiskSpace, diskSpaceFromDate , diskSpaceToDate
-        if (this.resizeWorkSpaceOnly || this.ManageBoth) {
-            let message = {};
+        const message = {};
+        message['manageWorkstation'] = this.resizeWorkSpaceOnly && !this.resizeAddDiskOnly;
+        message['manageDiskspace'] = !this.resizeWorkSpaceOnly && this.resizeAddDiskOnly;
+        message['manageWorkStationAndDiskspace'] = this.resizeWorkSpaceOnly && this.resizeAddDiskOnly;
+        // message['manageAll'] = false;
+        // message['manageUptime'] = false;
+        // message['manageUptimeAndDiskspace'] = false;
+        // message['manageUptimeAndWorkstation'] = false;
+
+        message['username'] = this.userName;
+        message['user_email'] = this.userEmail;
+        message['default_instance_type'] = this.defaultInstanceType;
+        message['instance_id'] = this.instanceId;
+        message['operating_system'] = this.operatingSystem;
+
+        if (this.resizeWorkSpaceOnly) {
+            message['workstation_schedule_from_date'] = this.workSpaceFromDate;
+            message['workstation_schedule_to_date'] = this.workSpaceToDate;
             message['requested_instance_type'] = this.requestedInstanceType;
             message['vcpu'] = this.vcpu;
-            message['username'] = this.userName;
-            message['user_email'] = this.userEmail;
-            message['default_instance_type'] = this.defaultInstanceType;
-            message['instance_id'] = this.instanceId;
-            message['operating_system'] = this.operatingSystem;
-            message['schedule_from_date'] = this.workSpaceFromDate;
-            message['schedule_to_date'] = this.workSpaceToDate;
-            this.gatewayService.modifyUserWorkstation('manage_user_workstation?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
-                (response: any) => {
-                    if (!this.resizeAddDiskOnly && !this.ManageBoth) {
-                        this.successHandler();
-                    }
-                    console.log('Request Sent Successfully');
-                },
-                (error) => {
-                    this.failureHandler();
-                }
-            );
+            message['memory'] = this.desiredMemory;
         }
-        if ((this.resizeAddDiskOnly || this.ManageBoth) && this.diskSizeChange) {
-            /*
-                API: manage_user_disk_volume
-                parameter epxected: instnace_id and disk size being requested.
-            */
-            let message = {};
-            message['instance_id'] = this.instanceId;
-            message['username'] = this.userName;
-            // message['user_email'] = this.userEmail;
-            // message['operating_system'] = this.operatingSystem;
-            message['size'] = this.additionalDiskSpace;
-            message['schedule_from_date'] = this.diskSpaceFromDate;
-            message['schedule_to_date'] = this.diskSpaceToDate;
-            this.gatewayService.modifyUserWorkstation('manage_user_disk_volume?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
-                (response: any) => {
-                    this.successHandler();
-                    console.log('Request Sent Successfully');
-                },
-                (error) => {
-                    this.failureHandler();
-                }
-            );
-        } else {
-            this.onNoClick();
+
+        if (this.resizeAddDiskOnly) {
+            // tslint:disable-next-line:radix
+            this.volumeCount = (parseInt(this.volumeCount) + 1).toString();
+            localStorage.setItem('volumeCount', this.volumeCount);
+            localStorage.setItem('volumeCountLastModified', new Date().toString());
+            this.shouldAllowManageVolume();
+            message['volume'] = true;
+            message['required_diskspace'] = this.diskSizeChange ? this.additionalDiskSpace : 0;
+            message['diskspace_schedule_from_date'] = this.diskSpaceFromDate;
+            message['diskspace_schedule_to_date'] = this.diskSpaceToDate;
         }
+
+        this.gatewayService.modifyUserWorkstation('manage_user_workstation?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
+            (response: any) => {
+                // if (!this.resizeAddDiskOnly && !this.ManageBoth) {
+                this.successHandler();
+                // }
+                console.log('Request Sent Successfully');
+            },
+            (error) => {
+                this.failureHandler();
+            }
+        );
     }
 
     successHandler() {
