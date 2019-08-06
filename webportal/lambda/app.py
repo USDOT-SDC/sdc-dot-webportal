@@ -34,6 +34,7 @@ RECEIVER = 'support@securedatacommons.com'
 PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY'
 RESTAPIID = 'u2zksemc1h'
 AUTHORIZERID = 'pby0gw'
+TABLENAME_TRUSTED_NEW = 'dev-UserStacksTable'
 TABLENAME_TRUSTED = 'dev-TrustedUsersTable'
 TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExportTable'
 TABLENAME_MANAGE_USER = 'dev-ManageUserWorkstationTable'
@@ -825,34 +826,35 @@ def manage_user_workstation():
                     headers={'Content-Type': 'application/json'})
 
 def user_requests_process(params):
-    manageWorkstaion = params['manageWorkstaion']
+    manageWorkstation = params['manageWorkstation']
     manageDiskspace = params['manageDiskspace']
-    manageWorkStaionAndDiskspace = params['manageWorkStaionAndDiskspace']
-    print(manageWorkstaion,manageDiskspace,manageWorkStaionAndDiskspace)
-    if manageWorkstaion == true:
+    manageWorkStationAndDiskspace = params['manageWorkStationAndDiskspace']
+    print(manageWorkstation)
+    print(manageDiskspace)
+    print(manageWorkStationAndDiskspace)
+    if manageWorkstation == True:
        resize_workstation(params)
        insert_request_to_table(params)
        update_configuration_type_to_table(params)
-    if manageDiskspace == true:
-       state=get_ec2_instance_state(params)
-       if state != 'running':
-         ec2_instance_start(params)
+    if manageDiskspace == True:
        response=attach_ebs_volume(params)
+    if manageWorkStationAndDiskspace == True:
+       resize_workstation(params)
+       insert_request_to_table(params)
        update_configuration_type_to_table(params)
+       response=attach_ebs_volume(params)
 
 def resize_workstation(params):
-#    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-#    table = dynamodb.Table('dev-ManageUserWorkstationTable')
-#    index_name = 'dev-username-index'
     try:
         ##state = get_ec2_instances(params['instance_id'],'running')
         state=get_ec2_instance_state(params)
         instance_id = params['instance_id']
-        requested_instance_type = params['requested_instance_type']
+        requested_instance_type = params['default_instance_type']
         if state == "running":
-           ec2_instance_stop(instance_id)
+######### manage disk function brings it up so no need to stop it since it is needed up 
+           ###ec2_instance_stop(instance_id)
            modify_instance(instance_id, requested_instance_type)
-           ec2_instance_start(params)
+        ###   ec2_instance_start(params)
         ##elif state == "None":
         else:
            modify_instance(instance_id, requested_instance_type)
@@ -860,15 +862,6 @@ def resize_workstation(params):
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
-#def get_ec2_instances(instance_id,state):
-#    ec2 = boto3.resource('ec2', region_name='us-east-1')
-#    instances = ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': [state]}])
-#    for instance in instances:
-#       if instance_id == instance.id:
-#         print(instance.id, instance.instance_type)  
-#         return state
-#
-#    return 'None'
 
 def ec2_instance_stop(instance_id):
     print("stopping instance_id: " + instance_id)  
@@ -878,14 +871,6 @@ def ec2_instance_stop(instance_id):
     client.stop_instances(InstanceIds=[instance_id])
     waiter=client.get_waiter('instance_stopped')
     waiter.wait(InstanceIds=[instance_id])
-
-#def ec2_instance_start(instance_id, instance_type):
-#    print("Starting instance_id: " + instance_id)  
-#    client = boto3.client('ec2',region_name='us-east-1')
-#    try:
-#        response = client.start_instances(InstanceIds=[instance_id])
-#    except ClientError as e:
-#        print(e)
 
 def modify_instance(instance_id, request_instance_type):
     print("Starting instance_id: " + instance_id)  
@@ -908,11 +893,11 @@ def insert_request_to_table(params):
                     'user_email': params['user_email'],
                     'instance_id': params['instance_id'],
                     'default_instance_type': params['default_instance_type'],
-                    'requested_instance_type': params['requested_instance_type'],
+                    'requested_instance_type': params['default_instance_type'],
                     'operating_system': params['operating_system'],
                     'request_date': request_date,
-                    'schedule_from_date': params['schedule_from_date'],
-                    'schedule_to_date': params['schedule_to_date'],
+                    'schedule_from_date': params['workstation_schedule_from_date'],
+                    'schedule_to_date': params['workstation_schedule_to_date'],
                     'is_active': True
                 }
             )
@@ -932,7 +917,7 @@ def insert_disk_request_to_table(params,volume_id,size):
                     'user_email': params['user_email'],
                     'instance_id': params['instance_id'],
                     'default_instance_type': params['default_instance_type'],
-                    'requested_instance_type': params['requested_instance_type'],
+                    'requested_instance_type': params['default_instance_type'],
                     'operating_system': params['operating_system'],
                     'request_date': request_date,
                     'schedule_from_date': params['diskspace_schedule_from_date'],
@@ -949,7 +934,8 @@ def update_volume_number_to_table(params,vol_number):
     instance_id = params['instance_id']
     username = params['username']
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table(TABLENAME_TRUSTED)
+    table = dynamodb.Table(TABLENAME_TRUSTED_NEW)
+    str_vol_number = str(vol_number)
     try:
       resp = table.query(KeyConditionExpression=Key('username').eq(username))
 
@@ -961,26 +947,27 @@ def update_volume_number_to_table(params,vol_number):
           if stack['instance_id'] == instance_id:
             map = map_num
       if map == -1:
-        print('Instance id ' instance_id + ' not found in '+ TABLENAME_TRUSTED)
+        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_TRUSTED)
         return -1
       table.update_item(
          Key={
           'username': username,
            },
            UpdateExpression='SET stacks[' + str(map) +'].volumes = :volumes',
-           ExpressionAttributeValues={':volumes': vol_number })
+           ExpressionAttributeValues={':volumes': str_vol_number })
     except ClientError as e:
         logging.exception("Error: Failed to update record into Dynamo Db Table with exception - {}".format(e))
 
 def update_configuration_type_to_table(params):
+    print(params)
     vcpu = params['vcpu']
     memory = params['memory']
     instance_id = params['instance_id']
     username = params['username']
-    current_configurationi = "CPUs:" + str(vcpu) + ",Memory(GiB):" + str(memory)
+    current_configuration = "CPUs:" + str(vcpu) + ",Memory(GiB):" + str(memory)
     current_instance_type = params['default_instance_type']
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table(TABLENAME_TRUSTED)
+    table = dynamodb.Table(TABLENAME_TRUSTED_NEW)
     try:
       resp = table.query(KeyConditionExpression=Key('username').eq(username))
 
@@ -992,7 +979,7 @@ def update_configuration_type_to_table(params):
           if stack['instance_id'] == instance_id:
             map = map_num
       if map == -1:
-        print('Instance id ' instance_id + ' not found in '+ TABLENAME_TRUSTED)
+        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_TRUSTED)
         return -1
       table.update_item(
          Key={
@@ -1006,26 +993,6 @@ def update_configuration_type_to_table(params):
     except ClientError as e:
         logging.exception("Error: Failed to update record into Dynamo Db Table with exception - {}".format(e))
 
-
-#@app.route('/manage_user_disk_volume', authorizer=authorizer, cors=cors_config)
-#def manage_user_disk_volume():
-#    paramsQuery = app.current_request.query_params
-#    paramsString = paramsQuery['wsrequest']
-#    logger.setLevel("INFO")
-#    logging.info("Received request {}".format(paramsString))
-#    params = json.loads(paramsString)
-#    try:
-#      state=get_ec2_instance_state(params)
-#      if state != 'running':
-#        ec2_instance_start(params)
-#      response=attach_ebs_volume(params)
-#    except BaseException as be:
-#        logging.exception("Error: Failed to process manage workstation request" + str(be))
-#        raise ChaliceViewError("Failed to process manage workstation request")
-#
-#    return Response(body=response,
-#                    status_code=200,
-#                    headers={'Content-Type': 'application/json'})
 
 def number_of_ec2_volumes(instance_id):
   i = 0
@@ -1077,6 +1044,9 @@ def attach_ebs_volume(params):
     return vol_number
   vol_number = vol_number + 1
   client = boto3.client('ec2',region_name='us-east-1')
+  state=get_ec2_instance_state(params)
+  if state != 'running':
+     ec2_instance_start(params)
   zone=ec2_instance_availability_zone(instance_id)
   print(zone)
   platform=ec2_instance_platform(instance_id)
@@ -1091,19 +1061,23 @@ def attach_ebs_volume(params):
      VolumeId=volume_id)
   waiter = client.get_waiter('volume_in_use')
   waiter.wait(VolumeIds=[volume_id])
+  print('inserting volume_id to DB')
   insert_disk_request_to_table(params,volume_id,size)
   update_volume_number_to_table(params,vol_number)
 #### format volume or mount
   if platform == 'windows':
+    print(state)
     ssm_ec2_instance_windows(instance_id)
   if platform == 'linux':
+    print(state)
     ssm_ec2_instance_linux(instance_id)
   return response
 
 ############
 def ssm_ec2_instance_windows(instance_id):
   print("Initializing disk2 on instance_id: " + instance_id)
-  ssm = boto3.client('ssm' )    
+  #ssm = boto3.client('ssm' )    
+  ssm = boto3.client('ssm',region_name='us-east-1' )    
   response = ssm.send_command( InstanceIds=[instance_id],
             DocumentName='AWS-RunPowerShellScript',
             Parameters={ "commands":[ """Get-Disk | Where partitionstyle -eq ‘raw’ |
@@ -1114,9 +1088,8 @@ def ssm_ec2_instance_windows(instance_id):
   print(command_id)
 
 def ssm_ec2_instance_linux(instance_id):
-  print("mounting on instance_id: " + instance_id)
+  print("EBS mounting on instance_id: " + instance_id)
   ssm = boto3.client('ssm',region_name='us-east-1' )    
-###            Parameters={ "commands":[ "mkfs -t ext4 /dev/xvdf;mkdir /data1;mount /dev/xvdf /data1/" ]  } )
   response = ssm.send_command( InstanceIds=[instance_id],
             DocumentName='AWS-RunShellScript',
             Parameters={ "commands":[ """lsblk;
