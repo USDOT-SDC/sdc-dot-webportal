@@ -883,6 +883,24 @@ def modify_instance(instance_id, request_instance_type):
 def insert_request_to_table(params):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_MANAGE_USER)
+
+    username = params['username']
+    resp = table.query(
+      # Add the name of the index you want to use in your query.
+      IndexName="dev-workstation-username-index",
+      KeyConditionExpression=Key('username').eq(username),)
+    active = False
+    for item in resp['Items']:
+      reqID=item['RequestId']
+      print(reqID)
+      table.update_item(
+       Key={
+      'RequestId': reqID,
+      'username': username
+      },
+      UpdateExpression='set is_active = :active',
+      ExpressionAttributeValues={':active': active })
+
     try:
         request_date = datetime.datetime.now()
         request_date = str(request_date)
@@ -907,6 +925,23 @@ def insert_request_to_table(params):
 def insert_disk_request_to_table(params,volume_id,size):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_MANAGE_DISK)
+    username = params['username']
+    resp = table.query(
+      # Add the name of the index you want to use in your query.
+      IndexName="dev-diskspace-username-index",
+      KeyConditionExpression=Key('username').eq(username),)
+    active = False
+    for item in resp['Items']:
+      reqID=item['RequestId']
+      print(reqID)
+      table.update_item(
+       Key={
+      'RequestId': reqID,
+      'username': username
+      },
+      UpdateExpression='set is_active = :active',
+      ExpressionAttributeValues={':active': active })
+
     try:
         request_date = datetime.datetime.now()
         request_date = str(request_date)
