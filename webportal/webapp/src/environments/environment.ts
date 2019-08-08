@@ -5,12 +5,12 @@
 
 export const environment = {
   production: false,
-  REGION : "",
-  USER_POOL_ID: "",
-  CLIENT_ID: "",
-  IDENTITY_PROVIDER: "",
-  APP_DOMAIN: "" ,
-  REDIRECT_URL: "",
-  API_ENDPOINT : "",
-  STREAMING_URL: ""
+  REGION : "us-east-1",
+  USER_POOL_ID: "us-east-1_89P1HiXoV",
+  CLIENT_ID: "341vdjpnjo7jel2tda2prtvvgf",
+  IDENTITY_PROVIDER: "USDOT-ADFS",
+  APP_DOMAIN: "test1-sdc-dot-webportal" ,
+  REDIRECT_URL: "https://test-portal.securedatacommons.com/index.html",
+  API_ENDPOINT : "https://q8nuwa27sd.execute-api.us-east-1.amazonaws.com/api",
+  STREAMING_URL: "https://dev-stream.securedatacommons.com/guacamole/#/"
 };

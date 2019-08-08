@@ -22,23 +22,23 @@ cors_config = CORSConfig(
 )
 
 #Parameters used to deploy production setup
-TABLENAME = ''
-TABLENAME_DATASET = ''
-APPSTREAM_S3_BUCKET_NAME = ''
+TABLENAME = 'dev-UserStacksTable'
+TABLENAME_DATASET = 'dev-AvailableDataset'
+APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
 APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
 APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
 APPSTREAM_DATASET_PATH = 'user/custom/'
-RECEIVER = ''
-PROVIDER_ARNS = ''
-RESTAPIID = ''
-AUTHORIZERID = ''
-TABLENAME_TRUSTED = ''
-TABLENAME_EXPORT_FILE_REQUEST= ''
+RECEIVER = 'support@securedatacommons.com'
+PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_89P1HiXoV'
+RESTAPIID = 'q8nuwa27sd'
+AUTHORIZERID = 'lc2s5o'
+TABLENAME_TRUSTED = 'dev-TrustedUsersTable'
+TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExportTable'
 
 authorizer = CognitoUserPoolAuthorizer(
-   '', provider_arns=[PROVIDER_ARNS])
+   'test-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
 
-app = Chalice(app_name='webportal')
+app = Chalice(app_name='test-webportal')
 logger = logging.getLogger()
 dynamodb_client = boto3.resource('dynamodb')
 appstream_client = boto3.client('appstream')
