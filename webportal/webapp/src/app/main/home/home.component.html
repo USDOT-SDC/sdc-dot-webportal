@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <img style="width: 100%" src="../../assets/images/background_original.jpg" class="mx-auto d-block">
+        </div>
+    </div>
+
+    <div class="row" style="padding-top: 15px;">
+        <div class="col-md-4">
+            <mat-card class="card">
+                <mat-card-title class="cardTitle">About SDC</mat-card-title>
+                <!--<a (click)="internalRoute('home','curated')" style="width: 50%">Learn More</a>-->
+
+                <mat-card-content class="cardContent">The Secure Data Commons is an online analytic portal for transportation researchers. On this portal, researchers can take advantage of pre-established programming environments to access and analyze a growing set of transportation-related data sets.
+                </mat-card-content>
+                <mat-card-actions>
+                    <div class="cardBtn">
+                        <button class="btn-default" [routerLink]="['/about']" style="width: 50%">Learn More</button>
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div class="col-md-4">
+            <mat-card class="card">
+                <mat-card-title class="cardTitle">Datasets</mat-card-title>
+                <mat-card-content class="cardContent">Check out the list of current datasets that
+                    are available on SDC platform and learn how
+                    to get access to those datasets
+                </mat-card-content>
+                <mat-card-actions>
+                    <div class="cardBtn">
+                        <button class="btn-default" [routerLink]="['/datasetinfo']" style="width: 50%">Learn More</button>
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div class="col-md-4">
+            <mat-card class="card">
+                <mat-card-title class="cardTitle">Sign up</mat-card-title>
+                <mat-card-content class="cardContent">Complete our online
+                    access request form and when you are
+                    approved you can begin creating your very
+                    own data analysis environments!
+                </mat-card-content>
+                <mat-card-actions>
+                    <div class="cardBtn">
+                        <button class="btn-default" [routerLink]="['/register']" style="width: 50%">Learn More</button>
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>

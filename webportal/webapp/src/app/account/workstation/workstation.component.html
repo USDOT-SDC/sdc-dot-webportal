@@ -1,0 +1,54 @@
+<div style="padding: 20%;text-align:center;" *ngIf="stacks == null">
+  <h3>
+    <img src="../../assets/images/dot-logo.png">
+    <br>
+    <br> Loading
+  </h3>
+</div>
+
+<div class="container" style="width:1278px;">
+  <mat-card>
+    <div class="row" style="width:1200px;">
+      <h3>My Workstations</h3>
+        <span>Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data</span><hr>
+      <mat-card-content style="max-height: 300px;overflow-y: scroll">
+        <table class="table">
+          <thead class="thead-inverse">
+          <tr>
+            <th>#</th>
+            <th>Stack Name</th>
+            <th>Applications</th>
+            <th>Configuration</th>
+            <th>Action</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-template ngFor let-stack [ngForOf]="stacks" let-i="index+1">
+            <tr>
+              <td>{{ i }}</td>
+              <td  style="width:200px;">{{ stack.display_name }}</td>
+              <td style="width:500px;"> {{stack.application}} </td>
+              <td style="width:200px;"> {{stack.configuration}} </td>
+              <td>
+                <div *ngIf="!stack.instance_id">
+                  <span>  ----</span>
+                </div>
+                <div *ngIf="stack.instance_id"  style="cursor: pointer;">
+                  <a class="btn btn-primary dotBtn" *ngIf="instanceStates[stack.instance_id] == 'running'" [style.pointer-events]="statusProcessing[stack.instance_id] ? 'none' : 'auto'" [style.color]="statusProcessing[stack.instance_id] ? 'gray' : ''" (click)="instanceAction(stack.instance_id,'stop')"> Stop </a>
+                  <a class="btn btn-primary dotBtn" *ngIf="instanceStates[stack.instance_id] == 'stop'" [style.pointer-events]="statusProcessing[stack.instance_id] ? 'none' : 'auto'" [style.color]="statusProcessing[stack.instance_id] ? 'gray' : ''" (click)="instanceAction(stack.instance_id,'run')"> Start </a>
+                  <p *ngIf="instanceStates[stack.instance_id] == 'error' ">Error</p>
+                </div>
+              </td>
+              <td>
+                <!--<button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack)">Launch</button>-->
+                <a class="btn btn-primary dotBtn" style="cursor: pointer;" (click)="launchWorkstation(stack)" target="_blank"> Launch </a>
+              </td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,48 @@
+
+.dotBtn {
+    color: #fff;
+    background-color: #2279a6 !important;
+    border-color: #288dc1 !important;
+    /*width: 30%;*/
+    font-size: 11px;
+}
+.mat-dialog-container {
+    border: solid 2px #0b264db8 !important;
+}
+mat_tab_style{
+    height: 451px;
+}
+/deep/ .mat-tab-body-content {
+    overflow: hidden !important;
+}
+/deep/ .mat-dialog-content {
+    max-height: 200vh !important;
+}
+.mat-dialog-actions {
+    display: block !important;
+}
+.request-exportNextBtn {
+    float: right;
+    margin-left: 7px;
+}
+.request-exportCancelBtn {
+    float: right;
+    margin-left: 40px;
+}
+/* FileUpload */
+.ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget, .ui-fileupload-choose.ui-button .ui-state-default {
+      background-color: #0275d8;
+      border: 1px solid #0275d8;
+      color: #ffffff;
+}
+
+.ui-fileupload-choose.ui-button.ui-state-hover, .ui-fileupload-choose.ui-button.ui-state-focus, .ui-fileupload-choose.ui-button.ui-state-active {
+      background-color: #025aa5;
+      border-color: #01549b;
+}
+
+.panel-div {max-height:150px;overflow:scroll;}
+
+.exportSelect {
+    margin-top: 20px;
+}
