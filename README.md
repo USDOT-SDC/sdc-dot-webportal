@@ -32,7 +32,7 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 August 8, 2019. SDC sdc-dot-webportal Release 2.1
 
 New features being released:
-*[Add DHS HSTS Module](webportal-hsts/index.js): about introducing compliance with DHS HSTS
+* [Add DHS HSTS Module](webportal-hsts/index.js): about introducing compliance with DHS HSTS
 
 <a name="release-history"/>
 
@@ -40,7 +40,6 @@ New features being released:
 ## [II. Release History]
 August 8, 2019. SDC sdc-dot-webportal Release 2.1
 
-**[1. Onboarding process for users to the SDC system](#onboarding-users)**
 <a name="overview"/>
 
 ## III. Overview
