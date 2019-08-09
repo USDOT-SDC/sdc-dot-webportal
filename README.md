@@ -11,38 +11,27 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 [I. Release Notes](#release-notes)
 
-[II. Release History](#release-history)
+[II. Overview](#overview)
 
-[III. Overview](#overview)
+[III. Design Diagram](#design-diagram)
 
-[IV. Design Diagram](#design-diagram)
+[IV. Getting Started](#getting-started)
 
-[V. Getting Started](#getting-started)
+[V. Unit Tests](#unit-tests)
 
-[VI. Unit Tests](#unit-tests)
-
-[VII. Support](#support)
+[VI. Support](#support)
 
 ---
 
 <a name="release-notes"/>
 
 
-## I. Release Notes
-August 8, 2019. SDC sdc-dot-webportal Release 2.1
-
-New features being released:
-* [Add DHS HSTS Module](webportal-hsts/index.js): About introducing compliance with DHS HSTS
-
-<a name="release-history"/>
-
-
-## II. Release History
-August 8, 2019. SDC sdc-dot-webportal Release 2.1
+## [I. Release Notes](ReleaseNotes.md)
+SDC Portal release notes and the release history will be updated here.
 
 <a name="overview"/>
 
-## III. Overview
+## II. Overview
 This is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
 **[1. Onboarding process for users to the SDC system](#onboarding-users)**
@@ -108,13 +97,13 @@ Published datasets are created by researchers to disseminate their research for 
 
 <a name="design-diagram"/>
 
-## IV. Accessing portal
+## III. Accessing portal
 
 ![sdc-dot-webportal](images/sdc-dot-webportal.png)
 
 <a name="getting-started"/>
 
-## V. Getting Started
+## IV. Getting Started
 
 The following instructions describe the procedure to build and deploy the webportal.
 
@@ -216,14 +205,14 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 ---
 <a name="unit-tests"/>
 
-## VI. Unit Tests
+## V. Unit Tests
 
 TO BE UPDATED
 ---
 ---
 <a name="support"/>
 
-## VII. Support
+## VI. Support
 
 For any queries you can reach to support@securedatacommons.com
 ---
