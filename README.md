@@ -11,15 +11,17 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 [I. Release Notes](#release-notes)
 
-[II. Overview](#overview)
+[II. Release History](#release-history)
 
-[III. Design Diagram](#design-diagram)
+[III. Overview](#overview)
 
-[IV. Getting Started](#getting-started)
+[IV. Design Diagram](#design-diagram)
 
-[V. Unit Tests](#unit-tests)
+[V. Getting Started](#getting-started)
 
-[VI. Support](#support)
+[VI. Unit Tests](#unit-tests)
+
+[VII. Support](#support)
 
 ---
 
@@ -27,11 +29,20 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 
 ## [I. Release Notes](ReleaseNotes.md)
-TO BE UPDATED
+August 8, 2019. SDC sdc-dot-webportal Release 2.1
+New features being released:
+    [Add DHS HSTS Module](webportal-hsts/index.js): <text about introducing compliance with DHS HSTS>
 
+<a name="release-history"/>
+
+
+## [II. Release History]
+August 8, 2019. SDC sdc-dot-webportal Release 2.1
+
+**[1. Onboarding process for users to the SDC system](#onboarding-users)**
 <a name="overview"/>
 
-## II. Overview
+## III. Overview
 This is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
 **[1. Onboarding process for users to the SDC system](#onboarding-users)**
@@ -97,13 +108,13 @@ Published datasets are created by researchers to disseminate their research for 
 
 <a name="design-diagram"/>
 
-## III. Accessing portal
+## IV. Accessing portal
 
 ![sdc-dot-webportal](images/sdc-dot-webportal.png)
 
 <a name="getting-started"/>
 
-## IV. Getting Started
+## V. Getting Started
 
 The following instructions describe the procedure to build and deploy the webportal.
 
@@ -205,14 +216,14 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 ---
 <a name="unit-tests"/>
 
-## V. Unit Tests
+## VI. Unit Tests
 
 TO BE UPDATED
 ---
 ---
 <a name="support"/>
 
-## VI. Support
+## VII. Support
 
 For any queries you can reach to support@securedatacommons.com
 ---
