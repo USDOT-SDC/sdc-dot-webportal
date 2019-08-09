@@ -28,7 +28,7 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 
-## [I. Release Notes](ReleaseNotes.md)
+## I. Release Notes
 August 8, 2019. SDC sdc-dot-webportal Release 2.1
 
 New features being released:
@@ -37,7 +37,7 @@ New features being released:
 <a name="release-history"/>
 
 
-## [II. Release History]
+## II. Release History
 August 8, 2019. SDC sdc-dot-webportal Release 2.1
 
 <a name="overview"/>
