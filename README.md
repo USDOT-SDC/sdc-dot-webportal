@@ -11,28 +11,46 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 [I. Release Notes](#release-notes)
 
-[II. Overview](#overview)
+[II. Usage Example](#usage-example)
 
-[III. Design Diagram](#design-diagram)
+[III. Configuration](#configuration)
 
-[IV. Getting Started](#getting-started)
+[IV. Installation](#installation)
 
-[V. Unit Tests](#unit-tests)
+[V. Design and Architecture](#design-architecture)
 
-[VI. Support](#support)
+[VI. Unit Tests](#unit-tests)
+
+[VII.  File Manifest](#file-manifest)
+
+[VIII.  Development Setup](#development-setup)
+
+[IX.  Release History](#release-history)
+
+[X. Contact Information](#contact-information)
+
+[XI. Contributing](#contributing)
+
+[XII. Known Bugs](#known-bugs)
+
+[XIII. Credits and Acknowledgment](#credits-and-acknowledgement)
+
+[XIV.  CODE.GOV Registration Info](#code-gov-registration-info)
+
 
 ---
 
 <a name="release-notes"/>
 
-
 ## [I. Release Notes](ReleaseNotes.md)
-SDC Portal release notes and the release history will be updated here.
+<strong>August 8, 2019. SDC sdc-dot-webportal Release 2.1</strong><br/>
+What's New in Release 2.1:
+- Enabled HTTP Strict Transport Security (HSTS) policy to ensure data is encrypted before it is sent, making it impossible for attackers to read or modify the data in transit to the authenticated server. HSTS protects against HTTP downgrade attacks (SSL stripping attacks) by requiring all traffic to use HTTPS, and rewrites requests that do not point to encrypted sources.
 
-<a name="overview"/>
 
-## II. Overview
-This is a online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
+## II. Usage Example
+
+This is an online data warehousing and analysis platform, which provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
 **[1. Onboarding process for users to the SDC system](#onboarding-users)**
 Onboarding a user to the SDC system involves the following steps:
@@ -95,15 +113,64 @@ Data curation is a process of integrating the raw data collected from various so
 **3. Published datasets**
 Published datasets are created by researchers to disseminate their research for other users to verify and reuse them beyond the original purpose for which they were collected. Published datasets are a result of combining analysis on curated datasets available in SDC platform along with other datasets or algorithms that is owned/created by a researcher or data scientist.
 
-<a name="design-diagram"/>
+### Accessing portal
 
-## III. Accessing portal
+[sdc-dot-webportal](https://portal.securedatacommons.com/)
 
-![sdc-dot-webportal](images/sdc-dot-webportal.png)
+<!---                           -->
+<!---     Configuration         -->
+<!---                           -->
 
-<a name="getting-started"/>
+<a name="configuration"/>
 
-## IV. Getting Started
+## III. Configuration
+
+
+<!---                           -->
+<!---     Installation          -->
+<!---                           -->
+
+<a name="installation"/>
+
+## IV. Installation
+
+
+<!---                                 -->
+<!---     Design and Architecture     -->
+<!---                                 -->
+
+<a name="design-architecture"/>
+
+## V. Design and Architecture
+
+
+<!---                           -->
+<!---     Unit Tests          -->
+<!---                           -->
+
+<a name="unit-tests"/>
+
+## VI. Unit Tests
+
+
+
+
+<!---                           -->
+<!---     File Manifest         -->
+<!---                           -->
+
+<a name="file-manifest"/>
+
+## VII. File Manifest
+
+
+<!---                           -->
+<!---     Development Setup     -->
+<!---                           -->
+
+<a name="development-setup"/>
+
+## VIII. Development Setup
 
 The following instructions describe the procedure to build and deploy the webportal.
 
@@ -203,17 +270,56 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 * NA 
 
 ---
-<a name="unit-tests"/>
-
-## V. Unit Tests
-
-TO BE UPDATED
----
----
 <a name="support"/>
 
-## VI. Support
+## IX. Release History
+
+August 8, 2019. SDC sdc-dot-webportal Release 2.1
+<!---                             -->
+<!---     Contact Information     -->
+<!---                             -->
+
+<a name="contact-information"/>
+
+## X. Contact Information
 
 For any queries you can reach to support@securedatacommons.com
+
+## XII. Known Bugs
+
+
+<!---                                    -->
+<!---     Credits and Acknowledgment     -->
+<!---                                    -->
+
+<a name="credits-and-acknowledgement"/>
+
+## XIII. Credits and Acknowledgment
+Thank you to the Department of Transportation for funding to develop this project.
+
+
+<!---                                    -->
+<!---     CODE.GOV Registration Info     -->
+<!---                                    -->
+
+<a name="code-gov-registration-info">
+
+## XIV. CODE.GOV Registration Info
+Agency:  DOT
+
+Short Description: The Secure Data Commons is an online data warehousing and analysis platform for transportation researchers.
+
+Status: Production
+
+Tags: transportation, connected vehicles, intelligent transportation systems
+
+Labor Hours:
+
+Contact Name: support@securedatacommons.com
+
+<!-- Contact Phone: -->
+
+
+
 ---
 [Back to top](#toc)
