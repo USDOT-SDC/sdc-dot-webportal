@@ -27,7 +27,7 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 
 ## [I. Release Notes](ReleaseNotes.md)
-TO BE UPDATED
+SDC Portal release notes and the release history will be updated here.
 
 <a name="overview"/>
 
