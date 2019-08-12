@@ -40,13 +40,22 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 ---
 
+<!---                           -->
+<!---     Release Notes         -->
+<!---                           -->
+
 <a name="release-notes"/>
 
-## [I. Release Notes](ReleaseNotes.md)
+## I. Release Notes
 <strong>August 8, 2019. SDC sdc-dot-webportal Release 2.1</strong><br/>
 What's New in Release 2.1:
 - Enabled HTTP Strict Transport Security (HSTS) policy to ensure data is encrypted before it is sent, making it impossible for attackers to read or modify the data in transit to the authenticated server. HSTS protects against HTTP downgrade attacks (SSL stripping attacks) by requiring all traffic to use HTTPS, and rewrites requests that do not point to encrypted sources.
 
+<!---                           -->
+<!---     Usage Example         -->
+<!---                           -->
+
+<a name="usage-example"/>
 
 ## II. Usage Example
 
@@ -269,12 +278,17 @@ NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment scrip
 ### Prerequisites
 * NA 
 
----
-<a name="support"/>
+<!---                           -->
+<!---     Release History       -->
+<!---                           -->
+
+<a name="release-history"/>
 
 ## IX. Release History
 
 August 8, 2019. SDC sdc-dot-webportal Release 2.1
+
+
 <!---                             -->
 <!---     Contact Information     -->
 <!---                             -->
@@ -284,6 +298,22 @@ August 8, 2019. SDC sdc-dot-webportal Release 2.1
 ## X. Contact Information
 
 For any queries you can reach to support@securedatacommons.com
+
+
+<!---                           -->
+<!---     Contributing          -->
+<!---                           -->
+
+<a name="contributing"/>
+
+## XI. Contributing
+
+
+<!---                           -->
+<!---     Known Bugs            -->
+<!---                           -->
+
+<a name="known-bugs"/>
 
 ## XII. Known Bugs
 
