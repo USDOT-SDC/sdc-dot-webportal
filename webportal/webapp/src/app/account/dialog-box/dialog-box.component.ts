@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
-//import { ProgressHttp } from "angular-progress-http";
-//import { Headers, RequestOptions } from '@angular/http';
+// import { ProgressHttp } from "angular-progress-http";
+// import { Headers, RequestOptions } from '@angular/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
@@ -16,12 +16,12 @@ import { element } from 'protractor';
 })
 
 export class DialogBoxComponent implements OnInit {
-    //protected options: RequestOptions;
+    // protected options: RequestOptions;
     fileName: string;
     mailType: string;
     requestType: string;
     userBucketName: string;
-    //selectedFiles: FileList;
+    // selectedFiles: FileList;
     selectedFiles: any[] = [];
     message: string;
     datasetName: string;
@@ -29,8 +29,8 @@ export class DialogBoxComponent implements OnInit {
     userName: string;
     showDataset: boolean;
     showAlgorithm: boolean;
-    uploadedFilesCount: number = 0;
-    selectedIndex: number = 0;
+    uploadedFilesCount = 0;
+    selectedIndex = 0;
     userTrustedStatus: any;
     datasettype: string;
     selectedDataSet: string;
@@ -76,7 +76,7 @@ export class DialogBoxComponent implements OnInit {
     // TODO
     scheduleUpTime = false;
     additionalDiskSpace = '';
-    @ViewChild("fileUpload") fileUpload: FileUpload;
+    @ViewChild('fileUpload') fileUpload: FileUpload;
 
     dataTypes = [
         { value: 'dataset', viewValue: 'Dataset' },
@@ -111,8 +111,9 @@ export class DialogBoxComponent implements OnInit {
     vcpu = '';
     desiredMemory = '';
     blockVolumeManage = false;
+    startAfterResize = false;
 
-    //cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
+    // cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
     messageModel = {
         name: '',
@@ -157,7 +158,7 @@ export class DialogBoxComponent implements OnInit {
 
     currentStack = {};
     states = {};
-    volumeCount = "";
+    volumeCount = '';
 
     constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
@@ -169,8 +170,8 @@ export class DialogBoxComponent implements OnInit {
         this.requestType = data.requestType;
         this.userBucketName = data.userBucketName;
         this.datasettype = data.datasettype;
-        this.trustedRequest = "No";
-        this.acceptableUse = "";
+        this.trustedRequest = 'No';
+        this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
         this.operatingSystem = data.stack && data.stack.operating_system;
@@ -186,25 +187,25 @@ export class DialogBoxComponent implements OnInit {
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
         this.setDisableCurrentConfigurations();
-        let trustedStatus = sessionStorage.getItem('userTrustedStatus');
-        console.log("Trusted status" + trustedStatus);
+        const trustedStatus = sessionStorage.getItem('userTrustedStatus');
+        console.log('Trusted status' + trustedStatus);
         this.userTrustedStatus = JSON.parse(trustedStatus);
-        console.log("Trusted status" + this.userTrustedStatus);
-        let expWorkflow = sessionStorage.getItem('exportWorkflow');
+        console.log('Trusted status' + this.userTrustedStatus);
+        const expWorkflow = sessionStorage.getItem('exportWorkflow');
         this.expWorkflow = JSON.parse(expWorkflow);
 
         this.exportWorkflow = JSON.parse(sessionStorage.getItem('datasets'));
         console.log(this.exportWorkflow);
-        for (var i = 0; i < this.exportWorkflow.length; i++) {
-            var exportW = this.exportWorkflow[i];
+        for (let i = 0; i < this.exportWorkflow.length; i++) {
+            const exportW = this.exportWorkflow[i];
             this.export.push(exportW.exportWorkflow);
         }
-        var datasets = [];
-        for (var j = 0; j < this.export.length; j++) {
+        const datasets = [];
+        for (let j = 0; j < this.export.length; j++) {
             console.log('Inside:' + this.export[j]);
             if (this.export[j]) {
                 console.log('Inside:' + this.export[j]);
-                var dataset = {};
+                const dataset = {};
                 dataset['value'] = Object.keys(this.export[j])[0];
                 dataset['viewValue'] = Object.keys(this.export[j])[0];
                 this.dataSetTypes.push(dataset);
@@ -242,12 +243,12 @@ export class DialogBoxComponent implements OnInit {
         this.dataProviderNames = [];
         this.subDataSets = [];
         this.selectedDataSet = this.messageModel.datasettype;
-        for (var j = 0; j < this.exportWorkflow.length; j++) {
-            var exportW = this.exportWorkflow[j];
+        for (let j = 0; j < this.exportWorkflow.length; j++) {
+            const exportW = this.exportWorkflow[j];
             if (exportW.exportWorkflow && exportW.exportWorkflow[event.value]) {
-                this.allProvidersJson = exportW.exportWorkflow[event.value]
-                for (var j = 0; j < Object.keys(this.allProvidersJson).length; j++) {
-                    var dataProvider = {};
+                this.allProvidersJson = exportW.exportWorkflow[event.value];
+                for (let j = 0; j < Object.keys(this.allProvidersJson).length; j++) {
+                    const dataProvider = {};
                     dataProvider['value'] = Object.keys(this.allProvidersJson)[j];
                     dataProvider['viewValue'] = Object.keys(this.allProvidersJson)[j];
                     this.dataProviderNames.push(dataProvider);
@@ -263,11 +264,11 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataProvider = this.messageModel.dataProviderName;
         console.log(this.allProvidersJson);
         // for (var j=0; j < this.allProvidersJson.length; j++){
-        var value = this.allProvidersJson[event.value];
+        const value = this.allProvidersJson[event.value];
         if (value) {
-            var allDataTypesForProvider = value.datatypes;
-            for (var j = 0; j < Object.keys(allDataTypesForProvider).length; j++) {
-                var dataType = {};
+            const allDataTypesForProvider = value.datatypes;
+            for (let j = 0; j < Object.keys(allDataTypesForProvider).length; j++) {
+                const dataType = {};
                 dataType['value'] = Object.keys(allDataTypesForProvider)[j];
                 dataType['viewValue'] = Object.keys(allDataTypesForProvider)[j];
                 this.subDataSets.push(dataType);
@@ -276,6 +277,7 @@ export class DialogBoxComponent implements OnInit {
         console.log(this.subDataSets);
     }
     selectedIndexChange(val: number) {
+        console.log('--- ', val, ' ---');
         this.selectedIndex = val;
     }
 
@@ -284,7 +286,7 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
         console.log('SelectedDataType:' + this.selectedDatatype);
-        let key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
+        const key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
         this.trustedStatus = key in this.userTrustedStatus;
         // add the trusted status logic here
         // this.trustedStatus = true;
@@ -306,12 +308,12 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndex = 2;
     }
     validateEmailRegex(email) {
-        var regexEmail = new RegExp('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?');
+        const regexEmail = new RegExp('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?');
         return regexEmail.test(email);
     }
 
     sendMail() {
-        if (this.mailType === 'Access Request Mail' && this.datasetName != 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets') {
+        if (this.mailType === 'Access Request Mail' && this.datasetName !== 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets') {
             this.message = '<div>' +
                 '    Hello,<br><br>' +
                 '    Please approve the request for Dataset Access.<br>' +
@@ -328,7 +330,7 @@ export class DialogBoxComponent implements OnInit {
                 '    Thanks, <br>' + this.userName +
                 '</div>';
         } else {
-            if (this.mailType === 'Access Request Mail' && this.datasetName == 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets') {
+            if (this.mailType === 'Access Request Mail' && this.datasetName === 'U.S DOT Connected Vehicle Pilot (CVP) Evaluation Datasets') {
                 this.message = '<div>' +
                     '    Hello,<br><br>' +
                     '    Please approve the request for Dataset Access.<br>' +
@@ -345,7 +347,7 @@ export class DialogBoxComponent implements OnInit {
                     '    </ul>' +
                     '    Thanks, <br>' + this.userName +
                     '</div>';
-            } else if (this.messageModel.type == 'dataset') {
+            } else if (this.messageModel.type === 'dataset') {
                 this.message = '<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>' +
                     '    <ul>' +
                     '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
@@ -361,7 +363,7 @@ export class DialogBoxComponent implements OnInit {
                     '    </ul>' +
                     '    Thanks, <br>' + this.userName +
                     '</div>';
-            } else if (this.messageModel.type == 'algorithm') {
+            } else if (this.messageModel.type === 'algorithm') {
                 this.message = '<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>' +
                     '    <ul>' +
                     '        <li>Dataset / Algorithm Name = ' + this.datasetName + '</li>' +
@@ -422,6 +424,7 @@ export class DialogBoxComponent implements OnInit {
                 duration: 5000,
             });
         }
+        console.log('handle resize next ');
         this.selectedIndexChange(e);
     }
 
@@ -441,7 +444,14 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTransformedPrice(cost) {
-        return ('$' + (parseFloat(cost)).toFixed(2) + ' per Hour');
+        return ('$' + (parseFloat(cost)).toFixed(2) + ' Per hour');
+    }
+
+    getInstanceTypeToPrint(e) {
+        if (e === 'Pricing List') {
+            return 'Full List';
+        }
+        return e;
     }
 
     getTransformedMemory(memory) {
@@ -449,24 +459,24 @@ export class DialogBoxComponent implements OnInit {
     }
 
     transformPricing(pricingList) {
-        this.pricingGroups = []
-        this.instanceFamilyList = []
-        let filteredPriceList = []
+        this.pricingGroups = [];
+        this.instanceFamilyList = [];
+        let filteredPriceList = [];
         pricingList.map(e => {
             if (e.pricelist) {
-                filteredPriceList = [...filteredPriceList, ...e.pricelist]
-            };
+                filteredPriceList = [...filteredPriceList, ...e.pricelist];
+            }
         });
-        let fileteredRecommendedInstanceFamilyList = []
+        let fileteredRecommendedInstanceFamilyList = [];
         pricingList.map(e => {
             if (e.recommendedlist) {
-                fileteredRecommendedInstanceFamilyList = [...fileteredRecommendedInstanceFamilyList, ...e.recommendedlist]
-            };
+                fileteredRecommendedInstanceFamilyList = [...fileteredRecommendedInstanceFamilyList, ...e.recommendedlist];
+            }
         });
-        this.pricingGroups.push(fileteredRecommendedInstanceFamilyList)
-        this.pricingGroups.push(filteredPriceList)
-        this.instanceFamilyList.push('Recomended List')
-        this.instanceFamilyList.push('Pricing List')
+        this.pricingGroups.push(fileteredRecommendedInstanceFamilyList);
+        this.pricingGroups.push(filteredPriceList);
+        this.instanceFamilyList.push('Recomended List');
+        this.instanceFamilyList.push('Pricing List');
     }
 
     postResizeJSON() {
@@ -486,6 +496,7 @@ export class DialogBoxComponent implements OnInit {
         message['operating_system'] = this.operatingSystem;
 
         if (this.resizeWorkSpaceOnly) {
+            message['startAfterResize'] = this.startAfterResize;
             message['workstation_schedule_from_date'] = this.workSpaceFromDate;
             message['workstation_schedule_to_date'] = this.workSpaceToDate;
             message['requested_instance_type'] = this.requestedInstanceType;
@@ -551,7 +562,7 @@ export class DialogBoxComponent implements OnInit {
         this.gatewayService.getDesiredInstanceTypesAndCosts('get_desired_instance_types?cpu=' + this.selectedCpu + '&memory=' + this.selectedMemory + '&os=' + this.operatingSystem).subscribe(
             (response: any) => {
                 console.log(response);
-                this.pricing = response
+                this.pricing = response;
                 this.transformPricing(this.pricing);
                 this.callResolved = true;
                 // this.snackBar.open('Your request has been sent successfully', 'close', {
@@ -564,10 +575,45 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTabHeading() {
+        if (this.resizeWorkSpaceOnly && !this.resizeAddDiskOnly) {
+            if (this.selectedIndex === 0) {
+                return `Manage Workstation`;
+            } else if (this.selectedIndex === 1) {
+                return 'Resize Workstation';
+            } else if (this.selectedIndex === 2) {
+                return 'Select schedule';
+            } else {
+                return 'Resize Workstation';
+            }
+        }
+        if (!this.resizeWorkSpaceOnly && this.resizeAddDiskOnly) {
+            if (this.selectedIndex === 0) {
+                return `Manage Workstation`;
+            } else if (this.selectedIndex === 1) {
+                return 'Additional Diskspace';
+            } else if (this.selectedIndex === 2) {
+                return 'Select schedule';
+            } else {
+                return 'Resize Workstation';
+            }
+        }
+        if (!this.resizeWorkSpaceOnly && this.resizeAddDiskOnly) {
+            if (this.selectedIndex === 0) {
+                return `Manage Workstation`;
+            } else if (this.selectedIndex === 1) {
+                return 'Resize Workstation';
+            } else if (this.selectedIndex === 2) {
+                return 'Additional Diskspace';
+            } else if (this.selectedIndex === 3) {
+                return 'Select schedule';
+            } else {
+                return 'Resize Workstation';
+            }
+        }
         if (this.selectedIndex === 0) {
             return `Manage Workstation`;
         } else if (this.selectedIndex === 1) {
-            return 'Add Additional Diskspace';
+            return 'Resize Workstation';
         } else if (this.selectedIndex === 2) {
             return 'Additional Diskspace';
         } else if (this.selectedIndex === 3) {
@@ -585,7 +631,7 @@ export class DialogBoxComponent implements OnInit {
 
         console.log(this.userBucketName);
 
-        let approvalForm = {};
+        const approvalForm = {};
 
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
@@ -615,10 +661,10 @@ export class DialogBoxComponent implements OnInit {
             approvalForm['justifyExport'] = this.justifyExport;
         }
         // Submit API gateway request
-        let reqBody = {};
+        const reqBody = {};
         // reqBody['S3KeyHash'] = this.messageModel.fileFolderName;//Md5.hashStr('');//add s3 key inside
         reqBody['RequestedBy_Epoch'] = new Date().getTime();
-        // reqBody['DataSet_DataProvider_Datatype'] = this.selectedDataSet + "-" + this.selectedDataProvider + "-" + this.selectedDatatype; 
+        // reqBody['DataSet_DataProvider_Datatype'] = this.selectedDataSet + "-" + this.selectedDataProvider + "-" + this.selectedDatatype;
         reqBody['ReqReceivedtimestamp'] = null;
         reqBody['RequestedBy'] = null;
         reqBody['WorkflowStatus'] = null;
@@ -626,12 +672,12 @@ export class DialogBoxComponent implements OnInit {
         reqBody['RequestReviewedBy'] = null;
         reqBody['ReqReviewTimestamp'] = null;
         reqBody['S3Key'] = this.messageModel.fileFolderName;
-        reqBody['TeamBucket'] = this.userBucketName; //check this
+        reqBody['TeamBucket'] = this.userBucketName; // check this
         reqBody['RequestID'] = null;
         reqBody['ApprovalForm'] = approvalForm;
         reqBody['UserID'] = this.userName;
         reqBody['selectedDataInfo'] = { 'selectedDataSet': this.selectedDataSet, 'selectedDataProvider': this.selectedDataProvider, 'selectedDatatype': this.selectedDatatype };
-        reqBody['acceptableUse'] = this.acceptableUse
+        reqBody['acceptableUse'] = this.acceptableUse;
         /*if(this.trustedRequest === "Yes" && (this.acceptableUse === "No" || this.acceptableUse == "")) {
             //alert("Usage policy to continue"); // Ribbon...
             this.snackBar.open('Acceptable use policy should be accepted to request trusted status', 'close', {
@@ -639,16 +685,16 @@ export class DialogBoxComponent implements OnInit {
             });
         } else { */
         if (this.trustedRequest === 'Yes') {
-            // Submit API gateway request 
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted' }
+            // Submit API gateway request
+            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted' };
         }
-        //***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
-        if (this.trustedRequest === 'Yes' && this.acceptableUse == 'Decline') {
+        // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
+        if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted' };
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
-        if (this.trustedRequest === 'No' && this.acceptableUse == 'Decline') {
+        if (this.trustedRequest === 'No' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
@@ -661,7 +707,7 @@ export class DialogBoxComponent implements OnInit {
                 console.log('Request Sent Successfully');
             }
         );
-        //}
+        // }
     }
 
     onTrustedRequestGrpChange(selectedVal: any) {
@@ -673,17 +719,17 @@ export class DialogBoxComponent implements OnInit {
         //     // this.trustedAcceptableUseDisabled = false;
         //     // this.acceptableUse = "Accept";
         //     this.trustedRequest =  "Yes";
-        // }  
+        // }
         if (selectedVal === 'Yes') {
             this.trustedRequest = 'Yes';
         }
     }
 
     uploadFiles(event1) {
-        let totalFilesCount = event1.files.length;
-        for (let file of event1.files) {
+        const totalFilesCount = event1.files.length;
+        for (const file of event1.files) {
 
-            console.log('Bucket name is = ' + this.userBucketName)
+            console.log('Bucket name is = ' + this.userBucketName);
             console.log('File name is = ' + file.name);
             this.gatewayService.getPresignedUrl('presigned_url?file_name=' + file.name + '&file_type=' + file.type + '&bucket_name=' + this.userBucketName + '&username=' + this.userName).subscribe(
                 (response: any) => {
@@ -708,7 +754,7 @@ export class DialogBoxComponent implements OnInit {
                                     this.fileUpload.remove(event1.files, index);
                                 }
                             });
-                            this.uploadedFilesCount++
+                            this.uploadedFilesCount++;
                             console.log('File is completely uploaded!');
                             if (this.uploadedFilesCount === totalFilesCount) {
                                 this.snackBar.open('Your file(s) has been uploaded successfully', 'close', {
@@ -719,7 +765,7 @@ export class DialogBoxComponent implements OnInit {
                         }
                     });
                 }
-            )
+            );
         }
     }
 

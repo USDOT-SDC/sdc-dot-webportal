@@ -446,7 +446,7 @@
             </div>
 
             <div class="resize-filter-start-workspace">
-              <mat-checkbox></mat-checkbox>
+              <mat-checkbox [(ngModel)]="startAfterResize"></mat-checkbox>
               <p style="padding-left: 10px;">
                 <b>
                   Please start my workstation after resizing to the new configuration
@@ -455,10 +455,10 @@
             </div>
           </div>
           <div *ngFor="let instanceType of instanceFamilyList; let j = index">
-            <mat-expansion-panel style="margin-top: 40px;">
+            <mat-expansion-panel [expanded]="instanceType === 'Recomended List'" style="margin-top: 40px;">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  {{instanceType}}
+                  {{getInstanceTypeToPrint(instanceType)}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <div class="pricing-container">
