@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } fro
 import { FileUpload } from 'primeng/fileupload';
 // import { ProgressHttp } from "angular-progress-http";
 // import { Headers, RequestOptions } from '@angular/http';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
 import { element } from 'protractor';
@@ -101,6 +101,8 @@ export class DialogBoxComponent implements OnInit {
     diskSpaceFromDate = new Date();
     diskSpaceToDate = null;
     workSpaceToDate = null;
+    uptimeFromDate = new Date();
+    uptimeToDate = null;
     callResolved = false;
     instanceState = '';
 
@@ -397,6 +399,20 @@ export class DialogBoxComponent implements OnInit {
       }
     }*/
 
+    getUptimeContinueButton() {
+        if (this.resizeAddDiskOnly || this.resizeWorkSpaceOnly) {
+            return 'Next';
+        }
+        return 'Submit';
+    }
+
+    handleUptimeButtonClick() {
+        if (this.resizeWorkSpaceOnly || this.resizeAddDiskOnly) {
+            return this.handleResizeWorkNext(3);
+        }
+        return this.postResizeJSON();
+    }
+
     handleResizeWorkNext(e) {
         /*
 
@@ -425,7 +441,7 @@ export class DialogBoxComponent implements OnInit {
             });
         }
         console.log('handle resize next ');
-        this.selectedIndexChange(e);
+        this.selectedIndexChange(this.selectedIndex + 1);
     }
 
     handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
@@ -504,6 +520,11 @@ export class DialogBoxComponent implements OnInit {
             message['memory'] = this.desiredMemory;
         }
 
+        if (this.scheduleUpTime) {
+            message['uptime_schedule_from_date'] = this.uptimeFromDate;
+            message['uptime_schedule_to_date'] = this.uptimeToDate;
+        }
+
         if (this.resizeAddDiskOnly) {
             // tslint:disable-next-line:radix
             this.volumeCount = (parseInt(this.volumeCount) + 1).toString();
@@ -575,7 +596,7 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTabHeading() {
-        if (this.resizeWorkSpaceOnly && !this.resizeAddDiskOnly) {
+        if (this.resizeWorkSpaceOnly && !this.resizeAddDiskOnly && !this.scheduleUpTime) {
             if (this.selectedIndex === 0) {
                 return `Manage Workstation`;
             } else if (this.selectedIndex === 1) {
@@ -586,7 +607,7 @@ export class DialogBoxComponent implements OnInit {
                 return 'Resize Workstation';
             }
         }
-        if (!this.resizeWorkSpaceOnly && this.resizeAddDiskOnly) {
+        if (!this.resizeWorkSpaceOnly && this.resizeAddDiskOnly && !this.scheduleUpTime) {
             if (this.selectedIndex === 0) {
                 return `Manage Workstation`;
             } else if (this.selectedIndex === 1) {
@@ -597,7 +618,16 @@ export class DialogBoxComponent implements OnInit {
                 return 'Resize Workstation';
             }
         }
-        if (!this.resizeWorkSpaceOnly && this.resizeAddDiskOnly) {
+        if (!this.resizeWorkSpaceOnly && !this.resizeAddDiskOnly && this.scheduleUpTime) {
+            if (this.selectedIndex === 0) {
+                return `Manage Workstation`;
+            } else if (this.selectedIndex === 1) {
+                return 'Uptime schedule';
+            } else {
+                return 'Resize Workstation';
+            }
+        }
+        if (this.resizeWorkSpaceOnly && this.resizeAddDiskOnly && !this.scheduleUpTime) {
             if (this.selectedIndex === 0) {
                 return `Manage Workstation`;
             } else if (this.selectedIndex === 1) {
@@ -605,6 +635,47 @@ export class DialogBoxComponent implements OnInit {
             } else if (this.selectedIndex === 2) {
                 return 'Additional Diskspace';
             } else if (this.selectedIndex === 3) {
+                return 'Select schedule';
+            } else {
+                return 'Resize Workstation';
+            }
+        }
+        if (this.resizeWorkSpaceOnly && !this.resizeAddDiskOnly && this.scheduleUpTime) {
+            if (this.selectedIndex === 0) {
+                return `Manage Workstation`;
+            } else if (this.selectedIndex === 1) {
+                return 'Resize Workstation';
+            } else if (this.selectedIndex === 2) {
+                return 'Uptime schedule';
+            } else if (this.selectedIndex === 3) {
+                return 'Select schedule';
+            } else {
+                return 'Resize Workstation';
+            }
+        }
+        if (!this.resizeWorkSpaceOnly && this.resizeAddDiskOnly && this.scheduleUpTime) {
+            if (this.selectedIndex === 0) {
+                return `Manage Workstation`;
+            } else if (this.selectedIndex === 1) {
+                return 'Uptime schedule';
+            } else if (this.selectedIndex === 2) {
+                return 'Additional Diskspace';
+            } else if (this.selectedIndex === 3) {
+                return 'Select schedule';
+            } else {
+                return 'Resize Workstation';
+            }
+        }
+        if (this.resizeWorkSpaceOnly && this.resizeAddDiskOnly && this.scheduleUpTime) {
+            if (this.selectedIndex === 0) {
+                return `Manage Workstation`;
+            } else if (this.selectedIndex === 1) {
+                return 'Resize Workstation';
+            } else if (this.selectedIndex === 3) {
+                return 'Additional Diskspace';
+            } else if (this.selectedIndex === 2) {
+                return 'Uptime schedule';
+            } else if (this.selectedIndex === 4) {
                 return 'Select schedule';
             } else {
                 return 'Resize Workstation';
