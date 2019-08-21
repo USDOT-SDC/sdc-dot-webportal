@@ -18,13 +18,15 @@ export class WorkstationComponent implements OnInit {
     selectedStack: string;
     stacks: any = [];
     streamingUrl: any;
-    //instanceId: any;
+    // instanceId: any;
     instanceStates: any = {};
     statusProcessing: any = {};
     instanceData: any = [];
     allow_resize: Bool;
-    
-    private static STREAMING_URL= environment.STREAMING_URL; //Apache Guacamole Streaming Url
+    transformedConfigurations = [];
+
+    // tslint:disable-next-line:member-ordering
+    private static STREAMING_URL= environment.STREAMING_URL; // Apache Guacamole Streaming Url
 
     constructor(
         private gatewayService: ApiGatewayService,
@@ -33,17 +35,27 @@ export class WorkstationComponent implements OnInit {
         public snackBar: MatSnackBar) { }
 
     ngOnInit() {
-       // this.instanceId = sessionStorage.getItem('instance-id');
-        var stacksString = sessionStorage.getItem('stacks');
-        this.stacks = JSON.parse(stacksString);
+        // this.instanceId = sessionStorage.getItem('instance-id');
+        this.gatewayService.getUserInfo('user').subscribe(
+            (response: any) => {
+                sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
+                const stacksString = sessionStorage.getItem('stacks');
+                this.stacks = JSON.parse(stacksString);
+                for (const stack of this.stacks) {
+                    this.allow_resize = Boolean(stack.allow_resize);
+                    const config = {};
+                    stack['current_configuration'].split(',').forEach(element => {
+                        // tslint:disable-next-line:radix
+                        config[element.split(':')[0]] = Number(element.split(':')[1]);
+                    });
+                    this.transformedConfigurations.push(config);
+                    if (stack.instance_id) {
+                        this.getInstanceState(stack.instance_id);
 
-        for (let stack of this.stacks) {
-            this.allow_resize = Boolean(stack.allow_resize)
-            if(stack.instance_id) {
-                this.getInstanceState(stack.instance_id);
-
+                    }
+                }
             }
-        }
+        );
     }
 
     getBoolean(str) {
@@ -62,7 +74,7 @@ export class WorkstationComponent implements OnInit {
         });
     }
 
-    getInstanceState(instanceId:any) {
+    getInstanceState(instanceId: any) {
         this.gatewayService.get('instancestatus?instance_id=' + instanceId).subscribe(
             (response: any) => {
                 this.instanceData = response.Status.InstanceStatuses;
@@ -81,14 +93,14 @@ export class WorkstationComponent implements OnInit {
         );
     }
 
-    instanceAction(instanceId:any,action) {
+    instanceAction(instanceId: any, action) {
         this.gatewayService.post('instance?instance_id=' + instanceId + '&action=' + action).subscribe(
             (response: any) => {
                 this.statusProcessing[instanceId] = true;
                 setTimeout(() =>  {
                    this.getInstanceState(instanceId);
                 },
-                15000);  
+                15000);
                 this.snackBar.open('Instance ' + action + ' successfully', 'close', {
                     duration: 2000,
                 });
@@ -98,8 +110,9 @@ export class WorkstationComponent implements OnInit {
 
     launchWorkstation(stack: any) {
       this.selectedStack = stack.stack_name;
-      if (this.selectedStack == "Programming_Stack_1"){
-        var fleetName = stack.fleet_name;
+      if (this.selectedStack === 'Programming_Stack_1'){
+        const fleetName = stack.fleet_name;
+        // tslint:disable-next-line:max-line-length
         this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
             (response: any) => {
                 this.streamingUrl = response;
@@ -111,9 +124,9 @@ export class WorkstationComponent implements OnInit {
             }
         );
       } else {
-        let authToken = this.cognitoService.getIdToken();
+        const authToken = this.cognitoService.getIdToken();
         this.streamingUrl = WorkstationComponent.STREAMING_URL + authToken;
-        window.open(this.streamingUrl)
+        window.open(this.streamingUrl);
       }
     }
 }

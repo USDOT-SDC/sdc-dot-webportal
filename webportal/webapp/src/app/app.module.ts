@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule } from '@angular/material';
 import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -69,6 +69,7 @@ import {MessageModule} from 'primeng/message';
     MatExpansionModule,
     MatSnackBarModule,
     MatInputModule,
+    MatTooltipModule,
     MatFormFieldModule,
     MatDialogModule,
     MatSelectModule,
