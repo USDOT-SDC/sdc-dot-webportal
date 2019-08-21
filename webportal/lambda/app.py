@@ -38,7 +38,9 @@ TABLENAME_TRUSTED_NEW = 'dev-UserStacksTable'
 TABLENAME_TRUSTED = 'dev-TrustedUsersTable'
 TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExportTable'
 TABLENAME_MANAGE_USER = 'dev-ManageUserWorkstationTable'
+TABLENAME_MANAGE_USER_INDEX = 'dev-workstation-username-index'
 TABLENAME_MANAGE_DISK = 'dev-ManageDiskspaceRequestsTable'
+TABLENAME_MANAGE_DISK_INDEX = 'dev-diskspace-username-index'
 
 authorizer = CognitoUserPoolAuthorizer(
    'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
@@ -847,17 +849,20 @@ def user_requests_process(params):
 def resize_workstation(params):
     try:
         ##state = get_ec2_instances(params['instance_id'],'running')
-        state=get_ec2_instance_state(params)
+       # state=get_ec2_instance_state(params)
         instance_id = params['instance_id']
         requested_instance_type = params['default_instance_type']
-        if state == "running":
+        modify_instance(instance_id, requested_instance_type)
+       ### send email  
+        workstation_instance_request_notification(params)
+       # if state == "running":
 ######### manage disk function brings it up so no need to stop it since it is needed up 
            ###ec2_instance_stop(instance_id)
-           modify_instance(instance_id, requested_instance_type)
+       #    modify_instance(instance_id, requested_instance_type)
         ###   ec2_instance_start(params)
         ##elif state == "None":
-        else:
-           modify_instance(instance_id, requested_instance_type)
+        #else:
+        #   modify_instance(instance_id, requested_instance_type)
 
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
@@ -887,7 +892,7 @@ def insert_request_to_table(params):
     username = params['username']
     resp = table.query(
       # Add the name of the index you want to use in your query.
-      IndexName="dev-workstation-username-index",
+      IndexName=TABLENAME_MANAGE_USER_INDEX,
       KeyConditionExpression=Key('username').eq(username),)
     active = False
     for item in resp['Items']:
@@ -928,7 +933,7 @@ def insert_disk_request_to_table(params,volume_id,size):
     username = params['username']
     resp = table.query(
       # Add the name of the index you want to use in your query.
-      IndexName="dev-diskspace-username-index",
+      IndexName=TABLENAME_MANAGE_DISK_INDEX,
       KeyConditionExpression=Key('username').eq(username),)
     active = False
     for item in resp['Items']:
@@ -1106,6 +1111,8 @@ def attach_ebs_volume(params):
   if platform == 'linux':
     print(state)
     ssm_ec2_instance_linux(instance_id)
+  ### send mail here 
+  workstation_diskspace_request_notification(params)
   return response
 
 ############
@@ -1176,6 +1183,122 @@ def ec2_instance_start(params):
   except ClientError as e:
     print(e)
 
+######
+def manage_workstation_send_email(email,subject,body_text):
+  SENDER = "SDC Administrator <support@securedatacommons.com>"
+  RECIPIENT = email 
+  AWS_REGION = "us-east-1"
+
+# The subject line for the email.
+  SUBJECT = subject
+# The email body for recipients with non-HTML email clients.
+  BODY_TEXT = body_text
+
+# The character encoding for the email.
+  CHARSET = "UTF-8"
+
+# Create a new SES resource and specify a region.
+  client = boto3.client('ses',region_name=AWS_REGION)
+
+# Try to send the email.
+  try: #Provide the contents of the email.
+    response = client.send_email(
+        Destination={
+            'ToAddresses': [
+                RECIPIENT,
+            ],
+        },
+        Message={
+            'Body': {
+                'Text': {
+                    'Charset': CHARSET,
+                    'Data': BODY_TEXT,
+                },
+            },
+            'Subject': {
+                'Charset': CHARSET,
+                'Data': SUBJECT,
+            },
+        },
+        Source=SENDER,
+    )
+# Display an error if something goes wrong.     
+  except ClientError as e:
+    print(e.response['Error']['Message'])
+  else:
+    print("Email sent! Message ID:"),
+    print(response['MessageId'])
+
+def format_date(date):
+   yyyy = date[0:4]
+   mm = date[5:7]
+   dd = date[8:10]
+   formated_date = str(mm)+'/'+str(dd)+'/'+str(yyyy)
+   return formated_date
+def workstation_instance_request_notification(params):
+
+    subject = 'SDC: New instance type for your workstation has been Scheduled'
+    email = params['user_email']
+    instance_type = params['default_instance_type']
+    schedule_from_date = format_date(params['workstation_schedule_from_date'])
+    schedule_to_date = format_date(params['workstation_schedule_to_date'])
+
+    BL0 = "Dear SDC user \r\n\n"
+    BL1 = "You just requested " + instance_type + " instance type as your new workstation." 
+    BL2 = "Your request has been scheduled from " + schedule_from_date + " to " +  schedule_to_date + "."
+    BL3 = "You will receive an email two days before your schedule expires."
+    BL4 = "Please reach out to SDC Support Team if you have any questions"
+    BL5 = "\n\nThank you,\n SDC Support Team"
+
+    body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
+    manage_workstation_send_email(email,subject,body_text)
+
+def workstation_diskspace_request_notification(params):
+
+    subject = 'SDC: New diskspace on your workstation has been Scheduled'
+    email = params['user_email']
+    size = params['required_diskspace']
+    schedule_from_date = params['diskspace_schedule_from_date']
+    schedule_to_date = params['diskspace_schedule_to_date'],
+
+    BL0 = "Dear SDC user \r\n\n"
+    BL1 = "You just requested  " + str(size) + "Gib of new disk storage for your workstation." 
+    BL2 = "Your request has been scheduled from " + schedule_from_date + " to " +  schedule_to_date + "."
+    BL3 = "You will receive an email two days before your schedule expires."
+    BL4 = "Please reach out to SDC Support Team if you have any questions"
+    BL5 = "\n\nThank you,\n SDC Support Team"
+
+    body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
+    send_email(email,subject,body_text)
+
+@app.route('/get_workstation_schedule', authorizer=authorizer, cors=cors_config)
+def get_workstation_schedule():
+  params = app.current_request.query_params
+  logger.setLevel("INFO")
+  username = params['username']
+  workstation_schedule = {}
+  workstation_schedule['schedulelist'] = []
+  dynamodb = boto3.resource('dynamodb')
+
+  table = dynamodb.Table('TABLENAME_MANAGE_DISK')
+  resp = table.query(
+    IndexName=TABLENAME_MANAGE_DISK_INDEX,
+    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True))
+
+  for item in resp['Items']:
+    info = {"diskspace_schedule_from_date" : format_date(item['schedule_from_date']),"diskspace_schedule_to_date" : format_date(item['schedule_to_date'])}
+    workstation_schedule['schedulelist'].append(info)
+
+  table = dynamodb.Table(TABLENAME_MANAGE_USER)
+  resp = table.query(
+    IndexName=TABLENAME_MANAGE_USER_INDEX,
+    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True))
+
+  for item in resp['Items']:
+    info = {"workstation_schedule_from_date" : format_date(item['schedule_from_date']),"workstation_schedule_to_date" : format_date(item['schedule_to_date'])}
+    workstation_schedule['schedulelist'].append(info)
+
+######
 
 @app.route('/get_desired_instance_types', authorizer=authorizer, cors=cors_config)
 def get_desired_instance_types():
@@ -1192,7 +1315,6 @@ def get_desired_instance_types():
   return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
-
 
 def instance_family_compare_cost(famList,instances): 
   print("Recommended EC2 instances ")
