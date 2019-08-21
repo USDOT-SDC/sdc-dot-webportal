@@ -7,6 +7,8 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepi
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
 import { element } from 'protractor';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 // import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
@@ -114,6 +116,7 @@ export class DialogBoxComponent implements OnInit {
     desiredMemory = '';
     blockVolumeManage = false;
     startAfterResize = false;
+    didManageWorkStation = {posted: false, data: {}};
 
     // cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
@@ -162,7 +165,8 @@ export class DialogBoxComponent implements OnInit {
     states = {};
     volumeCount = '';
 
-    constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
+    // tslint:disable-next-line:max-line-length
+    constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
             this.messageModel.bucketName = data.bucketName;
@@ -379,6 +383,23 @@ export class DialogBoxComponent implements OnInit {
                     '    </ul>' +
                     '    Thanks, <br>' + this.userName +
                     '</div>';
+            } else if (this.didManageWorkStation['posted'] && this.didManageWorkStation['data']['manageWorkstation']) {
+                this.message = '<div> Hello,<br><br>Please approve the request for resize of your workstation.<br>' +
+                    '    <ul>' +
+                    '        <li>WWork Station = ' + this.instanceId + '</li>' +
+                    '        <li>Operating System = ' + this.didManageWorkStation['data']['operating_system'] + '</li>' +
+                    '        <li>Operating System = ' + this.didManageWorkStation['data']['operating_system'] + '</li>' +
+                    '        <li>Start after resize = ' + this.didManageWorkStation['data']['startAfterResize'] + '</li>' +
+                    '        <li>Requested Instance Type= ' + this.didManageWorkStation['data']['requested_instance_type'] + '</li>' +
+                    '        <li>Requested CPU = ' + this.didManageWorkStation['data']['vcpu'] + '</li>' +
+                    '        <li>memory = ' + this.didManageWorkStation['data']['memory'] + '</li>' +
+                    '        <li>Schedule From Date = ' + this.didManageWorkStation['data']['workstation_schedule_from_date'] + '</li>' +
+                    '        <li>Schedule To Date = ' + this.didManageWorkStation['data']['workstation_schedule_to_date'] + '</li>' +
+                    '        <li>Sender Name = ' + this.userName + '</li>' +
+                    '        <li>Sender E-mail id = ' + this.userEmail + '</li>' +
+                    '    </ul>' +
+                    '    Thanks, <br>' + this.userName +
+                    '</div>';
             }
         }
         this.gatewayService.sendRequestMail('send_email?sender=' + this.userEmail + '&message=' + this.message).subscribe(
@@ -536,7 +557,8 @@ export class DialogBoxComponent implements OnInit {
             message['diskspace_schedule_from_date'] = this.diskSpaceFromDate;
             message['diskspace_schedule_to_date'] = this.diskSpaceToDate;
         }
-
+        this.didManageWorkStation['posted'] = true;
+        this.didManageWorkStation['data'] = message;
         this.gatewayService.modifyUserWorkstation('manage_user_workstation?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
             (response: any) => {
                 // if (!this.resizeAddDiskOnly && !this.ManageBoth) {
@@ -551,10 +573,13 @@ export class DialogBoxComponent implements OnInit {
     }
 
     successHandler() {
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
         this.snackBar.open('Your request has been sent successfully', 'close', {
-            duration: 5000,
+            duration: 1000,
         });
-        this.onNoClick();
+        this.sendMail();
     }
 
     failureHandler() {
@@ -566,9 +591,9 @@ export class DialogBoxComponent implements OnInit {
 
     setDisableCurrentConfigurations() {
         // "CPUs:2,Memory(GiB):4".split(",")[0].split(":")[1]
-        this.currentStack['configuration'].split(',').forEach(element => {
+        this.currentStack['current_configuration'].split(',').forEach(i => {
             // tslint:disable-next-line:radix
-            this.currentConfigurations.push(Number(element.split(':')[1]));
+            this.currentConfigurations.push(Number(i.split(':')[1]));
         });
     }
 

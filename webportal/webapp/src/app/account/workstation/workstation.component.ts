@@ -35,23 +35,27 @@ export class WorkstationComponent implements OnInit {
         public snackBar: MatSnackBar) { }
 
     ngOnInit() {
-       // this.instanceId = sessionStorage.getItem('instance-id');
-        const stacksString = sessionStorage.getItem('stacks');
-        this.stacks = JSON.parse(stacksString);
+        // this.instanceId = sessionStorage.getItem('instance-id');
+        this.gatewayService.getUserInfo('user').subscribe(
+            (response: any) => {
+                sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
+                const stacksString = sessionStorage.getItem('stacks');
+                this.stacks = JSON.parse(stacksString);
+                for (const stack of this.stacks) {
+                    this.allow_resize = Boolean(stack.allow_resize);
+                    const config = {};
+                    stack['current_configuration'].split(',').forEach(element => {
+                        // tslint:disable-next-line:radix
+                        config[element.split(':')[0]] = Number(element.split(':')[1]);
+                    });
+                    this.transformedConfigurations.push(config);
+                    if (stack.instance_id) {
+                        this.getInstanceState(stack.instance_id);
 
-        for (const stack of this.stacks) {
-            this.allow_resize = Boolean(stack.allow_resize);
-            const config = {};
-            stack['configuration'].split(',').forEach(element => {
-                // tslint:disable-next-line:radix
-                config[element.split(':')[0]] = Number( element.split(':')[1]);
-            });
-            this.transformedConfigurations.push(config);
-            if (stack.instance_id) {
-                this.getInstanceState(stack.instance_id);
-
+                    }
+                }
             }
-        }
+        );
     }
 
     getBoolean(str) {

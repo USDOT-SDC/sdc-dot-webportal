@@ -420,7 +420,7 @@
         <hr>
         <p>
           <b>
-            Your current workstation configuration is {{currentConfigurations[0]}} CPU and {{currentConfigurations[1]}} GB RAM
+            Your current workstation configuration is {{(currentConfigurations || [''])[0]}} CPU and {{(currentConfigurations || ['', ''])[1]}} GB RAM
           </b>
         </p>
         <div><b>Please choose the appropriate instance type by selecting the desired CPU and RAM<span [matTooltipPosition]="'above'" matTooltip="Schedule and resize your default workstation with extra CPU and Memory">
@@ -441,7 +441,7 @@
             <div class="resize-filters-form">
               <mat-form-field style='width: 42%; max-width: 42%;'>
                 <mat-select class="exportSelect" placeholder='CPU' [(ngModel)]="resize.cpu">
-                  <mat-option *ngFor="let dataSetType of cpuOptions" [value]="dataSetType" [disabled]="dataSetType === currentConfigurations[0]" required>
+                  <mat-option *ngFor="let dataSetType of cpuOptions" [value]="dataSetType" [disabled]="dataSetType === (currentConfigurations || '')[0]" required>
                     {{ dataSetType }}
                   </mat-option>
                 </mat-select>
@@ -450,7 +450,7 @@
 
               <mat-form-field style='width: 42%; max-width: 42%;'>
                 <mat-select class="exportSelect" placeholder='RAM' [(ngModel)]="resize.memory">
-                  <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" [disabled]="dataSetType === currentConfigurations[1]" required>
+                  <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" [disabled]="dataSetType === (currentConfigurations || '')[1]" required>
                     {{ dataSetType.toString().concat(' GB') }}
                   </mat-option>
                 </mat-select>
