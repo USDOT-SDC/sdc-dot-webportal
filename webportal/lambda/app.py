@@ -41,6 +41,7 @@ TABLENAME_MANAGE_USER = 'dev-ManageUserWorkstationTable'
 TABLENAME_MANAGE_USER_INDEX = 'dev-workstation-username-index'
 TABLENAME_MANAGE_DISK = 'dev-ManageDiskspaceRequestsTable'
 TABLENAME_MANAGE_DISK_INDEX = 'dev-diskspace-username-index'
+TABLENAME_MANAGE_UPTIME = 'dev-ScheduleUptimeTable'
 
 authorizer = CognitoUserPoolAuthorizer(
    'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
@@ -831,9 +832,11 @@ def user_requests_process(params):
     manageWorkstation = params['manageWorkstation']
     manageDiskspace = params['manageDiskspace']
     manageWorkStationAndDiskspace = params['manageWorkStationAndDiskspace']
+    manageUptimeAndWorkstation = params['manageUptimeAndWorkstation']
     print(manageWorkstation)
     print(manageDiskspace)
     print(manageWorkStationAndDiskspace)
+    print(manageUptimeAndWorkstation)
     if manageWorkstation == True:
        resize_workstation(params)
        insert_request_to_table(params)
@@ -845,6 +848,8 @@ def user_requests_process(params):
        insert_request_to_table(params)
        update_configuration_type_to_table(params)
        response=attach_ebs_volume(params)
+    if manageUptimeAndWorkstation == True:
+       insert_shedule_uptime_to_table(params)
 
 def resize_workstation(params):
     try:
@@ -897,7 +902,7 @@ def insert_request_to_table(params):
     active = False
     for item in resp['Items']:
       reqID=item['RequestId']
-      print(reqID)
+ ###   print(reqID)
       table.update_item(
        Key={
       'RequestId': reqID,
@@ -927,6 +932,29 @@ def insert_request_to_table(params):
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
+def insert_shedule_uptime_to_table(params):
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table(TABLENAME_MANAGE_UPTIME)
+
+    try:
+        request_date = datetime.datetime.now()
+        request_date = str(request_date)
+        table.put_item(
+            Item={
+                    'RequestId': str(uuid.uuid4()),
+                    'username': params['username'],
+                    'user_email': params['user_email'],
+                    'instance_id': params['instance_id'],
+                    'operating_system': params['operating_system'],
+                    'request_date': request_date,
+                    'schedule_from_date': params['uptime_schedule_from_date'],
+                    'schedule_to_date': params['uptime_schedule_to_date'],
+                    'is_active': True
+                }
+            )
+    except ClientError as e:
+        logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
+
 def insert_disk_request_to_table(params,volume_id,size):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_MANAGE_DISK)
@@ -938,7 +966,7 @@ def insert_disk_request_to_table(params,volume_id,size):
     active = False
     for item in resp['Items']:
       reqID=item['RequestId']
-      print(reqID)
+ ####    print(reqID)
       table.update_item(
        Key={
       'RequestId': reqID,
@@ -1243,11 +1271,11 @@ def workstation_instance_request_notification(params):
     schedule_from_date = format_date(params['workstation_schedule_from_date'])
     schedule_to_date = format_date(params['workstation_schedule_to_date'])
 
-    BL0 = "Dear SDC user \r\n\n"
+    BL0 = "Dear SDC User \r\n\n"
     BL1 = "You just requested " + instance_type + " instance type as your new workstation." 
     BL2 = "Your request has been scheduled from " + schedule_from_date + " to " +  schedule_to_date + "."
     BL3 = "You will receive an email two days before your schedule expires."
-    BL4 = "Please reach out to SDC Support Team if you have any questions"
+    BL4 = "Please reach out to the SDC Support Team if you have any questions"
     BL5 = "\n\nThank you,\n SDC Support Team"
 
     body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
@@ -1261,11 +1289,11 @@ def workstation_diskspace_request_notification(params):
     schedule_from_date = params['diskspace_schedule_from_date']
     schedule_to_date = params['diskspace_schedule_to_date'],
 
-    BL0 = "Dear SDC user \r\n\n"
+    BL0 = "Dear SDC User \r\n\n"
     BL1 = "You just requested  " + str(size) + "Gib of new disk storage for your workstation." 
     BL2 = "Your request has been scheduled from " + schedule_from_date + " to " +  schedule_to_date + "."
     BL3 = "You will receive an email two days before your schedule expires."
-    BL4 = "Please reach out to SDC Support Team if you have any questions"
+    BL4 = "Please reach out to the SDC Support Team if you have any questions"
     BL5 = "\n\nThank you,\n SDC Support Team"
 
     body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
