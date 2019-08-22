@@ -117,7 +117,8 @@ export class DialogBoxComponent implements OnInit {
     blockVolumeManage = false;
     startAfterResize = false;
     didManageWorkStation = {posted: false, data: {}};
-
+    disableUptimeOption = false;
+    schedulesOnInstance = [];
     // cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
     messageModel = {
@@ -222,6 +223,7 @@ export class DialogBoxComponent implements OnInit {
         this.instanceState = this.states[this.instanceId];
         // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
         // this.exportWorkflow = JSON.parse(exportWorkflow);
+        this.getScheduleUptimeData();
        this.shouldAllowManageVolume();
     }
 
@@ -407,7 +409,11 @@ export class DialogBoxComponent implements OnInit {
                 this.snackBar.open('Your request has been sent successfully', 'close', {
                     duration: 2000,
                 });
+                if (this.didManageWorkStation['posted'] && this.didManageWorkStation['data']['manageWorkstation']) {
+                    this.triggerManageWorkStationCallback();
+                }
                 this.onNoClick();
+
                 console.log('Access Request Sent Successfully');
             }
         );
@@ -521,6 +527,7 @@ export class DialogBoxComponent implements OnInit {
         message['manageWorkstation'] = this.resizeWorkSpaceOnly && !this.resizeAddDiskOnly;
         message['manageDiskspace'] = !this.resizeWorkSpaceOnly && this.resizeAddDiskOnly;
         message['manageWorkStationAndDiskspace'] = this.resizeWorkSpaceOnly && this.resizeAddDiskOnly;
+        message['manageUptimeAndWorkstation'] = this.scheduleUpTime;
         // message['manageAll'] = false;
         // message['manageUptime'] = false;
         // message['manageUptimeAndDiskspace'] = false;
@@ -572,12 +579,20 @@ export class DialogBoxComponent implements OnInit {
         );
     }
 
+    triggerManageWorkStationCallback() {
+        if (this.resizeWorkSpaceOnly) {
+            location.reload();
+        }
+    }
+
     successHandler() {
         setTimeout(() => {
-            location.reload();
+            if (this.resizeWorkSpaceOnly) {
+                location.reload();
+            }
         }, 1000);
         this.snackBar.open('Your request has been sent successfully', 'close', {
-            duration: 1000,
+            duration: 4000,
         });
         this.sendMail();
     }
@@ -595,6 +610,34 @@ export class DialogBoxComponent implements OnInit {
             // tslint:disable-next-line:radix
             this.currentConfigurations.push(Number(i.split(':')[1]));
         });
+    }
+
+    getScheduleUptimeData() {
+        const message = {username: this.userName, instance_id: this.instanceId};
+      this.gatewayService.get('get_workstation_schedule?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
+        // this.gatewayService.get('get_workstation_schedule?username=' + this.userName).subscribe(
+            (response: any) => {
+                if (response['schedulelist'].some(e => e['uptime_instnace_id'] === this.instanceId)) {
+                    this.disableUptimeOption = true;
+                    this.schedulesOnInstance = response['schedulelist'];
+                } else {
+                    this.disableUptimeOption = false;
+                }
+            },
+            error => {
+                this.disableUptimeOption = false;
+            }
+        );
+    }
+
+    getUptimeDates () {
+        const uptimeRequests = this.schedulesOnInstance.filter(e => e['uptime_instnace_id'] === this.instanceId);
+        return `from ${uptimeRequests[0]['uptime_schedule_from_date']} to ${uptimeRequests[0]['uptime_schedule_to_date']}`;
+    }
+
+    getScheduleUptimeTooltip() {
+        // tslint:disable-next-line:max-line-length
+        return this.disableUptimeOption ? `Schedule Uptime is already requested on this instance ${this.getUptimeDates()}` : '';
     }
 
     handleResizeFilterFormSubmit() {
