@@ -487,7 +487,7 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTransformedPrice(cost) {
-        return ('$' + (parseFloat(cost)).toFixed(2) + ' Per hour');
+        return ('$' + (parseFloat(cost)).toFixed(2) + ' per hour');
     }
 
     getInstanceTypeToPrint(e) {
@@ -529,7 +529,7 @@ export class DialogBoxComponent implements OnInit {
         message['manageWorkStationAndDiskspace'] = this.resizeWorkSpaceOnly && this.resizeAddDiskOnly;
         message['manageUptimeAndWorkstation'] = this.scheduleUpTime;
         // message['manageAll'] = false;
-        // message['manageUptime'] = false;
+        message['manageUptime'] = (this.scheduleUpTime);
         // message['manageUptimeAndDiskspace'] = false;
         // message['manageUptimeAndWorkstation'] = false;
 
@@ -538,9 +538,9 @@ export class DialogBoxComponent implements OnInit {
         message['default_instance_type'] = this.defaultInstanceType;
         message['instance_id'] = this.instanceId;
         message['operating_system'] = this.operatingSystem;
-
+        message['startAfterResize'] = this.startAfterResize;
+        
         if (this.resizeWorkSpaceOnly) {
-            message['startAfterResize'] = this.startAfterResize;
             message['workstation_schedule_from_date'] = this.workSpaceFromDate;
             message['workstation_schedule_to_date'] = this.workSpaceToDate;
             message['requested_instance_type'] = this.requestedInstanceType;
