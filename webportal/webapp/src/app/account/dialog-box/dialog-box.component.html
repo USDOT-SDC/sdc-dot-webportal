@@ -388,7 +388,7 @@
             <mat-checkbox [disabled]="blockVolumeManage" [(ngModel)]="resizeAddDiskOnly"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
-                Add Additional Diskspace
+                Add Additional Disk Space
               </b>
             </p>
             <span [matTooltipPosition]="'above'" matTooltip="Schedule and attach additional filesystem/storage to your workstation">
@@ -401,7 +401,7 @@
             <mat-checkbox [(ngModel)]="scheduleUpTime" [matTooltipPosition]="'above'" matTooltip={{getScheduleUptimeTooltip()}} [disabled]="disableUptimeOption"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
-                Schedule Workstation Up Time
+                Schedule Workstation UpTime
               </b>
             </p>
             <span [matTooltipPosition]="'above'" matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
@@ -474,7 +474,7 @@
             </div>
           </div>
           <div *ngFor="let instanceType of instanceFamilyList; let j = index">
-            <mat-expansion-panel [expanded]="instanceType === 'Recomended List'" style="margin-top: 40px;">
+            <mat-expansion-panel [expanded]="instanceType === 'Recommended list'" style="margin-top: 40px;">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   {{getInstanceTypeToPrint(instanceType)}}
@@ -529,7 +529,7 @@
         </div>
       </mat-dialog-content>
     </mat-tab>
-    <mat-tab *ngIf="(scheduleUpTime)" label="Schedule Workstation Up Time" #tab5 [disabled]='selectedIndex==0 || selectedIndex==1 || (!scheduleUpTime)'>
+    <mat-tab *ngIf="(scheduleUpTime)" label="Schedule Workstation UpTime" #tab5 [disabled]='selectedIndex==0 || selectedIndex==1 || (!scheduleUpTime)'>
         <mat-dialog-content style="height: 100%;">
           <hr>
           <p><b>Please select the schedule <span [matTooltipPosition]="'above'" matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
@@ -541,7 +541,7 @@
           <hr>
           <p>
             <b>
-              Schedule Workstation Up Time
+              Schedule Workstation UpTime
             </b>
           </p>
   

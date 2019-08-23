@@ -518,7 +518,7 @@ export class DialogBoxComponent implements OnInit {
         });
         this.pricingGroups.push(fileteredRecommendedInstanceFamilyList);
         this.pricingGroups.push(filteredPriceList);
-        this.instanceFamilyList.push('Recomended List');
+        this.instanceFamilyList.push('Recommended list');
         this.instanceFamilyList.push('Pricing List');
     }
 
