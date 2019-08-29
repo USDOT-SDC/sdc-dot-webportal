@@ -42,6 +42,7 @@ TABLENAME_MANAGE_USER_INDEX = 'dev-workstation-username-index'
 TABLENAME_MANAGE_DISK = 'dev-ManageDiskspaceRequestsTable'
 TABLENAME_MANAGE_DISK_INDEX = 'dev-diskspace-username-index'
 TABLENAME_MANAGE_UPTIME = 'dev-ScheduleUptimeTable'
+TABLENAME_MANAGE_UPTIME_INDEX = 'schedule-uptime-username-index'
 
 authorizer = CognitoUserPoolAuthorizer(
    'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
@@ -833,10 +834,12 @@ def user_requests_process(params):
     manageDiskspace = params['manageDiskspace']
     manageWorkStationAndDiskspace = params['manageWorkStationAndDiskspace']
     manageUptimeAndWorkstation = params['manageUptimeAndWorkstation']
+    startAfterResize = params['startAfterResize']
     print(manageWorkstation)
     print(manageDiskspace)
     print(manageWorkStationAndDiskspace)
     print(manageUptimeAndWorkstation)
+    print(startAfterResize)
     if manageWorkstation == True:
        resize_workstation(params)
        insert_request_to_table(params)
@@ -850,6 +853,10 @@ def user_requests_process(params):
        response=attach_ebs_volume(params)
     if manageUptimeAndWorkstation == True:
        insert_shedule_uptime_to_table(params)
+    if startAfterResize == True:
+       state=get_ec2_instance_state(params)
+       if state != "running":
+         ec2_instance_start(params)
 
 def resize_workstation(params):
     try:
@@ -895,10 +902,11 @@ def insert_request_to_table(params):
     table = dynamodb.Table(TABLENAME_MANAGE_USER)
 
     username = params['username']
+    instance_id = params['instance_id']
     resp = table.query(
       # Add the name of the index you want to use in your query.
       IndexName=TABLENAME_MANAGE_USER_INDEX,
-      KeyConditionExpression=Key('username').eq(username),)
+      KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
     active = False
     for item in resp['Items']:
       reqID=item['RequestId']
@@ -936,6 +944,24 @@ def insert_shedule_uptime_to_table(params):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_MANAGE_UPTIME)
 
+#    username = params['username']
+#    instance_id = params['instance_id']
+#    resp = table.query(
+#      # Add the name of the index you want to use in your query.
+#      IndexName=TABLENAME_MANAGE_UPTIME_INDEX,
+#      KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
+#    active = False
+#    for item in resp['Items']:
+#      reqID=item['RequestId']
+# ###   print(reqID)
+#      table.update_item(
+#       Key={
+#      'RequestId': reqID,
+#      'username': username
+#      },
+#      UpdateExpression='set is_active = :active',
+#      ExpressionAttributeValues={':active': active })
+
     try:
         request_date = datetime.datetime.now()
         request_date = str(request_date)
@@ -959,10 +985,11 @@ def insert_disk_request_to_table(params,volume_id,size):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_MANAGE_DISK)
     username = params['username']
+    instance_id = params['instance_id']
     resp = table.query(
       # Add the name of the index you want to use in your query.
       IndexName=TABLENAME_MANAGE_DISK_INDEX,
-      KeyConditionExpression=Key('username').eq(username),)
+      KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
     active = False
     for item in resp['Items']:
       reqID=item['RequestId']
@@ -1213,7 +1240,8 @@ def ec2_instance_start(params):
 
 ######
 def manage_workstation_send_email(email,subject,body_text):
-  SENDER = "SDC Administrator <support@securedatacommons.com>"
+##  SENDER = "SDC Administrator <support@securedatacommons.com>"
+  SENDER = email 
   RECIPIENT = email 
   AWS_REGION = "us-east-1"
 
@@ -1301,30 +1329,45 @@ def workstation_diskspace_request_notification(params):
 
 @app.route('/get_workstation_schedule', authorizer=authorizer, cors=cors_config)
 def get_workstation_schedule():
-  params = app.current_request.query_params
+  paramsQuery = app.current_request.query_params
+  paramsString = paramsQuery['wsrequest']
   logger.setLevel("INFO")
+  logging.info("Received request {}".format(paramsString))
+  params = json.loads(paramsString)
   username = params['username']
+  instance_id = params['instance_id']
+  print(username)
   workstation_schedule = {}
   workstation_schedule['schedulelist'] = []
-  dynamodb = boto3.resource('dynamodb')
+  dynamodb = boto3.resource('dynamodb',region_name='us-east-1')
 
-  table = dynamodb.Table('TABLENAME_MANAGE_DISK')
+  table = dynamodb.Table(TABLENAME_MANAGE_DISK)
   resp = table.query(
     IndexName=TABLENAME_MANAGE_DISK_INDEX,
-    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True))
+    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
 
   for item in resp['Items']:
-    info = {"diskspace_schedule_from_date" : format_date(item['schedule_from_date']),"diskspace_schedule_to_date" : format_date(item['schedule_to_date'])}
+    info = {"diskspace_instnace_id" : instance_id, "diskspace_schedule_from_date" : format_date(item['schedule_from_date']),"diskspace_schedule_to_date" : format_date(item['schedule_to_date'])}
     workstation_schedule['schedulelist'].append(info)
 
   table = dynamodb.Table(TABLENAME_MANAGE_USER)
   resp = table.query(
     IndexName=TABLENAME_MANAGE_USER_INDEX,
-    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True))
+    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
 
   for item in resp['Items']:
-    info = {"workstation_schedule_from_date" : format_date(item['schedule_from_date']),"workstation_schedule_to_date" : format_date(item['schedule_to_date'])}
+    info = {"workstation_instnace_id" : instance_id,"workstation_schedule_from_date" : format_date(item['schedule_from_date']),"workstation_schedule_to_date" : format_date(item['schedule_to_date'])}
     workstation_schedule['schedulelist'].append(info)
+
+  table = dynamodb.Table(TABLENAME_MANAGE_UPTIME)
+  resp = table.query(
+    IndexName=TABLENAME_MANAGE_UPTIME_INDEX,
+    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
+
+  for item in resp['Items']:
+    info = {"uptime_instnace_id" : instance_id,"uptime_schedule_from_date" : format_date(item['schedule_from_date']),"uptime_schedule_to_date" : format_date(item['schedule_to_date'])}
+    workstation_schedule['schedulelist'].append(info)
+  return workstation_schedule
 
 ######
 
