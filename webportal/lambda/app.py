@@ -34,7 +34,7 @@ RECEIVER = 'support@securedatacommons.com'
 PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY'
 RESTAPIID = 'u2zksemc1h'
 AUTHORIZERID = 'pby0gw'
-TABLENAME_TRUSTED_NEW = 'dev-UserStacksTable'
+#TABLENAME_TRUSTED_NEW = 'dev-UserStacksTable'
 TABLENAME_TRUSTED = 'dev-TrustedUsersTable'
 TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExportTable'
 TABLENAME_MANAGE_USER = 'dev-ManageUserWorkstationTable'
@@ -852,7 +852,7 @@ def user_requests_process(params):
        update_configuration_type_to_table(params)
        response=attach_ebs_volume(params)
     if manageUptimeAndWorkstation == True:
-       insert_shedule_uptime_to_table(params)
+       insert_schedule_uptime_to_table(params)
     if startAfterResize == True:
        state=get_ec2_instance_state(params)
        if state != "running":
@@ -861,20 +861,15 @@ def user_requests_process(params):
 def resize_workstation(params):
     try:
         ##state = get_ec2_instances(params['instance_id'],'running')
-       # state=get_ec2_instance_state(params)
+        state=get_ec2_instance_state(params)
         instance_id = params['instance_id']
-        requested_instance_type = params['default_instance_type']
+        requested_instance_type = params['requested_instance_type']
+        print(state)
+        if state == "running":
+           ec2_instance_stop(instance_id)
         modify_instance(instance_id, requested_instance_type)
        ### send email  
         workstation_instance_request_notification(params)
-       # if state == "running":
-######### manage disk function brings it up so no need to stop it since it is needed up 
-           ###ec2_instance_stop(instance_id)
-       #    modify_instance(instance_id, requested_instance_type)
-        ###   ec2_instance_start(params)
-        ##elif state == "None":
-        #else:
-        #   modify_instance(instance_id, requested_instance_type)
 
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
@@ -890,7 +885,7 @@ def ec2_instance_stop(instance_id):
     waiter.wait(InstanceIds=[instance_id])
 
 def modify_instance(instance_id, request_instance_type):
-    print("Starting instance_id: " + instance_id)  
+    print("Modifying instance_id: " + instance_id + " to " + request_instance_type)  
     client = boto3.client('ec2',region_name='us-east-1')
     try:
         client.modify_instance_attribute(InstanceId=instance_id,Attribute='instanceType', Value=request_instance_type)
@@ -929,7 +924,7 @@ def insert_request_to_table(params):
                     'user_email': params['user_email'],
                     'instance_id': params['instance_id'],
                     'default_instance_type': params['default_instance_type'],
-                    'requested_instance_type': params['default_instance_type'],
+                    'requested_instance_type': params['requested_instance_type'],
                     'operating_system': params['operating_system'],
                     'request_date': request_date,
                     'schedule_from_date': params['workstation_schedule_from_date'],
@@ -940,7 +935,10 @@ def insert_request_to_table(params):
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
-def insert_shedule_uptime_to_table(params):
+def insert_schedule_uptime_to_table(params):
+    instance_id = params['instance_id']
+    ec2 = boto3.resource('ec2', region_name='us-east-1')
+    ec2.create_tags(Resources=[instance_id], Tags=[{'Key':'Action', 'Value':'KeepRunning'}])
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_MANAGE_UPTIME)
 
@@ -1029,7 +1027,7 @@ def update_volume_number_to_table(params,vol_number):
     instance_id = params['instance_id']
     username = params['username']
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table(TABLENAME_TRUSTED_NEW)
+    table = dynamodb.Table(TABLENAME)
     str_vol_number = str(vol_number)
     try:
       resp = table.query(KeyConditionExpression=Key('username').eq(username))
@@ -1042,7 +1040,7 @@ def update_volume_number_to_table(params,vol_number):
           if stack['instance_id'] == instance_id:
             map = map_num
       if map == -1:
-        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_TRUSTED)
+        print('Instance id ' + instance_id + ' not found in '+ TABLENAME)
         return -1
       table.update_item(
          Key={
@@ -1060,9 +1058,9 @@ def update_configuration_type_to_table(params):
     instance_id = params['instance_id']
     username = params['username']
     current_configuration = "CPUs:" + str(vcpu) + ",Memory(GiB):" + str(memory)
-    current_instance_type = params['default_instance_type']
+    current_instance_type = params['requested_instance_type']
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table(TABLENAME_TRUSTED_NEW)
+    table = dynamodb.Table(TABLENAME)
     try:
       resp = table.query(KeyConditionExpression=Key('username').eq(username))
 
@@ -1074,7 +1072,7 @@ def update_configuration_type_to_table(params):
           if stack['instance_id'] == instance_id:
             map = map_num
       if map == -1:
-        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_TRUSTED)
+        print('Instance id ' + instance_id + ' not found in '+ TABLENAME)
         return -1
       table.update_item(
          Key={
@@ -1140,6 +1138,7 @@ def attach_ebs_volume(params):
   vol_number = vol_number + 1
   client = boto3.client('ec2',region_name='us-east-1')
   state=get_ec2_instance_state(params)
+  print('ret: ',state)
   if state != 'running':
      ec2_instance_start(params)
   zone=ec2_instance_availability_zone(instance_id)
@@ -1156,15 +1155,17 @@ def attach_ebs_volume(params):
      VolumeId=volume_id)
   waiter = client.get_waiter('volume_in_use')
   waiter.wait(VolumeIds=[volume_id])
+  ### 
+  ###time.sleep(5)
   print('inserting volume_id to DB')
   insert_disk_request_to_table(params,volume_id,size)
   update_volume_number_to_table(params,vol_number)
 #### format volume or mount
+  state=get_ec2_instance_state(params)
+  print('debug: ',state)
   if platform == 'windows':
-    print(state)
     ssm_ec2_instance_windows(instance_id)
   if platform == 'linux':
-    print(state)
     ssm_ec2_instance_linux(instance_id)
   ### send mail here 
   workstation_diskspace_request_notification(params)
@@ -1173,16 +1174,16 @@ def attach_ebs_volume(params):
 ############
 def ssm_ec2_instance_windows(instance_id):
   print("Initializing disk2 on instance_id: " + instance_id)
-  #ssm = boto3.client('ssm' )    
   ssm = boto3.client('ssm',region_name='us-east-1' )    
   response = ssm.send_command( InstanceIds=[instance_id],
             DocumentName='AWS-RunPowerShellScript',
             Parameters={ "commands":[ """Get-Disk | Where partitionstyle -eq ‘raw’ |
                                      Initialize-Disk -PartitionStyle MBR -PassThru |
                                      New-Partition -AssignDriveLetter -UseMaximumSize |
-                                     Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$false""" ]  } )
+                                     Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$false""" ]  },
+                                  MaxErrors='10' )
   command_id = response['Command']['CommandId']
-  print(command_id)
+  print('command ID',command_id)
 
 def ssm_ec2_instance_linux(instance_id):
   print("EBS mounting on instance_id: " + instance_id)
@@ -1199,9 +1200,9 @@ if [ $? -ne 0 ]; then
 echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
 fi
 """
-]  } )
+]  },MaxErrors='10' )
   command_id = response['Command']['CommandId']
-  print(command_id)
+  print('Run command id',command_id)
   #print(response)
 
 
@@ -1295,15 +1296,15 @@ def workstation_instance_request_notification(params):
 
     subject = 'SDC: New instance type for your workstation has been Scheduled'
     email = params['user_email']
-    instance_type = params['default_instance_type']
+    instance_type = params['requested_instance_type']
     schedule_from_date = format_date(params['workstation_schedule_from_date'])
     schedule_to_date = format_date(params['workstation_schedule_to_date'])
 
     BL0 = "Dear SDC User \r\n\n"
     BL1 = "You just requested " + instance_type + " instance type as your new workstation." 
-    BL2 = "Your request has been scheduled from " + schedule_from_date + " to " +  schedule_to_date + "."
+    BL2 = "Your request has been scheduled from " + str(schedule_from_date) + " to " +  str(schedule_to_date) + ". "
     BL3 = "You will receive an email two days before your schedule expires."
-    BL4 = "Please reach out to the SDC Support Team if you have any questions"
+    BL4 = "Please reach out to the SDC Support Team if you have any questions."
     BL5 = "\n\nThank you,\n SDC Support Team"
 
     body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
@@ -1314,18 +1315,18 @@ def workstation_diskspace_request_notification(params):
     subject = 'SDC: New diskspace on your workstation has been Scheduled'
     email = params['user_email']
     size = params['required_diskspace']
-    schedule_from_date = params['diskspace_schedule_from_date']
-    schedule_to_date = params['diskspace_schedule_to_date'],
+    schedule_from_date = format_date(params['diskspace_schedule_from_date'])
+    schedule_to_date = format_date(params['diskspace_schedule_to_date'])
 
     BL0 = "Dear SDC User \r\n\n"
     BL1 = "You just requested  " + str(size) + "Gib of new disk storage for your workstation." 
-    BL2 = "Your request has been scheduled from " + schedule_from_date + " to " +  schedule_to_date + "."
+    BL2 = "Your request has been scheduled from " + str(schedule_from_date) + " to " +  str(schedule_to_date) + ". "
     BL3 = "You will receive an email two days before your schedule expires."
-    BL4 = "Please reach out to the SDC Support Team if you have any questions"
+    BL4 = "Please reach out to the SDC Support Team if you have any questions."
     BL5 = "\n\nThank you,\n SDC Support Team"
 
     body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
-    send_email(email,subject,body_text)
+    manage_workstation_send_email(email,subject,body_text)
 
 @app.route('/get_workstation_schedule', authorizer=authorizer, cors=cors_config)
 def get_workstation_schedule():
