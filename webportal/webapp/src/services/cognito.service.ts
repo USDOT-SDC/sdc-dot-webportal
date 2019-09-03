@@ -29,14 +29,14 @@ export interface Callback {
 @Injectable()
 export class CognitoService {
    
-    public static _REGION = "us-east-1" // User pool AWS region
-    public static _USER_POOL_ID = "us-east-1_Y5JI7ysvY" // User pool ID
-    public static _CLIENT_ID = "7nk1dq7m9v4bf847s3cgu05895" // App client ID
-    public static _IDENTITY_PROVIDER = "USDOT-ADFS" // User pool Identity provider name
-    public static _APP_DOMAIN = "dev-sdc-dot-webportal" // App domain name
+    public static _REGION = environment.REGION // User pool AWS region
+    public static _USER_POOL_ID = environment.USER_POOL_ID // User pool ID
+    public static _CLIENT_ID = environment.CLIENT_ID // App client ID
+    public static _IDENTITY_PROVIDER = environment.IDENTITY_PROVIDER // User pool Identity provider name
+    public static _APP_DOMAIN = environment.APP_DOMAIN // App domain name
     public static _IDP_ENDPOINT = "cognito-idp." + CognitoService._REGION + ".amazonaws.com/" + CognitoService._USER_POOL_ID
-    public static _REDIRECT_URL = "http://localhost:4200/index.html" // Re-direct URL for the user pool
-
+    public static _REDIRECT_URL = environment.REDIRECT_URL // Re-direct URL for the user pool
+    
     public static _POOL_DATA:any = {
         UserPoolId: CognitoService._USER_POOL_ID,
         ClientId: CognitoService._CLIENT_ID
