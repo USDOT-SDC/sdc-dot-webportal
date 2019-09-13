@@ -36,7 +36,7 @@ export class CognitoService {
     public static _APP_DOMAIN = environment.APP_DOMAIN // App domain name
     public static _IDP_ENDPOINT = "cognito-idp." + CognitoService._REGION + ".amazonaws.com/" + CognitoService._USER_POOL_ID
     public static _REDIRECT_URL = environment.REDIRECT_URL // Re-direct URL for the user pool
-
+    
     public static _POOL_DATA:any = {
         UserPoolId: CognitoService._USER_POOL_ID,
         ClientId: CognitoService._CLIENT_ID
