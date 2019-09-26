@@ -44,6 +44,7 @@ export class WorkstationComponent implements OnInit {
                 for (const stack of this.stacks) {
                     this.allow_resize = Boolean(stack.allow_resize);
                     const config = {};
+                    console.log("stack current configuration = " + stack['current_configuration'])
                     stack['current_configuration'].split(',').forEach(element => {
                         // tslint:disable-next-line:radix
                         config[element.split(':')[0]] = Number(element.split(':')[1]);

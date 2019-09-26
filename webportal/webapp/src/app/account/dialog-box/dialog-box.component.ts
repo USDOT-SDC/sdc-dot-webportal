@@ -119,6 +119,8 @@ export class DialogBoxComponent implements OnInit {
     didManageWorkStation = {posted: false, data: {}};
     disableUptimeOption = false;
     schedulesOnInstance = [];
+    currentConfiguration = '';
+
     // cvPilotDataSets:string[] = new Array("Wyoming","Tampa Hillsborough Expressway Authority","New York City DOT","All Sites")
 
     messageModel = {
@@ -184,7 +186,7 @@ export class DialogBoxComponent implements OnInit {
         this.operatingSystem = data.stack && data.stack.operating_system;
         this.defaultInstanceType = data.stack && data.stack.instance_type;
         this.instanceId = data.stack && data.stack.instance_id;
-        this.currentStack = data.stack;
+        this.currentConfiguration = data.stack && data.stack.current_configuration;
         this.states = data.states;
     }
     onNoClick(): void {
@@ -220,10 +222,10 @@ export class DialogBoxComponent implements OnInit {
             }
         }
         console.log(this.dataSetTypes);
-        this.instanceState = this.states[this.instanceId];
+        //this.instanceState = this.states[this.instanceId];
         // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
         // this.exportWorkflow = JSON.parse(exportWorkflow);
-        this.getScheduleUptimeData();
+        //this.getScheduleUptimeData();
        this.shouldAllowManageVolume();
     }
 
@@ -385,24 +387,7 @@ export class DialogBoxComponent implements OnInit {
                     '    </ul>' +
                     '    Thanks, <br>' + this.userName +
                     '</div>';
-            } else if (this.didManageWorkStation['posted'] && this.didManageWorkStation['data']['manageWorkstation']) {
-                this.message = '<div> Hello,<br><br>Please approve the request for resize of your workstation.<br>' +
-                    '    <ul>' +
-                    '        <li>WWork Station = ' + this.instanceId + '</li>' +
-                    '        <li>Operating System = ' + this.didManageWorkStation['data']['operating_system'] + '</li>' +
-                    '        <li>Operating System = ' + this.didManageWorkStation['data']['operating_system'] + '</li>' +
-                    '        <li>Start after resize = ' + this.didManageWorkStation['data']['startAfterResize'] + '</li>' +
-                    '        <li>Requested Instance Type= ' + this.didManageWorkStation['data']['requested_instance_type'] + '</li>' +
-                    '        <li>Requested CPU = ' + this.didManageWorkStation['data']['vcpu'] + '</li>' +
-                    '        <li>memory = ' + this.didManageWorkStation['data']['memory'] + '</li>' +
-                    '        <li>Schedule From Date = ' + this.didManageWorkStation['data']['workstation_schedule_from_date'] + '</li>' +
-                    '        <li>Schedule To Date = ' + this.didManageWorkStation['data']['workstation_schedule_to_date'] + '</li>' +
-                    '        <li>Sender Name = ' + this.userName + '</li>' +
-                    '        <li>Sender E-mail id = ' + this.userEmail + '</li>' +
-                    '    </ul>' +
-                    '    Thanks, <br>' + this.userName +
-                    '</div>';
-            }
+            } 
         }
         this.gatewayService.sendRequestMail('send_email?sender=' + this.userEmail + '&message=' + this.message).subscribe(
             (response: any) => {
@@ -606,7 +591,7 @@ export class DialogBoxComponent implements OnInit {
 
     setDisableCurrentConfigurations() {
         // "CPUs:2,Memory(GiB):4".split(",")[0].split(":")[1]
-        this.currentStack['current_configuration'].split(',').forEach(i => {
+        this.currentConfiguration.split(',').forEach(i => {
             // tslint:disable-next-line:radix
             this.currentConfigurations.push(Number(i.split(':')[1]));
         });
