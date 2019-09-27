@@ -357,7 +357,8 @@
   </mat-tab-group>
 </div>
 
-<div>
+<!-- ngIf to render the dialog only when data.mailType is resize -->
+<div *ngIf="mailType === 'reSize Request'">
   <h3>{{getTabHeading()}}</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">

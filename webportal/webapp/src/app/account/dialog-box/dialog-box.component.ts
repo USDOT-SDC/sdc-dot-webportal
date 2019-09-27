@@ -155,6 +155,7 @@ export class DialogBoxComponent implements OnInit {
         derivedDatasetname: '',
         dataprovider: '',
         datatype: ''
+
     };
 
     resize = {
@@ -186,7 +187,8 @@ export class DialogBoxComponent implements OnInit {
         this.operatingSystem = data.stack && data.stack.operating_system;
         this.defaultInstanceType = data.stack && data.stack.instance_type;
         this.instanceId = data.stack && data.stack.instance_id;
-        this.currentConfiguration = data.stack && data.stack.current_configuration;
+        this.currentConfiguration = data.stack && data.stack.configuration;
+        this.currentStack = data.stack;
         this.states = data.states;
     }
     onNoClick(): void {
@@ -195,7 +197,7 @@ export class DialogBoxComponent implements OnInit {
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
-        this.setDisableCurrentConfigurations();
+        (this.mailType === 'reSize Request') && this.setDisableCurrentConfigurations();
         const trustedStatus = sessionStorage.getItem('userTrustedStatus');
         console.log('Trusted status' + trustedStatus);
         this.userTrustedStatus = JSON.parse(trustedStatus);
@@ -222,11 +224,13 @@ export class DialogBoxComponent implements OnInit {
             }
         }
         console.log(this.dataSetTypes);
-        //this.instanceState = this.states[this.instanceId];
-        // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
-        // this.exportWorkflow = JSON.parse(exportWorkflow);
-        //this.getScheduleUptimeData();
-       this.shouldAllowManageVolume();
+        if (this.mailType === 'reSize Request') {
+            this.instanceState = this.states[this.instanceId];
+            // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
+            // this.exportWorkflow = JSON.parse(exportWorkflow);
+            this.getScheduleUptimeData();
+            this.shouldAllowManageVolume();
+        }
     }
 
     shouldAllowManageVolume() {
