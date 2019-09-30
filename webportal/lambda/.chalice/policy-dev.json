@@ -1,0 +1,57 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*",
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "ses:SendEmail",
+        "pricing:DescribeServices",
+        "pricing:GetAttributeValues",
+        "s3:*",
+        "apigateway:*",
+        "appstream:*",
+        "dynamodb:*",
+        "ec2:*",
+        "pricing:GetProducts"
+      ],
+      "Resource": "*",
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "apigateway:POST"
+      ],
+      "Resource": "arn:aws:apigateway:*::/restapis/*/authorizers",
+      "Effect": "Allow",
+      "Condition": {
+        "ArnLike": {
+          "apigateway:CognitoUserPoolProviderArn": [
+            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q"
+          ]
+        }
+      }
+    },
+    {
+      "Action": [
+        "apigateway:PATCH"
+      ],
+      "Resource": "arn:aws:apigateway:*::/restapis/*/authorizers/*",
+      "Effect": "Allow",
+      "Condition": {
+        "ArnLike": {
+          "apigateway:CognitoUserPoolProviderArn": [
+            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_uAgXIUy4Q"
+          ]
+        }
+      }
+    }
+  ]
+}
