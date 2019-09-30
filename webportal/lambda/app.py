@@ -881,8 +881,8 @@ def ec2_instance_stop(instance_id):
 
 # Stop the instance
     client.stop_instances(InstanceIds=[instance_id])
-    waiter=client.get_waiter('instance_stopped')
-    waiter.wait(InstanceIds=[instance_id])
+ #   waiter=client.get_waiter('instance_stopped')
+ #   waiter.wait(InstanceIds=[instance_id])
 
 def modify_instance(instance_id, request_instance_type):
     print("Modifying instance_id: " + instance_id + " to " + request_instance_type)  
@@ -1175,15 +1175,20 @@ def attach_ebs_volume(params):
 def ssm_ec2_instance_windows(instance_id):
   print("Initializing disk2 on instance_id: " + instance_id)
   ssm = boto3.client('ssm',region_name='us-east-1' )    
-  response = ssm.send_command( InstanceIds=[instance_id],
+  try:
+    response = ssm.send_command( InstanceIds=[instance_id],
             DocumentName='AWS-RunPowerShellScript',
             Parameters={ "commands":[ """Get-Disk | Where partitionstyle -eq ‘raw’ |
                                      Initialize-Disk -PartitionStyle MBR -PassThru |
                                      New-Partition -AssignDriveLetter -UseMaximumSize |
                                      Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$false""" ]  },
-                                  MaxErrors='10' )
+                                  MaxErrors='20' )
+  except Exception as e:
+    logging.error("send command error: {0}".format(e))
+    raise e
   command_id = response['Command']['CommandId']
   print('command ID',command_id)
+  print(response)
 
 def ssm_ec2_instance_linux(instance_id):
   print("EBS mounting on instance_id: " + instance_id)
@@ -1200,7 +1205,7 @@ if [ $? -ne 0 ]; then
 echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
 fi
 """
-]  },MaxErrors='10' )
+]  },MaxErrors='20' )
   command_id = response['Command']['CommandId']
   print('Run command id',command_id)
   #print(response)
@@ -1234,8 +1239,8 @@ def ec2_instance_start(params):
 # Start the instance
   try:
     client.start_instances(InstanceIds=[instance_id])
-    waiter=client.get_waiter('instance_running')
-    waiter.wait(InstanceIds=[instance_id])
+  #  waiter=client.get_waiter('instance_running')
+  #  waiter.wait(InstanceIds=[instance_id])
   except ClientError as e:
     print(e)
 
