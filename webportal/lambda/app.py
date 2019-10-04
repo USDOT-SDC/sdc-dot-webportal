@@ -1057,7 +1057,7 @@ def update_configuration_type_to_table(params):
     memory = params['memory']
     instance_id = params['instance_id']
     username = params['username']
-    current_configuration = "CPUs:" + str(vcpu) + ",Memory(GiB):" + str(memory)
+    current_configuration = "vCPUs:" + str(vcpu) + ",RAM(GiB):" + str(memory)
     current_instance_type = params['requested_instance_type']
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME)
