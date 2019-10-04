@@ -187,7 +187,7 @@ export class DialogBoxComponent implements OnInit {
         this.operatingSystem = data.stack && data.stack.operating_system;
         this.defaultInstanceType = data.stack && data.stack.instance_type;
         this.instanceId = data.stack && data.stack.instance_id;
-        this.currentConfiguration = data.stack && data.stack.configuration;
+        this.currentConfiguration = data.stack && data.stack.current_configuration;
         this.currentStack = data.stack;
         this.states = data.states;
     }
@@ -583,7 +583,6 @@ export class DialogBoxComponent implements OnInit {
         this.snackBar.open('Your request has been sent successfully', 'close', {
             duration: 4000,
         });
-        this.sendMail();
     }
 
     failureHandler() {

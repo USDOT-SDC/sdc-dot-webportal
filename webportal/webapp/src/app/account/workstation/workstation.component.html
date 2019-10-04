@@ -29,7 +29,7 @@
               <td>{{ i }}</td>
               <td  style="width:200px;">{{ stack.display_name }}</td>
               <td style="width:500px;"> {{stack.application}} </td>
-              <td style="width:200px;" *ngIf="stack.configuration"> vCPUs: {{transformedConfigurations[i-1]['CPUs']}}<br/> RAM(GiB): {{transformedConfigurations[i-1]['Memory(GiB)']}}</td>
+              <td style="width:200px;" *ngIf="stack.configuration"> vCPUs: {{transformedConfigurations[i-1]['vCPUs']}}<br/> RAM(GiB): {{transformedConfigurations[i-1]['RAM(GiB)']}}</td>
               <td>
                 <div *ngIf="!stack.instance_id">
                   <span>  ----</span>
