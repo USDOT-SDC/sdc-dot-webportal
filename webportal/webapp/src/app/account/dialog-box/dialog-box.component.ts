@@ -487,7 +487,19 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTransformedMemory(memory) {
-        return memory.split(' ')[0].concat(' GB');
+        return memory ? memory.split(' ')[0].concat(' GB') : '';
+    }
+
+    isValidIntanceTypeOption(item) {
+        const requiredKeys = ['cost', 'instanceFamily', 'instanceType', 'memory', 'operatingSystem', 'storage', 'vcpu'];
+        const currentKeys = Object.keys(item);
+        let validPriceCollection = true;
+        requiredKeys.forEach(i => {
+            if (!(currentKeys).includes(i)) {
+                validPriceCollection = false;
+            }
+        });
+        return validPriceCollection;
     }
 
     transformPricing(pricingList) {

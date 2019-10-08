@@ -507,17 +507,17 @@
                     </div>
                     
                     <div class="general-purpose-body" *ngFor="let item of pricingGroups[j]; let i = index">
-                      <div class="pricing-instance">
+                      <div *ngIf="isValidIntanceTypeOption(item)" class="pricing-instance">
                         <input (click)="handlePricingSelection(j,i)" type="radio" name="pricing">
                         <span style="margin-left: 3px;">{{item.instanceType}}</span>
                       </div>
-                      <div>
+                      <div *ngIf="isValidIntanceTypeOption(item)">
                         {{item.vcpu}}
                       </div>
-                      <div>
+                      <div *ngIf="isValidIntanceTypeOption(item)">
                         {{getTransformedMemory(item.memory)}}
                       </div>
-                      <div>
+                      <div *ngIf="isValidIntanceTypeOption(item)">
                         {{getTransformedPrice(item.cost)}}
                       </div>
                     </div>
