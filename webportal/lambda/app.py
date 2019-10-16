@@ -976,6 +976,7 @@ def insert_schedule_uptime_to_table(params):
                     'is_active': True
                 }
             )
+        workstation_uptime_request_notification(params)
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
@@ -1296,6 +1297,7 @@ def format_date(date):
    dd = date[8:10]
    formated_date = str(mm)+'/'+str(dd)+'/'+str(yyyy)
    return formated_date
+
 def workstation_instance_request_notification(params):
 
     subject = 'SDC: New instance type for your workstation has been Scheduled'
@@ -1306,6 +1308,23 @@ def workstation_instance_request_notification(params):
 
     BL0 = "Dear SDC User \r\n\n"
     BL1 = "You just requested " + instance_type + " instance type as your new workstation." 
+    BL2 = "Your request has been scheduled from " + str(schedule_from_date) + " to " +  str(schedule_to_date) + ". "
+    BL3 = "You will receive an email two days before your schedule expires."
+    BL4 = "Please reach out to the SDC Support Team if you have any questions."
+    BL5 = "\n\nThank you,\n SDC Support Team"
+
+    body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
+    manage_workstation_send_email(email,subject,body_text)
+
+def workstation_uptime_request_notification(params):
+
+    subject = 'SDC: New workstation uptime has been Scheduled'
+    email = params['user_email']
+    schedule_from_date = format_date(params['uptime_schedule_from_date'])
+    schedule_to_date = format_date(params['uptime_schedule_to_date'])
+
+    BL0 = "Dear SDC User \r\n\n"
+    BL1 = "Your request for a new uptime for your workstation has been scheduled." 
     BL2 = "Your request has been scheduled from " + str(schedule_from_date) + " to " +  str(schedule_to_date) + ". "
     BL3 = "You will receive an email two days before your schedule expires."
     BL4 = "Please reach out to the SDC Support Team if you have any questions."
