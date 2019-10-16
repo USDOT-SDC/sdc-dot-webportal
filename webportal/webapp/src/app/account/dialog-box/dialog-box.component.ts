@@ -187,7 +187,7 @@ export class DialogBoxComponent implements OnInit {
         this.operatingSystem = data.stack && data.stack.operating_system;
         this.defaultInstanceType = data.stack && data.stack.instance_type;
         this.instanceId = data.stack && data.stack.instance_id;
-        this.currentConfiguration = data.stack && data.stack.configuration;
+        this.currentConfiguration = data.stack && data.stack.current_configuration;
         this.currentStack = data.stack;
         this.states = data.states;
     }
@@ -487,7 +487,19 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getTransformedMemory(memory) {
-        return memory.split(' ')[0].concat(' GB');
+        return memory ? memory.split(' ')[0].concat(' GB') : '';
+    }
+
+    isValidIntanceTypeOption(item) {
+        const requiredKeys = ['cost', 'instanceFamily', 'instanceType', 'memory', 'operatingSystem', 'storage', 'vcpu'];
+        const currentKeys = Object.keys(item);
+        let validPriceCollection = true;
+        requiredKeys.forEach(i => {
+            if (!(currentKeys).includes(i)) {
+                validPriceCollection = false;
+            }
+        });
+        return validPriceCollection;
     }
 
     transformPricing(pricingList) {
@@ -578,12 +590,13 @@ export class DialogBoxComponent implements OnInit {
         setTimeout(() => {
             if (this.resizeWorkSpaceOnly) {
                 location.reload();
+            } else {
+                this.onNoClick();
             }
         }, 1000);
         this.snackBar.open('Your request has been sent successfully', 'close', {
             duration: 4000,
         });
-        this.sendMail();
     }
 
     failureHandler() {

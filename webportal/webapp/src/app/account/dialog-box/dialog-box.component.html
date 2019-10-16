@@ -507,17 +507,17 @@
                     </div>
                     
                     <div class="general-purpose-body" *ngFor="let item of pricingGroups[j]; let i = index">
-                      <div class="pricing-instance">
+                      <div *ngIf="isValidIntanceTypeOption(item)" class="pricing-instance">
                         <input (click)="handlePricingSelection(j,i)" type="radio" name="pricing">
                         <span style="margin-left: 3px;">{{item.instanceType}}</span>
                       </div>
-                      <div>
+                      <div *ngIf="isValidIntanceTypeOption(item)">
                         {{item.vcpu}}
                       </div>
-                      <div>
+                      <div *ngIf="isValidIntanceTypeOption(item)">
                         {{getTransformedMemory(item.memory)}}
                       </div>
-                      <div>
+                      <div *ngIf="isValidIntanceTypeOption(item)">
                         {{getTransformedPrice(item.cost)}}
                       </div>
                     </div>
@@ -540,12 +540,12 @@
     <mat-tab *ngIf="(scheduleUpTime)" label="Schedule Workstation UpTime" #tab5 [disabled]='selectedIndex==0 || selectedIndex==1 || (!scheduleUpTime)'>
         <mat-dialog-content style="height: 100%;">
           <hr>
-          <p><b>Please select the schedule <span [matTooltipPosition]="'above'" matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
-              <i class="material-icons">
+          <p><b><span [matTooltipPosition]="'above'" matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
+              <!-- <i class="material-icons">
                   info
-                  </i>
-                  </span> between what dates you would want the workstation to be in resized state. An email
-              notification will be sent after the resize is completed.</b></p>
+                  </i> -->
+                  </span> 
+                  Please select the dates you would want the workstation to be up and opted out of the nightly stop scheduler from stopping your instance automatically. An email notification will be sent after the uptime request is completed.</b></p>
           <hr>
           <p>
             <b>
