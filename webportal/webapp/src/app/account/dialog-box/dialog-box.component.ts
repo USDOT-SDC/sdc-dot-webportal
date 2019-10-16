@@ -590,6 +590,8 @@ export class DialogBoxComponent implements OnInit {
         setTimeout(() => {
             if (this.resizeWorkSpaceOnly) {
                 location.reload();
+            } else {
+                this.onNoClick();
             }
         }, 1000);
         this.snackBar.open('Your request has been sent successfully', 'close', {
