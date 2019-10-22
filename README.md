@@ -46,8 +46,13 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
-<strong>August 8, 2019. SDC sdc-dot-webportal Release 2.1</strong><br/>
-What's New in Release 2.1:
+**October 23, 2019. SDC sdc-dot-webportal Release 2.2**
+### What's New in Release 2.2
+* Provides a new feature for users to modify their workstation to a different configuration on-demand
+* Provides a new feature for users to schedule workstation uptime, so users can continue to keep their workstations running without being stopped by the nightly process
+
+**August 8, 2019. SDC sdc-dot-webportal Release 2.1**
+### What's New in Release 2.1:
 - Enabled HTTP Strict Transport Security (HSTS) policy to ensure data is encrypted before it is sent, making it impossible for attackers to read or modify the data in transit to the authenticated server. HSTS protects against HTTP downgrade attacks (SSL stripping attacks) by requiring all traffic to use HTTPS, and rewrites requests that do not point to encrypted sources.
 
 <!---                           -->
