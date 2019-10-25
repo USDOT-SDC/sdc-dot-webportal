@@ -620,7 +620,6 @@ export class DialogBoxComponent implements OnInit {
         // this.gatewayService.get('get_workstation_schedule?username=' + this.userName).subscribe(
             (response: any) => {
                 if (response['schedulelist'].some(e => e['uptime_instnace_id'] === this.instanceId)) {
-                    this.disableUptimeOption = true;
                     this.schedulesOnInstance = response['schedulelist'];
                 } else {
                     this.disableUptimeOption = false;
