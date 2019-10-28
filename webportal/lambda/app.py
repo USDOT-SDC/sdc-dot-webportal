@@ -942,23 +942,23 @@ def insert_schedule_uptime_to_table(params):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_MANAGE_UPTIME)
 
-#    username = params['username']
-#    instance_id = params['instance_id']
-#    resp = table.query(
-#      # Add the name of the index you want to use in your query.
-#      IndexName=TABLENAME_MANAGE_UPTIME_INDEX,
-#      KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
-#    active = False
-#    for item in resp['Items']:
-#      reqID=item['RequestId']
-# ###   print(reqID)
-#      table.update_item(
-#       Key={
-#      'RequestId': reqID,
-#      'username': username
-#      },
-#      UpdateExpression='set is_active = :active',
-#      ExpressionAttributeValues={':active': active })
+    username = params['username']
+    instance_id = params['instance_id']
+    resp = table.query(
+        # Add the name of the index you want to use in your query.
+        IndexName=TABLENAME_MANAGE_UPTIME_INDEX,
+        KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
+    active = False
+    for item in resp['Items']:
+        reqID=item['RequestId']
+    ###   print(reqID)
+        table.update_item(
+        Key={
+        'RequestId': reqID,
+        'username': username
+        },
+        UpdateExpression='set is_active = :active',
+        ExpressionAttributeValues={':active': active })
 
     try:
         request_date = datetime.datetime.now()

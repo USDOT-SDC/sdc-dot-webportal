@@ -199,23 +199,18 @@ export class DialogBoxComponent implements OnInit {
         this.userName = sessionStorage.getItem('username');
         (this.mailType === 'reSize Request') && this.setDisableCurrentConfigurations();
         const trustedStatus = sessionStorage.getItem('userTrustedStatus');
-        console.log('Trusted status' + trustedStatus);
         this.userTrustedStatus = JSON.parse(trustedStatus);
-        console.log('Trusted status' + this.userTrustedStatus);
         const expWorkflow = sessionStorage.getItem('exportWorkflow');
         this.expWorkflow = JSON.parse(expWorkflow);
 
         this.exportWorkflow = JSON.parse(sessionStorage.getItem('datasets'));
-        console.log(this.exportWorkflow);
         for (let i = 0; i < this.exportWorkflow.length; i++) {
             const exportW = this.exportWorkflow[i];
             this.export.push(exportW.exportWorkflow);
         }
         const datasets = [];
         for (let j = 0; j < this.export.length; j++) {
-            console.log('Inside:' + this.export[j]);
             if (this.export[j]) {
-                console.log('Inside:' + this.export[j]);
                 const dataset = {};
                 dataset['value'] = Object.keys(this.export[j])[0];
                 dataset['viewValue'] = Object.keys(this.export[j])[0];
@@ -229,7 +224,7 @@ export class DialogBoxComponent implements OnInit {
             // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
             // this.exportWorkflow = JSON.parse(exportWorkflow);
             this.getScheduleUptimeData();
-            this.shouldAllowManageVolume();
+            //this.shouldAllowManageVolume();
         }
     }
 
@@ -620,7 +615,6 @@ export class DialogBoxComponent implements OnInit {
         // this.gatewayService.get('get_workstation_schedule?username=' + this.userName).subscribe(
             (response: any) => {
                 if (response['schedulelist'].some(e => e['uptime_instnace_id'] === this.instanceId)) {
-                    this.disableUptimeOption = true;
                     this.schedulesOnInstance = response['schedulelist'];
                 } else {
                     this.disableUptimeOption = false;
@@ -632,14 +626,10 @@ export class DialogBoxComponent implements OnInit {
         );
     }
 
-    getUptimeDates () {
-        const uptimeRequests = this.schedulesOnInstance.filter(e => e['uptime_instnace_id'] === this.instanceId);
-        return `from ${uptimeRequests[0]['uptime_schedule_from_date']} to ${uptimeRequests[0]['uptime_schedule_to_date']}`;
-    }
-
     getScheduleUptimeTooltip() {
         // tslint:disable-next-line:max-line-length
-        return this.disableUptimeOption ? `Schedule Uptime is already requested on this instance ${this.getUptimeDates()}` : '';
+        const uptimeRequests = this.schedulesOnInstance.filter(e => e['uptime_instnace_id'] === this.instanceId);
+        return uptimeRequests.length > 0 ? ` Schedule Uptime is already requested on this instance from ${uptimeRequests[0]['uptime_schedule_from_date']} to ${uptimeRequests[0]['uptime_schedule_to_date']}` : '';
     }
 
     handleResizeFilterFormSubmit() {
