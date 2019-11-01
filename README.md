@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.com/usdot-jpo-sdc/sdc-dot-webportal.svg?branch=develop)](https://travis-ci.com/usdot-jpo-sdc/sdc-dot-webportal)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-webportal&metric=alert_status)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-webportal)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-webportal&metric=coverage)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-webportal)
-# BigDataAsAPlatform
 
 # sdc-dot-webportal
 The Secure Data Commons is an online data warehousing and analysis platform for transportation researchers. On this portal, researchers can take advantage of pre-established programming environments to access and analyze a growing set of transportation-related data sets.
@@ -47,8 +46,13 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
-<strong>August 8, 2019. SDC sdc-dot-webportal Release 2.1</strong><br/>
-What's New in Release 2.1:
+**October 23, 2019. SDC sdc-dot-webportal Release 2.2**
+### What's New in Release 2.2
+* Provides a new feature for users to modify their workstation to a different configuration on-demand
+* Provides a new feature for users to schedule workstation uptime, so users can continue to keep their workstations running without being stopped by the nightly process
+
+**August 8, 2019. SDC sdc-dot-webportal Release 2.1**
+### What's New in Release 2.1:
 - Enabled HTTP Strict Transport Security (HSTS) policy to ensure data is encrypted before it is sent, making it impossible for attackers to read or modify the data in transit to the authenticated server. HSTS protects against HTTP downgrade attacks (SSL stripping attacks) by requiring all traffic to use HTTPS, and rewrites requests that do not point to encrypted sources.
 
 <!---                           -->

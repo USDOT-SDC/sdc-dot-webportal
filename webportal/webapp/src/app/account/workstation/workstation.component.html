@@ -29,7 +29,7 @@
               <td>{{ i }}</td>
               <td  style="width:200px;">{{ stack.display_name }}</td>
               <td style="width:500px;"> {{stack.application}} </td>
-              <td style="width:200px;"> {{stack.configuration}} </td>
+              <td style="width:200px;" *ngIf="stack.configuration"> vCPUs: {{transformedConfigurations[i-1]['vCPUs']}}<br/> RAM(GiB): {{transformedConfigurations[i-1]['RAM(GiB)']}}</td>
               <td>
                 <div *ngIf="!stack.instance_id">
                   <span>  ----</span>
@@ -43,6 +43,9 @@
               <td>
                 <!--<button class="btn btn-primary dotBtn" (click)="launchWorkstation(stack)">Launch</button>-->
                 <a class="btn btn-primary dotBtn" style="cursor: pointer;" (click)="launchWorkstation(stack)" target="_blank"> Launch </a>
+              </td>
+              <td>
+                <button class="btn btn-primary dotBtn" [disabled]="!getBoolean(stack.allow_resize)" (click)="renderReSizeDialog(stack)" style="cursor: pointer;" target="_blank"> Manage </button>
               </td>
             </tr>
           </ng-template>
