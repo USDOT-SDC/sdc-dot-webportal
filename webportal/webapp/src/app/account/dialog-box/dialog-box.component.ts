@@ -1,13 +1,8 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import { HttpClient, HttpHeaders , HttpRequest , HttpEventType, HttpResponse} from '@angular/common/http';
 import {FileUpload} from 'primeng/fileupload';
-//import { ProgressHttp } from "angular-progress-http";
-//import { Headers, RequestOptions } from '@angular/http';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatRadioModule, MatCheckboxModule, MatTabsModule} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { CognitoService } from '../../../services/cognito.service';
-import { NgModel } from '@angular/forms';
-// import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
   selector: 'app-dialog-box',
@@ -114,7 +109,7 @@ export class DialogBoxComponent implements OnInit {
         datatype: ''
     };
 
-    constructor(private gatewayService: ApiGatewayService, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
+    constructor(private gatewayService: ApiGatewayService, private http: HttpClient, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {    this.messageModel.bucketName = data.bucketName;
                                                         this.mailType = data.mailType;
@@ -136,14 +131,14 @@ export class DialogBoxComponent implements OnInit {
         this.userName = sessionStorage.getItem('username');
         
         let trustedStatus = sessionStorage.getItem('userTrustedStatus');
+        
         console.log("Trusted status"+trustedStatus);
-        this.userTrustedStatus = JSON.parse(trustedStatus);
-        console.log("Trusted status"+this.userTrustedStatus);
+        this.userTrustedStatus = JSON.parse(trustedStatus);        
+
         let expWorkflow = sessionStorage.getItem('exportWorkflow');
         this.expWorkflow = JSON.parse(expWorkflow);
-        
         this.exportWorkflow = JSON.parse(sessionStorage.getItem('datasets'));
-        console.log(this.exportWorkflow);
+
         for (var i=0; i < this.exportWorkflow.length; i++) {
             var exportW = this.exportWorkflow[i];
             this.export.push(exportW.exportWorkflow);
@@ -160,36 +155,35 @@ export class DialogBoxComponent implements OnInit {
                 // datasets.push(Object.keys(this.export[j]));
             }
         }
-        console.log(this.dataSetTypes);
         // let exportWorkflow = sessionStorage.getItem('exportWorkflow');
         // this.exportWorkflow = JSON.parse(exportWorkflow);
     }
     setDataProviders(event){
-        console.log(event.value);
+        //console.log(event.value);
         this.dataProviderNames = [];
         this.subDataSets = [];
         this.selectedDataSet = this.messageModel.datasettype;
         for (var j=0; j < this.exportWorkflow.length; j++){
             var exportW = this.exportWorkflow[j];
+            console.log('exportW.exportWorkflow is '+ exportW.exportWorkflow);
             if (exportW.exportWorkflow && exportW.exportWorkflow[event.value]){
-                this.allProvidersJson = exportW.exportWorkflow[event.value]
-                for (var j=0; j < Object.keys(this.allProvidersJson).length; j++){
-                    var dataProvider = {};
-                    dataProvider["value"] = Object.keys(this.allProvidersJson)[j];
-                    dataProvider["viewValue"] = Object.keys(this.allProvidersJson)[j];
-                    this.dataProviderNames.push(dataProvider);
+                this.allProvidersJson = exportW.exportWorkflow[event.value];
+                
+                if (typeof this.allProvidersJson !== 'undefined') {
+                    for (var j=0; j < Object.keys(this.allProvidersJson).length; j++){
+                        var dataProvider = {};
+                        dataProvider["value"] = Object.keys(this.allProvidersJson)[j];
+                        dataProvider["viewValue"] = Object.keys(this.allProvidersJson)[j];
+                        this.dataProviderNames.push(dataProvider);
+                    }
                 }
             }
         }
-        console.log(this.dataProviderNames);
     }
 
     setSubDatasets(event){
-        console.log(event.value);
         this.subDataSets = [];
         this.selectedDataProvider = this.messageModel.dataProviderName;
-        console.log(this.allProvidersJson);
-        // for (var j=0; j < this.allProvidersJson.length; j++){
         var value = this.allProvidersJson[event.value];
         if(value){
             var allDataTypesForProvider = value.datatypes;
@@ -200,7 +194,6 @@ export class DialogBoxComponent implements OnInit {
                 this.subDataSets.push(dataType);
             }
         }
-        console.log(this.subDataSets);
     }
     selectedIndexChange(val :number ){
         this.selectedIndex=val;
@@ -442,7 +435,9 @@ export class DialogBoxComponent implements OnInit {
                         if (event.type === HttpEventType.UploadProgress) {
                           // This is an upload progress event. Compute and show the % done:
                           const percentDone = Math.round(100 * event.loaded / event.total);
-                          this.fileUpload.progress = percentDone;
+                          if (this.fileUpload) {
+                            this.fileUpload.progress = percentDone;
+                          }                          
                           console.log('File is ${percentDone}% uploaded.', percentDone);
                         } else if (event instanceof HttpResponse) {
                           this.selectedFiles.push(file);  
