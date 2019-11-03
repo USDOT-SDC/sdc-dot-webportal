@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: '**', redirectTo: 'home' }
 ];
 
-fdescribe('DialogBoxComponent', () => {
+describe('DialogBoxComponent', () => {
   let component: DialogBoxComponent;
   let fixture: ComponentFixture<DialogBoxComponent>;
   let mockObjectMap = {};  
