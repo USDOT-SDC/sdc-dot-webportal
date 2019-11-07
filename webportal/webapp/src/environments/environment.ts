@@ -11,7 +11,6 @@ export const environment = {
   CLIENT_ID :'', //p client ID
   IDENTITY_PROVIDER : '', // User pool Identity provider name
   APP_DOMAIN :'', // App domain name
-  IDP_ENDPOINT : '',
   REDIRECT_URL : '', // Re-direct URL for the user pool
   API_ENDPOINT : ''// AWS API gateway base endpoint
 };
