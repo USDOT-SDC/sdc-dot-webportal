@@ -3,42 +3,42 @@
     "dev": {
       "api_gateway_stage": "api",
       "environment_variables":{
-        "TABLENAME_USER_STACKS": "dev-UserStacksTable",
-        "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
-        "RESTAPIID": "u2zksemc1h",
-        "AUTHORIZERID": "pby0gw",
-        "TABLENAME_TRUSTED_USERS": "dev-TrustedUsersTable",
-        "TABLENAME_EXPORT_FILE_REQUEST": "dev-RequestExportTable",
-        "TABLENAME_MANAGE_USER": "dev-ManageUserWorkstationTable",
-        "TABLENAME_MANAGE_USER_INDEX": "dev-workstation-username-index",
-        "TABLENAME_MANAGE_DISK": "dev-ManageDiskspaceRequestsTable",
-        "TABLENAME_MANAGE_DISK_INDEX": "dev-diskspace-username-index",
-        "TABLENAME_MANAGE_UPTIME": "dev-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"dev-scheduleuptime-username-index"
+        "TABLENAME_USER_STACKS": "",
+        "TABLENAME_AVAILABLE_DATASET": "",
+        "RESTAPIID": "",
+        "AUTHORIZERID": "",
+        "TABLENAME_TRUSTED_USERS": "",
+        "TABLENAME_EXPORT_FILE_REQUEST": "",
+        "TABLENAME_MANAGE_USER": "",
+        "TABLENAME_MANAGE_USER_INDEX": "",
+        "TABLENAME_MANAGE_DISK": "",
+        "TABLENAME_MANAGE_DISK_INDEX": "",
+        "TABLENAME_MANAGE_UPTIME": "",
+        "TABLENAME_MANAGE_UPTIME_INDEX":""
       }
     },
     "prod": {
       "api_gateway_stage": "api",
       "environment_variables":{
-        "TABLENAME_USER_STACKS": "prod-UserStacksTable",
-        "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
-        "RESTAPIID": "cyfca70occ",
-        "AUTHORIZERID": "r6ck6c",
-        "TABLENAME_TRUSTED_USERS": "production-TrustedUsersTable",
-        "TABLENAME_EXPORT_FILE_REQUEST": "production-RequestExportTable",
-        "TABLENAME_MANAGE_USER": "production-ManageUserWorkstationTable",
-        "TABLENAME_MANAGE_USER_INDEX": "production-workstation-username-index",
-        "TABLENAME_MANAGE_DISK": "production-ManageDiskspaceRequestsTable",
-        "TABLENAME_MANAGE_DISK_INDEX": "production-diskspace-username-index",
-        "TABLENAME_MANAGE_UPTIME": "production-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index"
+        "TABLENAME_USER_STACKS": "",
+        "TABLENAME_AVAILABLE_DATASET": "",
+        "RESTAPIID": "",
+        "AUTHORIZERID": "",
+        "TABLENAME_TRUSTED_USERS": "",
+        "TABLENAME_EXPORT_FILE_REQUEST": "",
+        "TABLENAME_MANAGE_USER": "",
+        "TABLENAME_MANAGE_USER_INDEX": "",
+        "TABLENAME_MANAGE_DISK": "",
+        "TABLENAME_MANAGE_DISK_INDEX": "",
+        "TABLENAME_MANAGE_UPTIME": "",
+        "TABLENAME_MANAGE_UPTIME_INDEX":""
       }
     }    
   },
   "version": "2.0",
   "app_name": "webportal",
   "environment_variables":{
-    "RECEIVER_EMAIL": "support@securedatacommons.com",
-    "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY"
+    "RECEIVER_EMAIL": "",
+    "IDP_PROVIDER_ARNS":""
   }
 }
