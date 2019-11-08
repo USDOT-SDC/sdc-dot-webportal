@@ -1,12 +1,44 @@
 {
   "stages": {
     "dev": {
-      "api_gateway_stage": "api"
+      "api_gateway_stage": "api",
+      "environment_variables":{
+        "TABLENAME_USER_STACKS": "",
+        "TABLENAME_AVAILABLE_DATASET": "",
+        "RESTAPIID": "",
+        "AUTHORIZERID": "",
+        "TABLENAME_TRUSTED_USERS": "",
+        "TABLENAME_EXPORT_FILE_REQUEST": "",
+        "TABLENAME_MANAGE_USER": "",
+        "TABLENAME_MANAGE_USER_INDEX": "",
+        "TABLENAME_MANAGE_DISK": "",
+        "TABLENAME_MANAGE_DISK_INDEX": "",
+        "TABLENAME_MANAGE_UPTIME": "",
+        "TABLENAME_MANAGE_UPTIME_INDEX":""
+      }
     },
     "prod": {
-      "api_gateway_stage": "api"
+      "api_gateway_stage": "api",
+      "environment_variables":{
+        "TABLENAME_USER_STACKS": "",
+        "TABLENAME_AVAILABLE_DATASET": "",
+        "RESTAPIID": "",
+        "AUTHORIZERID": "",
+        "TABLENAME_TRUSTED_USERS": "",
+        "TABLENAME_EXPORT_FILE_REQUEST": "",
+        "TABLENAME_MANAGE_USER": "",
+        "TABLENAME_MANAGE_USER_INDEX": "",
+        "TABLENAME_MANAGE_DISK": "",
+        "TABLENAME_MANAGE_DISK_INDEX": "",
+        "TABLENAME_MANAGE_UPTIME": "",
+        "TABLENAME_MANAGE_UPTIME_INDEX":""
+      }
     }    
   },
   "version": "2.0",
-  "app_name": "webportal"
+  "app_name": "webportal",
+  "environment_variables":{
+    "RECEIVER_EMAIL": "",
+    "IDP_PROVIDER_ARNS":""
+  }
 }
