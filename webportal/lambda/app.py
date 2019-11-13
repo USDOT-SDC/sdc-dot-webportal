@@ -14,6 +14,7 @@ import datetime
 from boto3.dynamodb.conditions import Attr, Key
 from chalice import CORSConfig
 import time
+import os
 
 cors_config = CORSConfig(
     allow_origin='*',
@@ -23,34 +24,29 @@ cors_config = CORSConfig(
     allow_credentials=True
 )
 
-#Parameters used to deploy production setup
-TABLENAME = 'dev-UserStacksTable'
-TABLENAME_DATASET = 'dev-AvailableDataset'
-APPSTREAM_S3_BUCKET_NAME = 'appstream2-36fb080bb8-us-east-1-911061262852'
-APPSTREAM_DATASET_FOLDER_NAME = 'datasets/'
-APPSTREAM_ALGORITHM_FOLDER_NAME = 'algorithm/'
-APPSTREAM_DATASET_PATH = 'user/custom/'
-RECEIVER = 'support@securedatacommons.com'
-PROVIDER_ARNS = 'arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY'
-RESTAPIID = 'u2zksemc1h'
-AUTHORIZERID = 'pby0gw'
-#TABLENAME_TRUSTED_NEW = 'dev-UserStacksTable'
-TABLENAME_TRUSTED = 'dev-TrustedUsersTable'
-TABLENAME_EXPORT_FILE_REQUEST= 'dev-RequestExportTable'
-TABLENAME_MANAGE_USER = 'dev-ManageUserWorkstationTable'
-TABLENAME_MANAGE_USER_INDEX = 'dev-workstation-username-index'
-TABLENAME_MANAGE_DISK = 'dev-ManageDiskspaceRequestsTable'
-TABLENAME_MANAGE_DISK_INDEX = 'dev-diskspace-username-index'
-TABLENAME_MANAGE_UPTIME = 'dev-ScheduleUptimeTable'
-TABLENAME_MANAGE_UPTIME_INDEX = 'schedule-uptime-username-index'
-
-authorizer = CognitoUserPoolAuthorizer(
-   'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
-
 app = Chalice(app_name='webportal')
 logger = logging.getLogger()
 dynamodb_client = boto3.resource('dynamodb')
 appstream_client = boto3.client('appstream')
+
+PROVIDER_ARNS = os.getenv("IDP_PROVIDER_ARNS")
+TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
+TABLENAME_AVAILABLE_DATASET = os.getenv("TABLENAME_AVAILABLE_DATASET")
+RECEIVER = os.getenv("RECEIVER_EMAIL")
+RESTAPIID = os.getenv("RESTAPIID")
+AUTHORIZERID = os.getenv("AUTHORIZERID")
+TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
+TABLENAME_EXPORT_FILE_REQUEST= os.getenv("TABLENAME_EXPORT_FILE_REQUEST")
+TABLENAME_MANAGE_USER = os.getenv("TABLENAME_MANAGE_USER")
+TABLENAME_MANAGE_USER_INDEX = os.getenv("TABLENAME_MANAGE_USER_INDEX")
+TABLENAME_MANAGE_DISK = os.getenv("TABLENAME_MANAGE_DISK")
+TABLENAME_MANAGE_DISK_INDEX = os.getenv("TABLENAME_MANAGE_DISK_INDEX")
+TABLENAME_MANAGE_UPTIME = os.getenv("TABLENAME_MANAGE_UPTIME")
+TABLENAME_MANAGE_UPTIME_INDEX = os.getenv("TABLENAME_MANAGE_UPTIME_INDEX")
+
+
+authorizer = CognitoUserPoolAuthorizer(
+   'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
 
 def get_user_details(id_token):
     try:
@@ -81,9 +77,9 @@ def get_user_details(id_token):
 def get_datasets():
 
     try:
-        table = dynamodb_client.Table(TABLENAME_DATASET)
+        table = dynamodb_client.Table(TABLENAME_AVAILABLE_DATASET)
 
-        response = table.scan(TableName=TABLENAME_DATASET)
+        response = table.scan(TableName=TABLENAME_AVAILABLE_DATASET)
 
         return { 'datasets' : response }
     except BaseException as be:
@@ -91,7 +87,7 @@ def get_datasets():
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
 def get_user_trustedstatus(userid):
-    trustedUsersTable = dynamodb_client.Table(TABLENAME_TRUSTED)
+    trustedUsersTable = dynamodb_client.Table(TABLENAME_TRUSTED_USERS)
 
     response = trustedUsersTable.query(
         KeyConditionExpression=Key('UserID').eq(userid),
@@ -119,11 +115,8 @@ def get_user_info():
     except BaseException as be:
         logging.exception("Error: Failed to get user details from token or datasets and algorithm." + str(be) )
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-    table = dynamodb_client.Table(TABLENAME)
+    table = dynamodb_client.Table(TABLENAME_USER_STACKS)
 
-    # stack_names=set()
-
-    # Extract the stack names associated with the roles passed
 
     # Get the item with role name
     try:
@@ -145,61 +138,6 @@ def get_user_info():
     return Response(body=user_info,
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
-
-
-@app.route('/streamingurl', methods=['POST'], authorizer=authorizer, cors=cors_config)
-def get_streaming_url():
-    params = app.current_request.query_params
-    if not params or "stack_name" not in params or "username" not in params :
-        logger.error("The query parameters 'stack_name' or 'username' is missing")
-        raise BadRequestError("The query parameters 'stack_name' or 'username' is missing")
-
-
-    # try:
-    #     hash_object_user_id = hashlib.sha256(params['username'])
-    #     hex_dig_user_id = hash_object_user_id.hexdigest()
-    # except BaseException as be:
-    #     logger.exception("Failed to create sha256 hash for userid: %s" % params['username'])
-    #     raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-    #
-    # try:
-    #     client_s3 = boto3.client('s3')
-    #     response = client_s3.put_object(
-    #             Bucket=APPSTREAM_S3_BUCKET_NAME,
-    #             Body='',
-    #             Key=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_DATASET_FOLDER_NAME
-    #             )
-    # except ClientError as ce:
-    #     logger.exception("Failed to create datasets folder of user %s" % params['username'])
-    #     raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-    #
-    # try:
-    #     client_s3 = boto3.client('s3')
-    #     response = client_s3.put_object(
-    #             Bucket=APPSTREAM_S3_BUCKET_NAME,
-    #             Body='',
-    #             Key=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME
-    #             )
-    # except ClientError as ce:
-    #     logger.exception("Failed to create algorithm folder of user %s" % params['username'])
-    #     raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-
-    # Create the appstream url.
-    try:
-        response = appstream_client.create_streaming_url(FleetName=params['fleet_name'], StackName=params['stack_name'],
-                                                         UserId=params['username'])
-        #return {'url': response['StreamingURL']}
-
-        return Response(body=response['StreamingURL'],
-                status_code=200,
-                headers={'Content-Type': 'text/plain'})
-    except KeyError as ke:
-        logger.exception('received malformed mapping data from dynamodb. %s' % mapping)
-        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-    except ClientError as ce:
-        logger.exception("Creation of streaming url failed for [user=%s, Fleet=%s, stack=%s]" % (
-        user_id, found['fleet_name'], found['stack_name']))
-        raise ChaliceViewError("Error creating streaming url")
 
 @app.route('/send_email', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def send_email():
@@ -251,20 +189,6 @@ def get_my_datasets():
     content = set()
     user_id = ''
     params = app.current_request.query_params
-    # try:
-    #     id_token = app.current_request.headers['authorization']
-    #     info_dict=get_user_details(id_token)
-    #     user_id=info_dict['username']
-    # except BaseException as be:
-    #     logging.exception("Error: Failed to get user_id/email from token" + str(be) )
-    #     raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-    #
-    # try:
-    #     hash_object_user_id = hashlib.sha256(user_id)
-    #     hex_dig_user_id = hash_object_user_id.hexdigest()
-    # except BaseException as be:
-    #     logger.exception("Failed to create sha256 hash for userid: %s" % user_id)
-    #     raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
     try:
         client_s3 = boto3.client('s3')
@@ -290,24 +214,6 @@ def get_my_datasets():
     except BaseException as ce:
         logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
-
-    # try:
-    #     client_s3 = boto3.client('s3')
-    #     response = client_s3.list_objects(
-    #         Bucket=APPSTREAM_S3_BUCKET_NAME,
-    #         Prefix=APPSTREAM_DATASET_PATH+hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME
-    #     )
-    #     total_content_algo = {}
-    #     if 'Contents' in response:
-    #         total_content_algo=response['Contents']
-    #
-    #     for c in total_content_algo:
-    #         if not c['Key'].endswith(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME):
-    #             content.add(c['Key'].split(hex_dig_user_id+'/'+APPSTREAM_ALGORITHM_FOLDER_NAME)[1])
-    #
-    # except BaseException as ce:
-    #     logger.exception("Failed to list algorithm folder of user %s. %s" % (user_id,ce))
-    #     raise ChaliceViewError("Internal error occurred! Contact your administrator.")
 
     return Response(body=list(content),
                     status_code=200,
@@ -464,7 +370,7 @@ def get_combined_export_workflow():
 
 def get_user_details_from_username(username):
     try:
-        table = dynamodb_client.Table(TABLENAME)  
+        table = dynamodb_client.Table(TABLENAME_USER_STACKS)  
         response_table = table.get_item(Key={'username': username })
         team_name = response_table['Item']['teamName']
     except BaseException as be:
@@ -513,7 +419,7 @@ def export():
             acceptableUse = params['acceptableUse']
 
         if 'trustedRequest' in params:
-            trustedUsersTable = dynamodb.Table(TABLENAME_TRUSTED)
+            trustedUsersTable = dynamodb.Table(TABLENAME_TRUSTED_USERS)
 
             trustedStatus=params['trustedRequest']['trustedRequestStatus']
 
@@ -534,7 +440,7 @@ def export():
                     'TrustedStatus': trustedStatus,
                     'UsagePolicyStatus': acceptableUse,
                     'ReqReceivedTimestamp': int(time.time()),
-                    'LastUpdatedTimestamp': datetime.utcnow().strftime("%Y%m%d")
+                    'LastUpdatedTimestamp': datetime.datetime.utcnow().strftime("%Y%m%d")
                 }
             )
         requestReviewStatus = params['RequestReviewStatus']
@@ -565,9 +471,7 @@ def export():
                 'TeamBucket': params['TeamBucket'],
                 'ReqReceivedTimestamp': timemills,
                 'UserEmail': user_email,
-                "TeamName": team_name,
-                'ReqReceivedDate': datetime.now().strftime('%Y-%m-%d')
-                # 'RequestID' : params['RequestID']
+                'ReqReceivedDate': datetime.datetime.now().strftime('%Y-%m-%d')
             }
         )
         availableDatasets = get_datasets()['datasets']['Items']
@@ -650,7 +554,7 @@ def getSubmittedRequests():
 
         #Query all submitted requests for the selected datatype
         exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
-        trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED)
+        trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED_USERS)
         for userdataset in userdatasets:
             exportFileRequestResponse = exportFileRequestTable.query(
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
@@ -784,7 +688,7 @@ def updatetrustedtatus():
         key2=params['key2']
         userEmail = params['userEmail']
 
-        trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED)
+        trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED_USERS)
         trustedRequestTable.update_item(
                             Key={
                                 'UserID': key1,
@@ -1028,7 +932,7 @@ def update_volume_number_to_table(params,vol_number):
     instance_id = params['instance_id']
     username = params['username']
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table(TABLENAME)
+    table = dynamodb.Table(TABLENAME_USER_STACKS)
     str_vol_number = str(vol_number)
     try:
       resp = table.query(KeyConditionExpression=Key('username').eq(username))
@@ -1041,7 +945,7 @@ def update_volume_number_to_table(params,vol_number):
           if stack['instance_id'] == instance_id:
             map = map_num
       if map == -1:
-        print('Instance id ' + instance_id + ' not found in '+ TABLENAME)
+        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_USER_STACKS)
         return -1
       table.update_item(
          Key={
@@ -1061,7 +965,7 @@ def update_configuration_type_to_table(params):
     current_configuration = "vCPUs:" + str(vcpu) + ",RAM(GiB):" + str(memory)
     current_instance_type = params['requested_instance_type']
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table(TABLENAME)
+    table = dynamodb.Table(TABLENAME_USER_STACKS)
     try:
       resp = table.query(KeyConditionExpression=Key('username').eq(username))
 
@@ -1073,7 +977,7 @@ def update_configuration_type_to_table(params):
           if stack['instance_id'] == instance_id:
             map = map_num
       if map == -1:
-        print('Instance id ' + instance_id + ' not found in '+ TABLENAME)
+        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_USER_STACKS)
         return -1
       table.update_item(
          Key={

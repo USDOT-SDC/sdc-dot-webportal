@@ -46,7 +46,11 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
-**October 23, 2019. SDC sdc-dot-webportal Release 2.2**
+**November 11, 2019. SDC sdc-dot-webportal Release 2.3**
+### What's New in Release 2.3
+* Bug fix for export functionality
+
+**November 1, 2019. SDC sdc-dot-webportal Release 2.2**
 ### What's New in Release 2.2
 * Provides a new feature for users to modify their workstation to a different configuration on-demand
 * Provides a new feature for users to schedule workstation uptime, so users can continue to keep their workstations running without being stopped by the nightly process
