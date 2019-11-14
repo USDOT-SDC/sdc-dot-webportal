@@ -99,12 +99,10 @@ export class ExportRequestsComponent implements OnInit {
                             'ReqReceivedDate': item['ReqReceivedDate']
                            }
                         );
-                        console.log(item);
                     } 
                 }    
                 for(let items of response['trustedRequests']) {
                     for(let item of items) {
-                         //console.log(item);
                          this.trustedRequests.push({'userFullName' : item['UserID'], 
                                                     'dataset' : item['Dataset-DataProvider-Datatype'],
                                                     'TrustedStatus' : item['TrustedStatus'],
@@ -213,15 +211,16 @@ export class ExportRequestsComponent implements OnInit {
     }
 
      
-
+    /* Cheryl - commenting out, this method is not being used anywhere
     getMetadataForS3Objects(filename: string): any {
         var resp;
-        /*return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
+        return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
             (response: any) => {
                 resp=response;
                 return resp;
-        }); */   
+        });    
     }
+    */
 
     parseQueryString(queryString: string): Map<string, string> {
         var params = new Map<string, string>();
