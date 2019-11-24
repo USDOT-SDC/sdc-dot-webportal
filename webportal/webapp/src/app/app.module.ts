@@ -4,7 +4,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import { RoutingModule } from './app.routes';
 import { HttpModule } from '@angular/http';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
 import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatRadioButton } from '@angular/material';
@@ -12,7 +12,7 @@ import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
-//import { FileUploadModule } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
@@ -31,7 +31,7 @@ import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
-import {PanelModule,SharedModule, DataTableModule, FileUploadModule} from 'primeng/primeng';
+import { PanelModule,SharedModule, DataTableModule } from 'primeng/primeng';
 import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
@@ -79,7 +79,6 @@ import { APP_BASE_HREF } from '@angular/common';
     MatRadioModule,
     MatCheckboxModule,
     MatTabsModule,
-    //MatRadioButton,
     CdkTableModule,
     TableModule,
     FileUploadModule,
@@ -91,10 +90,10 @@ import { APP_BASE_HREF } from '@angular/common';
     ToastyModule.forRoot(),
     DataTableModule
   ],
-  schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
+  //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
   exports: [BrowserModule, ToastyModule, RouterModule ],
   providers: [
-    {provide: APP_BASE_HREF, useValue: '/'},
+    //{provide: APP_BASE_HREF, useValue: '/'},
     CognitoService,
     ApiGatewayService,
     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },

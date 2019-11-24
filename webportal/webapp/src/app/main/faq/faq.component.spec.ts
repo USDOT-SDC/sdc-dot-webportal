@@ -1,85 +1,34 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { HomeFaqComponent } from './faq.component';
-import { BrowserModule } from '@angular/platform-browser';
-import { RoutingModule } from '../../app.routes';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatCardModule, MatToolbarModule, MatIconModule, MatTableModule, MatExpansionModule, MatSnackBarModule, MatInputModule, MatFormFieldModule, MatDialogModule, MatSelectModule, MatOptionModule, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
-import { CdkTableModule } from '@angular/cdk/table';
-import { TableModule } from 'primeng/table';
-import { FileUploadModule, SharedModule, PanelModule, RadioButtonModule, MessageModule } from 'primeng/primeng';
-import { MarkdownModule } from 'ngx-md';
-import { ToastyModule } from 'ng2-toasty';
-import { MainComponent } from '../main.component';
-import { HomeComponent } from '../home/home.component';
-import { AboutComponent } from '../about/about.component';
-import { AccountComponent } from '../../account/account.component';
-import { AccountHomeComponent } from '../../account/accounthome/accounthome.component';
-import { DatasetsComponent } from '../../account/datasets/datasets.component';
-import { ExportRequestsComponent } from '../../account/exportrequests/exportrequests.component';
-import { WorkstationComponent } from '../../account/workstation/workstation.component';
-import { RegisterComponent } from '../register/register.component';
-import { DialogBoxComponent } from '../../account/dialog-box/dialog-box.component';
-import { FaqComponent } from '../../account/faq/faq.component';
-import { DatasetinfoComponent } from '../datasetinfo/datasetinfo.component';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Routes, Router, UrlTree } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { APP_BASE_HREF } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-class MockRouter {
-  public ne = new NavigationEnd(0, 'http://localhost:4200/login', 'http://localhost:4200/login');
-  public events = new Observable(observer => {
-    observer.next(this.ne);
-    observer.complete();
-  });
-}
+const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeFaqComponent },
+  { path: '**', redirectTo: 'home' }
+];
 
 describe('HomeFaqComponent', () => {
   let component: HomeFaqComponent;
-  let fixture: ComponentFixture<HomeFaqComponent>;
+  let fixture: ComponentFixture<HomeFaqComponent>;  
+  let tree;
 
-  beforeEach(async(() => {
+  beforeEach(async(() => {    
+
     TestBed.configureTestingModule({
       imports: [
-        BrowserModule,
-        RoutingModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatMenuModule,
-        MatCardModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatTableModule,
-        MatExpansionModule,
-        MatSnackBarModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatDialogModule,
-        MatSelectModule,
-        MatOptionModule,
-        MatRadioModule,
-        MatCheckboxModule,
-        MatTabsModule],
-      declarations: [ 
-        MainComponent,
-        HomeComponent,
-        AboutComponent,
-        AccountComponent,
-        AccountHomeComponent,
-        DatasetsComponent,
-        ExportRequestsComponent,
-        WorkstationComponent,
-        RegisterComponent,
-        DialogBoxComponent,
-        FaqComponent,
-        HomeFaqComponent,
-        DatasetinfoComponent
+        RouterTestingModule.withRoutes(routes),
+      ], 
+      declarations: [
+         HomeFaqComponent,
+       ], 
+      providers: [  
+        { provide: APP_BASE_HREF, useValue : '/' } 
       ],
-      providers: [{provide: Router, useClass: MockRouter}],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
@@ -94,4 +43,52 @@ describe('HomeFaqComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should create the app', async(() => {
+    const fixture = TestBed.createComponent(HomeFaqComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
+  }));
+
+  it('should test navigationEnd', () => {
+    TestBed.get(Router)
+      .navigate(['/home'])
+        .then(() => {         
+          console.log("##### Test Location ", location);
+          expect(location.pathname.endsWith('/context.html')).toBe(true);
+        }).catch(e => console.log(e));
+  });  
+
+  it('should test tree.fragment', () => {
+    //let tree = new UrlTree();
+    //spyOn(tree, 'fragment').and.returnValue('fragment');
+    //let route = jasmine.createSpyObj('Route', ['parseUrl']).and.returnValue('home/test?debug#fragment');
+    // let route; jasmine.createSpyObj('Route', ['parseUrl']);
+    // route.UrlTree = {
+    //     val: 'home/test?debug#fragment'
+    // }
+    //let tree = jasmine.createSpyObj('tree', ['fragment']);
+    TestBed.get(Router)
+      .navigate(['/home'])
+        .then(() => {         
+          console.log("##### Test Location ", location);
+          expect(location.pathname.endsWith('/context.html')).toBe(true);
+        }).catch(e => console.log(e));
+
+      let route = {
+        parseUrl: jasmine.createSpyObj('route', ['parseUrl'])
+      }
+    // const tree: UrlTree = 
+    // TestBed.get(Router)
+    //   .parseUrl(["/home/test?debug#fragment"])
+    //     .then(() => {                  
+    //       console.log("##### Test Location ", location);
+    //       expect(location.pathname.endsWith('/context.html')).toBe(true);          
+    //     }).catch(e => console.log(e));
+    //let tree = {
+    //  fragment: jasmine.createSpyObj('tree', ['fragment'])
+    //}
+    //expect(tree.fragment).toEqual('fragment');
+  });
+ 
 });
