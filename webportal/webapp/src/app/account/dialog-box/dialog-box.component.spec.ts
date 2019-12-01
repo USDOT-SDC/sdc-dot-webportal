@@ -127,6 +127,18 @@ describe('DialogBoxComponent', () => {
     spyOn(sessionStorage, 'removeItem').and.callFake(mockSessionStorage.removeItem);
     spyOn(sessionStorage, 'clear').and.callFake(mockSessionStorage.clear);    
     
+    const mockLocalStorage = {
+      getItem: (key: string): string => {
+        return key in store ? store[key] : null;
+      },
+      setItem: (key: string, value: string) => {
+        store[key] = `${value}`;
+      }
+    };
+
+    spyOn(localStorage, 'getItem').and.callFake(mockLocalStorage.getItem);
+    spyOn(localStorage, 'setItem').and.callFake(mockLocalStorage.setItem);
+    
     let trustedStatus: string;
     trustedStatus =  JSON.stringify({ status: 'success' });
     sessionStorage.setItem('userTrustedStatus', trustedStatus);
@@ -151,9 +163,21 @@ describe('DialogBoxComponent', () => {
     expect(spy).toHaveBeenCalled();    
   });
 
-  it('should call ngOnInit and set up export and datasettypes array', () => { 
+  it('should call ngOnInit and set up export and datasettypes array', () => {     
     component.ngOnInit(); 
-    expect(component.export.length).toBeGreaterThan(0);
+    expect(component.export.length).toBeGreaterThan(0);    
+    expect(component.dataSetTypes.length).toBeGreaterThan(0);
+  });
+
+  it('should call ngOnInit and if resize request, call getScheduleUptimeData', () => { 
+    component.mailType = 'reSize Request';
+    component.instanceId = 'i-05c68239b52a6a0ab';
+    component.states = {"instanceId" : "i-05c68239b52a6a0ab"};
+    let spy = spyOn(component, 'getScheduleUptimeData');
+    let spy1 = spyOn(component, 'setDisableCurrentConfigurations');
+    component.ngOnInit(); 
+    expect(spy).toHaveBeenCalled();
+    expect(spy1).toHaveBeenCalled();
   });
 
   it('should trigger event to setDataProviders', () => {
@@ -234,7 +258,17 @@ describe('DialogBoxComponent', () => {
     expect(mockObjectMap['mockApiGatewayService'].sendRequestMail).toHaveBeenCalled(); 
   });
 
- 
+  // it('should send mail and trigger manage workstation callback', () => {   
+  //   component.didManageWorkStation.posted = true;    
+  //   component.didManageWorkStation.data = { 'manageWorkstation': 'true'};
+  //   component.resizeWorkSpaceOnly = true;
+  //   let spy = spyOn(component, 'triggerManageWorkStationCallback').and.callThrough();      
+  //   component.sendMail();
+  //   expect(mockObjectMap['mockApiGatewayService'].sendRequestMail).toHaveBeenCalled(); 
+  //   expect(spy).toHaveBeenCalled();
+  //   expect(location.reload).toHaveBeenCalled();
+  // });
+
   it('should submit export request with trustedRequest set to Yes', () => {   
     component.messageModel.datasettype = "algorithm";
     component.messageModel.dataProviderName = "CVP";
@@ -277,15 +311,39 @@ describe('DialogBoxComponent', () => {
     expect(component.trustedRequest).toEqual('No'); 
   });
 
-  it('should trigger event to upload files', () => {
-    mockHttp.request.and.returnValue(
-      of({ type: HttpEventType.UploadProgress, loaded: 7, total: 10 } as HttpProgressEvent)
-    );
-    component.ngOnInit();
-    let event1 = { 'files': [{"name": "tmp.1"} ,{"name": "tmp.2"}]};       
-    let spy = spyOn(component, 'uploadFiles').and.callThrough();    
-    component.uploadFiles(event1);
-    expect(spy).toHaveBeenCalled();
-    expect(mockObjectMap['mockHttp'].request).toHaveBeenCalled(); 
-   });
+  it('should not allow manage volume', () => {
+    var d1 = new Date (),
+    d2 = new Date ( d1 );
+    d2.setMinutes ( d1.getMinutes() - 30 );
+    localStorage.setItem('volumeCountLastModified', d2.toString());
+    localStorage.setItem('volumeCount', '2');   
+    component.shouldAllowManageVolume();
+    expect(component.blockVolumeManage).toBeTruthy(); 
+  });
+
+  it('should return Next', () => {
+    component.resizeAddDiskOnly = true;
+    component.resizeWorkSpaceOnly = true;
+    var result = component.getUptimeContinueButton();
+    expect(result).toEqual('Next'); 
+  });
+
+  it('should return Submit', () => {
+    component.resizeAddDiskOnly = false;
+    component.resizeWorkSpaceOnly = false;
+    var result = component.getUptimeContinueButton();
+    expect(result).toEqual('Submit'); 
+  });
+
+  // it('should trigger event to upload files', () => {
+  //   mockHttp.request.and.returnValue(
+  //     of({ type: HttpEventType.UploadProgress, loaded: 7, total: 10 } as HttpProgressEvent)
+  //   );
+  //   component.ngOnInit();
+  //   let event1 = { 'files': [{"name": "tmp.1"} ,{"name": "tmp.2"}]};       
+  //   let spy = spyOn(component, 'uploadFiles').and.callThrough();    
+  //   component.uploadFiles(event1);
+  //   expect(spy).toHaveBeenCalled();
+  //   expect(mockObjectMap['mockHttp'].request).toHaveBeenCalled(); 
+  //  });
 });

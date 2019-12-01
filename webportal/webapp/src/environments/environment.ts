@@ -4,13 +4,13 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  REGION : "",
-  USER_POOL_ID: "",
-  CLIENT_ID: "",
-  IDENTITY_PROVIDER: "",
-  APP_DOMAIN: "" ,
-  REDIRECT_URL: "",
-  API_ENDPOINT : "",
-  STREAMING_URL: ""
+  production: '',
+  STREAMING_URL: '',
+  REGION : '', // User pool AWS region
+  USER_POOL_ID : '' ,// User pool ID
+  CLIENT_ID :'', //p client ID
+  IDENTITY_PROVIDER : '', // User pool Identity provider name
+  APP_DOMAIN :'', // App domain name
+  REDIRECT_URL : '', // Re-direct URL for the user pool
+  API_ENDPOINT : ''// AWS API gateway base endpoint
 };

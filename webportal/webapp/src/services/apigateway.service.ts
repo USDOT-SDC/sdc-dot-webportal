@@ -12,7 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class ApiGatewayService {
 
     protected options: RequestOptions;
-    private static _API_ENDPOINT = environment.API_ENDPOINT; // AWS API gateway base endpoint
+    private static _API_ENDPOINT = environment.API_ENDPOINT;
 
     apiResponse: any;
     extractData: any;
@@ -139,5 +139,19 @@ export class ApiGatewayService {
         return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
         .map(this.extractData)
         .catch(this.handleError);
+    }
+
+    getDesiredInstanceTypesAndCosts(url: string){
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    modifyUserWorkstation(url: string){
+        this.setRequestHeaders();
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
     }
 }

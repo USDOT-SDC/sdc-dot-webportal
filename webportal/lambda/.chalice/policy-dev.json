@@ -12,12 +12,15 @@
     },
     {
       "Action": [
-        "dynamodb:*",
-        "appstream:*",
-        "apigateway:*",
+        "ses:SendEmail",
+        "pricing:DescribeServices",
+        "pricing:GetAttributeValues",
         "s3:*",
-        "ses:sendEmail",
-        "ec2:*"
+        "apigateway:*",
+        "appstream:*",
+        "dynamodb:*",
+        "ec2:*",
+        "pricing:GetProducts"
       ],
       "Resource": "*",
       "Effect": "Allow"

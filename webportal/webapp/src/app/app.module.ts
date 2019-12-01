@@ -7,8 +7,8 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatRadioButton } from '@angular/material';
-import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule } from '@angular/material';
+import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
@@ -72,6 +72,7 @@ import { APP_BASE_HREF } from '@angular/common';
     MatExpansionModule,
     MatSnackBarModule,
     MatInputModule,
+    MatTooltipModule,
     MatFormFieldModule,
     MatDialogModule,
     MatSelectModule,
@@ -86,6 +87,8 @@ import { APP_BASE_HREF } from '@angular/common';
     PanelModule,
     RadioButtonModule,
     MessageModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
     DataTableModule
