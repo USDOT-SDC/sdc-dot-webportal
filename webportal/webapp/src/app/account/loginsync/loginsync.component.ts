@@ -7,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
               '../../../../node_modules/uswds/src/stylesheets/uswds.scss']
 })
 export class LoginSyncComponent implements OnInit {
+  username: string;
+  password: string;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onSubmit() {
+    console.log(`User tried to sign in with creds: ${this.username}, ${this.password}`);
   }
 
 }
