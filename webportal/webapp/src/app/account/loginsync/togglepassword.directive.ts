@@ -1,9 +1,9 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[appTogglepassword]'
+  selector: '[appTogglePassword]'
 })
-export class TogglepasswordDirective {
+export class TogglePasswordDirective {
 
   constructor() { }
 
