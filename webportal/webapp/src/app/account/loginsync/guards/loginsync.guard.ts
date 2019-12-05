@@ -15,7 +15,7 @@ export class LoginSyncGuard implements CanActivate {
         return true;
       }
       // Redirect to the /loginsync page if the user signed in with Login.gov creds
-      this.router.navigate(['/loginsync']);
+      this.router.navigate(['account/loginsync']);
       return false;
   }
 }

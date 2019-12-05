@@ -15,6 +15,6 @@ export class AdfsLoginService {
 
   // Fetch all toggles
   userSignedInWithADFSCreds(): any {
-    return true;
+    return false;
   }
 }
