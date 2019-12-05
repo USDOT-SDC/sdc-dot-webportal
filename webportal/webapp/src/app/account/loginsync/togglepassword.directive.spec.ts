@@ -36,4 +36,16 @@ describe('TogglePasswordDirective', () => {
 
     expect(input.getAttribute('type')).toEqual('text');
   });
+
+  it('should toggle to hide password when clicked twice', () => {
+    const debugEl: HTMLElement = fixture.debugElement.nativeElement;
+    const input: HTMLElement = debugEl.querySelector('input');
+    const aTag: HTMLElement = debugEl.querySelector('a');
+
+    aTag.click();
+    aTag.click();
+    fixture.detectChanges();
+
+    expect(input.getAttribute('type')).toEqual('password');
+  });
 });
