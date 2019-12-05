@@ -35,6 +35,7 @@ import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/loginsync.component';
+import { TogglepasswordDirective } from './account/loginsync/togglepassword.directive';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { LoginSyncComponent } from './account/loginsync/loginsync.component';
     HomeFaqComponent,
     DatasetinfoComponent,
     LoginSyncComponent,
+    TogglepasswordDirective,
   ],
   imports: [
     BrowserModule,
