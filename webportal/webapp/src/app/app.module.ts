@@ -34,8 +34,8 @@ import {PanelModule, SharedModule} from 'primeng/primeng';
 import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
-import { LoginSyncComponent } from './account/loginsync/loginsync.component';
-import { TogglePasswordDirective } from './account/loginsync/togglepassword.directive';
+import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
+import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 
 
 @NgModule({
