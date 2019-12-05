@@ -12,6 +12,7 @@ import { RegisterComponent } from './main/register/register.component';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
+import { LoginSyncComponent } from './account/loginsync/loginsync.component';
 
 const appRoutes: Routes = [
     {
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
             { path: 'exportrequests', component: ExportRequestsComponent },
             { path: 'workstation', component: WorkstationComponent },
             { path: 'faq', component: FaqComponent },
+            { path: 'loginsync', component: LoginSyncComponent },
         ],
     }
 ];
