@@ -17,5 +17,4 @@ export class AdfsLoginService {
   userSignedInWithADFSCreds(): any {
     return true;
   }
-
 }
