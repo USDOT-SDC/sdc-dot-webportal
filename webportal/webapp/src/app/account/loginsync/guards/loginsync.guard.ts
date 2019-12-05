@@ -11,11 +11,9 @@ export class LoginSyncGuard implements CanActivate {
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
 
       if (this.adfsLoginService.userSignedInWithADFSCreds()) {
-        // Continue to homepage if user signed in with ADFS creds
-        return true;
+        return true; // Continue to homepage if user signed in with ADFS creds
       }
-      // Redirect to the /loginsync page if the user signed in with Login.gov creds
-      this.router.navigate(['account/loginsync']);
+      this.router.navigate(['account/loginsync']); // Redirect to the /loginsync page if the user signed in with Login.gov creds
       return false;
   }
 }
