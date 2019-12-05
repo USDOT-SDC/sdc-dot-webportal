@@ -30,10 +30,12 @@ import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
-import {PanelModule,SharedModule} from 'primeng/primeng';
+import {PanelModule, SharedModule} from 'primeng/primeng';
 import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
+import { LoginSyncComponent } from './account/loginsync/loginsync.component';
+import { TogglePasswordDirective } from './account/loginsync/togglepassword.directive';
 
 
 @NgModule({
@@ -52,6 +54,8 @@ import {MessageModule} from 'primeng/message';
     FaqComponent,
     HomeFaqComponent,
     DatasetinfoComponent,
+    LoginSyncComponent,
+    TogglePasswordDirective,
   ],
   imports: [
     BrowserModule,
