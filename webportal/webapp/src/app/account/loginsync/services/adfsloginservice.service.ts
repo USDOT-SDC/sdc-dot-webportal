@@ -13,7 +13,7 @@ export class AdfsLoginService {
 
   constructor(private http: HttpClient) { }
 
-  // Fetch all toggles
+  // TODO: Reach out to API for this result
   userSignedInWithADFSCreds(): any {
     return false;
   }
