@@ -1,8 +1,8 @@
-import { TogglepasswordDirective } from './togglepassword.directive';
+import { TogglePasswordDirective } from './togglepassword.directive';
 
 describe('TogglepasswordDirective', () => {
   it('should create an instance', () => {
-    const directive = new TogglepasswordDirective();
+    const directive = new TogglePasswordDirective();
     expect(directive).toBeTruthy();
   });
 });

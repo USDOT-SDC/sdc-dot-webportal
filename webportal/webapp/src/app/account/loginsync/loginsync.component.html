@@ -9,10 +9,7 @@
           <input class="usa-input" id="username" name="username" [(ngModel)]="username" type="email" autocapitalize="off" autocorrect="off">
   
           <label for="password-sign-in">Password</label>
-          <input class="usa-input" id="password-sign-in" name="password" [(ngModel)]="password" type="password">
-          <p class="usa-form__note">
-              <a onclick="togglePassword(this, document.getElementById('password-sign-in'))" class="usa-show-password">Show password</a>
-          </p>
+          <input class="usa-input" id="password-sign-in" name="password" [(ngModel)]="password" type="password" appTogglePassword>
           <input class="usa-button" type="submit" value="Sign in">
         </fieldset>
       </form>
