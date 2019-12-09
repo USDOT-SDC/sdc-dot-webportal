@@ -10,16 +10,19 @@ const httpOptions = {
 
 @Injectable()
 export class LoginSyncService {
+  url = 'https://whatever.url';
 
   constructor(private http: HttpClient) { }
 
   // TODO: Reach out to API for this result
-  userSignedInWithADFSCreds(): any {
+  userSignedInWithADFSCreds(): boolean {
     return false;
+    // return this.http.get<boolean>(this.url);
   }
 
   // TODO: reach out to API for this result
-  loginGovCredentialVerification(): any {
+  loginGovCredentialVerification(username: string, password: string): boolean {
     return true;
+    // return this.http.get<boolean>(this.url);
   }
 }
