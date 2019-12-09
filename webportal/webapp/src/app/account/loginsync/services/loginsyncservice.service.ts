@@ -9,12 +9,17 @@ const httpOptions = {
 };
 
 @Injectable()
-export class AdfsLoginService {
+export class LoginSyncService {
 
   constructor(private http: HttpClient) { }
 
   // TODO: Reach out to API for this result
   userSignedInWithADFSCreds(): any {
     return false;
+  }
+
+  // TODO: reach out to API for this result
+  loginGovCredentialVerification(): any {
+    return true;
   }
 }

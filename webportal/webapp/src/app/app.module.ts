@@ -37,7 +37,7 @@ import {MessageModule} from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
 import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
-import { AdfsLoginService } from './account/loginsync/services/adfsloginservice.service';
+import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
 
 
 @NgModule({
@@ -99,7 +99,7 @@ import { AdfsLoginService } from './account/loginsync/services/adfsloginservice.
   providers: [
     CognitoService,
     ApiGatewayService,
-    AdfsLoginService,
+    LoginSyncService,
     LoginSyncGuard,
     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
    // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
