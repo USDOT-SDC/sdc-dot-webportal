@@ -16,14 +16,18 @@ export class LoginSyncGuard implements CanActivate {
           'body': { 'accountLinked': true }
         }
       */
+     console.log('before');
       this.loginSyncService
           .userAccountsLinked()
           .subscribe(
-            result => { this.accountsLinked = result['body']['accountLinked']; },
+            result => { 
+              console.log('inside');
+              console.log(result);
+              this.accountsLinked = result.value.accountLinked; },
             error => {
               console.log(error);
             });
-
+      console.log('after');
       if (this.accountsLinked) {
         return true; // Continue to account/accounthome
       }

@@ -25,7 +25,7 @@ export class LoginSyncService {
   userAccountsLinked(): Observable<any> {
     return this.http.get(this.accountLinkedUrl, this.httpOptions)
       .map((response) => {
-        return Observable.throw(response);
+        return Observable.of(response);
       }).catch(this.handleError);
   }
 
@@ -37,7 +37,7 @@ export class LoginSyncService {
 
     return this.http.post(this.linkAccountUrl, payload, this.httpOptions)
       .map((response) => {
-        return Observable.throw(response);
+        return Observable.of(response);
       }).catch(this.handleError);
   }
 
