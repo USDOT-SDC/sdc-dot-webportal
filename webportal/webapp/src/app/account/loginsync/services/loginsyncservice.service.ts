@@ -16,7 +16,7 @@ export class LoginSyncService {
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': this.cognitoService.getIdToken(),
+        'Authorization': ' ' + this.cognitoService.getIdToken(),
         'Access-Control-Allow-Origin': '*'
       })
     };
