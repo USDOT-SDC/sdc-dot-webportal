@@ -1,6 +1,7 @@
 <div class="container">
   <mat-card>
     <div>
+      <app-alert [showAlert]="!linkSuccessful" [text]="errorMessage"></app-alert>
       <form class="usa-form signin" (ngSubmit)="onSubmit()">
         <fieldset class="usa-fieldset">
           <legend class="usa-legend">Sign in</legend>

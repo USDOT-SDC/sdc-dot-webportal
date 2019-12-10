@@ -35,6 +35,7 @@ import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
+import { AlertComponent } from './account/loginsync/components/alert/alert.component';
 import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
 import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
@@ -57,6 +58,7 @@ import { LoginSyncService } from './account/loginsync/services/loginsyncservice.
     HomeFaqComponent,
     DatasetinfoComponent,
     LoginSyncComponent,
+    AlertComponent,
     TogglePasswordDirective,
   ],
   imports: [

@@ -18,9 +18,11 @@ export class LoginSyncGuard implements CanActivate {
       */
       this.loginSyncService
           .userAccountsLinked()
-          .subscribe(result => {
-            this.accountsLinked = result['body']['accountLinked'];
-          });
+          .subscribe(
+            result => { this.accountsLinked = result['body']['accountLinked']; },
+            error => {
+              console.log(error);
+            });
 
       if (this.accountsLinked) {
         return true; // Continue to account/accounthome
