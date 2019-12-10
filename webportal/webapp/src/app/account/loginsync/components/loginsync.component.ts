@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 export class LoginSyncComponent implements OnInit {
   username: string;
   password: string;
-  verified = false;
+  linkSuccessful = false;
+  errorMessage = '';
 
   constructor(private loginSyncService: LoginSyncService, private router: Router) { }
 
@@ -27,14 +28,17 @@ export class LoginSyncComponent implements OnInit {
     this.loginSyncService
         .linkAccounts(this.username, this.password)
         .subscribe(result => {
-          this.verified = result['statusCode'] === 200;
+          this.linkSuccessful = result['statusCode'] === 200;
+          this.errorMessage = result['body']['userErrorMessage'];
         });
 
-    if (this.verified) {
-      this.router.navigate(['account/accounthome']); // Redirect to the user homepage
+    if (this.linkSuccessful) {
+      // TODO redirect BACK to the Login.gov sign in page
+      // Something to do with this: https://dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com/oauth2/authorize?redirect_uri=https://dev-portal.securedatacommons.com/index.html&response_type=token&client_id=kfjfmaq0jvfjoq9gbt26c732o
+      this.router.navigate(['account/accounthome']);
     } else {
-      // TODO: What do we want to show if the Login.gov creds are incorrect?
-      console.log('Sorry we could not authenticate those credentials');
+      // TODO: Show an alert with the error message
+      console.log(this.errorMessage);
     }
   }
 }

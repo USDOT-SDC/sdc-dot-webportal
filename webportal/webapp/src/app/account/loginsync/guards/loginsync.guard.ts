@@ -23,9 +23,7 @@ export class LoginSyncGuard implements CanActivate {
           });
 
       if (this.accountsLinked) {
-        // TODO redirect BACK to the Login.gov sign in page
-        // Something to do with this: https://dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com/oauth2/authorize?redirect_uri=https://dev-portal.securedatacommons.com/index.html&response_type=token&client_id=kfjfmaq0jvfjoq9gbt26c732o
-        return true;
+        return true; // Continue to account/accounthome
       }
       this.router.navigate(['account/loginsync']); // Redirect to the /loginsync page if the user signed in with Login.gov creds
       return false;
