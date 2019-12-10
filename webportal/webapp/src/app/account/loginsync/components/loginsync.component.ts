@@ -19,13 +19,17 @@ export class LoginSyncComponent implements OnInit {
   }
 
   onSubmit() {
-    this.verified = this.loginSyncService.loginGovCredentialVerification(this.username, this.password);
-    console.log(`User tried to sign in with creds: ${this.username}, ${this.password}`);
+    console.log(`User entered login.gov creds: ${this.username}, ${this.password}`);
+
+    this.loginSyncService
+        .linkAccounts(this.username, this.password)
+        .subscribe(result => this.verified = result);
 
     if (this.verified) {
       this.router.navigate(['account/accounthome']); // Redirect to the user homepage
     } else {
-      // TDOD: What do we want to show if the Login.gov creds are incorrect?
+      // TODO: What do we want to show if the Login.gov creds are incorrect?
+      console.log('Sorry we could not authenticate those credentials');
     }
   }
 }

@@ -10,19 +10,24 @@ const httpOptions = {
 
 @Injectable()
 export class LoginSyncService {
-  url = 'https://whatever.url';
+  // THESE ARE DEV URLS, Need env-specific urls
+  linkAccountUrl = 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/dev/dev-link-account';
+  adfsCredCheckUrl = 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/dev/dev-account-linked';
 
   constructor(private http: HttpClient) { }
 
-  // TODO: Reach out to API for this result
-  userSignedInWithADFSCreds(): boolean {
-    return false;
-    // return this.http.get<boolean>(this.url);
+  userSignedInWithADFSCreds(): Observable<boolean> {
+    // TODO: Need to figure out the return value, I am assuming a boolean
+    return this.http.get<boolean>(this.adfsCredCheckUrl);
   }
 
-  // TODO: reach out to API for this result
-  loginGovCredentialVerification(username: string, password: string): boolean {
-    return true;
-    // return this.http.get<boolean>(this.url);
+  linkAccounts(username: string, password: string): Observable<boolean> {
+    const payload = {
+      'username': username,
+      'password': password
+    };
+
+    // TODO: Need to figure out the return value, I am assuming a boolean
+    return this.http.post<any>(this.linkAccountUrl, payload, httpOptions);
   }
 }
