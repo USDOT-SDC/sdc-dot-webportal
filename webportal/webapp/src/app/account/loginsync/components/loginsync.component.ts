@@ -21,9 +21,14 @@ export class LoginSyncComponent implements OnInit {
   onSubmit() {
     console.log(`User entered login.gov creds: ${this.username}, ${this.password}`);
 
+    /*
+      { 'statusCode': 200, 'body': '{}' }
+    */
     this.loginSyncService
         .linkAccounts(this.username, this.password)
-        .subscribe(result => this.verified = result);
+        .subscribe(result => {
+          this.verified = result['statusCode'] === 200;
+        });
 
     if (this.verified) {
       this.router.navigate(['account/accounthome']); // Redirect to the user homepage
