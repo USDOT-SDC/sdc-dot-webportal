@@ -30,7 +30,6 @@ export class LoginSyncComponent implements OnInit {
         .subscribe(
           result => {
             this.linkSuccessful = true;
-            console.log('result in result branch', result);
 
             // TODO navigate back to login page
             this.router.navigate(['account/accounthome']);
