@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { environment } from '../../../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -11,9 +12,9 @@ const httpOptions = {
 
 @Injectable()
 export class LoginSyncService {
-  // THESE ARE DEV URLS, Need env-specific urls
-  linkAccountUrl = 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/dev/dev-link-account';
-  accountLinkedUrl = 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/dev/dev-account-linked';
+  env = environment.production === 'true' ? 'prod' : 'dev';
+  linkAccountUrl = `https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/${this.env}/${this.env}-link-account`;
+  accountLinkedUrl = `https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/${this.env}/${this.env}-account-linked`;
 
   constructor(private http: HttpClient) { }
 

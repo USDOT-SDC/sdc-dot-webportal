@@ -31,8 +31,8 @@ export class LoginSyncComponent implements OnInit {
           result => {
             this.linkSuccessful = true;
 
-            // TODO navigate back to login page
-            this.router.navigate(['account/accounthome']);
+            // Navigate back to login page
+            this.router.navigate([this.buildRedirectUrl()]);
           },
           error => {
             this.linkSuccessful = false;
@@ -42,7 +42,12 @@ export class LoginSyncComponent implements OnInit {
   }
 
   buildRedirectUrl(): string {
-    console.log('environment.production', environment.production);
-    return '';
+    const env = environment.production === 'true' ? 'prod' : 'dev';
+    const redirectUri = window.localStorage.origin;
+    const clientId = '';
+    const url = `https://${env}-sdc-dot-webportal.auth.${environment.REGION}
+                .amazoncognito.com/oauth2/authorize?redirect_uri=${redirectUri}/index.html
+                &response_type=token&client_id=${clientId}`;
+    return url;
   }
 }
