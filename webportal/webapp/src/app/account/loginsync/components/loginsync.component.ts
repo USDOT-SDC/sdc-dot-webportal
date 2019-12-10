@@ -20,8 +20,6 @@ export class LoginSyncComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(`User entered login.gov creds: ${this.username}, ${this.password}`);
-
     /*
       { 'statusCode': 200, 'body': '{}' }
     */
