@@ -5,7 +5,7 @@ import { LoginSyncService } from '../services/loginsyncservice.service';
 
 @Injectable()
 export class LoginSyncGuard implements CanActivate {
-  signedInWithAdfsCreds = false;
+  accountsLinked = false;
 
   constructor(private loginSyncService: LoginSyncService, private router: Router) { }
 
@@ -17,12 +17,12 @@ export class LoginSyncGuard implements CanActivate {
         }
       */
       this.loginSyncService
-          .userSignedInWithADFSCreds()
+          .userAccountsLinked()
           .subscribe(result => {
-            this.signedInWithAdfsCreds = result['body']['accountLinked'];
+            this.accountsLinked = result['body']['accountLinked'];
           });
 
-      if (this.signedInWithAdfsCreds) {
+      if (this.accountsLinked) {
         // TODO redirect BACK to the Login.gov sign in page
         // Something to do with this: https://dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com/oauth2/authorize?redirect_uri=https://dev-portal.securedatacommons.com/index.html&response_type=token&client_id=kfjfmaq0jvfjoq9gbt26c732o
         return true;
