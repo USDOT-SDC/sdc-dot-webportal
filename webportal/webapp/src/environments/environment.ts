@@ -4,14 +4,13 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
+  production: '',
   STREAMING_URL: '',
-  REGION : 'us-east-1', // User pool AWS region
-  USER_POOL_ID : 'us-east-1_Y5JI7ysvY' , // User pool ID
-  CLIENT_ID : '207smrvtpcd6ucoup3s7ph0lb0', //p client ID
+  REGION : '', // User pool AWS region
+  USER_POOL_ID : '' ,// User pool ID
+  CLIENT_ID :'', //p client ID
   IDENTITY_PROVIDER : '', // User pool Identity provider name
-  APP_DOMAIN : 'dev-sdc-dot-webportal', // App domain name
-  REDIRECT_URL : 'http://localhost:4200/index.html', // Re-direct URL for the user pool
-  API_ENDPOINT : '', // AWS API gateway base endpoint
-  LOGIN_GOV_COGNITO_APP_CLIENT_ID: 'kfjfmaq0jvfjoq9gbt26c732o' // AWS Cognito client id
+  APP_DOMAIN :'', // App domain name
+  REDIRECT_URL : '', // Re-direct URL for the user pool
+  API_ENDPOINT : ''// AWS API gateway base endpoint
 };
