@@ -38,12 +38,12 @@ export class LoginSyncComponent implements OnInit {
   }
 
   buildRedirectUrl(): string {
-    const env = environment.production === 'true' ? 'prod' : 'dev';
-    const redirectUri = window.localStorage.origin;
-    const clientId = '';
-    const url = `https://${env}-sdc-dot-webportal.auth.${environment.REGION}
-                .amazoncognito.com/oauth2/authorize?redirect_uri=${redirectUri}/index.html
-                &response_type=token&client_id=${clientId}`;
+    const env = environment.production ? 'prod' : 'dev';
+    const redirectUri = window.location.origin;
+    const clientId = environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID;
+    const url = `https://${env}-sdc-dot-webportal.auth.${environment.REGION}` +
+                `.amazoncognito.com/oauth2/authorize?redirect_uri=${redirectUri}/index.html` +
+                `&response_type=token&client_id=${clientId}`;
     return url;
   }
 }
