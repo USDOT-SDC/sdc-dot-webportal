@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginSyncService } from '../services/loginsyncservice.service';
-import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { CognitoService } from '../../../../services/cognito.service';
 
@@ -16,28 +15,25 @@ export class LoginSyncComponent implements OnInit {
   linkSuccessful = true;
   errorMessage = '';
 
-  constructor(private loginSyncService: LoginSyncService, private router: Router, private cognitoService: CognitoService) { }
+  constructor(private loginSyncService: LoginSyncService, private cognitoService: CognitoService) { }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    /*
-      { 'statusCode': 200, 'body': '{}' }
-    */
     this.loginSyncService
         .linkAccounts(this.username, this.password)
         .subscribe(
           result => {
+            console.log(result);
             this.linkSuccessful = true;
 
-            // Navigate back to login page
-            this.router.navigate([this.buildRedirectUrl()]);
+            // Redirect back to login page
+            window.location.href = this.buildRedirectUrl();
           },
           error => {
             this.linkSuccessful = false;
             this.errorMessage =  error;
-            console.log(this.errorMessage);
           });
   }
 
