@@ -17,7 +17,6 @@ export class LoginSyncGuard implements CanActivate {
                                   this.router.navigate(['account/loginsync']); // Navigate to the /loginsync page
                                   return false;
                                 }).catch(error => {
-                                  console.log('error', error);
                                   return of(false);
                                 });
   }

@@ -25,7 +25,6 @@ export class LoginSyncComponent implements OnInit {
         .linkAccounts(this.username, this.password)
         .subscribe(
           result => {
-            console.log(result);
             this.linkSuccessful = true;
 
             // Redirect back to login page
