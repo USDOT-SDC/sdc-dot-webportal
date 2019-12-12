@@ -9,8 +9,8 @@ import { CognitoService } from '../../../../services/cognito.service';
 export class LoginSyncService {
   httpOptions = {};
   env = environment.production ? 'prod' : 'dev';
-  linkAccountUrl = `https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/${this.env}/${this.env}-link-account`;
-  accountLinkedUrl = `https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/${this.env}/${this.env}-account-linked`;
+  linkAccountUrl = `${environment.LOGIN_GOV_LINK_ACCOUNT_URL}/${this.env}/${this.env}-link-account`;
+  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINKED_URL}/${this.env}/${this.env}-account-linked`;
 
   constructor(private http: HttpClient, private cognitoService: CognitoService) {
     this.httpOptions = {
