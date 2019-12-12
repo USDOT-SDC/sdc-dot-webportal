@@ -14,6 +14,5 @@ export const environment = {
   REDIRECT_URL : 'https://dev-portal.securedatacommons.com/index.html', // Re-direct URL for the user pool
   API_ENDPOINT : 'https://u2zksemc1h.execute-api.us-east-1.amazonaws.com/api/', // AWS API gateway base endpoint
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: 'kfjfmaq0jvfjoq9gbt26c732o', // AWS Cognito client id
-  LOGIN_GOV_LINK_ACCOUNT_URL: 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com', // API endpoint for link-account
-  LOGIN_GOV_ACCOUNT_LINKED_URL: 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com' //API endpoint for account-linked
+  LOGIN_GOV_ACCOUNT_LINK_URL: 'https://yr5qma7k4m.execute-api.us-east-1.amazonaws.com', // API endpoint for link-account
 };
