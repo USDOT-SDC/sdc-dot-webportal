@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { environment } from '../../../../environments/environment';
 import { CognitoService } from '../../../../services/cognito.service';
+import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/typings/overlay-directives';
 
 @Injectable()
 export class LoginSyncService {
@@ -26,7 +27,10 @@ export class LoginSyncService {
     return this.http.get(this.accountLinkedUrl, this.httpOptions)
       .map((response) => {
         return Observable.of(response);
-      }).catch(this.handleError);
+      }).catch(err => {
+        console.log(err);
+        return Observable.throw('woops');
+      });
   }
 
   linkAccounts(username: string, password: string): Observable<any> {
@@ -38,10 +42,14 @@ export class LoginSyncService {
     return this.http.post(this.linkAccountUrl, payload, this.httpOptions)
       .map((response) => {
         return Observable.of(response);
-      }).catch(this.handleError);
+      }).catch(err => {
+        console.log(err);
+        return Observable.throw('woops2');
+      });
   }
 
   private handleError(error: any) {
+    console.log('error in handleError', error);
     const errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     return Observable.throw(errMsg);
