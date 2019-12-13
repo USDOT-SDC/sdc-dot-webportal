@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { environment } from '../../../../environments/environment';
 import { CognitoService } from '../../../../services/cognito.service';
-import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/typings/overlay-directives';
 
 @Injectable()
 export class LoginSyncService {
@@ -42,7 +41,7 @@ export class LoginSyncService {
       }).catch(this.handleError);
   }
 
-  private handleError(error: any) {
+  private handleError(error: HttpErrorResponse) {
     const devErrorMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     const userErrorMsg = (error.error) ? error.error['userErrorMessage'] : 'Sorry, something went wrong. Please try again later';
