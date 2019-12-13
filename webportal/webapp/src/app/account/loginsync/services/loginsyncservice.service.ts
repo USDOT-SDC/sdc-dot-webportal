@@ -27,10 +27,7 @@ export class LoginSyncService {
     return this.http.get(this.accountLinkedUrl, this.httpOptions)
       .map((response) => {
         return Observable.of(response);
-      }).catch(err => {
-        console.log(err);
-        return Observable.throw('woops');
-      });
+      }).catch(this.handleError);
   }
 
   linkAccounts(username: string, password: string): Observable<any> {
@@ -42,16 +39,15 @@ export class LoginSyncService {
     return this.http.post(this.linkAccountUrl, payload, this.httpOptions)
       .map((response) => {
         return Observable.of(response);
-      }).catch(err => {
-        console.log(err);
-        return Observable.throw('woops2');
-      });
+      }).catch(this.handleError);
   }
 
   private handleError(error: any) {
-    console.log('error in handleError', error);
-    const errMsg = (error.message) ? error.message :
+    const devErrorMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    return Observable.throw(errMsg);
+    const userErrorMsg = (error.error) ? error.error['userErrorMessage'] : 'Sorry, something went wrong. Please try again later';
+
+    console.log(devErrorMsg);
+    return Observable.throw(userErrorMsg);
   }
 }
