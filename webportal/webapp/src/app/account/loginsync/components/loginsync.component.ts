@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginSyncService } from '../services/loginsyncservice.service';
-import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { CognitoService } from '../../../../services/cognito.service';
 
 @Component({
   selector: 'app-loginsync',
@@ -11,32 +12,37 @@ import { Router } from '@angular/router';
 export class LoginSyncComponent implements OnInit {
   username: string;
   password: string;
-  linkSuccessful = false;
+  linkSuccessful = true;
   errorMessage = '';
 
-  constructor(private loginSyncService: LoginSyncService, private router: Router) { }
+  constructor(private loginSyncService: LoginSyncService, private cognitoService: CognitoService) { }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    /*
-      { 'statusCode': 200, 'body': '{}' }
-    */
     this.loginSyncService
         .linkAccounts(this.username, this.password)
-        .subscribe(result => {
-          this.linkSuccessful = result['statusCode'] === 200;
-          this.errorMessage = result['body']['userErrorMessage'];
-        });
+        .subscribe(
+          result => {
+            this.linkSuccessful = true;
 
-    if (this.linkSuccessful) {
-      // TODO redirect BACK to the Login.gov sign in page
-      // Something to do with this: https://dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com/oauth2/authorize?redirect_uri=https://dev-portal.securedatacommons.com/index.html&response_type=token&client_id=kfjfmaq0jvfjoq9gbt26c732o
-      this.router.navigate(['account/accounthome']);
-    } else {
-      // TODO: Show an alert with the error message
-      console.log(this.errorMessage);
-    }
+            // Redirect back to login page
+            window.location.href = this.buildRedirectUrl();
+          },
+          error => {
+            this.linkSuccessful = false;
+            this.errorMessage =  error;
+          });
+  }
+
+  buildRedirectUrl(): string {
+    const env = environment.production ? 'prod' : 'dev';
+    const redirectUri = window.location.origin;
+    const clientId = environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID;
+    const url = `https://${env}-sdc-dot-webportal.auth.${environment.REGION}` +
+                `.amazoncognito.com/oauth2/authorize?redirect_uri=${redirectUri}/index.html` +
+                `&response_type=token&client_id=${clientId}`;
+    return url;
   }
 }

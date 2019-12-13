@@ -1,31 +1,49 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
+import 'rxjs/add/operator/map';
+import { environment } from '../../../../environments/environment';
+import { CognitoService } from '../../../../services/cognito.service';
 
 @Injectable()
 export class LoginSyncService {
-  // THESE ARE DEV URLS, Need env-specific urls
-  linkAccountUrl = 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/dev/dev-link-account';
-  accountLinkedUrl = 'https://aae0n1czsf.execute-api.us-east-1.amazonaws.com/dev/dev-account-linked';
+  httpOptions = {};
+  env = environment.production ? 'prod' : 'dev';
+  linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-link-account`;
+  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked`;
 
-  constructor(private http: HttpClient) { }
-
-  userAccountsLinked(): Observable<boolean> {
-    return this.http.get<any>(this.accountLinkedUrl);
+  constructor(private http: HttpClient, private cognitoService: CognitoService) {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': ' ' + this.cognitoService.getIdToken(),
+        'Access-Control-Allow-Origin': '*'
+      })
+    };
   }
 
-  linkAccounts(username: string, password: string): Observable<boolean> {
+  userAccountsLinked(): Observable<any> {
+    return this.http.get(this.accountLinkedUrl, this.httpOptions)
+      .map((response) => {
+        return Observable.of(response);
+      }).catch(this.handleError);
+  }
+
+  linkAccounts(username: string, password: string): Observable<any> {
     const payload = {
       'username': username,
       'password': password
     };
 
-    return this.http.post<any>(this.linkAccountUrl, payload, httpOptions);
+    return this.http.post(this.linkAccountUrl, payload, this.httpOptions)
+      .map((response) => {
+        return Observable.of(response);
+      }).catch(this.handleError);
+  }
+
+  private handleError(error: any) {
+    const errMsg = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    return Observable.throw(errMsg);
   }
 }
