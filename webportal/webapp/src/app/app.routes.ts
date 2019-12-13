@@ -19,7 +19,7 @@ const appRoutes: Routes = [
     {
         path: '', component: MainComponent, children: [
             { path: '', redirectTo: '/home', pathMatch: 'full' },
-            { path: 'index.html', component: HomeComponent },
+            { path: 'index.html', component: HomeComponent, canActivate: [ LoginSyncGuard ] },
             { path: 'home', component: HomeComponent },
             { path: 'about', component: AboutComponent },
             { path: 'datasetinfo', component: DatasetinfoComponent },
