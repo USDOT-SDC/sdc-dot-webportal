@@ -6,8 +6,8 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule } from '@angular/material';
-import { MatExpansionModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
@@ -30,10 +30,18 @@ import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
-import {PanelModule,SharedModule} from 'primeng/primeng';
+import {PanelModule, SharedModule} from 'primeng/primeng';
 import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
+import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
+import { AlertComponent } from './account/loginsync/components/alert/alert.component';
+import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
+import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
+import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
+import { LoaderComponent } from './account/loginsync/components/loader/loader.component';
+import { LoaderService } from './account/loginsync/services/loader.service';
+import { LoaderInterceptor } from './account/loginsync/services/loader.interceptor';
 
 
 @NgModule({
@@ -52,6 +60,10 @@ import {MessageModule} from 'primeng/message';
     FaqComponent,
     HomeFaqComponent,
     DatasetinfoComponent,
+    LoginSyncComponent,
+    AlertComponent,
+    TogglePasswordDirective,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +81,7 @@ import {MessageModule} from 'primeng/message';
     MatExpansionModule,
     MatSnackBarModule,
     MatInputModule,
+    MatTooltipModule,
     MatFormFieldModule,
     MatDialogModule,
     MatSelectModule,
@@ -76,6 +89,7 @@ import {MessageModule} from 'primeng/message';
     MatRadioModule,
     MatCheckboxModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
     CdkTableModule,
     TableModule,
     FileUploadModule,
@@ -83,6 +97,8 @@ import {MessageModule} from 'primeng/message';
     PanelModule,
     RadioButtonModule,
     MessageModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
   ],
@@ -90,6 +106,10 @@ import {MessageModule} from 'primeng/message';
   providers: [
     CognitoService,
     ApiGatewayService,
+    LoginSyncService,
+    LoginSyncGuard,
+    LoaderService,
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
    // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
   ],

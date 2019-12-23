@@ -1,0 +1,24 @@
+<div class="container">
+  <mat-card>
+    <app-loader></app-loader>
+    <div>
+      <app-alert [showAlert]="!linkSuccessful" [text]="errorMessage"></app-alert>
+      <form class="usa-form signin" (ngSubmit)="onSubmit()">
+        <fieldset class="usa-fieldset">
+          <legend class="usa-legend">Sign in</legend>
+          <label for="username">Username</label>
+          <input class="usa-input" id="username" name="username" [(ngModel)]="username" autocapitalize="off" autocorrect="off">
+  
+          <label for="password-sign-in">Password</label>
+          <input class="usa-input" id="password-sign-in" name="password" [(ngModel)]="password" type="password" appTogglePassword>
+          <input class="usa-button" type="submit" value="Sign in">
+
+          <p>Please sign in using your Secure Data Commons credentials.</p>
+          <p>If you do not remember your Secure Data Commons credentials, please contact <a href = "mailto:support@securedatacommons.com" style="text-decoration: none;">Support Team.</a></p>
+          <p>Don't have an account? <a href="https://portal.securedatacommons.com/register" target="_blank" style="text-decoration: none;" rel="noopener noreferrer">Follow the instructions</a> on the SDC portal to create one.</p>
+        </fieldset>
+      </form>
+    </div>
+  </mat-card>
+</div>
+ 
