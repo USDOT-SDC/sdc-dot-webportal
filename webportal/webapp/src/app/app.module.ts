@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
 import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -39,6 +39,9 @@ import { AlertComponent } from './account/loginsync/components/alert/alert.compo
 import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
 import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
+import { LoaderComponent } from './account/loginsync/components/loader/loader.component';
+import { LoaderService } from './account/loginsync/services/loader.service';
+import { LoaderInterceptor } from './account/loginsync/services/loader.interceptor';
 
 
 @NgModule({
@@ -60,6 +63,7 @@ import { LoginSyncService } from './account/loginsync/services/loginsyncservice.
     LoginSyncComponent,
     AlertComponent,
     TogglePasswordDirective,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +89,7 @@ import { LoginSyncService } from './account/loginsync/services/loginsyncservice.
     MatRadioModule,
     MatCheckboxModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
     CdkTableModule,
     TableModule,
     FileUploadModule,
@@ -103,6 +108,8 @@ import { LoginSyncService } from './account/loginsync/services/loginsyncservice.
     ApiGatewayService,
     LoginSyncService,
     LoginSyncGuard,
+    LoaderService,
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
    // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
   ],
