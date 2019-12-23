@@ -5,15 +5,16 @@
       <form class="usa-form signin" (ngSubmit)="onSubmit()">
         <fieldset class="usa-fieldset">
           <legend class="usa-legend">Sign in</legend>
-          <p>First-time Login.gov users please sign in below using your Secure Data Commons credentials.</p>
-          <p>If you do not remember your Secure Data Commons credentials, please contact the <a href = "mailto:support@securedatacommons.com">Support Team.</a></p>
-  
           <label for="username">Username</label>
           <input class="usa-input" id="username" name="username" [(ngModel)]="username" autocapitalize="off" autocorrect="off">
   
           <label for="password-sign-in">Password</label>
           <input class="usa-input" id="password-sign-in" name="password" [(ngModel)]="password" type="password" appTogglePassword>
           <input class="usa-button" type="submit" value="Sign in">
+
+          <p>Please sign in using your Secure Data Commons credentials.</p>
+          <p>If you do not remember your Secure Data Commons credentials, please contact <a href = "mailto:support@securedatacommons.com" style="text-decoration: none;">Support Team.</a></p>
+          <p>Don't have an account? Follow the instructions from this <a href="https://portal.securedatacommons.com/register" target="_blank" style="text-decoration: none;">link.</a></p>
         </fieldset>
       </form>
     </div>
