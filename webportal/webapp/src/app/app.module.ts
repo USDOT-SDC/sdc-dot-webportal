@@ -39,6 +39,7 @@ import { AlertComponent } from './account/loginsync/components/alert/alert.compo
 import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
 import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
+import { LoaderComponent } from './account/loginsync/components/loader/loader.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { LoginSyncService } from './account/loginsync/services/loginsyncservice.
     LoginSyncComponent,
     AlertComponent,
     TogglePasswordDirective,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
