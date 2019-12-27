@@ -1,7 +1,7 @@
 import { LoginSyncGuard } from './loginsync.guard';
 
 class MockRouter {
-  navigate(path);
+  navigate(path) {};
 }
 
 describe('LoginSyncGuard', () => {

@@ -4,7 +4,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import { RoutingModule } from './app.routes';
 import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
 import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
@@ -103,7 +103,7 @@ import { LoaderInterceptor } from './account/loginsync/services/loader.intercept
     MatNativeDateModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
-    DataTableModule
+    //DataTableModule
   ],
   //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
   exports: [BrowserModule, ToastyModule, RouterModule ],

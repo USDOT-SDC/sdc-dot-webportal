@@ -8,7 +8,7 @@ export const environment = {
   STREAMING_URL: '',
   REGION : '', // User pool AWS region
   USER_POOL_ID : '' , // User pool ID
-  CLIENT_ID : '', //p client ID
+  CLIENT_ID : '', // User pool client ID
   IDENTITY_PROVIDER : '', // User pool Identity provider name
   APP_DOMAIN : '', // App domain name
   REDIRECT_URL : '', // Re-direct URL for the user pool
