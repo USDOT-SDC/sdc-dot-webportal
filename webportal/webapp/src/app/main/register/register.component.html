@@ -25,16 +25,13 @@
       <div class="col-xs-6 column-two">
         <div style="padding: 115px;">
           <div style="margin-bottom: 10px">
-            <label for="email">Enter your email address</label>
+            <label for="email">Enter your email address to sign in <br>You will be redirected to your organization's sign in page</label>
           </div>
           <div style="margin-bottom: 20px">
             <input value="" type="text" size="40" class="usa-input" id="email" name="email" [(ngModel)]="email" autocapitalize="off" autocorrect="off">
           </div>
-          <div style="margin-top: 50px">
-            <button class="btn btn-primary actionBtn" (click)="userLogin()">Submit</button>
-          </div>
           <div style="margin-top: 20px">
-            <p>You will be redirected to your organization's sign in page</p>
+            <button class="btn btn-primary actionBtn" (click)="userLogin()">Submit</button>
           </div>
         </div>
       </div>
