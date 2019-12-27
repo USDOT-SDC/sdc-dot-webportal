@@ -23,8 +23,16 @@
       </div>
       <div class="vertical-divider">or</div>
       <div class="col-xs-6 column-two">
-        <div id="wrapper">
-          <button class="btn btn-primary actionBtn" (click)="userLogin()">Login</button>
+        <div style="padding: 115px;">
+          <div style="margin-bottom: 10px">
+            <p><strong>Enter your email address to sign in</strong><br>You will be redirected to your organization's sign in page</p>
+          </div>
+          <div style="margin-bottom: 20px">
+            <input value="" type="text" size="40" class="usa-input" id="email" name="email" [(ngModel)]="email" autocapitalize="off" autocorrect="off">
+          </div>
+          <div style="margin-top: 20px">
+            <button class="btn btn-primary actionBtn" (click)="userLogin()">Submit</button>
+          </div>
         </div>
       </div>
     </div>
