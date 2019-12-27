@@ -11,6 +11,8 @@ import { RegisterComponent } from './main/register/register.component';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
+import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
+import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
 
 const appRoutes: Routes = [
     {
@@ -27,11 +29,12 @@ const appRoutes: Routes = [
     {
         path: 'account', component: AccountComponent, children: [
             { path: '', redirectTo: 'accounthome', pathMatch: 'prefix' },
-            { path: 'accounthome', component: AccountHomeComponent },
+            { path: 'accounthome', component: AccountHomeComponent, canActivate: [ LoginSyncGuard ] },
             { path: 'datasets', component: DatasetsComponent },
             { path: 'exportrequests', component: ExportRequestsComponent },
             { path: 'workstation', component: WorkstationComponent },
             { path: 'faq', component: FaqComponent },
+            { path: 'loginsync', component: LoginSyncComponent },
         ],
     }
 ];

@@ -37,6 +37,7 @@
     "primeng": "^5.2.7",
     "rxjs": "^5.5.4",
     "rxjs-compat": "^6.5.2",
+    "uswds": "^1.6.13",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
