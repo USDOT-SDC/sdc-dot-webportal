@@ -69,6 +69,16 @@
     margin-top: 50px;
     color: #777;
 }
+
+.information-text {
+    color: #777;
+    font-size: 13px;
+}
+
+.sign-in-information-text {
+    padding-top: 10px;
+}
+
 .accessLink {
     font-size: 20px;
     cursor: pointer;
@@ -87,4 +97,5 @@
     background-color: #2279a6 !important;
     border-color: #288dc1 !important;
     width: 25%;
+    margin-top: 30px;
 }

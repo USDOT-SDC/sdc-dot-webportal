@@ -4,3 +4,15 @@
 }
 
 @import '~uswds/dist/css/uswds.css';
+
+html {
+  font-size: 16px;
+}
+
+label {
+  margin-top: 2.0rem;
+}
+
+.link-submit {
+  margin-bottom: 15px;
+}
