@@ -23,13 +23,13 @@
       </div>
       <div class="vertical-divider">or</div>
       <div class="col-xs-6 column-two">
-        <div style="padding: 30px; display: flex; align-content: center; flex-direction: column;">
+        <div class="sign-in-container">
           <h3>Sign in</h3>
           <div class="information-text sign-in-information-text">
             <p>If you do not have a Department of Transportation email address, you will be redirected to Login.gov.</p>
             <p>You must create a Login.gov account the first time you sign in.</p>
           </div>
-          <div style="padding-top: 30px;">
+          <div class="email-address-container">
             <p><strong>Email Address</strong></p>
             <input value="" type="text" size="40" class="usa-input" id="email" name="email" [(ngModel)]="email" autocapitalize="off" autocorrect="off">
             <button class="btn btn-primary actionBtn" (click)="userLogin()">Sign In</button>
