@@ -84,7 +84,8 @@
 }
 
 .sign-in-container {
-    padding: 30px;
+    padding-left: 30px;
+    padding-right: 15px;
     display: flex;
     align-content: center;
     flex-direction: column;
