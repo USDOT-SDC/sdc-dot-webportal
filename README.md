@@ -46,6 +46,11 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**January 28, 2020. SDC sdc-dot-webportal Release 2.4**
+### What's New in Release 2.4
+* Change login functionality to allow users to be redirected to Login.gov
+* Add syncing screen after login from Login.gov so users can sync their Login.gov account with their SDC account
+
 **November 11, 2019. SDC sdc-dot-webportal Release 2.3**
 ### What's New in Release 2.3
 * Bug fix for export functionality
