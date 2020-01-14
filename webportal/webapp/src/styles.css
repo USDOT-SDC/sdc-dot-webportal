@@ -4,6 +4,9 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 body { padding-top: 70px; }
 
+html {
+    font-size: 16px;
+}
 
 .navbar-default {
     background: rgb(21, 35, 80) !important;

@@ -46,6 +46,11 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**January 28, 2020. SDC sdc-dot-webportal Release 2.4**
+### What's New in Release 2.4
+* Change login functionality to allow users to be redirected to Login.gov
+* Add syncing screen after login from Login.gov so users can sync their Login.gov account with their SDC account
+
 **November 11, 2019. SDC sdc-dot-webportal Release 2.3**
 ### What's New in Release 2.3
 * Bug fix for export functionality
@@ -270,21 +275,29 @@ Cognito configuration
 
 ## Deployment steps for the application UI
 
-   
-```sh 
-NOTE - Change s3 bucket hosting name e.x. s3://<bucket_name> in deployment script 
-```  
-
 1. Run the command below for Development Deployment -
    * Goto `../webapp/`
    * Run `./dev_deploy.sh`
+
+   ~OR~
+
+   Run these commands manually:
+   1. `ng build --dev --aot`
+   2. `aws s3 cp --profile sdc ./dist s3://test-sdc-webportal-hosting --recursive --metadata-directive REPLACE --cache-control max-age=86400 --acl public-read`
+   3. `aws s3 cp --profile sdc ./dist/index.html s3://test-sdc-webportal-hosting/index.html --region us-east-1 --metadata-directive REPLACE --cache-control max-age=0 --acl public-read`
+
+   After running these commands (or the dev_deploy script) you must invalidate the CloudFront cache:
+   1. Identify the Cloudfront distribution by the CNAME (for dev, that is dev-portal.securedatacommons.com)
+   2. Click into the Cloudfront distribution and then click the Invalidations tab
+   3. Click the Create Invalidation button
+   4. Enter "/*" in the object paths and click "Invalidate" (the invalidation may take a long time)
     
 2. Run the command below for Production Deployment -
    * Goto `../webapp/`
    * Run `./prod_deploy.sh`
    
 ### Prerequisites
-* NA 
+* Your environment.ts file must be fully filled out with the required environment variables before you can deploy to any environment
 
 <!---                           -->
 <!---     Release History       -->
