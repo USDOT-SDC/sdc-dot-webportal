@@ -69,6 +69,28 @@
     margin-top: 50px;
     color: #777;
 }
+
+.information-text {
+    color: #777;
+    font-size: 13px;
+}
+
+.sign-in-information-text {
+    padding-top: 10px;
+}
+
+.email-address-container {
+    padding-top: 30px;
+}
+
+.sign-in-container {
+    padding-left: 30px;
+    padding-right: 15px;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
+
 .accessLink {
     font-size: 20px;
     cursor: pointer;
@@ -87,4 +109,5 @@
     background-color: #2279a6 !important;
     border-color: #288dc1 !important;
     width: 25%;
+    margin-top: 30px;
 }

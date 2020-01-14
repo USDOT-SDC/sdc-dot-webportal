@@ -2,3 +2,13 @@
   margin: 0 auto;
   text-align: left;
 }
+
+@import '~uswds/dist/css/uswds.css';
+
+label {
+  margin-top: 2.0rem;
+}
+
+.link-submit {
+  margin-bottom: 15px;
+}
