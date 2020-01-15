@@ -35,6 +35,7 @@ TABLENAME_AVAILABLE_DATASET = os.getenv("TABLENAME_AVAILABLE_DATASET")
 RECEIVER = os.getenv("RECEIVER_EMAIL")
 RESTAPIID = os.getenv("RESTAPIID")
 AUTHORIZERID = os.getenv("AUTHORIZERID")
+TABLENAME_AUTOEXPORT_USERS = os.getenv("TABLENAME_AUTOEXPORT_USERS")
 TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
 TABLENAME_EXPORT_FILE_REQUEST= os.getenv("TABLENAME_EXPORT_FILE_REQUEST")
 TABLENAME_MANAGE_USER = os.getenv("TABLENAME_MANAGE_USER")
@@ -555,20 +556,28 @@ def getSubmittedRequests():
         #Query all submitted requests for the selected datatype
         exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
         trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED_USERS)
+        autoExportRequestTable = dynamodb_client.Table(TABLENAME_AUTOEXPORT_USERS)
         for userdataset in userdatasets:
+            # Data File Request query
             exportFileRequestResponse = exportFileRequestTable.query(
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
                 KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
             if exportFileRequestResponse['Items']:
                 response['exportRequests'].append(exportFileRequestResponse['Items'])
 
+            # Trusted User Request query
             trustedRequestResponse = trustedRequestTable.query(
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
                 KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
-
             if trustedRequestResponse['Items']:
                 response['trustedRequests'].append(trustedRequestResponse['Items'])
 
+            # Auto-Export Request query
+            autoExportRequestResponse = autoExportRequestTable.query(
+                IndexName='DataInfo-ReqReceivedtimestamp-index',
+                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
+            if autoExportRequestResponse['Items']:
+                response['trustedRequests'].append(autoExportRequestResponse['Items'])
 
         logging.info(response)
     except BaseException as be:
@@ -714,6 +723,46 @@ def updatetrustedtatus():
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
 
+@app.route('/export/requests/updateautoexportstatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def updateautoexportstatus():
+    paramsQuery = app.current_request.query_params
+        paramsString = paramsQuery['message']
+        logger.setLevel("INFO")
+        logging.info("Received request {}".format(paramsString))
+        params = json.loads(paramsString)
+        response = {}
+        try:
+            status=params['status']
+            key1=params['key1']
+            key2=params['key2']
+            userEmail = params['userEmail']
+
+            autoExportRequestTable = dynamodb_client.Table(TABLENAME_AUTOEXPORT_USERS)
+            autoExportRequestTable.update_item(
+                                Key={
+                                    'UserID': key1,
+                                    'Dataset-DataProvider-Datatype': key2
+                                },
+                                UpdateExpression="set AutoExportStatus = :val",
+                                ExpressionAttributeValues = {
+                                    ':val': status
+                                },
+                                ReturnValues="UPDATED_NEW"
+                            )
+            # Send notification to the analyst if their request is approved or rejected
+            listOfPOC = []
+            listOfPOC.append(userEmail)
+            emailContent = "<br/>The Status of the Auto-Export Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>"
+            send_notification(listOfPOC, emailContent)
+
+        except BaseException as be:
+            logging.exception("Error: Failed to updateautoexportstatus" + str(be))
+            raise ChaliceViewError("Failed to updateautoexportstatus")
+
+        return Response(body=response,
+                        status_code=200,
+                        headers={'Content-Type': 'application/json'})
+    return
 
 @app.route('/manage_user_workstation', authorizer=authorizer, cors=cors_config)
 def manage_user_workstation():
