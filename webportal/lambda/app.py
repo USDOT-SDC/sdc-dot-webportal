@@ -444,6 +444,25 @@ def export():
                     'LastUpdatedTimestamp': datetime.datetime.utcnow().strftime("%Y%m%d")
                 }
             )
+        if 'autoExportRequest' in params:
+            autoExportUsersTable = dynamodb.Table(TABLENAME_AUTOEXPORT_USERS)
+
+            autoExportStatus=params['autoExportRequest']['autoExportRequestStatus']
+
+            emailContent = "<br/>Auto-Export status has been requested by <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
+
+            response = autoExportUsersTable.put_item(
+                            Item = {
+                                'UserID': userID,
+                                'UserEmail': user_email,
+                                'Dataset-DataProvider-Datatype': combinedDataInfo,
+                                'TrustedStatus': autoExportStatus,
+                                'UsagePolicyStatus': acceptableUse,
+                                'ReqReceivedTimestamp': int(time.time()),
+                                'LastUpdatedTimestamp': datetime.datetime.utcnow().strftime("%Y%m%d")
+                            }
+                        )
+
         requestReviewStatus = params['RequestReviewStatus']
         download = 'false'
         export = 'true'
@@ -726,38 +745,38 @@ def updatetrustedtatus():
 @app.route('/export/requests/updateautoexportstatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def updateautoexportstatus():
     paramsQuery = app.current_request.query_params
-        paramsString = paramsQuery['message']
-        logger.setLevel("INFO")
-        logging.info("Received request {}".format(paramsString))
-        params = json.loads(paramsString)
-        response = {}
-        try:
-            status=params['status']
-            key1=params['key1']
-            key2=params['key2']
-            userEmail = params['userEmail']
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    response = {}
+    try:
+        status=params['status']
+        key1=params['key1']
+        key2=params['key2']
+        userEmail = params['userEmail']
 
-            autoExportRequestTable = dynamodb_client.Table(TABLENAME_AUTOEXPORT_USERS)
-            autoExportRequestTable.update_item(
-                                Key={
-                                    'UserID': key1,
-                                    'Dataset-DataProvider-Datatype': key2
-                                },
-                                UpdateExpression="set AutoExportStatus = :val",
-                                ExpressionAttributeValues = {
-                                    ':val': status
-                                },
-                                ReturnValues="UPDATED_NEW"
-                            )
-            # Send notification to the analyst if their request is approved or rejected
-            listOfPOC = []
-            listOfPOC.append(userEmail)
-            emailContent = "<br/>The Status of the Auto-Export Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>"
-            send_notification(listOfPOC, emailContent)
+        autoExportRequestTable = dynamodb_client.Table(TABLENAME_AUTOEXPORT_USERS)
+        autoExportRequestTable.update_item(
+                            Key={
+                                'UserID': key1,
+                                'Dataset-DataProvider-Datatype': key2
+                            },
+                            UpdateExpression="set AutoExportStatus = :val",
+                            ExpressionAttributeValues = {
+                                ':val': status
+                            },
+                            ReturnValues="UPDATED_NEW"
+                        )
+        # Send notification to the analyst if their request is approved or rejected
+        listOfPOC = []
+        listOfPOC.append(userEmail)
+        emailContent = "<br/>The Status of the Auto-Export Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>"
+        send_notification(listOfPOC, emailContent)
 
-        except BaseException as be:
-            logging.exception("Error: Failed to updateautoexportstatus" + str(be))
-            raise ChaliceViewError("Failed to updateautoexportstatus")
+    except BaseException as be:
+        logging.exception("Error: Failed to updateautoexportstatus" + str(be))
+        raise ChaliceViewError("Failed to updateautoexportstatus")
 
         return Response(body=response,
                         status_code=200,
@@ -794,21 +813,21 @@ def user_requests_process(params):
     print(manageUptimeAndWorkstation)
     print(startAfterResize)
     if manageWorkstation == True:
-       resize_workstation(params)
-       insert_request_to_table(params)
-       update_configuration_type_to_table(params)
+        resize_workstation(params)
+        insert_request_to_table(params)
+        update_configuration_type_to_table(params)
     if manageDiskspace == True:
-       response=attach_ebs_volume(params)
+        response=attach_ebs_volume(params)
     if manageWorkStationAndDiskspace == True:
-       resize_workstation(params)
-       insert_request_to_table(params)
-       update_configuration_type_to_table(params)
-       response=attach_ebs_volume(params)
+        resize_workstation(params)
+        insert_request_to_table(params)
+        update_configuration_type_to_table(params)
+        response=attach_ebs_volume(params)
     if manageUptimeAndWorkstation == True:
-       insert_schedule_uptime_to_table(params)
+        insert_schedule_uptime_to_table(params)
     if startAfterResize == True:
-       state=get_ec2_instance_state(params)
-       if state != "running":
+        state=get_ec2_instance_state(params)
+        if state != "running":
          ec2_instance_start(params)
 
 def resize_workstation(params):
@@ -821,7 +840,7 @@ def resize_workstation(params):
         if state == "running":
            ec2_instance_stop(instance_id)
         modify_instance(instance_id, requested_instance_type)
-       ### send email  
+        ### send email
         workstation_instance_request_notification(params)
 
     except ClientError as e:
@@ -852,20 +871,20 @@ def insert_request_to_table(params):
     username = params['username']
     instance_id = params['instance_id']
     resp = table.query(
-      # Add the name of the index you want to use in your query.
-      IndexName=TABLENAME_MANAGE_USER_INDEX,
-      KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
+    # Add the name of the index you want to use in your query.
+    IndexName=TABLENAME_MANAGE_USER_INDEX,
+    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
     active = False
     for item in resp['Items']:
-      reqID=item['RequestId']
- ###   print(reqID)
-      table.update_item(
-       Key={
-      'RequestId': reqID,
-      'username': username
-      },
-      UpdateExpression='set is_active = :active',
-      ExpressionAttributeValues={':active': active })
+        reqID=item['RequestId']
+        ###print(reqID)
+        table.update_item(
+            Key={
+            'RequestId': reqID,
+            'username': username
+            },
+            UpdateExpression='set is_active = :active',
+            ExpressionAttributeValues={':active': active })
 
     try:
         request_date = datetime.datetime.now()
@@ -939,20 +958,20 @@ def insert_disk_request_to_table(params,volume_id,size):
     username = params['username']
     instance_id = params['instance_id']
     resp = table.query(
-      # Add the name of the index you want to use in your query.
-      IndexName=TABLENAME_MANAGE_DISK_INDEX,
-      KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
+    # Add the name of the index you want to use in your query.
+    IndexName=TABLENAME_MANAGE_DISK_INDEX,
+    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
     active = False
     for item in resp['Items']:
-      reqID=item['RequestId']
- ####    print(reqID)
-      table.update_item(
-       Key={
-      'RequestId': reqID,
-      'username': username
-      },
-      UpdateExpression='set is_active = :active',
-      ExpressionAttributeValues={':active': active })
+        reqID=item['RequestId']
+        #### print(reqID)
+        table.update_item(
+            Key={
+            'RequestId': reqID,
+            'username': username
+            },
+            UpdateExpression='set is_active = :active',
+            ExpressionAttributeValues={':active': active })
 
     try:
         request_date = datetime.datetime.now()
@@ -984,24 +1003,24 @@ def update_volume_number_to_table(params,vol_number):
     table = dynamodb.Table(TABLENAME_USER_STACKS)
     str_vol_number = str(vol_number)
     try:
-      resp = table.query(KeyConditionExpression=Key('username').eq(username))
+        resp = table.query(KeyConditionExpression=Key('username').eq(username))
 
-      map = -1
-      map_num = -1
-      for item in resp['Items']:
-        for stack in (item['stacks']):
-          map_num = map_num + 1
-          if stack['instance_id'] == instance_id:
-            map = map_num
-      if map == -1:
-        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_USER_STACKS)
-        return -1
-      table.update_item(
-         Key={
-          'username': username,
-           },
-           UpdateExpression='SET stacks[' + str(map) +'].volumes = :volumes',
-           ExpressionAttributeValues={':volumes': str_vol_number })
+        map = -1
+        map_num = -1
+        for item in resp['Items']:
+            for stack in (item['stacks']):
+                map_num = map_num + 1
+                if stack['instance_id'] == instance_id:
+                    map = map_num
+        if map == -1:
+            print('Instance id ' + instance_id + ' not found in '+ TABLENAME_USER_STACKS)
+            return -1
+        table.update_item(
+            Key={
+            'username': username,
+            },
+            UpdateExpression='SET stacks[' + str(map) +'].volumes = :volumes',
+            ExpressionAttributeValues={':volumes': str_vol_number })
     except ClientError as e:
         logging.exception("Error: Failed to update record into Dynamo Db Table with exception - {}".format(e))
 
@@ -1016,240 +1035,240 @@ def update_configuration_type_to_table(params):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(TABLENAME_USER_STACKS)
     try:
-      resp = table.query(KeyConditionExpression=Key('username').eq(username))
+        resp = table.query(KeyConditionExpression=Key('username').eq(username))
 
-      map = -1
-      map_num = -1
-      for item in resp['Items']:
-        for stack in (item['stacks']):
-          map_num = map_num + 1
-          if stack['instance_id'] == instance_id:
-            map = map_num
-      if map == -1:
-        print('Instance id ' + instance_id + ' not found in '+ TABLENAME_USER_STACKS)
-        return -1
-      table.update_item(
-         Key={
-          'username': username,
-           },
-           UpdateExpression='set stacks[' + str(map) + '].current_configuration = :conf,stacks[' + str(map) +'].current_instance_type = :type',
-             ExpressionAttributeValues={
-               ':conf': current_configuration,
-               ':type': current_instance_type 
-           })
+        map = -1
+        map_num = -1
+        for item in resp['Items']:
+            for stack in (item['stacks']):
+                map_num = map_num + 1
+                if stack['instance_id'] == instance_id:
+                    map = map_num
+        if map == -1:
+            print('Instance id ' + instance_id + ' not found in '+ TABLENAME_USER_STACKS)
+            return -1
+        table.update_item(
+            Key={
+            'username': username,
+            },
+            UpdateExpression='set stacks[' + str(map) + '].current_configuration = :conf,stacks[' + str(map) +'].current_instance_type = :type',
+            ExpressionAttributeValues={
+                ':conf': current_configuration,
+                ':type': current_instance_type
+            })
     except ClientError as e:
         logging.exception("Error: Failed to update record into Dynamo Db Table with exception - {}".format(e))
 
 
 def number_of_ec2_volumes(instance_id):
-  i = 0
-  ec2 = boto3.resource('ec2', region_name='us-east-1')
-  instance = ec2.Instance(instance_id)
-  volumes = instance.volumes.all()
-  for v in volumes:
-  ##  print(v.id)
-    i = i + 1
-  return i
+    i = 0
+    ec2 = boto3.resource('ec2', region_name='us-east-1')
+    instance = ec2.Instance(instance_id)
+    volumes = instance.volumes.all()
+    for v in volumes:
+        ## print(v.id)
+        i = i + 1
+    return i
 
 def create_ebs_volume(instance_id,platform,zone,size):
-  tag = str(platform) + str(instance_id) 
-  client = boto3.client('ec2',region_name='us-east-1')
-  ec2 = boto3.resource('ec2', region_name='us-east-1')
-  volume = ec2.create_volume(
-    AvailabilityZone=zone,
-    Encrypted=True,
-    Size=size,
-    VolumeType='gp2',
-    TagSpecifications=[
-        {
-         'ResourceType': 'volume',
+    tag = str(platform) + str(instance_id)
+    client = boto3.client('ec2',region_name='us-east-1')
+    ec2 = boto3.resource('ec2', region_name='us-east-1')
+    volume = ec2.create_volume(
+        AvailabilityZone=zone,
+        Encrypted=True,
+        Size=size,
+        VolumeType='gp2',
+        TagSpecifications=[
+            {
+            'ResourceType': 'volume',
             'Tags': [
                 {
-                    'Key': 'Name',
-                    'Value': tag 
+                'Key': 'Name',
+                'Value': tag
                 },
             ]
-        },
-    ]
+            },
+        ]
     )
-  print(volume)
-  V = str(volume)
-  vol,vol1 = V.split("=", 1)
-  vol = vol1.replace('\'','')
-  volume = vol.replace(')','')
-  client.get_waiter('volume_available').wait(VolumeIds=[volume])
-  return volume
+    print(volume)
+    V = str(volume)
+    vol,vol1 = V.split("=", 1)
+    vol = vol1.replace('\'','')
+    volume = vol.replace(')','')
+    client.get_waiter('volume_available').wait(VolumeIds=[volume])
+    return volume
 
 ############
 def attach_ebs_volume(params):
-  instance_id = params['instance_id']
-  size = int(params['required_diskspace'])
-### check if instance has more than one volumes 
-  vol_number=number_of_ec2_volumes(instance_id)
-  if vol_number > 1:
-    print("Instance " + instance_id + " " + " has " + str(vol_number) + " volumes already")
-    return vol_number
-  vol_number = vol_number + 1
-  client = boto3.client('ec2',region_name='us-east-1')
-  state=get_ec2_instance_state(params)
-  print('ret: ',state)
-  if state != 'running':
-     ec2_instance_start(params)
-  zone=ec2_instance_availability_zone(instance_id)
-  print(zone)
-  platform=ec2_instance_platform(instance_id)
-  if platform != 'windows':
-    platform = 'linux'
-  print(platform)
-### create and get volume_id
-  volume_id=create_ebs_volume(instance_id,platform,zone,size)
-  response = client.attach_volume(
-     Device='/dev/sdb',
-     InstanceId=instance_id,
-     VolumeId=volume_id)
-  waiter = client.get_waiter('volume_in_use')
-  waiter.wait(VolumeIds=[volume_id])
-  ### 
-  ###time.sleep(5)
-  print('inserting volume_id to DB')
-  insert_disk_request_to_table(params,volume_id,size)
-  update_volume_number_to_table(params,vol_number)
-#### format volume or mount
-  state=get_ec2_instance_state(params)
-  print('debug: ',state)
-  if platform == 'windows':
-    ssm_ec2_instance_windows(instance_id)
-  if platform == 'linux':
-    ssm_ec2_instance_linux(instance_id)
-  ### send mail here 
-  workstation_diskspace_request_notification(params)
-  return response
+    instance_id = params['instance_id']
+    size = int(params['required_diskspace'])
+    ### check if instance has more than one volumes
+    vol_number=number_of_ec2_volumes(instance_id)
+    if vol_number > 1:
+        print("Instance " + instance_id + " " + " has " + str(vol_number) + " volumes already")
+        return vol_number
+    vol_number = vol_number + 1
+    client = boto3.client('ec2',region_name='us-east-1')
+    state=get_ec2_instance_state(params)
+    print('ret: ',state)
+    if state != 'running':
+        ec2_instance_start(params)
+    zone=ec2_instance_availability_zone(instance_id)
+    print(zone)
+    platform=ec2_instance_platform(instance_id)
+    if platform != 'windows':
+        platform = 'linux'
+    print(platform)
+    ### create and get volume_id
+    volume_id=create_ebs_volume(instance_id,platform,zone,size)
+    response = client.attach_volume(
+        Device='/dev/sdb',
+        InstanceId=instance_id,
+        VolumeId=volume_id)
+    waiter = client.get_waiter('volume_in_use')
+    waiter.wait(VolumeIds=[volume_id])
+    ###
+    ###time.sleep(5)
+    print('inserting volume_id to DB')
+    insert_disk_request_to_table(params,volume_id,size)
+    update_volume_number_to_table(params,vol_number)
+    #### format volume or mount
+    state=get_ec2_instance_state(params)
+    print('debug: ',state)
+    if platform == 'windows':
+        ssm_ec2_instance_windows(instance_id)
+    if platform == 'linux':
+        ssm_ec2_instance_linux(instance_id)
+    ### send mail here
+    workstation_diskspace_request_notification(params)
+    return response
 
 ############
 def ssm_ec2_instance_windows(instance_id):
-  print("Initializing disk2 on instance_id: " + instance_id)
-  ssm = boto3.client('ssm',region_name='us-east-1' )    
-  try:
-    response = ssm.send_command( InstanceIds=[instance_id],
-            DocumentName='AWS-RunPowerShellScript',
-            Parameters={ "commands":[ """Get-Disk | Where partitionstyle -eq ‘raw’ |
-                                     Initialize-Disk -PartitionStyle MBR -PassThru |
-                                     New-Partition -AssignDriveLetter -UseMaximumSize |
-                                     Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$false""" ]  },
-                                  MaxErrors='20' )
-  except Exception as e:
-    logging.error("send command error: {0}".format(e))
-    raise e
-  command_id = response['Command']['CommandId']
-  print('command ID',command_id)
-  print(response)
+    print("Initializing disk2 on instance_id: " + instance_id)
+    ssm = boto3.client('ssm',region_name='us-east-1' )
+    try:
+        response = ssm.send_command( InstanceIds=[instance_id],
+        DocumentName='AWS-RunPowerShellScript',
+        Parameters={ "commands":[ """Get-Disk | Where partitionstyle -eq ‘raw’ |
+                                 Initialize-Disk -PartitionStyle MBR -PassThru |
+                                 New-Partition -AssignDriveLetter -UseMaximumSize |
+                                 Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$false""" ]  },
+                                 MaxErrors='20' )
+    except Exception as e:
+        logging.error("send command error: {0}".format(e))
+        raise e
+    command_id = response['Command']['CommandId']
+    print('command ID',command_id)
+    print(response)
 
 def ssm_ec2_instance_linux(instance_id):
-  print("EBS mounting on instance_id: " + instance_id)
-  ssm = boto3.client('ssm',region_name='us-east-1' )    
-  response = ssm.send_command( InstanceIds=[instance_id],
-            DocumentName='AWS-RunShellScript',
-            Parameters={ "commands":[ """lsblk;
-sudo mkfs -t ext4 /dev/xvdb
-cd /
-mkdir -p /data1
-sudo mount /dev/xvdb  /data1/
-cat /etc/fstab | grep data1
-if [ $? -ne 0 ]; then
-echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
-fi
-"""
-]  },MaxErrors='20' )
-  command_id = response['Command']['CommandId']
-  print('Run command id',command_id)
-  #print(response)
+    print("EBS mounting on instance_id: " + instance_id)
+    ssm = boto3.client('ssm',region_name='us-east-1' )
+    response = ssm.send_command( InstanceIds=[instance_id],
+    DocumentName='AWS-RunShellScript',
+    Parameters={ "commands":[ """lsblk;
+    sudo mkfs -t ext4 /dev/xvdb
+    cd /
+    mkdir -p /data1
+    sudo mount /dev/xvdb  /data1/
+    cat /etc/fstab | grep data1
+    if [ $? -ne 0 ]; then
+    echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
+    fi
+    """
+    ]  },MaxErrors='20' )
+    command_id = response['Command']['CommandId']
+    print('Run command id',command_id)
+    #print(response)
 
 
 def ec2_instance_platform(instance_id):
-  ec2 = boto3.resource('ec2')
-  instance = ec2.Instance(instance_id)
-  return instance.platform
+    ec2 = boto3.resource('ec2')
+    instance = ec2.Instance(instance_id)
+    return instance.platform
 
 def ec2_instance_availability_zone(instance_id):
-  client = boto3.client('ec2')
-  responses = client.describe_instances(InstanceIds=[instance_id])
-  for response in responses["Reservations"]:
-      for instance in response["Instances"]:
+    client = boto3.client('ec2')
+    responses = client.describe_instances(InstanceIds=[instance_id])
+    for response in responses["Reservations"]:
+        for instance in response["Instances"]:
             availability_zone = instance["Placement"]["AvailabilityZone"]
             return availability_zone
 
 def get_ec2_instance_state(params):
-  instance_id = params['instance_id']
-  ec2 = boto3.resource('ec2', region_name='us-east-1')
-  instance = ec2.Instance(instance_id)
-  return instance.state['Name']
+    instance_id = params['instance_id']
+    ec2 = boto3.resource('ec2', region_name='us-east-1')
+    instance = ec2.Instance(instance_id)
+    return instance.state['Name']
 
 #################
 def ec2_instance_start(params):
-  instance_id = params['instance_id']
-  print("Starting instance_id: " + instance_id)
-  client = boto3.client('ec2',region_name='us-east-1')
+    instance_id = params['instance_id']
+    print("Starting instance_id: " + instance_id)
+    client = boto3.client('ec2',region_name='us-east-1')
 
 # Start the instance
-  try:
-    client.start_instances(InstanceIds=[instance_id])
-  #  waiter=client.get_waiter('instance_running')
-  #  waiter.wait(InstanceIds=[instance_id])
-  except ClientError as e:
-    print(e)
+    try:
+        client.start_instances(InstanceIds=[instance_id])
+        #  waiter=client.get_waiter('instance_running')
+        #  waiter.wait(InstanceIds=[instance_id])
+    except ClientError as e:
+        print(e)
 
 ######
 def manage_workstation_send_email(email,subject,body_text):
-  SENDER = "SDC Administrator <support@securedatacommons.com>"
-  RECIPIENT = email 
-  AWS_REGION = "us-east-1"
+    SENDER = "SDC Administrator <support@securedatacommons.com>"
+    RECIPIENT = email
+    AWS_REGION = "us-east-1"
 
 # The subject line for the email.
-  SUBJECT = subject
+    SUBJECT = subject
 # The email body for recipients with non-HTML email clients.
-  BODY_TEXT = body_text
+    BODY_TEXT = body_text
 
 # The character encoding for the email.
-  CHARSET = "UTF-8"
+    CHARSET = "UTF-8"
 
 # Create a new SES resource and specify a region.
-  client = boto3.client('ses',region_name=AWS_REGION)
+    client = boto3.client('ses',region_name=AWS_REGION)
 
 # Try to send the email.
-  try: #Provide the contents of the email.
-    response = client.send_email(
-        Destination={
-            'ToAddresses': [
-                RECIPIENT,
-            ],
-        },
-        Message={
-            'Body': {
-                'Text': {
+    try: #Provide the contents of the email.
+        response = client.send_email(
+            Destination={
+                'ToAddresses': [
+                    RECIPIENT,
+                ],
+            },
+            Message={
+                'Body': {
+                    'Text': {
+                        'Charset': CHARSET,
+                        'Data': BODY_TEXT,
+                    },
+                },
+                'Subject': {
                     'Charset': CHARSET,
-                    'Data': BODY_TEXT,
+                    'Data': SUBJECT,
                 },
             },
-            'Subject': {
-                'Charset': CHARSET,
-                'Data': SUBJECT,
-            },
-        },
-        Source=SENDER,
-    )
+            Source=SENDER,
+        )
 # Display an error if something goes wrong.     
-  except ClientError as e:
-    print(e.response['Error']['Message'])
-  else:
-    print("Email sent! Message ID:"),
-    print(response['MessageId'])
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+    else:
+        print("Email sent! Message ID:"),
+        print(response['MessageId'])
 
 def format_date(date):
-   yyyy = date[0:4]
-   mm = date[5:7]
-   dd = date[8:10]
-   formated_date = str(mm)+'/'+str(dd)+'/'+str(yyyy)
-   return formated_date
+    yyyy = date[0:4]
+    mm = date[5:7]
+    dd = date[8:10]
+    formated_date = str(mm)+'/'+str(dd)+'/'+str(yyyy)
+    return formated_date
 
 def workstation_instance_request_notification(params):
 
@@ -1306,197 +1325,197 @@ def workstation_diskspace_request_notification(params):
 
 @app.route('/get_workstation_schedule', authorizer=authorizer, cors=cors_config)
 def get_workstation_schedule():
-  paramsQuery = app.current_request.query_params
-  paramsString = paramsQuery['wsrequest']
-  logger.setLevel("INFO")
-  logging.info("Received request {}".format(paramsString))
-  params = json.loads(paramsString)
-  username = params['username']
-  instance_id = params['instance_id']
-  print(username)
-  workstation_schedule = {}
-  workstation_schedule['schedulelist'] = []
-  dynamodb = boto3.resource('dynamodb',region_name='us-east-1')
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['wsrequest']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    username = params['username']
+    instance_id = params['instance_id']
+    print(username)
+    workstation_schedule = {}
+    workstation_schedule['schedulelist'] = []
+    dynamodb = boto3.resource('dynamodb',region_name='us-east-1')
 
-  table = dynamodb.Table(TABLENAME_MANAGE_DISK)
-  resp = table.query(
+    table = dynamodb.Table(TABLENAME_MANAGE_DISK)
+    resp = table.query(
     IndexName=TABLENAME_MANAGE_DISK_INDEX,
     KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
 
-  for item in resp['Items']:
-    info = {"diskspace_instnace_id" : instance_id, "diskspace_schedule_from_date" : format_date(item['schedule_from_date']),"diskspace_schedule_to_date" : format_date(item['schedule_to_date'])}
-    workstation_schedule['schedulelist'].append(info)
+    for item in resp['Items']:
+        info = {"diskspace_instnace_id" : instance_id, "diskspace_schedule_from_date" : format_date(item['schedule_from_date']),"diskspace_schedule_to_date" : format_date(item['schedule_to_date'])}
+        workstation_schedule['schedulelist'].append(info)
 
-  table = dynamodb.Table(TABLENAME_MANAGE_USER)
-  resp = table.query(
-    IndexName=TABLENAME_MANAGE_USER_INDEX,
-    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
+    table = dynamodb.Table(TABLENAME_MANAGE_USER)
+    resp = table.query(
+        IndexName=TABLENAME_MANAGE_USER_INDEX,
+        KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
 
-  for item in resp['Items']:
-    info = {"workstation_instnace_id" : instance_id,"workstation_schedule_from_date" : format_date(item['schedule_from_date']),"workstation_schedule_to_date" : format_date(item['schedule_to_date'])}
-    workstation_schedule['schedulelist'].append(info)
+    for item in resp['Items']:
+        info = {"workstation_instnace_id" : instance_id,"workstation_schedule_from_date" : format_date(item['schedule_from_date']),"workstation_schedule_to_date" : format_date(item['schedule_to_date'])}
+        workstation_schedule['schedulelist'].append(info)
 
-  table = dynamodb.Table(TABLENAME_MANAGE_UPTIME)
-  resp = table.query(
-    IndexName=TABLENAME_MANAGE_UPTIME_INDEX,
-    KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
+    table = dynamodb.Table(TABLENAME_MANAGE_UPTIME)
+    resp = table.query(
+        IndexName=TABLENAME_MANAGE_UPTIME_INDEX,
+        KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('is_active').eq(True) & Attr('instance_id').eq(instance_id))
 
-  for item in resp['Items']:
-    info = {"uptime_instnace_id" : instance_id,"uptime_schedule_from_date" : format_date(item['schedule_from_date']),"uptime_schedule_to_date" : format_date(item['schedule_to_date'])}
-    workstation_schedule['schedulelist'].append(info)
-  return workstation_schedule
+    for item in resp['Items']:
+        info = {"uptime_instnace_id" : instance_id,"uptime_schedule_from_date" : format_date(item['schedule_from_date']),"uptime_schedule_to_date" : format_date(item['schedule_to_date'])}
+        workstation_schedule['schedulelist'].append(info)
+    return workstation_schedule
 
 ######
 
 @app.route('/get_desired_instance_types', authorizer=authorizer, cors=cors_config)
 def get_desired_instance_types():
-  params = app.current_request.query_params
-  logger.setLevel("INFO")
+    params = app.current_request.query_params
+    logger.setLevel("INFO")
 #########
-  try:
-    response=get_instances_prices(params['cpu'], params['memory'], params['os'])
-    logging.info("Respnse - " + str(response))
-  except BaseException as be:
+    try:
+        response=get_instances_prices(params['cpu'], params['memory'], params['os'])
+        logging.info("Respnse - " + str(response))
+    except BaseException as be:
         logging.exception("Error: Failed to process manage workstation request" + str(be))
         raise ChaliceViewError("Failed to process manage workstation request")
 
-  return Response(body=response,
+    return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
 
 def instance_family_compare_cost(famList,instances): 
-  print("Recommended EC2 instances ")
-  print("=====================")
-  lowestCostList = [] 
-  listIndex = -1 
-  prvlistIndex = -1 
-  for instance in instances['pricelist']:
-    listIndex = listIndex + 1
-    if instance['instanceFamily'] != famList: 
-       continue
-    if prvlistIndex >= 0:
-       if instances['pricelist'][prvlistIndex]['cost'] > instances['pricelist'][listIndex]['cost']:
-          lowestCostList = instances['pricelist'][listIndex] 
-          prvlistIndex = listIndex 
-          continue
-       if instances['pricelist'][prvlistIndex]['cost'] < instances['pricelist'][listIndex]['cost']:
-          lowestCostList = instances['pricelist'][prvlistIndex] 
-          continue
-       if instances['pricelist'][listIndex]['cost'] == instances['pricelist'][prvlistIndex]['cost']:
-          str_storage=instances['pricelist'][prvlistIndex]['storage']
-          if (str_storage.find('EBS') != -1):
-             lowestCostList = instances['pricelist'][prvlistIndex] 
-             continue
-          else:
-            lowestCostList = instances['pricelist'][listIndex] 
-    prvlistIndex = listIndex 
-  return lowestCostList
+    print("Recommended EC2 instances ")
+    print("=====================")
+    lowestCostList = []
+    listIndex = -1
+    prvlistIndex = -1
+    for instance in instances['pricelist']:
+        listIndex = listIndex + 1
+        if instance['instanceFamily'] != famList:
+            continue
+        if prvlistIndex >= 0:
+            if instances['pricelist'][prvlistIndex]['cost'] > instances['pricelist'][listIndex]['cost']:
+                lowestCostList = instances['pricelist'][listIndex]
+                prvlistIndex = listIndex
+                continue
+            if instances['pricelist'][prvlistIndex]['cost'] < instances['pricelist'][listIndex]['cost']:
+                lowestCostList = instances['pricelist'][prvlistIndex]
+                continue
+            if instances['pricelist'][listIndex]['cost'] == instances['pricelist'][prvlistIndex]['cost']:
+                str_storage=instances['pricelist'][prvlistIndex]['storage']
+                if (str_storage.find('EBS') != -1):
+                    lowestCostList = instances['pricelist'][prvlistIndex]
+                    continue
+                else:
+                    lowestCostList = instances['pricelist'][listIndex]
+        prvlistIndex = listIndex
+    return lowestCostList
 ######
 def get_cost_per_family(familyList,instances): 
-  lowestCostList = [] 
-  recommenedInstances = {}
-  recommenedInstances['recommendedlist'] = []
-  for famList in familyList: 
-    famList = famList.lstrip()
-    famNum = 0
-    listIndex = -1
-    for instance in instances['pricelist']:
-      if instance['instanceFamily'] != famList: 
-         listIndex = listIndex + 1
-         continue
-      famNum = famNum + 1
+    lowestCostList = []
+    recommenedInstances = {}
+    recommenedInstances['recommendedlist'] = []
+    for famList in familyList:
+        famList = famList.lstrip()
+        famNum = 0
+        listIndex = -1
+        for instance in instances['pricelist']:
+            if instance['instanceFamily'] != famList:
+                listIndex = listIndex + 1
+                continue
+            famNum = famNum + 1
 ### one instnace and nothing to compare 
-    if famNum == 1: 
-      lowestCostList=instances['pricelist'][listIndex]
-      recommenedInstances['recommendedlist'].append(lowestCostList)
+        if famNum == 1:
+            lowestCostList=instances['pricelist'][listIndex]
+            recommenedInstances['recommendedlist'].append(lowestCostList)
 ### multiple instance families found
-    if famNum >= 1: 
-      lowestCostList=instance_family_compare_cost(famList,instances) 
-      recommenedInstances['recommendedlist'].append(lowestCostList)
+        if famNum >= 1:
+            lowestCostList=instance_family_compare_cost(famList,instances)
+            recommenedInstances['recommendedlist'].append(lowestCostList)
 
-  return recommenedInstances
-  #print(json.dumps(recommenedInstances,indent=2))
+    return recommenedInstances
+    #print(json.dumps(recommenedInstances,indent=2))
        
 ####### function to get unique values 
 def family_unique_list(tempList): 
 # intilize a null list 
-  unique_list = [] 
+    unique_list = []
 # traverse for all elements 
-  for x in tempList: 
-      # check if exists in unique_list or not 
-     if x not in unique_list: 
-       unique_list.append(x) 
-  return unique_list
+    for x in tempList:
+        # check if exists in unique_list or not
+        if x not in unique_list:
+            unique_list.append(x)
+    return unique_list
 
 ####
 def get_instances_prices(cpu, memory, os):
-  VCPU = cpu
-  memory = memory
-  MEMORY = memory + ' GiB'
-  operatingSystem = os
-  pricing = boto3.client('pricing')
-  response = pricing.get_products(
-    ServiceCode='AmazonEC2',
-    Filters = [
-       {'Type' :'TERM_MATCH', 'Field':'licenseModel',   'Value':'No License required'  },
-       {'Type' :'TERM_MATCH', 'Field':'tenancy' ,      'Value':'Shared'       },  
-       {'Type' :'TERM_MATCH', 'Field':'preInstalledSw', 'Value':'NA'       },  
-       {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':operatingSystem       },  
-       {'Type' :'TERM_MATCH', 'Field':'vcpu',            'Value':VCPU            },
-       {'Type' :'TERM_MATCH', 'Field':'memory',          'Value':MEMORY          },
-       {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'}
-    ]
+    VCPU = cpu
+    memory = memory
+    MEMORY = memory + ' GiB'
+    operatingSystem = os
+    pricing = boto3.client('pricing')
+    response = pricing.get_products(
+        ServiceCode='AmazonEC2',
+        Filters = [
+           {'Type' :'TERM_MATCH', 'Field':'licenseModel',   'Value':'No License required'  },
+           {'Type' :'TERM_MATCH', 'Field':'tenancy' ,      'Value':'Shared'       },
+           {'Type' :'TERM_MATCH', 'Field':'preInstalledSw', 'Value':'NA'       },
+           {'Type' :'TERM_MATCH', 'Field':'operatingSystem', 'Value':operatingSystem       },
+           {'Type' :'TERM_MATCH', 'Field':'vcpu',            'Value':VCPU            },
+           {'Type' :'TERM_MATCH', 'Field':'memory',          'Value':MEMORY          },
+           {'Type' :'TERM_MATCH', 'Field':'location',        'Value':'US East (N. Virginia)'}
+        ]
     )
 
-  instances = {}
-  instances['pricelist'] = []
-  for pricelist in response['PriceList']:
-    if (pricelist.find('per On Demand') == -1):
-      continue
-    product = json.loads(pricelist)
-    productfamily = product['product']['productFamily']
-    data = json.dumps(product['product'])
-    attributes = json.loads(data)
-    instanceFamily = attributes['attributes']['instanceFamily']
-    instanceType = attributes['attributes']['instanceType']
-    storage =  attributes['attributes']['storage']
-    ### move up the jason string
-    data = json.dumps(product['terms'])
-    terms = json.loads(data)
-    data = json.dumps(terms['OnDemand'])
-    terms = json.loads(data)
-    for key in terms:
-      data = terms[key]
-    data1 = json.dumps(data)
-    terms = json.loads(data1)
-    data = json.dumps(terms['priceDimensions'])
-    terms = json.loads(data)
-    for key in terms:
-      data = terms[key]
-    for key in terms:
-      data = terms[key]
-    data1 = json.dumps(data)
-    terms = json.loads(data1)
-    pricePerUnit=(round(float(terms['pricePerUnit']['USD']),4))
-    info = {"instanceFamily" : instanceFamily,"instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : VCPU, "memory" : MEMORY,"storage" : storage, "cost" : pricePerUnit}
+    instances = {}
+    instances['pricelist'] = []
+    for pricelist in response['PriceList']:
+        if (pricelist.find('per On Demand') == -1):
+            continue
+        product = json.loads(pricelist)
+        productfamily = product['product']['productFamily']
+        data = json.dumps(product['product'])
+        attributes = json.loads(data)
+        instanceFamily = attributes['attributes']['instanceFamily']
+        instanceType = attributes['attributes']['instanceType']
+        storage =  attributes['attributes']['storage']
+        ### move up the jason string
+        data = json.dumps(product['terms'])
+        terms = json.loads(data)
+        data = json.dumps(terms['OnDemand'])
+        terms = json.loads(data)
+        for key in terms:
+            data = terms[key]
+        data1 = json.dumps(data)
+        terms = json.loads(data1)
+        data = json.dumps(terms['priceDimensions'])
+        terms = json.loads(data)
+        for key in terms:
+            data = terms[key]
+        for key in terms:
+            data = terms[key]
+        data1 = json.dumps(data)
+        terms = json.loads(data1)
+        pricePerUnit=(round(float(terms['pricePerUnit']['USD']),4))
+        info = {"instanceFamily" : instanceFamily,"instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : VCPU, "memory" : MEMORY,"storage" : storage, "cost" : pricePerUnit}
 
-    instances['pricelist'].append(info)
+        instances['pricelist'].append(info)
 
 ### sort by lowest cost
-  familyList = []
-  for instance in instances['pricelist']:
-    familyList.append(str(instance['cost']) + ' : ' + instance['instanceFamily'])
-  familyList.sort()
+    familyList = []
+    for instance in instances['pricelist']:
+        familyList.append(str(instance['cost']) + ' : ' + instance['instanceFamily'])
+    familyList.sort()
 # make a unique list
-  tempList = []
-  for InsFamily in familyList: 
-    tempList.append(InsFamily.split(':')[1])
-    
-  familyList = family_unique_list(tempList) 
-  recommended_list=get_cost_per_family(familyList,instances)
-  instance_types = []
-  instance_types.append(instances)
-  instance_types.append(recommended_list)
+    tempList = []
+    for InsFamily in familyList:
+        tempList.append(InsFamily.split(':')[1])
+
+    familyList = family_unique_list(tempList)
+    recommended_list=get_cost_per_family(familyList,instances)
+    instance_types = []
+    instance_types.append(instances)
+    instance_types.append(recommended_list)
   
-  return instance_types
+    return instance_types
   

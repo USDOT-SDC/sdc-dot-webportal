@@ -316,39 +316,74 @@
       </mat-dialog-content>
       
     </mat-tab>
+
     <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex!=2'>
       <hr>
       <p><b>Trusted Status is a mechanism for analysts to obtain a passport from a data provider. Obtaining this passport allows analyst to export their data immediately (for subsequent similar requests), as opposed to waiting for the review and approval of a data provider.</b>
-      <br>
-      <b>This status is acquired per Project + Data Provider + Sub-Dataset/Data Type.</b></p>
+        <br>
+        <b>This status is acquired per Project + Data Provider + Sub-Dataset/Data Type.</b></p>
       <mat-dialog-content *ngIf="trustedStatus">
         <br>
         <p>Note - Based on the dataset and datatype selection, you currently have Trusted Status from this Data Provider. We will notify the Data Provider about your request.</p>
+      </mat-dialog-content>
+
+      <mat-dialog-content>
+        <div *ngIf="!trustedStatus">
+          <br>
+          <p>Note - Based on the dataset and datatype selection, you currently do not have a Trusted Status from this Data Provider. We will notify the Data Provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
+          <h5>Do you wish to request Trusted Status from the Data Provider?</h5>
+
+          <br/>
+          <div class="ui-g">
+            <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="Yes" label="Yes"  (onClick) = "onTrustedRequestGrpChange('Yes')" [(ngModel)]="trustedRequest"></p-radioButton> </div>
+            <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"   (onClick) = "onTrustedRequestGrpChange('No')"  [(ngModel)]="trustedRequest" checked> </p-radioButton> </div>
+          </div>
+          <br/>
+        </div>
+
+        <p-panel header="Acceptable Use Policy" >
+          <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
+        </p-panel>
+        <br/>
+        <div *ngIf="!trustedStatus">
+          <div class="ui-g">
+            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
+            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <br/><br/>
+      <mat-dialog-actions>
+        <button class="btn btn-primary dotBtn request-exportNextBtn"
+                [disabled]="!messageModel.derivedDatasetname"
+                (click)="onTrustedformClick()">NEXT
+        </button>
+        <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+      </mat-dialog-actions>
+    </mat-tab>
+
+    <mat-tab label="Auto-Export Status" #tab4 [disabled]='selectedIndex!=3'>
+      <hr>
+      <p><b>Auto-Export Status is a mechanism for analysts to obtain a passport from a data provider for automatic export of data. Obtaining this passport allows analyst to export their data automatically (for subsequent similar requests), as opposed to manually approving the request for export yourself (as a trusted user).</b>
+      <br>
+      <b>This status is acquired per Project + Data Provider + Sub-Dataset/Data Type.</b></p>
+      <mat-dialog-content *ngIf="autoExportStatus">
+        <br>
+        <p>Note - Based on the dataset and datatype selection, you currently have Auto-Export Status from this Data Provider.</p>
       </mat-dialog-content> 
         
       <mat-dialog-content>
-          <div *ngIf="!trustedStatus">
+          <div *ngIf="!autoExportStatus">
             <br>
-            <p>Note - Based on the dataset and datatype selection, you currently do not have a Trusted Status from this Data Provider. We will notify the Data Provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
-            <h5>Do you wish to request Trusted Status from the Data Provider?</h5>
+            <p>Note - Based on the dataset and datatype selection, you currently do not have Auto-Export Status from this Data Provider. We will notify the Data Provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
+            <h5>Do you wish to request Auto-Export Status from the Data Provider?</h5>
             
             <br/>
             <div class="ui-g">
-                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="Yes" label="Yes"  (onClick) = "onTrustedRequestGrpChange('Yes')" [(ngModel)]="trustedRequest"></p-radioButton> </div>
-                <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"   (onClick) = "onTrustedRequestGrpChange('No')"  [(ngModel)]="trustedRequest" checked> </p-radioButton> </div>
+                <div class="ui-g-2"><p-radioButton  name="autoExportRequestGrp" value="Yes" label="Yes"  (onClick) = "onAutoExportRequestGrpChange('Yes')" [(ngModel)]="autoExportRequest"></p-radioButton> </div>
+                <div class="ui-g-2"><p-radioButton  name="autoExportRequestGrp" value="No" label="No"   (onClick) = "onAutoExportRequestGrpChange('No')"  [(ngModel)]="autoExportRequest" checked> </p-radioButton> </div>
             </div>
             <br/>
-          </div>
-
-          <p-panel header="Acceptable Use Policy" >
-              <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
-          </p-panel>
-          <br/>
-          <div *ngIf="!trustedStatus">
-            <div class="ui-g">
-                <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
-                <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
-            </div>
           </div>
         </mat-dialog-content> 
         <br/><br/>

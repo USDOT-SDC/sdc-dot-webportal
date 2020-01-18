@@ -44,6 +44,7 @@ export class DialogBoxComponent implements OnInit {
     tags: string;
     justifyExport: string;
     trustedStatus: boolean;
+    autoExportStatus: boolean;
     exportWorkflow: any;
     expWorkflow: any;
     derivedDataSetname: string;
@@ -53,6 +54,7 @@ export class DialogBoxComponent implements OnInit {
     allProvidersJson: any;
     allDataTypes: any;
     trustedRequest: string;
+    autoExportRequest: string;
     acceptableUse: string;
     approvalForm: string;
     derivedDataSet: string;
@@ -181,6 +183,7 @@ export class DialogBoxComponent implements OnInit {
         this.userBucketName = data.userBucketName;
         this.datasettype = data.datasettype;
         this.trustedRequest = 'No';
+        this.autoExportRequest = 'No';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -316,6 +319,11 @@ export class DialogBoxComponent implements OnInit {
 
         this.selectedIndex = 2;
     }
+    onTrustedformClick() {
+        // TODO Maybe store values from trusted request unless they are already stored
+        this.selectedIndex = 3;
+    }
+
     validateEmailRegex(email) {
         const regexEmail = new RegExp('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?');
         return regexEmail.test(email);
@@ -829,6 +837,12 @@ export class DialogBoxComponent implements OnInit {
             console.log('Declined acceptable usage policy');
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
+
+        if (this.autoExportRequest === 'Yes') {
+            // Submit API gateway request
+            reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted' };
+        }
+
         this.gatewayService.sendExportRequest('export?message=' + encodeURI(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
                 this.snackBar.open('Your request has been sent successfully', 'close', {
@@ -853,6 +867,12 @@ export class DialogBoxComponent implements OnInit {
         // }
         if (selectedVal === 'Yes') {
             this.trustedRequest = 'Yes';
+        }
+    }
+
+    onAutoExportRequestGrpChange(selectedVal: any) {
+        if (selectedVal === 'Yes') {
+            this.autoExportRequest = 'Yes';
         }
     }
 
