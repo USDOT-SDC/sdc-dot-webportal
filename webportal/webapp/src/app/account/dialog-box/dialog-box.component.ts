@@ -34,6 +34,7 @@ export class DialogBoxComponent implements OnInit {
     uploadedFilesCount = 0;
     selectedIndex = 0;
     userTrustedStatus: any;
+    userAutoExportStatus: any;
     datasettype: string;
     selectedDataSet: string;
     selectedDataProvider: string;
@@ -203,6 +204,8 @@ export class DialogBoxComponent implements OnInit {
         (this.mailType === 'reSize Request') && this.setDisableCurrentConfigurations();
         const trustedStatus = sessionStorage.getItem('userTrustedStatus');
         this.userTrustedStatus = JSON.parse(trustedStatus);
+        const autoExportStatus = sessionStorage.getItem('userAutoExportStatus');
+        this.userAutoExportStatus = JSON.parse(autoExportStatus);
         const expWorkflow = sessionStorage.getItem('exportWorkflow');
         this.expWorkflow = JSON.parse(expWorkflow);
 
@@ -300,8 +303,10 @@ export class DialogBoxComponent implements OnInit {
         console.log('SelectedDataType:' + this.selectedDatatype);
         const key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
         this.trustedStatus = key in this.userTrustedStatus;
-        // add the trusted status logic here
-        // this.trustedStatus = true;
+        this.autoExportStatus = key in this.userAutoExportStatus;
+        this.trustedRequest = 'No';
+        this.autoExportRequest = 'No';
+        this.acceptableUse = '';
         this.selectedIndex = 1;
     }
     onApprovalformClick() {
@@ -320,7 +325,6 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndex = 2;
     }
     onTrustedformClick() {
-        // TODO Maybe store values from trusted request unless they are already stored
         this.selectedIndex = 3;
     }
 

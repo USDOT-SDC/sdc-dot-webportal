@@ -115,11 +115,11 @@
                             <td>{{autoExportRequest.userFullName}}</td>
                             <td>{{autoExportRequest.dataset}}</td>
                             <td>
-                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"> <i class="material-icons iconFont" (click)="submitAutoExportApproval('Trusted',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >done</i><i class="material-icons iconFont" (click)="submitAutoExportApproval('Untrusted',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</i></div>
-                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Trusted'">
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"> <i class="material-icons iconFont" (click)="submitAutoExportApproval('Approved',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >done</i><i class="material-icons iconFont" (click)="submitAutoExportApproval('Denied',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</i></div>
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Approved'">
                                     <p-message severity="success" text="{{autoExportRequest.AutoExportStatus}}"></p-message>
                                 </div>
-                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Untrusted'">
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Denied'">
                                     <p-message severity="error" text="{{autoExportRequest.AutoExportStatus}}"></p-message>
                                 </div>
                             </td>

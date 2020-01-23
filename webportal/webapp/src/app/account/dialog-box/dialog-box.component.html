@@ -317,7 +317,7 @@
       
     </mat-tab>
 
-    <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex!=2'>
+    <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex<2'>
       <hr>
       <p><b>Trusted Status is a mechanism for analysts to obtain a passport from a data provider. Obtaining this passport allows analyst to export their data immediately (for subsequent similar requests), as opposed to waiting for the review and approval of a data provider.</b>
         <br>
@@ -353,27 +353,34 @@
         </div>
       </mat-dialog-content>
       <br/><br/>
-      <mat-dialog-actions>
+      <mat-dialog-actions *ngIf="trustedStatus">
         <button class="btn btn-primary dotBtn request-exportNextBtn"
                 [disabled]="!messageModel.derivedDatasetname"
                 (click)="onTrustedformClick()">NEXT
         </button>
         <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
       </mat-dialog-actions>
+      <br *ngIf="!trustedStatus"/><br *ngIf="!trustedStatus"/>
+      <div *ngIf="!trustedStatus"><button class="btn btn-primary dotBtn" (click)="submitRequest()">Submit</button></div>
     </mat-tab>
 
-    <mat-tab label="Auto-Export Status" #tab4 [disabled]='selectedIndex!=3'>
+    <mat-tab label="Auto-Export Status" #tab4 [disabled]='selectedIndex!=3' *ngIf="trustedStatus">
       <hr>
-      <p><b>Auto-Export Status is a mechanism for analysts to obtain a passport from a data provider for automatic export of data. Obtaining this passport allows analyst to export their data automatically (for subsequent similar requests), as opposed to manually approving the request for export yourself (as a trusted user).</b>
+      <p><b>Auto-Export Status is a mechanism for analysts to obtain a passport from a data provider for automatic export of data. Obtaining this passport allows analyst to export their data automatically (for subsequent similar requests), as opposed to manually approving the request for export yourself (as a trusted user). If approved, this passport may be revoked by the data provider at any time.</b>
       <br>
       <b>This status is acquired per Project + Data Provider + Sub-Dataset/Data Type.</b></p>
-      <mat-dialog-content *ngIf="autoExportStatus">
+      <mat-dialog-content *ngIf="!trustedStatus">
+        <br>
+        <p>Note - Based on the dataset and datatype selection, you currently are not eligible for auto-export passport permissions. You must apply to be a trusted user first. Once approved, you may request auto-export permissions.</p>
+      </mat-dialog-content>
+
+      <mat-dialog-content *ngIf="autoExportStatus && trustedStatus">
         <br>
         <p>Note - Based on the dataset and datatype selection, you currently have Auto-Export Status from this Data Provider.</p>
       </mat-dialog-content> 
         
       <mat-dialog-content>
-          <div *ngIf="!autoExportStatus">
+          <div *ngIf="!autoExportStatus && trustedStatus">
             <br>
             <p>Note - Based on the dataset and datatype selection, you currently do not have Auto-Export Status from this Data Provider. We will notify the Data Provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
             <h5>Do you wish to request Auto-Export Status from the Data Provider?</h5>

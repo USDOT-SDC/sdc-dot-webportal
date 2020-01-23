@@ -100,6 +100,19 @@ def get_user_trustedstatus(userid):
 
     return userTrustedStatus
 
+def get_user_autoexportstatus(userid):
+    autoExportUsersTable = dynamodb_client.Table(TABLENAME_AUTOEXPORT_USERS)
+
+    response = autoExportUsersTable.query(
+        KeyConditionExpression=Key('UserID').eq(userid),
+        FilterExpression=Attr('AutoExportStatus').eq('Approved')
+    )
+    userAutoExportStatus = {}
+    for x in response['Items']:
+        userAutoExportStatus[x['Dataset-DataProvider-Datatype']] = 'Approved'
+
+    return userAutoExportStatus
+
 @app.route('/user', authorizer=authorizer, cors=cors_config)
 def get_user_info():
 
@@ -113,6 +126,7 @@ def get_user_info():
         user_info['username']=info_dict['username']
         user_info['datasets']=get_datasets()['datasets']['Items']
         user_info['userTrustedStatus'] = get_user_trustedstatus(info_dict['username'])
+        user_info['userAutoExportStatus'] = get_user_autoexportstatus(info_dict['username'])
     except BaseException as be:
         logging.exception("Error: Failed to get user details from token or datasets and algorithm." + str(be) )
         raise ChaliceViewError("Internal error occurred! Contact your administrator.")
@@ -456,10 +470,9 @@ def export():
                                 'UserID': userID,
                                 'UserEmail': user_email,
                                 'Dataset-DataProvider-Datatype': combinedDataInfo,
-                                'TrustedStatus': autoExportStatus,
-                                'UsagePolicyStatus': acceptableUse,
-                                'ReqReceivedTimestamp': int(time.time()),
-                                'LastUpdatedTimestamp': datetime.datetime.utcnow().strftime("%Y%m%d")
+                                'AutoExportStatus': autoExportStatus,
+                                'ReqReceivedTime': int(time.time()),
+                                'LastUpdatedTime': datetime.datetime.utcnow().strftime("%Y%m%d")
                             }
                         )
 
@@ -561,7 +574,7 @@ def getSubmittedRequests():
 
     useremail = params['userEmail']
     userdatasets = []
-    response = {"exportRequests": [], "trustedRequests": []}
+    response = {"exportRequests": [], "trustedRequests": [], "autoExportRequests": []}
     try:
         combinedExportWorkflow = get_combined_export_workflow()
 
@@ -577,6 +590,7 @@ def getSubmittedRequests():
         trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED_USERS)
         autoExportRequestTable = dynamodb_client.Table(TABLENAME_AUTOEXPORT_USERS)
         for userdataset in userdatasets:
+            logging.info("Dataset: " + userdataset)
             # Data File Request query
             exportFileRequestResponse = exportFileRequestTable.query(
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
@@ -596,7 +610,7 @@ def getSubmittedRequests():
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
                 KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
             if autoExportRequestResponse['Items']:
-                response['trustedRequests'].append(autoExportRequestResponse['Items'])
+                response['autoExportRequests'].append(autoExportRequestResponse['Items'])
 
         logging.info(response)
     except BaseException as be:

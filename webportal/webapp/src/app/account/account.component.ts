@@ -31,6 +31,7 @@ export class AccountComponent implements OnInit {
             sessionStorage.setItem('datasets', JSON.stringify(response.datasets));
             sessionStorage.setItem('roles', response.role);
             sessionStorage.setItem('userTrustedStatus', JSON.stringify(response.userTrustedStatus));
+            sessionStorage.setItem('userAutoExportStatus', JSON.stringify(response.userAutoExportStatus));
             console.log("User info:"+response.userTrustedStatus);
             // Extract and exportWorkflow all exportWorkflow from datasets
             let combinedEW = {};

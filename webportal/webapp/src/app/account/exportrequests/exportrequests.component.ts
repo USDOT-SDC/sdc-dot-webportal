@@ -33,7 +33,9 @@ export class ExportRequestsComponent implements OnInit {
 
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
+        console.log(this.userEmail);
         this.userName = sessionStorage.getItem('username');
+        console.log(this.userName);
 
         this.getExportFileRequests();
         
@@ -126,7 +128,8 @@ export class ExportRequestsComponent implements OnInit {
                         this.autoExportRequests.push({'userFullName' : item['UserID'],
                             'dataset' : item['Dataset-DataProvider-Datatype'],
                             'AutoExportStatus' : item['AutoExportStatus'],
-                            'ReqReceivedTimestamp': item['ReqReceivedTimestamp']});
+                            'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
+                            'UserEmail': item['UserEmail']});
                     }
                 }
 
