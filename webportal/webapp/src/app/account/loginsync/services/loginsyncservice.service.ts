@@ -25,7 +25,7 @@ export class LoginSyncService {
   userAccountsLinked(): Observable<any> {
     return this.http.get(this.accountLinkedUrl, this.httpOptions)
       .map((response) => {
-        return Observable.of(response);
+        return response;
       }).catch(this.handleError);
   }
 
