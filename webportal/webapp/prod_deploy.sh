@@ -1,8 +1,6 @@
 #/bin/bash
 ng build --prod --aot
-#upload files
-s3cmd --exclude '.git/*' sync --delete-removed ./dist/ s3://prod-sdc-webportal-hosting/
-#set content type of css files
-s3cmd --recursive modify --add-header='content-type':'text/css' --exclude '' --include '.css' s3://prod-sdc-webportal-hosting/
-#make everything public
-s3cmd setacl s3://prod-sdc-webportal-hosting --acl-public --recursive
+#Copy everything over to S3 bucket
+aws s3 cp --profile sdc ./dist s3://prod-sdc-webportal-hosting --recursive --metadata-directive REPLACE --cache-control max-age=86400 --acl public-read
+#Bust open the cache
+aws s3 cp --profile sdc ./dist/index.html s3://prod-sdc-webportal-hosting/index.html --region us-east-1 --metadata-directive REPLACE --cache-control max-age=0 --acl public-read
