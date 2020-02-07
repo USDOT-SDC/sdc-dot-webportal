@@ -10,7 +10,9 @@
           </div>
           <div class="email-address-container">
             <p><strong>Email Address</strong></p>
-            <input value="" type="text" size="40" class="usa-input" id="email" name="email" [(ngModel)]="email" autocapitalize="off" autocorrect="off">
+            <div>
+              <input value="" type="text" size="40" class="usa-input" id="email" name="email" [(ngModel)]="email" autocapitalize="off" autocorrect="off">
+            </div>
             <button class="btn btn-primary actionBtn" (click)="userLogin()">Sign In</button>
           </div>
         </div>
