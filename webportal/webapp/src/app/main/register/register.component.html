@@ -2,6 +2,21 @@
   <mat-card>
     <div class="row row-divided">
       <div class="col-xs-6 column-one">
+        <div class="sign-in-container">
+          <h3>Sign in</h3>
+          <div class="information-text sign-in-information-text">
+            <p>If you do not have a Department of Transportation email address, you will be redirected to Login.gov.</p>
+            <p>You will be prompted to create a Login.gov account if you do not already have one.</p>
+          </div>
+          <div class="email-address-container">
+            <p><strong>Email Address</strong></p>
+            <input value="" type="text" size="40" class="usa-input" id="email" name="email" [(ngModel)]="email" autocapitalize="off" autocorrect="off">
+            <button class="btn btn-primary actionBtn" (click)="userLogin()">Sign In</button>
+          </div>
+        </div>
+      </div>
+      <div class="vertical-divider">or</div>
+      <div class="col-xs-6 column-two">
         <h3>Sign up</h3>
         <p class="textFormat">Please download the access request
           form below, fill out the required details and send an email
@@ -12,29 +27,15 @@
         <div class="accessLink">
           <a style="font-size:16px;" href="../../../assets/SDC_Form/SDCAccessRequestForm.pdf" target="_blank" >Access Request Form</a>
         </div>
-        <div style="width:50px;height:50px;float:left;padding-left:10px;padding-top:20px;">
-          <img style="width:32px;height:32px;" src="../../../assets/images/info_icon.png" alt="Warning!">
-        </div>
-        <div style="padding-top: 20px;">
-          <p class="textFormat" style="margin-top:inherit;font-size:13px;">You are accessing a U.S. Government information system. This information system, including all related equipment, networks, and network devices, is provided for U.S. Government-authorized use only. Unauthorized or improper use of this system is prohibited, and may result in civil and criminal penalties, or administrative disciplinary action. The communications and data stored or transiting this system may be, for any lawful Government purpose, monitored, recorded, and subject to audit or investigation. By using this system, you understand and consent to such terms. 
-            For details on how we use your information, please see our <a href="https://www.transportation.gov/dot-website-privacy-policy">Privacy Policy</a>
-          </p>
-        </div>
       </div>
-      <div class="vertical-divider">or</div>
-      <div class="col-xs-6 column-two">
-        <div style="padding: 115px;">
-          <div style="margin-bottom: 10px">
-            <p><strong>Enter your email address to sign in</strong><br>You will be redirected to your organization's sign in page</p>
-          </div>
-          <div style="margin-bottom: 20px">
-            <input value="" type="text" size="40" class="usa-input" id="email" name="email" [(ngModel)]="email" autocapitalize="off" autocorrect="off">
-          </div>
-          <div style="margin-top: 20px">
-            <button class="btn btn-primary actionBtn" (click)="userLogin()">Submit</button>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div style="width:50px;height:50px;float:left;padding-left:10px;padding-top:20px;">
+      <img style="width:32px;height:32px;" src="../../../assets/images/info_icon.png" alt="Warning!">
+    </div>
+    <div style="padding-top: 20px;">
+      <p class="information-text">You are accessing a U.S. Government information system. This information system, including all related equipment, networks, and network devices, is provided for U.S. Government-authorized use only. Unauthorized or improper use of this system is prohibited, and may result in civil and criminal penalties, or administrative disciplinary action. The communications and data stored or transiting this system may be, for any lawful Government purpose, monitored, recorded, and subject to audit or investigation. By using this system, you understand and consent to such terms. 
+        For details on how we use your information, please see our <a href="https://www.transportation.gov/dot-website-privacy-policy">Privacy Policy</a>
+      </p>
     </div>
   </mat-card>
 </div>

@@ -6,8 +6,7 @@ import { CognitoService } from '../../../../services/cognito.service';
 @Component({
   selector: 'app-loginsync',
   templateUrl: './loginsync.component.html',
-  styleUrls: ['./loginsync.component.css',
-              '../../../../../node_modules/uswds/src/stylesheets/uswds.scss']
+  styleUrls: ['./loginsync.component.css']
 })
 export class LoginSyncComponent implements OnInit {
   username: string;
