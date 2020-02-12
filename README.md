@@ -49,7 +49,7 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 **January ??, 2020. SDC sdc-dot-webportal Release 2.5**
 ### What's New in Release 2.5
 * Add Auto-Export request option for users with trusted status in the export request pop-up window
-* Add Auto-Export request approving meny for data providers in the export requests tab
+* Add Auto-Export request approving menu for data providers in the export requests tab
 
 **January 28, 2020. SDC sdc-dot-webportal Release 2.4**
 ### What's New in Release 2.4
