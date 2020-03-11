@@ -461,18 +461,21 @@ def export():
         if 'autoExportRequest' in params:
             autoExportUsersTable = dynamodb.Table(TABLENAME_AUTOEXPORT_USERS)
 
-            autoExportStatus=params['autoExportRequest']['autoExportRequestStatus']
+            autoExportStatus = params['autoExportRequest']['autoExportRequestStatus']
+            autoExportReason = params['autoExportRequest']['autoExportRequestReason']
+            autoExportDataInfo = combinedDataInfo.split('-')[0] + '-' + combinedDataInfo.split('-')[1] + '-' + params['autoExportRequest']['autoExportRequestDataset']
 
-            emailContent = "<br/>Auto-Export status has been requested by <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
+            emailContent = "<br/>Auto-Export status has been requested by <b>" + userID + "</b> for dataset <b>" + autoExportDataInfo + "</b>"
 
             response = autoExportUsersTable.put_item(
                             Item = {
                                 'UserID': userID,
                                 'UserEmail': user_email,
-                                'Dataset-DataProvider-Datatype': combinedDataInfo,
+                                'Dataset-DataProvider-Datatype': autoExportDataInfo,
                                 'AutoExportStatus': autoExportStatus,
                                 'ReqReceivedTime': int(time.time()),
-                                'LastUpdatedTime': datetime.datetime.utcnow().strftime("%Y%m%d")
+                                'LastUpdatedTime': datetime.datetime.utcnow().strftime("%Y%m%d"),
+                                'Justification': autoExportReason
                             }
                         )
 
@@ -605,10 +608,19 @@ def getSubmittedRequests():
             if trustedRequestResponse['Items']:
                 response['trustedRequests'].append(trustedRequestResponse['Items'])
 
+        # Auto-export uses derived data types that has no limit of potential datatypes so prefix must be used
+        userdatasetprefixes = []
+        for ds in userdatasets:
+            prefix = ds.split('-')[0] + '-' + ds.split('-')[0]
+            if prefix not in userdatasetprefixes:
+                userdatasetprefixes.append(prefix)
+
+        for datasetprefix in userdatasetprefixes:
+            logging.info("Dataset Prefix: " + datasetprefix)
+
             # Auto-Export Request query
-            autoExportRequestResponse = autoExportRequestTable.query(
-                IndexName='DataInfo-ReqReceivedtimestamp-index',
-                KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
+            autoExportRequestResponse = autoExportRequestTable.scan(
+                FilterExpression=Attr('Dataset-DataProvider-Datatype').begins_with('CVP-WYDOT'))
             if autoExportRequestResponse['Items']:
                 response['autoExportRequests'].append(autoExportRequestResponse['Items'])
 
@@ -787,6 +799,12 @@ def updateautoexportstatus():
         listOfPOC.append(userEmail)
         emailContent = "<br/>The Status of the Auto-Export Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>"
         send_notification(listOfPOC, emailContent)
+
+        # NEW
+        if params['status'] == 'Approved':
+            listOfPOC = [RECEIVER]
+            emailContent = "<br/>Auto-Export status has been approved for <b>" + key1 + "</b> for the Dataset-DataProvider-Datatype <b>" + key2 + "</b>. Please perform next steps following this SOP: https://securedatacommons.atlassian.net/wiki/spaces/SD/pages/265519105/SOP+-+Assigning+S3+Auto-Export+IAM+Roles."
+            send_notification(listOfPOC, emailContent)
 
     except BaseException as be:
         logging.exception("Error: Failed to updateautoexportstatus" + str(be))

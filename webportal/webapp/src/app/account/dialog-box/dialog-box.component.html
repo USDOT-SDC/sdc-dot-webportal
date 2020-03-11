@@ -391,10 +391,21 @@
                 <div class="ui-g-2"><p-radioButton  name="autoExportRequestGrp" value="No" label="No"   (onClick) = "onAutoExportRequestGrpChange('No')"  [(ngModel)]="autoExportRequest" checked> </p-radioButton> </div>
             </div>
             <br/>
+            <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
+                <input matInput placeholder="Specify the derived dataset name" [(ngModel)]="messageModel.autoderiveddataset" value="{{messageModel.autoderiveddataset}}" required>
+            </mat-form-field>
+            <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
+                <input matInput placeholder="Reason for requesting permission" [(ngModel)]="messageModel.autoreason" value="{{messageModel.autoreason}}" required>
+            </mat-form-field>
           </div>
         </mat-dialog-content> 
         <br/><br/>
-        <div><button class="btn btn-primary dotBtn" (click)="submitRequest()">Submit</button></div>
+        <div>
+          <button class="btn btn-primary dotBtn"
+                  [disabled]="(!messageModel.autoderiveddataset || !messageModel.autoreason) && autoExportRequestSelected"
+                  (click)="submitRequest()">Submit
+          </button>
+        </div>
     </mat-tab>
   </mat-tab-group>
 </div>

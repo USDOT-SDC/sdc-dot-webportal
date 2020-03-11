@@ -60,6 +60,7 @@ export class ExportRequestsComponent implements OnInit {
         this.colsAutoExport = [
             { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
+            { field: 'justification', header: 'Justification' },
             { field: 'approval', header: 'Approval' }
         ]
     }
@@ -129,7 +130,8 @@ export class ExportRequestsComponent implements OnInit {
                             'dataset' : item['Dataset-DataProvider-Datatype'],
                             'AutoExportStatus' : item['AutoExportStatus'],
                             'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
-                            'UserEmail': item['UserEmail']});
+                            'UserEmail': item['UserEmail'],
+                            'justification': item['Justification']});
                     }
                 }
 

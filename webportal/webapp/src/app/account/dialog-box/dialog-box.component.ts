@@ -42,6 +42,8 @@ export class DialogBoxComponent implements OnInit {
     datasources: string;
     deriveddataset: string;
     detailedderiveddataset: string;
+    autoderiveddataset: string;
+    autoreason: string;
     tags: string;
     justifyExport: string;
     trustedStatus: boolean;
@@ -56,6 +58,7 @@ export class DialogBoxComponent implements OnInit {
     allDataTypes: any;
     trustedRequest: string;
     autoExportRequest: string;
+    autoExportRequestSelected: boolean;
     acceptableUse: string;
     approvalForm: string;
     derivedDataSet: string;
@@ -157,7 +160,9 @@ export class DialogBoxComponent implements OnInit {
         justifyExport: '',
         derivedDatasetname: '',
         dataprovider: '',
-        datatype: ''
+        datatype: '',
+        autoderiveddataset: '',
+        autoreason: ''
 
     };
 
@@ -185,6 +190,9 @@ export class DialogBoxComponent implements OnInit {
         this.datasettype = data.datasettype;
         this.trustedRequest = 'No';
         this.autoExportRequest = 'No';
+        this.autoExportRequestSelected = false;
+        this.autoderiveddataset = '';
+        this.autoreason = '';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -306,6 +314,9 @@ export class DialogBoxComponent implements OnInit {
         this.autoExportStatus = key in this.userAutoExportStatus;
         this.trustedRequest = 'No';
         this.autoExportRequest = 'No';
+        this.autoExportRequestSelected = false;
+        this.autoderiveddataset = ''
+        this.autoreason = ''
         this.acceptableUse = '';
         this.selectedIndex = 1;
     }
@@ -771,6 +782,8 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
+        this.autoderiveddataset = this.messageModel.autoderiveddataset;
+        this.autoreason = this.messageModel.autoreason;
 
         console.log(this.userBucketName);
 
@@ -803,6 +816,7 @@ export class DialogBoxComponent implements OnInit {
         if (this.justifyExport) {
             approvalForm['justifyExport'] = this.justifyExport;
         }
+
         // Submit API gateway request
         const reqBody = {};
         // reqBody['S3KeyHash'] = this.messageModel.fileFolderName;//Md5.hashStr('');//add s3 key inside
@@ -844,7 +858,7 @@ export class DialogBoxComponent implements OnInit {
 
         if (this.autoExportRequest === 'Yes') {
             // Submit API gateway request
-            reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted' };
+            reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
         }
 
         this.gatewayService.sendExportRequest('export?message=' + encodeURI(JSON.stringify(reqBody))).subscribe(
@@ -877,6 +891,11 @@ export class DialogBoxComponent implements OnInit {
     onAutoExportRequestGrpChange(selectedVal: any) {
         if (selectedVal === 'Yes') {
             this.autoExportRequest = 'Yes';
+            this.autoExportRequestSelected = true;
+        }
+        else if (selectedVal === 'No') {
+            this.autoExportRequest = 'No';
+            this.autoExportRequestSelected = false;
         }
     }
 
