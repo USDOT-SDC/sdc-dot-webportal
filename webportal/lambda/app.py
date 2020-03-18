@@ -465,7 +465,7 @@ def export():
             autoExportReason = params['autoExportRequest']['autoExportRequestReason']
             autoExportDataInfo = combinedDataInfo.split('-')[0] + '-' + combinedDataInfo.split('-')[1] + '-' + params['autoExportRequest']['autoExportRequestDataset']
 
-            emailContent = "<br/>Auto-Export status has been requested by <b>" + userID + "</b> for dataset <b>" + autoExportDataInfo + "</b>"
+            send_notification(listOfPOC,"Auto-Export status has been requested by <b>" + userID + "</b> for dataset <b>" + autoExportDataInfo + "</b>", 'Auto-Export Request')
 
             response = autoExportUsersTable.put_item(
                             Item = {
@@ -532,7 +532,7 @@ def export():
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
 
-def send_notification(listOfPOC, emailContent):
+def send_notification(listOfPOC, emailContent, subject = 'Export Notification'):
     ses_client = boto3.client('ses')
     sender = RECEIVER
 
@@ -558,7 +558,7 @@ def send_notification(listOfPOC, emailContent):
                 },
                 'Subject': {
                     'Charset': 'UTF-8',
-                    'Data': 'Export Notification',
+                    'Data': subject,
                 },
             },
             Source=sender
@@ -797,14 +797,16 @@ def updateautoexportstatus():
         # Send notification to the analyst if their request is approved or rejected
         listOfPOC = []
         listOfPOC.append(userEmail)
-        emailContent = "<br/>The Status of the Auto-Export Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>"
-        send_notification(listOfPOC, emailContent)
+        emailContent = "<br/>The Status of the Auto-Export Status Request made by you for the Dataset <b>" + key2 + "</b> has been changed to <b>" + params['status'] + "</b>. "
+        if params['status'] == 'Approved':
+            emailContent = emailContent + 'An SDC Admin will now assign auto-export permissions to your SDC account. Please wait to be contacted by an SDC Admin that your new permissions have been assigned before attempting to use auto-export.'
+        send_notification(listOfPOC, emailContent, 'Auto-Export Request Response')
 
         # NEW
         if params['status'] == 'Approved':
             listOfPOC = [RECEIVER]
             emailContent = "<br/>Auto-Export status has been approved for <b>" + key1 + "</b> for the Dataset-DataProvider-Datatype <b>" + key2 + "</b>. Please perform next steps following this SOP: https://securedatacommons.atlassian.net/wiki/spaces/SD/pages/265519105/SOP+-+Assigning+S3+Auto-Export+IAM+Roles."
-            send_notification(listOfPOC, emailContent)
+            send_notification(listOfPOC, emailContent, 'Auto-Export Action Required')
 
     except BaseException as be:
         logging.exception("Error: Failed to updateautoexportstatus" + str(be))
