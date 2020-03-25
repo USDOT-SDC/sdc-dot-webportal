@@ -56,7 +56,26 @@
         "COGNITO_USER_POOL":"dev-sdc-dot-cognito-pool",
         "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY"
       }
-    }    
+    },
+    "production": {
+      "api_gateway_stage": "api",
+      "environment_variables":{
+        "TABLENAME_USER_STACKS": "prod-UserStacksTable",
+        "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
+        "RESTAPIID": "cyfca70occ",
+        "AUTHORIZERID": "r6ck6c",
+        "TABLENAME_TRUSTED_USERS": "production-TrustedUsersTable",
+        "TABLENAME_EXPORT_FILE_REQUEST": "production-RequestExportTable",
+        "TABLENAME_MANAGE_USER": "production-ManageUserWorkstationTable",
+        "TABLENAME_MANAGE_USER_INDEX": "production-workstation-username-index",
+        "TABLENAME_MANAGE_DISK": "production-ManageDiskspaceRequestsTable",
+        "TABLENAME_MANAGE_DISK_INDEX": "production-diskspace-username-index",
+        "TABLENAME_MANAGE_UPTIME": "production-ScheduleUptimeTable",
+        "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index",
+        "COGNITO_USER_POOL":"dev-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY"
+      }
+    }
   },
   "version": "2.0",
   "app_name": "webportal",
