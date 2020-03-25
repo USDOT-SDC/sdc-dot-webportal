@@ -72,8 +72,8 @@
         "TABLENAME_MANAGE_DISK_INDEX": "production-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "production-ScheduleUptimeTable",
         "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"dev-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY"
+        "COGNITO_USER_POOL":"prod-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_1zLqP2XrI"
       }
     }
   },
