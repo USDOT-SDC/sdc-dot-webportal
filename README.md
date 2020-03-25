@@ -201,7 +201,7 @@ The following instructions describe the procedure to build and deploy the webpor
 To deploy run below command at the lambda folder:
 
 ```sh
-chalice deploy --stage <stage_name> --no-autogen-policy --profile us-dot
+chalice deploy --stage <stage_name> --no-autogen-policy --profile <profile_name>
 ```
 
 where, `stage_name` can be `dev`, `prod` and so on.
