@@ -46,6 +46,10 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**April 4, 2020. SDC sdc-dot-webportal Release 2.4.1**
+### What's New in Release 2.4.1
+* Inject the Cognito user pool through the environment so all environments do not need to use the dev Cognito pool
+
 **January 28, 2020. SDC sdc-dot-webportal Release 2.4**
 ### What's New in Release 2.4
 * Change login functionality to allow users to be redirected to Login.gov
@@ -201,7 +205,7 @@ The following instructions describe the procedure to build and deploy the webpor
 To deploy run below command at the lambda folder:
 
 ```sh
-chalice deploy --stage <stage_name> --no-autogen-policy --profile us-dot
+chalice deploy --stage <stage_name> --no-autogen-policy --profile <profile_name>
 ```
 
 where, `stage_name` can be `dev`, `prod` and so on.
