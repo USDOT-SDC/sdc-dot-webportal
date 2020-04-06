@@ -46,6 +46,10 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**April 4, 2020. SDC sdc-dot-webportal Release 2.4.1**
+### What's New in Release 2.4.1
+* Inject the Cognito user pool through the environment so all environments do not need to use the dev Cognito pool
+
 **January 28, 2020. SDC sdc-dot-webportal Release 2.4**
 ### What's New in Release 2.4
 * Change login functionality to allow users to be redirected to Login.gov
