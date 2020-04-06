@@ -6,8 +6,6 @@ import uuid
 from botocore.exceptions import ClientError
 from chalice import BadRequestError, NotFoundError, ChaliceViewError, ForbiddenError
 from chalice import CognitoUserPoolAuthorizer
-import traceback
-#import urllib2
 import hashlib
 from datetime import datetime
 import datetime
@@ -30,6 +28,7 @@ dynamodb_client = boto3.resource('dynamodb')
 appstream_client = boto3.client('appstream')
 
 PROVIDER_ARNS = os.getenv("IDP_PROVIDER_ARNS")
+COGNITO_USER_POOL = os.getenv("COGNITO_USER_POOL")
 TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
 TABLENAME_AVAILABLE_DATASET = os.getenv("TABLENAME_AVAILABLE_DATASET")
 RECEIVER = os.getenv("RECEIVER_EMAIL")
@@ -44,9 +43,7 @@ TABLENAME_MANAGE_DISK_INDEX = os.getenv("TABLENAME_MANAGE_DISK_INDEX")
 TABLENAME_MANAGE_UPTIME = os.getenv("TABLENAME_MANAGE_UPTIME")
 TABLENAME_MANAGE_UPTIME_INDEX = os.getenv("TABLENAME_MANAGE_UPTIME_INDEX")
 
-
-authorizer = CognitoUserPoolAuthorizer(
-   'dev-sdc-dot-cognito-pool', provider_arns=[PROVIDER_ARNS])
+authorizer = CognitoUserPoolAuthorizer(COGNITO_USER_POOL, provider_arns=[PROVIDER_ARNS])
 
 def get_user_details(id_token):
     try:
