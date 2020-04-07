@@ -104,7 +104,7 @@
                 <p-table #dt [columns]="colsAutoExport" [value]="autoExportRequests" [paginator]="true" [rows]="10" [totalRecords]="autoExportRequests.length"  dataKey="filename">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                            <th id="autoRequests" *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
                                 {{col.header}} <br/>
                                 <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
                             </th>
@@ -116,7 +116,7 @@
                             <td>{{autoExportRequest.dataset}}</td>
                             <td>{{autoExportRequest.justification}}</td>
                             <td>
-                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"> <i class="material-icons iconFont" (click)="submitAutoExportApproval('Approved',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >done</i><i class="material-icons iconFont" (click)="submitAutoExportApproval('Denied',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</i></div>
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"> <em class="material-icons iconFont" (click)="submitAutoExportApproval('Approved',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >done</em><em class="material-icons iconFont" (click)="submitAutoExportApproval('Denied',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</em></div>
                                 <div *ngIf="autoExportRequest.AutoExportStatus == 'Approved'">
                                     <p-message severity="success" text="{{autoExportRequest.AutoExportStatus}}"></p-message>
                                 </div>
