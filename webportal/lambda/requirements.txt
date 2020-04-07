@@ -1,2 +1,2 @@
-chalice==1.12.0
+chalice==1.13.0
 boto3

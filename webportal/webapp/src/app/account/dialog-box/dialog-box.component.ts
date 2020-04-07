@@ -1,15 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
-// import { ProgressHttp } from "angular-progress-http";
-// import { Headers, RequestOptions } from '@angular/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { CognitoService } from '../../../services/cognito.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-// import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
     selector: 'app-dialog-box',
@@ -178,7 +174,7 @@ export class DialogBoxComponent implements OnInit {
     volumeCount = '';
 
     // tslint:disable-next-line:max-line-length
-    constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
+    constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
             this.messageModel.bucketName = data.bucketName;
@@ -251,7 +247,7 @@ export class DialogBoxComponent implements OnInit {
             // tslint:disable-next-line:radix
             const currentDate = Date.parse(new Date().toString());
             // tslint:disable-next-line:radix
-            const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));
+            const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));            
             if (((currentDate - lastUpdatTime) / (1000) / (60) / (60) ) < 1) {
                 // tslint:disable-next-line:radix
                 if (parseInt(this.volumeCount) >= 2) {
@@ -278,7 +274,6 @@ export class DialogBoxComponent implements OnInit {
                 }
             }
         }
-        console.log(this.dataProviderNames);
     }
 
     setSubDatasets(event) {
@@ -297,7 +292,6 @@ export class DialogBoxComponent implements OnInit {
                 this.subDataSets.push(dataType);
             }
         }
-        console.log(this.subDataSets);
     }
     selectedIndexChange(val: number) {
         console.log('--- ', val, ' ---');
