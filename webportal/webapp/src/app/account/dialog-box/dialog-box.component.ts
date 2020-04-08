@@ -1,15 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
-// import { ProgressHttp } from "angular-progress-http";
-// import { Headers, RequestOptions } from '@angular/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { CognitoService } from '../../../services/cognito.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-// import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
     selector: 'app-dialog-box',
@@ -34,6 +30,7 @@ export class DialogBoxComponent implements OnInit {
     uploadedFilesCount = 0;
     selectedIndex = 0;
     userTrustedStatus: any;
+    userAutoExportStatus: any;
     datasettype: string;
     selectedDataSet: string;
     selectedDataProvider: string;
@@ -41,9 +38,12 @@ export class DialogBoxComponent implements OnInit {
     datasources: string;
     deriveddataset: string;
     detailedderiveddataset: string;
+    autoderiveddataset: string;
+    autoreason: string;
     tags: string;
     justifyExport: string;
     trustedStatus: boolean;
+    autoExportStatus: boolean;
     exportWorkflow: any;
     expWorkflow: any;
     derivedDataSetname: string;
@@ -53,6 +53,8 @@ export class DialogBoxComponent implements OnInit {
     allProvidersJson: any;
     allDataTypes: any;
     trustedRequest: string;
+    autoExportRequest: string;
+    autoExportRequestSelected: boolean;
     acceptableUse: string;
     approvalForm: string;
     derivedDataSet: string;
@@ -154,7 +156,9 @@ export class DialogBoxComponent implements OnInit {
         justifyExport: '',
         derivedDatasetname: '',
         dataprovider: '',
-        datatype: ''
+        datatype: '',
+        autoderiveddataset: '',
+        autoreason: ''
 
     };
 
@@ -170,7 +174,7 @@ export class DialogBoxComponent implements OnInit {
     volumeCount = '';
 
     // tslint:disable-next-line:max-line-length
-    constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, private cognitoService: CognitoService, public snackBar: MatSnackBar,
+    constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
             this.messageModel.bucketName = data.bucketName;
@@ -181,6 +185,10 @@ export class DialogBoxComponent implements OnInit {
         this.userBucketName = data.userBucketName;
         this.datasettype = data.datasettype;
         this.trustedRequest = 'No';
+        this.autoExportRequest = 'No';
+        this.autoExportRequestSelected = false;
+        this.autoderiveddataset = '';
+        this.autoreason = '';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -200,6 +208,8 @@ export class DialogBoxComponent implements OnInit {
         (this.mailType === 'reSize Request') && this.setDisableCurrentConfigurations();
         const trustedStatus = sessionStorage.getItem('userTrustedStatus');
         this.userTrustedStatus = JSON.parse(trustedStatus);
+        const autoExportStatus = sessionStorage.getItem('userAutoExportStatus');
+        this.userAutoExportStatus = JSON.parse(autoExportStatus);
         const expWorkflow = sessionStorage.getItem('exportWorkflow');
         this.expWorkflow = JSON.parse(expWorkflow);
 
@@ -237,7 +247,7 @@ export class DialogBoxComponent implements OnInit {
             // tslint:disable-next-line:radix
             const currentDate = Date.parse(new Date().toString());
             // tslint:disable-next-line:radix
-            const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));
+            const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));            
             if (((currentDate - lastUpdatTime) / (1000) / (60) / (60) ) < 1) {
                 // tslint:disable-next-line:radix
                 if (parseInt(this.volumeCount) >= 2) {
@@ -264,7 +274,6 @@ export class DialogBoxComponent implements OnInit {
                 }
             }
         }
-        console.log(this.dataProviderNames);
     }
 
     setSubDatasets(event) {
@@ -283,7 +292,6 @@ export class DialogBoxComponent implements OnInit {
                 this.subDataSets.push(dataType);
             }
         }
-        console.log(this.subDataSets);
     }
     selectedIndexChange(val: number) {
         console.log('--- ', val, ' ---');
@@ -297,8 +305,13 @@ export class DialogBoxComponent implements OnInit {
         console.log('SelectedDataType:' + this.selectedDatatype);
         const key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
         this.trustedStatus = key in this.userTrustedStatus;
-        // add the trusted status logic here
-        // this.trustedStatus = true;
+        this.autoExportStatus = key in this.userAutoExportStatus;
+        this.trustedRequest = 'No';
+        this.autoExportRequest = 'No';
+        this.autoExportRequestSelected = false;
+        this.autoderiveddataset = ''
+        this.autoreason = ''
+        this.acceptableUse = '';
         this.selectedIndex = 1;
     }
     onApprovalformClick() {
@@ -316,6 +329,10 @@ export class DialogBoxComponent implements OnInit {
 
         this.selectedIndex = 2;
     }
+    onTrustedformClick() {
+        this.selectedIndex = 3;
+    }
+
     validateEmailRegex(email) {
         const regexEmail = new RegExp('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?');
         return regexEmail.test(email);
@@ -759,6 +776,8 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
+        this.autoderiveddataset = this.messageModel.autoderiveddataset;
+        this.autoreason = this.messageModel.autoreason;
 
         console.log(this.userBucketName);
 
@@ -791,6 +810,7 @@ export class DialogBoxComponent implements OnInit {
         if (this.justifyExport) {
             approvalForm['justifyExport'] = this.justifyExport;
         }
+
         // Submit API gateway request
         const reqBody = {};
         // reqBody['S3KeyHash'] = this.messageModel.fileFolderName;//Md5.hashStr('');//add s3 key inside
@@ -829,6 +849,12 @@ export class DialogBoxComponent implements OnInit {
             console.log('Declined acceptable usage policy');
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
+
+        if (this.autoExportRequest === 'Yes') {
+            // Submit API gateway request
+            reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
+        }
+
         this.gatewayService.sendExportRequest('export?message=' + encodeURI(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
                 this.snackBar.open('Your request has been sent successfully', 'close', {
@@ -853,6 +879,17 @@ export class DialogBoxComponent implements OnInit {
         // }
         if (selectedVal === 'Yes') {
             this.trustedRequest = 'Yes';
+        }
+    }
+
+    onAutoExportRequestGrpChange(selectedVal: any) {
+        if (selectedVal === 'Yes') {
+            this.autoExportRequest = 'Yes';
+            this.autoExportRequestSelected = true;
+        }
+        else if (selectedVal === 'No') {
+            this.autoExportRequest = 'No';
+            this.autoExportRequestSelected = false;
         }
     }
 
