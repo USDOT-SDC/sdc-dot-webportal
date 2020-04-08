@@ -36,18 +36,15 @@
     "ngx-md": "^3.1.0",
     "primeng": "^5.2.7",
     "rxjs": "^5.5.4",
-    "rxjs-compat": "^6.5.2",
     "uswds": "^2.4.0",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.6.8",
-    "@angular/cli": "6.0.8",
+    "@angular/cli": "1.5.6",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.0.0",
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
-    "aws-sdk-mock": "^4.4.0",
     "codelyzer": "^4.0.1",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
@@ -62,6 +59,6 @@
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
     "typescript": "~2.4.2",
-    "webpack": "^4.8.3"
+    "webpack": "^3.10.0"
   }
 }

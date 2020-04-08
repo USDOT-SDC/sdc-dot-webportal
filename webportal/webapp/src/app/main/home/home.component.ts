@@ -13,36 +13,32 @@ export class HomeComponent implements OnInit {
   constructor(
     private cognitoService: CognitoService,
     private router: Router) {
-       //router.events.subscribe(event => {
-       //    if (event instanceof NavigationEnd) {
-       //        const tree = router.parseUrl(router.url);
-       //        if (tree.fragment) {
-       //            const element = document.querySelector("#" + tree.fragment);
-       //            if (element) { element.scrollIntoView(); }
-       //        }
-       //    }
-       //});
-  }
-
- 
-  getCurrentURL() {
-    return window.location.href;
+      // router.events.subscribe(event => {
+      //     if (event instanceof NavigationEnd) {
+      //         const tree = router.parseUrl(router.url);
+      //         if (tree.fragment) {
+      //             const element = document.querySelector("#" + tree.fragment);
+      //             if (element) { element.scrollIntoView(); }
+      //         }
+      //     }
+      // });
   }
 
   ngOnInit() {
-    if (this.getCurrentURL().indexOf('access_token') !== -1) {
+    var currentUrl = window.location.href;
+    if (currentUrl.indexOf('access_token') !== -1) {
       this.cognitoService.onLoad();
       this.router.navigate(['account']);
     }
     this.cognitoService.isUserSessionActive(this);
   }
 
-  isLoggedIn(message: string, loggedIn: boolean) {
-    if (loggedIn) {
-      console.log('The user is authenticated: ' + loggedIn);
+  isLoggedIn(message: string, isLoggedIn: boolean) {
+    if (isLoggedIn) {
+      console.log('The user is authenticated: ' + isLoggedIn);
       this.router.navigate(['account']);
     } else {
-        console.log('User not authenticated: ' + loggedIn);
+        console.log('User not authenticated: ' + isLoggedIn);
     }
   }
 

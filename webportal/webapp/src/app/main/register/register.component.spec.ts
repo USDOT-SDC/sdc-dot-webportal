@@ -1,30 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
-import { MatCardModule } from '@angular/material';
-import { CognitoService } from '../../../services/cognito.service';
-
-let mockObjectMap = {};
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
 
   beforeEach(async(() => {
-    let mockCognitoAPIService = {
-      login: jasmine.createSpy('login')
-    }
-
-    mockObjectMap = Object.assign({}, {
-    mockCognitoAPIService  
-    });
-
     TestBed.configureTestingModule({
-      imports: [MatCardModule],
-      declarations: [ RegisterComponent ],
-      providers: [
-        { provide: CognitoService, useValue: mockCognitoAPIService }
-      ]
+      declarations: [ RegisterComponent ]
     })
     .compileComponents();
   }));
@@ -35,13 +19,7 @@ describe('RegisterComponent', () => {
     fixture.detectChanges();
   });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
-
-  // it('should call login', () => {
-  //   component.userLogin();
-  //   expect(mockObjectMap['mockCognitoAPIService'].login).toHaveBeenCalled();
-  // });
-
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });
