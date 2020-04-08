@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { MatSnackBar } from '@angular/material';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections'
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
+import { DataSource } from '@angular/cdk/table';
+import { TableModule } from 'primeng/table';
 import * as $ from 'jquery';
 
 @Component({
@@ -32,10 +35,8 @@ export class DatasetsComponent implements OnInit {
     userName: any;
     userEmail: any;
     requestReviewStatus: any;
-    componentName: any;
 
     ngOnInit() {
-        this.componentName = "Datasets";
         this.getUserInfo();
         var sdcDatasetsString = sessionStorage.getItem('datasets');
         this.sdcElements = JSON.parse(sdcDatasetsString);
@@ -60,7 +61,6 @@ export class DatasetsComponent implements OnInit {
             }
         });
         this.getMyDatasetsList();
-        console.log("my Datasets length = " + this.myDatasets.length);
         
         this.cols = [
           { field: 'filename', header: 'Filename' },
@@ -74,7 +74,6 @@ export class DatasetsComponent implements OnInit {
         console.log("Trusted status"+ JSON.stringify(this.userTrustedStatus));
     }
     getUserInfo() {
-        console.log("getUserInfo calledl");
         this.gatewayService.getUserInfo('user').subscribe(
             (response: any) => {
                 sessionStorage.setItem('username', response.username);
@@ -86,7 +85,8 @@ export class DatasetsComponent implements OnInit {
                 console.log("User info:"+response.userTrustedStatus);
                 // Extract and exportWorkflow all exportWorkflow from datasets
                 let combinedEW = {};
-                for (let dset in response.datasets) {                  
+                for (let dset in response.datasets) {
+                  //alert(JSON.stringify(response.datasets[dset]));
                   let key = "exportWorkflow";
                   let dtEWExists =  key in response.datasets[dset];
                     if(dtEWExists) {
@@ -104,7 +104,6 @@ export class DatasetsComponent implements OnInit {
         );
     }
     getMyDatasetsList() {
-        console.log('getMyDatasetsList called: get URL = ' + this.userBucketName + '&username=' + this.userName);
         this.gatewayService.get('user_data?userBucketName=' + this.userBucketName + '&username=' + this.userName).subscribe(
             (response: any) => {
             for(let x of response) {
@@ -130,18 +129,15 @@ export class DatasetsComponent implements OnInit {
                     }
                 );
              }
-             console.log("My Datasets: " + JSON.stringify(this.myDatasets));
-             console.log("my Datasets length = " + this.myDatasets.length);
+             console.log(this.myDatasets);
             }
         );
     }
     getRequestReviewStatus(filename) {
-        console.log("getRequestReviewStatus called, filename: " + filename);
         let reqBody = {};
         this.userEmail = sessionStorage.getItem("email");
         reqBody['userEmail'] = this.userEmail;
         reqBody['filename'] = filename;
-        console.log('getRequestReviewStatus - URI = ' + encodeURI(JSON.stringify(reqBody)) );
         this.gatewayService.get("exportrequeststatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
             var resp = response["Items"][0];
@@ -150,7 +146,6 @@ export class DatasetsComponent implements OnInit {
     selectsdcDataset(dataset) {
         this.selectedsdcDataset = dataset;
         this.showDictionary = true;
-        console.log('select sdc dataset called - get URL: ' + this.selectedsdcDataset.ReadmeBucket  + '&readmepathkey=' + this.selectedsdcDataset.ReadmePathKey);
         this.gatewayService.get('dataset_dictionary?readmebucket=' + this.selectedsdcDataset.ReadmeBucket + '&readmepathkey=' + this.selectedsdcDataset.ReadmePathKey).subscribe(
             (response: any) => {
                 this.dictionary = response.data;
@@ -170,7 +165,6 @@ export class DatasetsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('requestMail');
             console.log('The dialog was closed');
         });
     }
@@ -195,14 +189,13 @@ export class DatasetsComponent implements OnInit {
             data: { userBucketName: this.userBucketName, requestType: requestType }
         });
         dialogRef.afterClosed().subscribe(result => {
-            console.log('The upload files to s3 dialog was closed');
+            console.log('The upload dialog was closed');
             this.myDatasets = [];
             this.getMyDatasetsList();
         })
     }
 
     requestDownload() {
-      console.log('requestDownload called');
       for(let selectedFile of this.selectedFiles){
         this.myDatasets.forEach((datasetObj, index) => {
             if(selectedFile.filename == datasetObj["filename"]){
@@ -213,16 +206,12 @@ export class DatasetsComponent implements OnInit {
                     });
                 }
             }
-            else {
-                console.log('selected file datasetObj key is not filename');
-            }
         });
       }
     }
 
     getMetadataForS3Objects(filename: string): any{
         var resp;
-        console.log('getMetadataForS3Objects called');
         return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
             (response: any) => {
                 resp=response;

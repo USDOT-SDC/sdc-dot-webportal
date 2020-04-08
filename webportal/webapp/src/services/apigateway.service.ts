@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/throw';
 import { environment } from '../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class ApiGatewayService {
@@ -17,7 +16,6 @@ export class ApiGatewayService {
     apiResponse: any;
     extractData: any;
     handleError: any;
-    name = "ApiGatewayService";
 
     constructor(
         private http: Http,
@@ -71,15 +69,6 @@ export class ApiGatewayService {
             'Authorization': " " + authToken,
             'Access-Control-Allow-Origin': '*'
         });
-
-        // const httpOptions = {
-        //     headers: new HttpHeaders({
-        //         'Content-Type': 'application/json',
-        //         'Authorization': " " + authToken,
-        //         'Access-Control-Allow-Origin': '*'
-        //     })
-        //   };
-          
         this.options = new RequestOptions({ headers: headers });
     }
 
