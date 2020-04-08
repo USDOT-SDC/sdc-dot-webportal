@@ -91,6 +91,44 @@
         </p-table>
         <hr />
         </mat-expansion-panel>
+
+            <!-- Auto-Export Requests-->
+            <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Auto-Export Requests
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div *ngIf="!autoExportRequests">No Auto-Export Requests</div>
+                <span style="color:grey">This section displays the list of Auto-Export Requests</span><hr>
+                <p-table #dt [columns]="colsAutoExport" [value]="autoExportRequests" [paginator]="true" [rows]="10" [totalRecords]="autoExportRequests.length"  dataKey="filename">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th id="autoRequests" *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                                {{col.header}} <br/>
+                                <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-autoExportRequest let-columns="columns">
+                        <tr>
+                            <td>{{autoExportRequest.userFullName}}</td>
+                            <td>{{autoExportRequest.dataset}}</td>
+                            <td>{{autoExportRequest.justification}}</td>
+                            <td>
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"> <em class="material-icons iconFont" (click)="submitAutoExportApproval('Approved',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >done</em><em class="material-icons iconFont" (click)="submitAutoExportApproval('Denied',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</em></div>
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Approved'">
+                                    <p-message severity="success" text="{{autoExportRequest.AutoExportStatus}}"></p-message>
+                                </div>
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Denied'">
+                                    <p-message severity="error" text="{{autoExportRequest.AutoExportStatus}}"></p-message>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <hr />
+            </mat-expansion-panel>
         </div>
       </div>
     </mat-card>
