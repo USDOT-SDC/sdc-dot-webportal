@@ -20,10 +20,12 @@ export class ExportRequestsComponent implements OnInit {
      
     exportFileRequests = [];
     trustedRequests = [];
+    autoExportRequests = [];
     metadata = {};
     user: any;
     cols: any = [];
     colsTrusted: any = [];
+    colsAutoExport: any = [];
     userEmail: string;
     userName: string;
     detailsOnclick: any;
@@ -31,7 +33,9 @@ export class ExportRequestsComponent implements OnInit {
 
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
+        console.log(this.userEmail);
         this.userName = sessionStorage.getItem('username');
+        console.log(this.userName);
 
         this.getExportFileRequests();
         
@@ -51,13 +55,20 @@ export class ExportRequestsComponent implements OnInit {
             { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
             { field: 'approval', header: 'Approval' }
-            
           ]
+
+        this.colsAutoExport = [
+            { field: 'userFullName', header: 'User' },
+            { field: 'dataset', header: 'Dataset' },
+            { field: 'justification', header: 'Justification' },
+            { field: 'approval', header: 'Approval' }
+        ]
     }
 
     getExportFileRequests() {
         this.exportFileRequests = [];
         this.trustedRequests = [];
+        this.autoExportRequests = [];
         //this.exportFileRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'description' : 'This is derived Dataset', 'team' : 'team1 bucket', 'dataset' : 'Waze-Waze-alert', 'details' : 'Details'  ,'reviewFile' : 'reviewFileOrLink'});
         //this.trustedRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'dataset' : 'Waze-Waze-alert' });
 
@@ -99,24 +110,37 @@ export class ExportRequestsComponent implements OnInit {
                             'ReqReceivedDate': item['ReqReceivedDate']
                            }
                         );
-                        console.log(item);
                     } 
                 }    
                 for(let items of response['trustedRequests']) {
                     for(let item of items) {
-                         //console.log(item);
                          this.trustedRequests.push({'userFullName' : item['UserID'], 
                                                     'dataset' : item['Dataset-DataProvider-Datatype'],
                                                     'TrustedStatus' : item['TrustedStatus'],
                                                     'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
                                                     'UserEmail': item['UserEmail']});
                     } 
-                }  
+                }
+                for(let items of response['autoExportRequests']) {
+                    for(let item of items) {
+                        //console.log(item);
+                        this.autoExportRequests.push({'userFullName' : item['UserID'],
+                            'dataset' : item['Dataset-DataProvider-Datatype'],
+                            'AutoExportStatus' : item['AutoExportStatus'],
+                            'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
+                            'UserEmail': item['UserEmail'],
+                            'justification': item['Justification']});
+                    }
+                }
+
                 console.log('Request Sent Successfully');
                 this.exportFileRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
                 });
                 this.trustedRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
+                });
+                this.autoExportRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
                 });
             }
@@ -212,16 +236,31 @@ export class ExportRequestsComponent implements OnInit {
 
     }
 
-     
+    submitAutoExportApproval(status,key1,key2,autoExportRequest) {
+        let reqBody = {};
+        reqBody['status'] = status;
+        reqBody['key1'] = key1;
+        reqBody['key2'] = key2;
+        reqBody['userEmail'] = autoExportRequest['UserEmail'];
 
+        this.gatewayService.post("export/requests/updateautoexportstatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+            (response: any) => {
+                this.getExportFileRequests();
+                console.log('Request Sent Successfully');
+            }
+        );
+    }
+     
+    /* Cheryl - commenting out, this method is not being used anywhere
     getMetadataForS3Objects(filename: string): any {
         var resp;
-        /*return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
+        return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
             (response: any) => {
                 resp=response;
                 return resp;
-        }); */   
+        });    
     }
+    */
 
     parseQueryString(queryString: string): Map<string, string> {
         var params = new Map<string, string>();

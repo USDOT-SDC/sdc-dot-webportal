@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RoutingModule } from './app.routes';
 import { HttpModule } from '@angular/http';
@@ -67,6 +68,7 @@ import { LoaderInterceptor } from './account/loginsync/services/loader.intercept
   ],
   imports: [
     BrowserModule,
+    RouterModule.forRoot([]),
     RoutingModule,
     FormsModule,
     HttpModule,
@@ -101,9 +103,12 @@ import { LoaderInterceptor } from './account/loginsync/services/loader.intercept
     MatNativeDateModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
+    //DataTableModule
   ],
-  exports: [BrowserModule, ToastyModule],
+  //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
+  exports: [BrowserModule, ToastyModule, RouterModule ],
   providers: [
+    //{provide: APP_BASE_HREF, useValue: '/'},
     CognitoService,
     ApiGatewayService,
     LoginSyncService,
