@@ -5,6 +5,7 @@
       "environment_variables":{
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
+        "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
         "RESTAPIID": "u2zksemc1h",
         "AUTHORIZERID": "pby0gw",
         "TABLENAME_TRUSTED_USERS": "dev-TrustedUsersTable",
@@ -24,6 +25,7 @@
       "environment_variables":{
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
+        "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
         "RESTAPIID": "z2jk3bjo2m",
         "AUTHORIZERID": "zv7cbg",
         "TABLENAME_TRUSTED_USERS": "dev-TrustedUsersTable",
@@ -43,6 +45,7 @@
       "environment_variables":{
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
+        "TABLENAME_AUTOEXPORT_USERS": "prod-AutoExportUsersTable",
         "RESTAPIID": "cyfca70occ",
         "AUTHORIZERID": "r6ck6c",
         "TABLENAME_TRUSTED_USERS": "production-TrustedUsersTable",
@@ -62,6 +65,7 @@
       "environment_variables":{
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
+        "TABLENAME_AUTOEXPORT_USERS": "prod-AutoExportUsersTable",
         "RESTAPIID": "cyfca70occ",
         "AUTHORIZERID": "r6ck6c",
         "TABLENAME_TRUSTED_USERS": "production-TrustedUsersTable",
