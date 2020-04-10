@@ -40,7 +40,7 @@ webportal/webapp/Thumbs.db
 
 # Backend files
 webportal/lambda/__pycache__
-webportal/lambda/.chalice/deployments
+# webportal/lambda/.chalice/deployments
 
 .idea/
 .vscode/
