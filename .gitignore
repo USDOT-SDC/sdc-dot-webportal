@@ -39,8 +39,8 @@ webportal/webapp/.DS_Store
 webportal/webapp/Thumbs.db
 
 # Backend files
-webportal/lambda/__pycache__
-# webportal/lambda/.chalice/deployments
+__pycache__
+webportal/lambda/.chalice/deployments
 
 .idea/
 .vscode/
