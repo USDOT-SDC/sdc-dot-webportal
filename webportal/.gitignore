@@ -2,6 +2,3 @@
 .chalice/venv/
 .idea/
 .venv
-
-.coverage
-html_coverage_reports/
