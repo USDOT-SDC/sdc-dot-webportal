@@ -4,4 +4,4 @@
 .venv
 
 .coverage
-html_coverage_reports/**
+html_coverage_reports/
