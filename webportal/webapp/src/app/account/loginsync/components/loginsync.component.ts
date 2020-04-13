@@ -20,14 +20,13 @@ export class LoginSyncComponent implements OnInit {
   }
 
   onSubmit() {
+    const dotUser = 'dot_active_directory_user';
     this.loginSyncService
         .linkAccounts(this.username, this.password)
         .subscribe(
           result => {
             this.linkSuccessful = true;
-
-            // Redirect back to login page
-            window.location.href = this.buildRedirectUrl();
+            window.location.href = result.value.signInType === dotUser ? this.buildDoTADRedirectUrl() : this.buildLoginGovRedirectUrl();
           },
           error => {
             this.linkSuccessful = false;
@@ -35,10 +34,17 @@ export class LoginSyncComponent implements OnInit {
           });
   }
 
-  buildRedirectUrl(): string {
-    const url = `https://dev-sdc-dot-webportal.auth.${environment.REGION}` +
+  buildLoginGovRedirectUrl(): string {
+    return this.buildBaseRedirectUrl() + `&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`
+  }
+
+  buildDoTADRedirectUrl(): string {
+    return this.buildBaseRedirectUrl() + `&client_id=${environment.CLIENT_ID}`;
+  }
+
+  buildBaseRedirectUrl(): string {
+    return `https://dev-sdc-dot-webportal.auth.${environment.REGION}` +
                 `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
-                `&response_type=token&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`;
-    return url;
+                `&response_type=token`;
   }
 }
