@@ -44,7 +44,7 @@ export class CognitoService {
     public static _AUTH_DATA = {
         ClientId : CognitoService._CLIENT_ID,
         AppWebDomain : CognitoService._APP_DOMAIN + ".auth." + CognitoService._REGION + ".amazoncognito.com",
-        TokenScopesArray : ['phone', 'email', 'profile','openid' ],
+        TokenScopesArray : ['email', 'profile','openid' ],
         RedirectUriSignIn : CognitoService._REDIRECT_URL,
         RedirectUriSignOut : CognitoService._REDIRECT_URL,
         IdentityProvider : CognitoService._IDENTITY_PROVIDER,
