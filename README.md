@@ -211,10 +211,11 @@ The following instructions describe the procedure to build and deploy the webpor
 To deploy run below command at the lambda folder:
 
 ```sh
-chalice deploy --stage <stage_name> --no-autogen-policy --profile <profile_name>
+. ./setup_venv.sh # Note space between the 2 periods
+python3 deploy.py --environment <whatever>
 ```
 
-where, `stage_name` can be `dev`, `prod` and so on.
+where, `--environment` can be `dev`, `prod` and so on.
 
 ##### Deploy the metadata lambda function - 
 
