@@ -1,0 +1,18 @@
+[run]
+branch = True
+include=
+    *.py
+omit=
+    */__init__.py
+    */python3.*/*
+    */.venv/*
+    */tests/*
+
+[report]
+exclude_lines=
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+[html]
+directory = html_coverage_reports
+title = Coverage Report for sdc-dot-login-gov-proxy
