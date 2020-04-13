@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
   }
   userLogin() {
     if (this.email.endsWith('dot.gov')) {
-      this.cognitoService.login(false); // Route to ADFS login
+      this.cognitoService.login(false); // Route to DOT login
     } else {
       window.location.href = this.buildLoginGovUrl(); // Route to Login.gov
     }
