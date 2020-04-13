@@ -93,3 +93,12 @@ html {
     font-size: 16px;
     color: #13136b;
 }
+
+.usa-form__note {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+  
+  .usa-show-password {
+    cursor: pointer;
+  }
