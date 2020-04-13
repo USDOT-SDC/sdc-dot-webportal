@@ -4,7 +4,7 @@ import { PasswordResetComponent } from './passwordreset.component';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
-  let fixture: ComponentFixture<LoginSyncComponent>;
+  let fixture: ComponentFixture<PasswordResetComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
