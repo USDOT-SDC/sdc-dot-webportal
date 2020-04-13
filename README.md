@@ -211,7 +211,7 @@ The following instructions describe the procedure to build and deploy the webpor
 To deploy run below command at the lambda folder:
 
 ```sh
-. ./setup.sh # Note space between the 2 periods
+. ./setup_venv.sh # Note space between the 2 periods
 python3 deploy.py --environment <whatever>
 ```
 
