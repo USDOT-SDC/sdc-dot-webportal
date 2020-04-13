@@ -2,6 +2,11 @@
   "stages": {
     "dev": {
       "api_gateway_stage": "api",
+      "tags": {
+        "Environment": "dev",
+        "Project": "SDC-Platform",
+        "Team": "sdc-platform"
+      },
       "environment_variables":{
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
@@ -22,6 +27,11 @@
     },
     "test": {
       "api_gateway_stage": "api",
+      "tags": {
+        "Environment": "test",
+        "Project": "SDC-Platform",
+        "Team": "sdc-platform"
+      },
       "environment_variables":{
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
@@ -42,6 +52,11 @@
     },
     "prod": {
       "api_gateway_stage": "api",
+      "tags": {
+        "Environment": "prod",
+        "Project": "SDC-Platform",
+        "Team": "sdc-platform"
+      },
       "environment_variables":{
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
@@ -62,6 +77,11 @@
     },
     "production": {
       "api_gateway_stage": "api",
+      "tags": {
+        "Environment": "prod",
+        "Project": "SDC-Platform",
+        "Team": "sdc-platform"
+      },
       "environment_variables":{
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
