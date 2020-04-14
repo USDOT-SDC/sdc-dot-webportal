@@ -8,7 +8,7 @@ export const environment = {
   STREAMING_URL: 'https://dev-stream.securedatacommons.com/guacamole/?authToken=',
   REGION: 'us-east-1',
   USER_POOL_ID: 'us-east-1_Y5JI7ysvY',
-  CLIENT_ID: '7rj8qvbi72mc5esnoabruqkc6v',
+  CLIENT_ID: '6bqivipmgp9aqbsvqjghlenhjg',
   IDENTITY_PROVIDER: 'dev-dot-ad',
   APP_DOMAIN: 'dev-sdc-dot-webportal',
   REDIRECT_URL: 'https://dev-portal.securedatacommons.com/index.html', //dev environment
