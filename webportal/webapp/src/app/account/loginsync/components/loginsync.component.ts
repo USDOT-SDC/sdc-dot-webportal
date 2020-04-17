@@ -6,8 +6,7 @@ import { CognitoService } from '../../../../services/cognito.service';
 @Component({
   selector: 'app-loginsync',
   templateUrl: './loginsync.component.html',
-  styleUrls: ['./loginsync.component.css',
-              '../../../../../node_modules/uswds/src/stylesheets/uswds.scss']
+  styleUrls: ['./loginsync.component.css']
 })
 export class LoginSyncComponent implements OnInit {
   username: string;
@@ -37,8 +36,7 @@ export class LoginSyncComponent implements OnInit {
   }
 
   buildRedirectUrl(): string {
-    const env = environment.production ? 'prod' : 'dev';
-    const url = `https://${env}-sdc-dot-webportal.auth.${environment.REGION}` +
+    const url = `https://dev-sdc-dot-webportal.auth.${environment.REGION}` +
                 `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
                 `&response_type=token&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`;
     return url;

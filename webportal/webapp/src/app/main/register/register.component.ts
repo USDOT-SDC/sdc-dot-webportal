@@ -22,8 +22,8 @@ export class RegisterComponent implements OnInit {
   }
 
   buildLoginGovUrl() {
-    const env = environment.production ? 'prod' : 'dev';
-    return `https://${env}-sdc-dot-webportal.auth.${environment.REGION}` +
+    // The dev cognito user pool is used in prod. Hardcoding for now... :-(
+    return `https://dev-sdc-dot-webportal.auth.${environment.REGION}` +
             `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
             `&response_type=token&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`;
   }
