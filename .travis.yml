@@ -14,7 +14,7 @@ before_script:
   - npm install -g @angular/cli
 
 env:
-  - TEST_DIR=webapp
+  - TEST_DIR=webportal/webapp/
 
 script:
     - cd $TEST_DIR && npm test-headless
