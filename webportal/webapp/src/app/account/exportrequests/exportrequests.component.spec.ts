@@ -130,7 +130,30 @@ let RESPONSE3 = { 'exportRequests': [
                         'ReqReceivedTimestamp' : 'recd time stamp',
                         'UserEmail': 'crousseau@acrotron.com',
                         'TeamName': 'team name',
-                        'ReqReceivedDate': 'req recd data'}]
+                        'ReqReceivedDate': 'req recd data'}
+                  ],
+                  'autoExportRequests': [
+                    {'userFullName' : 'Cheryl Rousseau', 'description': "Test dummy description", 'team': "team bucket 1",
+                       'dataset': "Waze Alert", 'details': 'Details', 'reviewFile': 'review file', 'S3KeyHash': '12345',
+                        'RequestedBy_Epoch': 'request by ',
+                        'S3Key' : 'S3 key',
+                        'TeamBucket' : 'team bucket',
+                        'RequestReviewStatus': 'review status',
+                        'ReqReceivedTimestamp' : 'recd time stamp',
+                        'UserEmail': 'crousseau@acrotron.com',
+                        'TeamName': 'team name',
+                        'ReqReceivedDate': 'req recd data'},
+                        {'userFullName' : 'John Smith', 'description': "Test dummy description", 'team': "team bucket 1",
+                       'dataset': "Waze Alert", 'details': 'Details', 'reviewFile': 'review file', 'S3KeyHash': '12345',
+                        'RequestedBy_Epoch': 'request by ',
+                        'S3Key' : 'S3 key',
+                        'TeamBucket' : 'team bucket',
+                        'RequestReviewStatus': 'review status',
+                        'ReqReceivedTimestamp' : 'recd time stamp',
+                        'UserEmail': 'crousseau@acrotron.com',
+                        'TeamName': 'team name',
+                        'ReqReceivedDate': 'req recd data'}
+                  ]
                   }
 
 describe('ExportRequestsComponent', () => {
