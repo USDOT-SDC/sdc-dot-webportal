@@ -14,5 +14,5 @@ before_script:
   - npm install -g @angular/cli
 
 script:
-    - ng test --watch=false --browsers=ChromeHeadless
+    - cd webportal/webapp && npm test-headless
     - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
