@@ -12,11 +12,10 @@ addons:
 
 before_script:
   - npm install -g @angular/cli
-  - npm install
 
 env:
   - TEST_DIR=webportal/webapp/
 
 script:
-    - cd $TEST_DIR && npm run test-headless
+    - cd $TEST_DIR && npm install && npm run test-headless
     - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
