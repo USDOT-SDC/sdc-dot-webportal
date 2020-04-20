@@ -15,7 +15,8 @@ before_script:
 
 env:
   - TEST_DIR=webportal/webapp/
+  - SONAR_DIR=../../
 
 script:
     - cd $TEST_DIR && npm install && npm run test-headless
-    - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
+    - cd $SONAR_DIR && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
