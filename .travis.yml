@@ -15,7 +15,10 @@ addons:
     sonarcloud:
         organization: "usdot-jpo-sdc"
 
+before_script:
+  - npm install -g @angular/cli
+
 script:
     - coverage erase
-    - npm run test-headless
+    - ng test --watch=false --browsers=ChromeHeadless
     - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
