@@ -17,4 +17,5 @@ addons:
 
 script:
     - coverage erase
+    - npm run test-headless
     - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
