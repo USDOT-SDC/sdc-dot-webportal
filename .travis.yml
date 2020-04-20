@@ -12,6 +12,7 @@ addons:
 
 before_script:
   - npm install -g @angular/cli
+  - npm install
 
 env:
   - TEST_DIR=webportal/webapp/
