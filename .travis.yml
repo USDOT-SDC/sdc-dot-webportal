@@ -1,11 +1,6 @@
-language: python
-python:
-    - 3.6
-install:
-    - pip install boto3
-    - pip install utils
-    - pip install moto
-    - pip install coverage
+language: node_js
+node_js:
+    - "12"
 branches:
     only:
         - master
@@ -19,6 +14,5 @@ before_script:
   - npm install -g @angular/cli
 
 script:
-    - coverage erase
     - ng test --watch=false --browsers=ChromeHeadless
     - sonar-scanner -X -D sonar.login=$SONAR_TOKEN
