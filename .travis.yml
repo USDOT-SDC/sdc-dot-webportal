@@ -18,5 +18,4 @@ env:
   - SONAR_DIR=../../
 
 script:
-    - cd $TEST_DIR && npm install && npm run test-headless
-    - cd $SONAR_DIR && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
+    - cd $TEST_DIR && npm install && npm run test-headless && cd $SONAR_DIR && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
