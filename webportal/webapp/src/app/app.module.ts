@@ -41,8 +41,8 @@ import { TogglePasswordDirective } from './account/loginsync/directives/togglepa
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
 import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
 import { LoaderComponent } from './account/components/loader/loader.component';
-import { LoaderService } from './account/services/loader.service';
-import { LoaderInterceptor } from './account/services/loader.interceptor';
+import { LoaderService } from './account/loginsync/services/loader.service';
+import { LoaderInterceptor } from './account/loginsync/services/loader.interceptor';
 import { PasswordResetComponent } from './account/passwordreset/passwordreset.component'
 
 @NgModule({
