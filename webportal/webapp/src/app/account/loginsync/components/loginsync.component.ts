@@ -27,18 +27,11 @@ export class LoginSyncComponent implements OnInit {
             this.linkSuccessful = true;
 
             // Redirect back to login page
-            window.location.href = this.buildRedirectUrl();
+            window.location.href = this.cognitoService.buildLoginGovRedirectUrl();
           },
           error => {
             this.linkSuccessful = false;
             this.errorMessage =  error;
           });
-  }
-
-  buildRedirectUrl(): string {
-    const url = `https://${environment.APP_DOMAIN}.auth.${environment.REGION}` +
-                `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
-                `&response_type=token&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`;
-    return url;
   }
 }
