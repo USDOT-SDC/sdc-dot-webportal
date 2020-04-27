@@ -36,7 +36,7 @@ export class LoginSyncComponent implements OnInit {
   }
 
   buildRedirectUrl(): string {
-    const url = `https://dev-sdc-dot-webportal.auth.${environment.REGION}` +
+    const url = `https://${environment.APP_DOMAIN}.auth.${environment.REGION}` +
                 `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
                 `&response_type=token&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`;
     return url;
