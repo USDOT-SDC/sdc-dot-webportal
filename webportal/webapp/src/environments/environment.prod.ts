@@ -11,4 +11,5 @@ export const environment = {
   API_ENDPOINT: 'https://cyfca70occ.execute-api.us-east-1.amazonaws.com/api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '34vj4387sna9jk31gudpt3b78i',
   LOGIN_GOV_ACCOUNT_LINK_URL: 'https://2l418womp5.execute-api.us-east-1.amazonaws.com',
+  ENVIRONMENT: 'prod',
 };
