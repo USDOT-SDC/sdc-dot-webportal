@@ -1,21 +1,34 @@
-language: node_js
-node_js:
-    - "12"
-branches:
-    only:
-        - master
-        - develop
-
-addons:
-    sonarcloud:
-        organization: "usdot-jpo-sdc"
-
-before_script:
-  - npm install -g @angular/cli
-
-env:
-  - TEST_DIR=webportal/webapp/
-
-script:
-    - cd $TEST_DIR && npm install && npm run test-headless
-    - cd ../../ && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
+matrix:
+  include:
+    - language: node_js
+      node_js: "12"
+      branches:
+        - only:
+          - master
+          - develop
+      addons:
+        - sonarcloud:
+          - organization: "usdot-jpo-sdc"
+      before_script:
+        - npm install -g @angular/cli
+      env:
+        - TEST_DIR=webportal/webapp/
+      script:
+        - cd $TEST_DIR && npm install && npm run test-headless
+        - cd ../../ && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
+    - langauge: python
+      python: 3.6
+      branches:
+        - only:
+          - master
+          - develop
+      addons:
+        - sonarcloud:
+          - organization: "usdot-jpo-sdc"
+      install:
+        - pip install -r webportal/lambda/requirements.txt -r webportal/lambda/development_requirements.txt
+      env:
+        - TEST_DIR=webportal/lambda/
+      script:
+        - cd $TEST_DIR && coverage run -m pytest
+        - cd ../../ && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
