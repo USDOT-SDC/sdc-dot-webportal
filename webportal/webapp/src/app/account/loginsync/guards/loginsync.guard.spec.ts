@@ -57,8 +57,6 @@ describe('LoginSyncGuard', () => {
         mockLoginSyncService = injector.get(LoginSyncService);
         mockCognitoService = injector.get(CognitoService);
         mockWindow = injector.get(WindowToken);
-        console.log('mockWindow in tests');
-        console.log(mockWindow);
     });
 
     it('should return true for a user logged in with ADFS creds', () => {

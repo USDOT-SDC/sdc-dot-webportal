@@ -38,7 +38,7 @@ export class LoginSyncService {
 
     return this.http.post(this.linkAccountUrl, payload, this.httpOptions)
       .map((response) => {
-        return Observable.of(response);
+        return response;
       }).catch(this.handleError);
   }
 
