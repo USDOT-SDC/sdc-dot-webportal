@@ -11,9 +11,10 @@ export const environment = {
   CLIENT_ID: '7apdoeuudp6606blne6cstpneu',
   IDENTITY_PROVIDER: 'dev-dot-ad',
   APP_DOMAIN: 'dev-sdc-dot-webportal',
-  REDIRECT_URL: 'https://dev-portal.securedatacommons.com/index.html', //dev environment
-  // REDIRECT_URL: 'http://localhost:4200/index.html', // local development
+  // REDIRECT_URL: 'https://dev-portal.securedatacommons.com/index.html', //dev environment
+  REDIRECT_URL: 'http://localhost:4200/index.html', // local development
   API_ENDPOINT: 'https://u2zksemc1h.execute-api.us-east-1.amazonaws.com/api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3ikuiqen3fdfl5brs5uk49cvsu',
+  //LOGIN_GOV_ACCOUNT_LINK_URL: 'https://dhclxz0yoa.execute-api.us-east-1.amazonaws.com',
   LOGIN_GOV_ACCOUNT_LINK_URL: 'https://dhclxz0yoa.execute-api.us-east-1.amazonaws.com',
 };

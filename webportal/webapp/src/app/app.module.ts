@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
+import { WindowToken, windowProvider } from '../factories/window.factory';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
@@ -115,6 +116,7 @@ import { LoaderInterceptor } from './account/loginsync/services/loader.intercept
     LoginSyncGuard,
     LoaderService,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    { provide: WindowToken, useFactory: windowProvider },
     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
    // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
   ],

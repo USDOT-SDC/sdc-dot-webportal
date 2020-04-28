@@ -10,7 +10,8 @@ export class LoginSyncService {
   httpOptions = {};
   env = environment.production ? 'prod' : 'dev';
   linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-link-account`;
-  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked`;
+  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked-bleh`;
+  //accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked`;
 
   constructor(private http: HttpClient, private cognitoService: CognitoService) {
     this.httpOptions = {
@@ -25,7 +26,7 @@ export class LoginSyncService {
   userAccountsLinked(): Observable<any> {
     return this.http.get(this.accountLinkedUrl, this.httpOptions)
       .map((response) => {
-        return Observable.of(response);
+        return response;
       }).catch(this.handleError);
   }
 
