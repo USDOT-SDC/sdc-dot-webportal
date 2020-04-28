@@ -10,8 +10,7 @@ export class LoginSyncService {
   httpOptions = {};
   env = environment.production ? 'prod' : 'dev';
   linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-link-account`;
-  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked-bleh`;
-  //accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked`;
+  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked`;
 
   constructor(private http: HttpClient, private cognitoService: CognitoService) {
     this.httpOptions = {
