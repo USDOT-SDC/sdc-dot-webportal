@@ -26,12 +26,7 @@ matrix:
         - sonarcloud:
           - organization: "usdot-jpo-sdc"
       install:
-        - pip install boto3
-        - pip install utils
-        - pip install moto
-        - pip install coverage
-        - pip install pytest
-        - pip install pytest-mock
+        - pip install webportal/lambda/development_requirements.txt
       env:
         - TEST_DIR=webportal/lambda/
       script:
