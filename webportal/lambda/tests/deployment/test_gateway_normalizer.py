@@ -69,16 +69,3 @@ def test_normalize_gateway_sets_name_and_stage_logging_and_adds_tags(mock_chalic
         api_gateway_stubber.assert_no_pending_responses()
         chalice_config_reader.find_deployed_config.assert_called_with('rest_api', environment)
         chalice_config_reader.chalice_config.assert_called_with()
-
-
-
-def test_api_gateway_client_returns_api_gateway_client():
-    result_class = gateway_normalizer.api_gateway_client()
-
-    assert 'botocore.client.APIGateway' == f'{result_class.__class__.__module__}.{result_class.__class__.__name__}'
-
-
-def test_get_region_returns_region():
-    region = os.popen('aws configure get region').read().strip()
-
-    assert region == gateway_normalizer.get_region()
