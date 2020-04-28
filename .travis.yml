@@ -26,7 +26,7 @@ matrix:
         - sonarcloud:
           - organization: "usdot-jpo-sdc"
       install:
-        - pip install webportal/lambda/development_requirements.txt
+        - pip install -r webportal/lambda/development_requirements.txt
       env:
         - TEST_DIR=webportal/lambda/
       script:
