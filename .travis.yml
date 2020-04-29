@@ -30,5 +30,5 @@ matrix:
       env:
         - TEST_DIR=webportal/lambda/
       script:
-        - cd $TEST_DIR && coverage run -m pytest
+        - cd $TEST_DIR && coverage erase && coverage run -m pytest && coverage xml -i
         - cd ../../ && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
