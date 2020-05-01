@@ -138,6 +138,14 @@ export class CognitoService {
         return idToken
     }
 
-    // TODO: Add refresh token logic
+    buildLoginGovRedirectUrl(): string {
+        return this.buildBaseRedirectUrl() + `&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`
+    }
 
+    buildBaseRedirectUrl(): string {
+        return `https://${environment.APP_DOMAIN}.auth.${environment.REGION}` +
+               `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
+               `&response_type=token`;
+    }
+    // TODO: Add refresh token logic
 }

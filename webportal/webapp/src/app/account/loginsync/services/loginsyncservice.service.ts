@@ -8,9 +8,8 @@ import { CognitoService } from '../../../../services/cognito.service';
 @Injectable()
 export class LoginSyncService {
   httpOptions = {};
-  env = environment.production ? 'prod' : 'dev';
-  linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-link-account`;
-  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked`;
+  linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${environment.ENVIRONMENT}/${environment.ENVIRONMENT}-link-account`;
+  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${environment.ENVIRONMENT}/${environment.ENVIRONMENT}-account-linked`;
 
   constructor(private http: HttpClient, private cognitoService: CognitoService) {
     this.httpOptions = {
@@ -25,7 +24,7 @@ export class LoginSyncService {
   userAccountsLinked(): Observable<any> {
     return this.http.get(this.accountLinkedUrl, this.httpOptions)
       .map((response) => {
-        return Observable.of(response);
+        return response;
       }).catch(this.handleError);
   }
 
@@ -37,7 +36,7 @@ export class LoginSyncService {
 
     return this.http.post(this.linkAccountUrl, payload, this.httpOptions)
       .map((response) => {
-        return Observable.of(response);
+        return response;
       }).catch(this.handleError);
   }
 
