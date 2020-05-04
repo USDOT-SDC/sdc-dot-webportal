@@ -6,6 +6,8 @@ from botocore.stub import Stubber
 
 
 TEST_ENVIRONMENT = 'some_environment'
+PRIVATE_ENVIRONMENT = "private_env"
+VPCE_ID = "vpce-12345"
 REST_API_ID = 'some_rest_api_id'
 API_GATEWAY_STAGE = 'some_api_stage'
 MOCK_ACCOUNT_NUMBER = 42
@@ -14,7 +16,17 @@ MOCK_CHALICE_CONFIG = {
     "stages": {
         TEST_ENVIRONMENT: {
             "api_gateway_stage": API_GATEWAY_STAGE
+        },
+        PRIVATE_ENVIRONMENT: {
+            "api_gateway_stage": API_GATEWAY_STAGE,
+            "api_gateway_endpoint_type": "PRIVATE",
+            "api_gateway_endpoint_vpce": VPCE_ID,
         }
+    }
+}
+MOCK_CHALICE_PRIVATE_CONFIG = {
+    "stages": {
+        
     }
 }
 
@@ -62,6 +74,37 @@ def test_normalize_gateway_sets_name_and_stage_logging_and_adds_tags(mock_chalic
                                                                                   {'op': 'replace', 'path': '/accessLogSettings/format', 'value': gateway_normalizer.LOG_FORMAT}]})
     api_gateway_stubber.add_response('tag_resource', {}, {'resourceArn': f'arn:aws:apigateway:us-east-1::/restapis/{REST_API_ID}',
                                                           "tags": {"Environment": environment, "Project": "SDC-Platform", "Team": "sdc-platform"}})
+
+    with api_gateway_stubber:
+        partially_mocked_gateway_normalizer.normalize_gateway(environment)
+
+        api_gateway_stubber.assert_no_pending_responses()
+        chalice_config_reader.find_deployed_config.assert_called_with('rest_api', environment)
+        chalice_config_reader.chalice_config.assert_called_with()
+
+def test_normalize_sets_vpce(mock_chalice_config_reader, partially_mocked_gateway_normalizer, api_gateway_stubber):
+    environment = PRIVATE_ENVIRONMENT
+
+    api_gateway_stubber.add_response('update_rest_api', {}, {'restApiId': REST_API_ID,
+                                                             'patchOperations': [{'op': 'replace', 'path': '/name', 'value': f'{environment}-webportal'},
+                                                                                 {'op': 'replace', 'path': '/description', 'value': f'{environment}-webportal'}]})
+
+    # Additional private API call
+    # Stubs are FIFO so order is important!!!
+    api_gateway_stubber.add_response('update_rest_api', 
+    {}, 
+    {'restApiId': REST_API_ID,
+     'patchOperations': [{'op': 'add', 'path': '/endpointConfiguration/vpcEndpointIds', 'value': VPCE_ID}]
+    })
+
+    api_gateway_stubber.add_response('update_stage', {}, {'restApiId': REST_API_ID, 'stageName': API_GATEWAY_STAGE,
+                                                             'patchOperations': [{'op': 'replace', 'path': '/accessLogSettings/destinationArn',
+                                                                                  'value': f'arn:aws:logs:us-east-1:{MOCK_ACCOUNT_NUMBER}:log-group:/aws/apigateway/{REST_API_ID}/{API_GATEWAY_STAGE}'},
+                                                                                  {'op': 'replace', 'path': '/accessLogSettings/format', 'value': gateway_normalizer.LOG_FORMAT}]})
+    api_gateway_stubber.add_response('tag_resource', {}, {'resourceArn': f'arn:aws:apigateway:us-east-1::/restapis/{REST_API_ID}',
+                                                          "tags": {"Environment": environment, "Project": "SDC-Platform", "Team": "sdc-platform"}})
+
+    
 
     with api_gateway_stubber:
         partially_mocked_gateway_normalizer.normalize_gateway(environment)
