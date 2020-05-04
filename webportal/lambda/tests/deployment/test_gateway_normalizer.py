@@ -24,11 +24,6 @@ MOCK_CHALICE_CONFIG = {
         }
     }
 }
-MOCK_CHALICE_PRIVATE_CONFIG = {
-    "stages": {
-        
-    }
-}
 
 
 @pytest.fixture
