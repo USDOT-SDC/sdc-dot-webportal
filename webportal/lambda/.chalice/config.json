@@ -28,7 +28,6 @@
     "dev-private": {
       "api_gateway_endpoint_type": "PRIVATE",
       "api_gateway_endpoint_vpce": "vpce-0052333c172f0faa2",
-      "api_gateway_policy_file": "gateway-policy.json",
       "api_gateway_stage": "webportal-api",
       "tags": {
         "Environment": "dev",
