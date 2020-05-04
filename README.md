@@ -184,6 +184,11 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## VI. Unit Tests
 
+You can run unit tests using the following command in the project root directory:
+
+```sh
+coverage run -m pytest
+```
 
 
 
