@@ -18,7 +18,7 @@ def normalize_gateway(environment):
                                    patchOperations=api_gateway_patch_operations(webportal_name))
     
     # For Private APIs, chalice doesn't seem to be assigning VPCE correctly (although it generates a valid policy)
-    gateway_type = chalice_config['stages'][environment]['api_gateway_endpoint_type']
+    gateway_type = chalice_config['stages'][environment].get('api_gateway_endpoint_type', "NOT_PRIVATE")
     print(f"Gateway type for {environment} is {gateway_type}")
     if gateway_type == "PRIVATE":
         vpce = chalice_config['stages'][environment]['api_gateway_endpoint_vpce']
