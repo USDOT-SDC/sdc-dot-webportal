@@ -217,6 +217,14 @@ python3 deploy.py --environment <whatever>
 
 where, `--environment` can be `dev`, `prod` and so on.
 
+### Deleting the Backend
+
+If you need to delete your resources, do the following:
+```sh
+# pwd: /webportal/lambda
+chalice delete --stage dev-private --profile sdc
+```
+
 ##### Deploy the metadata lambda function - 
 
 **Step 1**: Create a script with below contents e.g(sdc-add-metadata-to-s3-object
