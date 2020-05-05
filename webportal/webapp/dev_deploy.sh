@@ -1,8 +1,9 @@
 #/bin/bash
+
 ng build --aot=true --configuration=dev-private
 # Use distinct dev-private bucket so we can modify URLs, etc. per the environment
-#Copy everything over to S3 bucket
-aws s3 cp --profile sdc ./dist s3://dev-private-sdc-webportal-hosting --recursive
+# Copy everything over to S3 bucket
+aws s3 cp --profile sdc ./dist s3://dev-private-sdc-webportal-hosting --recursive --only-show-errors
 
 # Bust open the cache
 # This won't work for proxy, we would need to trigger a re-fetch somehow
