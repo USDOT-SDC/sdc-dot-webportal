@@ -166,6 +166,11 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## IV. Installation
 
+You can install dependencies for the web app via:
+```sh
+# pwd: /webportal/webapp
+npm install
+```
 
 <!---                                 -->
 <!---     Design and Architecture     -->
