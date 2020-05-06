@@ -98,6 +98,7 @@ export class ApiGatewayService {
             .catch(this.handleError);
     }
 
+    // TODO: Figure out why this is throwing 500s
     getUserInfo(url: string) {
         this.setRequestHeaders();
         return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
