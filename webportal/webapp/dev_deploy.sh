@@ -1,11 +1,19 @@
 #/bin/bash
 
+echo "***"
+echo "Building assets..."
 ng build --aot=true --configuration=dev-private
+
+
 # Use distinct dev-private bucket so we can modify URLs, etc. per the environment
 # Copy everything over to S3 bucket
+echo "Copying to s3..."
 aws s3 cp --profile sdc ./dist s3://dev-private-sdc-webportal-hosting --recursive --only-show-errors
 
-# Bust open the cache
-# This won't work for proxy, we would need to trigger a re-fetch somehow
-#    - maybe invoke an SSM command to grab latest on our proxies?
-# aws s3 cp --profile sdc ./dist/index.html s3://test-sdc-webportal-hosting/index.html --region us-east-1 --metadata-directive REPLACE --cache-control max-age=0 --acl public-read
+# Refresh assets on nginx proxies
+echo "Refreshing assets on proxies..."
+aws ssm send-command --profile sdc \
+  --document-name dev-nginx-asset-update \
+  --parameters staticAssetsBucket="dev-private-sdc-webportal-hosting" \
+  --targets "Key=tag:Name,Values=dev-nginx-web-proxy" \
+  --comment "Deploying sdc-dot-webportal to dev at $(date) and refreshing assets"
