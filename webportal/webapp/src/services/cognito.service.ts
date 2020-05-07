@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import {
     AuthenticationDetails,
     CognitoIdentityServiceProvider,
@@ -11,6 +11,7 @@ import * as AWS from "aws-sdk";
 import * as awsservice from "aws-sdk/lib/service";
 import * as CognitoIdentity from "aws-sdk/clients/cognitoidentity";
 import { environment } from '../environments/environment';
+import { WindowToken } from '../factories/window.factory';
 
 
 export interface CognitoCallback {
@@ -28,33 +29,24 @@ export interface Callback {
 
 @Injectable()
 export class CognitoService {
-   
+    constructor(@Inject(WindowToken) private window: Window) { }
+
+
     public static _REGION = environment.REGION // User pool AWS region
     public static _USER_POOL_ID = environment.USER_POOL_ID // User pool ID
     public static _CLIENT_ID = environment.CLIENT_ID // App client ID
     public static _IDENTITY_PROVIDER = environment.IDENTITY_PROVIDER // User pool Identity provider name
     public static _APP_DOMAIN = environment.APP_DOMAIN // App domain name
     public static _IDP_ENDPOINT = "cognito-idp." + CognitoService._REGION + ".amazonaws.com/" + CognitoService._USER_POOL_ID
-    public static _REDIRECT_URL = environment.REDIRECT_URL // Re-direct URL for the user pool
     
     public static _POOL_DATA:any = {
         UserPoolId: CognitoService._USER_POOL_ID,
         ClientId: CognitoService._CLIENT_ID
     };
-    public static _AUTH_DATA = {
-        ClientId : CognitoService._CLIENT_ID,
-        AppWebDomain : CognitoService._APP_DOMAIN + ".auth." + CognitoService._REGION + ".amazoncognito.com",
-        TokenScopesArray : ['phone', 'email', 'profile','openid' ],
-        RedirectUriSignIn : CognitoService._REDIRECT_URL,
-        RedirectUriSignOut : CognitoService._REDIRECT_URL,
-        IdentityProvider : CognitoService._IDENTITY_PROVIDER,
-        UserPoolId : CognitoService._USER_POOL_ID,
-        AdvancedSecurityDataCollectionFlag : false
-    };
 
     // Authenticate the user & login
     login(isLoggedIn: boolean) {
-        var userAuth = new CognitoAuth(CognitoService._AUTH_DATA)
+        var userAuth = new CognitoAuth(this.authData())
         userAuth.userhandler = {
             onSuccess: function(result) {
             },
@@ -66,6 +58,19 @@ export class CognitoService {
             userAuth.parseCognitoWebResponse(currentUrl);
         } else
             userAuth.getSession();
+    }
+
+    authData() {
+        return {
+            ClientId : CognitoService._CLIENT_ID,
+            AppWebDomain : CognitoService._APP_DOMAIN + ".auth." + CognitoService._REGION + ".amazoncognito.com",
+            TokenScopesArray : ['email', 'profile','openid' ],
+            RedirectUriSignIn : this.redirectUrl(),
+            RedirectUriSignOut : this.redirectUrl(),
+            IdentityProvider : CognitoService._IDENTITY_PROVIDER,
+            UserPoolId : CognitoService._USER_POOL_ID,
+            AdvancedSecurityDataCollectionFlag : false
+        };
     }
 
     // Immediately after login
@@ -107,7 +112,7 @@ export class CognitoService {
 
     // Logout the user session
     logout() {
-        var userAuth = new CognitoAuth(CognitoService._AUTH_DATA)
+        var userAuth = new CognitoAuth(this.authData())
         userAuth.userhandler = {
             onSuccess: function(result) {
             },
@@ -138,14 +143,23 @@ export class CognitoService {
         return idToken
     }
 
+    buildDoTADRedirectUrl(): string {
+        return this.buildBaseRedirectUrl() + `&client_id=${environment.CLIENT_ID}`;
+    }
+
     buildLoginGovRedirectUrl(): string {
         return this.buildBaseRedirectUrl() + `&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`
     }
 
     buildBaseRedirectUrl(): string {
         return `https://${environment.APP_DOMAIN}.auth.${environment.REGION}` +
-               `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
+               `.amazoncognito.com/oauth2/authorize?redirect_uri=${this.redirectUrl()}` +
                `&response_type=token`;
     }
+
+    redirectUrl() {
+        return `${this.window.location.origin}/index.html`;
+    }
+
     // TODO: Add refresh token logic
 }
