@@ -3,8 +3,8 @@
     <div class="grid-row margin-top-3">
       <div class="grid-col-4"></div>
       <div class="grid-col-4">
-        <app-alert [showAlert]="!linkSuccessful" [text]="errorMessage"></app-alert>
-        <form class="usa-form signin" (ngSubmit)="onSubmit()">
+        <app-alert [showAlert]="errorMessage" [text]="errorMessage"></app-alert>
+        <form *ngIf="!changeTemporaryPassword" class="usa-form signin" (ngSubmit)="onSubmitLinkAccount()">
           <fieldset class="usa-fieldset">
             <legend class="border-0 usa-legend">One Time Sign In</legend>
             <label class="margin-top-4" for="username">Username</label>
@@ -17,6 +17,27 @@
             <p class="margin-top-4 padding-top-4 border-top">Please sign in using your internal Secure Data Commons credentials. Accounts only need to be linked once.</p>
             <p>If you do not remember your Secure Data Commons credentials, please contact the <a href = "mailto:support@securedatacommons.com" style="text-decoration: none;">Support Team.</a></p>
             <p>Don't have an account? <a href="https://portal.securedatacommons.com/register" target="_blank" style="text-decoration: none;" rel="noopener noreferrer">Follow the instructions</a> on the Secure Data Commons portal to create one.</p>
+          </fieldset>
+        </form>
+        <form *ngIf="changeTemporaryPassword" class="usa-form signin" (ngSubmit)="onSubmitChangeTemporaryPassword()">
+          <fieldset class="usa-fieldset">
+            <legend class="border-0 usa-legend">Password Reset</legend>
+            <label class="margin-top-4" for="newPassword">New Password</label>
+            <input class="usa-input" id="newPassword" name="newPassword" [(ngModel)]="newPassword" type="password" appTogglePassword>
+
+            <label class="margin-top-4" for="newPasswordConfirmation">Confirm New Password</label>
+            <input class="usa-input" id="newPasswordConfirmation" name="newPasswordConfirmation" [(ngModel)]="newPasswordConfirmation" type="password" appTogglePassword>
+
+            <input class="usa-button link-submit margin-top-3" type="submit" value="Reset Password">
+
+            <p class="margin-top-4 padding-top-4 border-top">Your internal Secure Data Commons credentials have expired and must be changed.</p>
+            <p>Your password must be 7 characters long and contain at least 3 of the following:</p>
+              <ul>
+                <li>Lower case letter</li>
+                <li>Upper case letter</li>
+                <li>Special character</li>
+                <li>Number</li>
+              </ul>
           </fieldset>
         </form>
       </div>

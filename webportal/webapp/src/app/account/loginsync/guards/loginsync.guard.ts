@@ -23,7 +23,7 @@ export class LoginSyncGuard implements CanActivate {
                                     this.router.navigate(['account/loginsync']);
                                     return false;
                                 }).catch(error => {
-                                  const msg = error ? error.message : 'Caught an error from the loginSyncService call but no message error message was provided';
+                                  const msg = error.userErrorMessage ? error.userErrorMessage : 'Caught an error from the loginSyncService call but no message error message was provided';
                                   console.log(msg);
                                   return of(true); // Continue to the /accounthome pahe
                                 });
