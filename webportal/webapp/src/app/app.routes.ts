@@ -13,7 +13,6 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
-import { PasswordResetComponent } from './account/passwordreset/passwordreset.component';
 
 const appRoutes: Routes = [
     {
@@ -36,7 +35,6 @@ const appRoutes: Routes = [
             { path: 'workstation', component: WorkstationComponent },
             { path: 'faq', component: FaqComponent },
             { path: 'loginsync', component: LoginSyncComponent },
-            { path: 'passwordreset', component: PasswordResetComponent },
         ],
     }
 ];

@@ -61,6 +61,6 @@ export class LoginSyncService {
     const userErrorMessage = (error.error) ? error.error['userErrorMessage'] : 'Sorry, something went wrong. Please try again later';
 
     console.log(devErrorMsg);
-    return Observable.throw({ userErrorMessage: userErrorMessage, body: error.error);
+    return Observable.throw({ userErrorMessage: userErrorMessage, body: error.error});
   }
 }

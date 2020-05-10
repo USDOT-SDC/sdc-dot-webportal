@@ -44,7 +44,6 @@ import { LoginSyncService } from './account/loginsync/services/loginsyncservice.
 import { LoaderComponent } from './account/components/loader/loader.component';
 import { LoaderService } from './account/services/loader.service';
 import { LoaderInterceptor } from './account/services/loader.interceptor';
-import { PasswordResetComponent } from './account/passwordreset/passwordreset.component'
 
 @NgModule({
   declarations: [
@@ -65,8 +64,7 @@ import { PasswordResetComponent } from './account/passwordreset/passwordreset.co
     LoginSyncComponent,
     AlertComponent,
     TogglePasswordDirective,
-    LoaderComponent,
-    PasswordResetComponent
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
