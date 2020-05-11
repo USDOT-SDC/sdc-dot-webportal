@@ -23,7 +23,6 @@ def normalize_gateway(environment):
     if gateway_type == "PRIVATE":
         vpce = chalice_config['stages'][environment]['api_gateway_endpoint_vpce']
         print(f"Explicitly adding {vpce} to private endpoint")
-        vpce_json = json.dumps([vpce])
         gateway_client.update_rest_api(restApiId=rest_api_id,
                                        patchOperations=[{'op': 'add', 'path': '/endpointConfiguration/vpcEndpointIds', 'value': vpce}])
 
