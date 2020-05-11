@@ -9,5 +9,7 @@ export const environment = {
   REDIRECT_URL: 'https://dev-proxy-portal.securedatacommons.com/index.html', //dev environment
   API_ENDPOINT: 'https://dev-proxy-portal.securedatacommons.com/webportal-api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3ikuiqen3fdfl5brs5uk49cvsu',
-  LOGIN_GOV_ACCOUNT_LINK_URL: 'https://dev-proxy-portal.securedatacommons.com',
+  ACCOUNT_LINK_URL: 'https://dev-proxy-portal.securedatacommons.com/account-link-dev',
+  LINK_ACCOUNT_PATH: 'dev-link-account-private',
+  ACCOUNT_LINKED_PATH: 'dev-account-linked-private',
 };

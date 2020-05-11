@@ -8,12 +8,8 @@ import { CognitoService } from '../../../../services/cognito.service';
 @Injectable()
 export class LoginSyncService {
   httpOptions = {};
-  env = environment.production ? 'prod' : 'dev';
-  // TODO: Additional problem here in that the current account API Gateway terraforms also add a suffix
-  // Omitting the redundant environment prefix in our paths would also make this less brittle
-  // Pulling account-link-env into the base URL would also clean this up
-  linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/account-link-${this.env}/${this.env}-link-account-private`;
-  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/account-link-${this.env}/${this.env}-account-linked-private`;
+  linkAccountUrl = `${environment.ACCOUNT_LINK_URL}/${environment.LINK_ACCOUNT_PATH}`;
+  accountLinkedUrl = `${environment.ACCOUNT_LINK_URL}/${environment.ACCOUNT_LINKED_PATH}`;
 
   constructor(private http: HttpClient, private cognitoService: CognitoService) {
     this.httpOptions = {
