@@ -1,31 +1,152 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LoginSyncComponent } from './loginsync.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginSyncService } from '../services/loginsyncservice.service';
-import { HttpClient } from '@angular/common/http';
-import { HttpHandler } from '@angular/common/http';
-import { CognitoService } from './../../../../services/cognito.service';
+import { WindowToken } from '../../../../factories/window.factory';
+import { CognitoService } from '../../../../services/cognito.service';
+import { Observable } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { MatCardModule } from '@angular/material';
 
-describe('LoginsyncComponent', () => {
-  let component: LoginSyncComponent;
-  let fixture: ComponentFixture<LoginSyncComponent>;
+fdescribe('LoginsyncComponent', () => {
+    let component: LoginSyncComponent;
+    let fixture: ComponentFixture<LoginSyncComponent>;
+    let mockLoginSyncService: MockLoginSyncService;
+    let mockWindow;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      providers: [LoginSyncService, HttpClient, HttpHandler, CognitoService],
-      declarations: [ LoginSyncComponent ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            imports: [FormsModule, ReactiveFormsModule, MatCardModule],
+            declarations: [ LoginSyncComponent, MockLoaderComponent, MockAlertComponent ],
+            providers: [
+                { provide: CognitoService, useClass: MockCognitoService },
+                { provide: LoginSyncService, useClass: MockLoginSyncService },
+                { provide: WindowToken, useValue: MockWindow }
+            ]
+        })
+        .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(LoginSyncComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(LoginSyncComponent);
+        mockLoginSyncService = TestBed.get(LoginSyncService);
+        mockWindow = TestBed.get(WindowToken);
+        component = fixture.componentInstance;
+        component.username = 'the_username';
+        component.password = 'the_password';
+        fixture.detectChanges();
+    });
 
-   it('should create', () => {
-     expect(component).toBeTruthy();
-   });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('redirects to Login.gov if the link type is login.gov', () => {
+        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+
+        fixture.debugElement.query(By.css('#signin_form')).triggerEventHandler('submit', null);
+        fixture.detectChanges();
+
+        expect(mockWindow.location.href).toEqual('login_gov');
+    });
+
+    it('shows the temporary password reset screen if the user signed in with a temporary password', () => {
+        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.throw({ userErrorMessage: 'Your password expired or whatever...',
+                                                                                       body: { passwordExpired: true } }));
+
+        fixture.debugElement.query(By.css('#signin_form')).triggerEventHandler('submit', null);
+        fixture.detectChanges();
+
+        expect(component.changeTemporaryPassword).toEqual(true);
+        expect(fixture.debugElement.nativeElement.querySelector('#temporary_credentials_form')).toBeTruthy();
+    });
+
+    describe('TemporaryCredentials', () => {
+        beforeEach(() => {
+            component.changeTemporaryPassword = true;
+            fixture.detectChanges();
+        });
+
+        it('prevents invalid new passwords from submitting and shows an error message', () => {
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue('I should not be called.');
+            [{newPassword: '$h0rT', newPasswordConfirmation: '$h0rT', error: component.complexityErrorMessage},
+             {newPassword: 'notComplexEnough', newPasswordConfirmation: 'notComplexEnough', error: component.complexityErrorMessage},
+             {newPassword: 'noMatching$', newPasswordConfirmation: 'noMatch', error: component.passwordMatchingErrorMessage}].forEach(testCase => {
+                component.newPassword = testCase.newPassword;
+                component.newPasswordConfirmation = testCase.newPasswordConfirmation;
+
+                fixture.debugElement.query(By.css('#temporary_credentials_form')).triggerEventHandler('submit', null);
+                fixture.detectChanges();
+
+                expect(mockLoginSyncService.resetTemporaryPassword).toHaveBeenCalledTimes(0);
+                expect(fixture.debugElement.nativeElement.querySelector('#alert_show_alert').textContent).toBeTruthy();
+                expect(fixture.debugElement.nativeElement.querySelector('#alert_show_alert').textContent).toEqual(testCase.error);
+             });
+        });
+
+        it('it shows a nice error message if something bad happens during the password reset', () => {
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.throw({ userErrorMessage: 'Oh noes...', body: { } }));
+            component.newPassword = 'Lets-Switch-To-React';
+            component.newPasswordConfirmation = 'Lets-Switch-To-React';
+
+            fixture.debugElement.query(By.css('#temporary_credentials_form')).triggerEventHandler('submit', null);
+            fixture.detectChanges();
+
+            expect(component.changeTemporaryPassword).toEqual(true);
+            expect(mockLoginSyncService.resetTemporaryPassword).toHaveBeenCalledTimes(1);
+            expect(fixture.debugElement.nativeElement.querySelector('#alert_show_alert').textContent).toBeTruthy();
+            expect(fixture.debugElement.nativeElement.querySelector('#alert_text').textContent).toEqual( 'Oh noes...');
+        });
+
+        it('it shows the user the regular sync screen once the temporary password has been changed', () => {
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({}));
+            component.newPassword = 'Lets-Switch-To-React';
+            component.newPasswordConfirmation = 'Lets-Switch-To-React';
+
+            fixture.debugElement.query(By.css('#temporary_credentials_form')).triggerEventHandler('submit', null);
+            fixture.detectChanges();
+
+            expect(component.changeTemporaryPassword).toEqual(false);
+            expect(mockLoginSyncService.resetTemporaryPassword).toHaveBeenCalledTimes(1);
+            expect(fixture.debugElement.nativeElement.querySelector('#signin_form')).toBeTruthy();
+        });
+    });
 });
+
+@Component({
+  selector: 'app-loader',
+  template: ''
+})
+class MockLoaderComponent {
+}
+
+@Component({
+  selector: 'app-alert',
+  template: `<div id="alert_show_alert">{{showAlert}}</div><div id="alert_text">{{text}}</div>`
+})
+class MockAlertComponent {
+  @Input() showAlert: boolean;
+  @Input() text: string;
+}
+
+class MockCognitoService {
+    buildLoginGovRedirectUrl() { return 'login_gov'; };
+}
+
+class MockLoginSyncService {
+    linkAccounts(username, password) {};
+    resetTemporaryPassword(username: string, currentPassword: string, newPassword: string, newPasswordConfirmation: string) {};
+}
+
+const MockWindow = {
+  location: {
+    _href: '',
+    set href(url: string) {
+      this._href = url;
+    },
+    get href() {
+      return this._href;
+    }
+  }
+};

@@ -4,7 +4,7 @@
       <div class="grid-col-4"></div>
       <div class="grid-col-4">
         <app-alert [showAlert]="errorMessage" [text]="errorMessage"></app-alert>
-        <form *ngIf="!changeTemporaryPassword" class="usa-form signin" (ngSubmit)="onSubmitLinkAccount()">
+        <form *ngIf="!changeTemporaryPassword" id="signin_form" class="usa-form signin" (ngSubmit)="onSubmitLinkAccount()">
           <fieldset class="usa-fieldset">
             <legend class="border-0 usa-legend">One Time Sign In</legend>
             <label class="margin-top-4" for="username">Username</label>
@@ -19,9 +19,9 @@
             <p>Don't have an account? <a href="https://portal.securedatacommons.com/register" target="_blank" style="text-decoration: none;" rel="noopener noreferrer">Follow the instructions</a> on the Secure Data Commons portal to create one.</p>
           </fieldset>
         </form>
-        <form *ngIf="changeTemporaryPassword" class="usa-form signin" (ngSubmit)="onSubmitChangeTemporaryPassword()">
+        <form *ngIf="changeTemporaryPassword" id="temporary_credentials_form" class="usa-form" (ngSubmit)="onSubmitChangeTemporaryPassword()">
           <fieldset class="usa-fieldset">
-            <legend class="border-0 usa-legend">Password Reset</legend>
+            <legend class="border-0 usa-legend">Temporary Password Reset</legend>
             <label class="margin-top-4" for="newPassword">New Password</label>
             <input class="usa-input" id="newPassword" name="newPassword" [(ngModel)]="newPassword" type="password" appTogglePassword>
 
@@ -30,14 +30,15 @@
 
             <input class="usa-button link-submit margin-top-3" type="submit" value="Reset Password">
 
-            <p class="margin-top-4 padding-top-4 border-top">Your internal Secure Data Commons credentials have expired and must be changed.</p>
-            <p>Your password must be 7 characters long and contain at least 3 of the following:</p>
-              <ul>
-                <li>Lower case letter</li>
-                <li>Upper case letter</li>
-                <li>Special character</li>
-                <li>Number</li>
-              </ul>
+            <p class="margin-top-4 padding-top-4 border-top">Your temporary Secure Data Commons password must be changed.</p>
+            <p>Your new password must be 7 characters long and contain at least 3 of the following:</p>
+            <ul>
+              <li>Lower case letter</li>
+              <li>Upper case letter</li>
+              <li>Special character</li>
+              <li>Number</li>
+            </ul>
+            <p>Your password may not be the same as your previous 23 passwords.</p>
           </fieldset>
         </form>
       </div>

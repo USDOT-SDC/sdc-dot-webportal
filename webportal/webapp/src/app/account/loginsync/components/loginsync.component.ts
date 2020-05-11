@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { LoginSyncService } from '../services/loginsyncservice.service';
 import { environment } from '../../../../environments/environment';
 import { CognitoService } from '../../../../services/cognito.service';
+import { WindowToken } from '../../../../factories/window.factory';
 
 @Component({
   selector: 'app-loginsync',
@@ -15,8 +16,10 @@ export class LoginSyncComponent implements OnInit {
   newPasswordConfirmation: string;
   changeTemporaryPassword = false;
   errorMessage = '';
+  complexityErrorMessage: string = "The password does not match the complexity criteria.";
+  passwordMatchingErrorMessage: string = "Passwords must match.";
 
-  constructor(private loginSyncService: LoginSyncService, private cognitoService: CognitoService) { }
+  constructor(private loginSyncService: LoginSyncService, private cognitoService: CognitoService,  @Inject(WindowToken) private window: Window) { }
 
   ngOnInit() {
   }
@@ -27,9 +30,10 @@ export class LoginSyncComponent implements OnInit {
         .subscribe(
           result => {
             // Redirect back to login page
-            window.location.href = this.cognitoService.buildLoginGovRedirectUrl();
+            this.window.location.href = this.cognitoService.buildLoginGovRedirectUrl();
           },
           error => {
+            console.log('erroring');
             if(error.body.passwordExpired) {
                 this.changeTemporaryPassword = true;
             } else {
@@ -66,10 +70,10 @@ export class LoginSyncComponent implements OnInit {
 
     var validPassword = (hasSevenCharacters && ((hasUpperCase + hasLowerCase + hasNumbers + hasSpecialCharacters) >= 3));
     if(!validPassword) {
-      this.errorMessage = "The password does not match the complexity criteria."
+      this.errorMessage = this.complexityErrorMessage;
       return false;
     } else if(this.newPassword != this.newPasswordConfirmation) {
-      this.errorMessage = "Passwords must match."
+      this.errorMessage = this.passwordMatchingErrorMessage;
       return false;
     } else {
       this.errorMessage = "";
