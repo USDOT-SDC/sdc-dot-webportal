@@ -133,7 +133,10 @@ export class CognitoService {
                 idToken = session.getIdToken().getJwtToken()
             });
         } else {
-            console.log("NO TOKEN")
+            console.log("NO TOKEN - wiping localStorage");
+            // try wiping local storage and see if we can recover session?
+            localStorage.clear();
+            //userAuth.getSession(); // maybe revive session?
         }
         return idToken
     }
