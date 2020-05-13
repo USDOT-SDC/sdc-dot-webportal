@@ -8,9 +8,8 @@ import { CognitoService } from '../../../../services/cognito.service';
 @Injectable()
 export class LoginSyncService {
   httpOptions = {};
-  env = environment.production ? 'prod' : 'dev';
-  linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-link-account`;
-  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${this.env}/${this.env}-account-linked`;
+  linkAccountUrl = `${environment.ACCOUNT_LINK_URL}/${environment.LINK_ACCOUNT_PATH}`;
+  accountLinkedUrl = `${environment.ACCOUNT_LINK_URL}/${environment.ACCOUNT_LINKED_PATH}`;
 
   constructor(private http: HttpClient, private cognitoService: CognitoService) {
     this.httpOptions = {

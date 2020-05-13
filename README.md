@@ -166,6 +166,11 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## IV. Installation
 
+You can install dependencies for the web app via:
+```sh
+# pwd: /webportal/webapp
+npm install
+```
 
 <!---                                 -->
 <!---     Design and Architecture     -->
@@ -184,6 +189,11 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## VI. Unit Tests
 
+You can run unit tests using the following command in the project root directory:
+
+```sh
+coverage run -m pytest
+```
 
 
 
@@ -216,6 +226,14 @@ python3 deploy.py --environment <whatever>
 ```
 
 where, `--environment` can be `dev`, `prod` and so on.
+
+### Deleting the Backend
+
+If you need to delete your resources, do the following:
+```sh
+# pwd: /webportal/lambda
+chalice delete --stage dev-private --profile sdc
+```
 
 ##### Deploy the metadata lambda function - 
 
