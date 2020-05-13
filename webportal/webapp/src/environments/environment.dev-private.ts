@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  STREAMING_URL: 'https://dev-stream.securedatacommons.com/guacamole/?authToken=',
+  STREAMING_URL: 'https://dev-proxy-portal.securedatacommons.com/guacamole/?authToken=',
   REGION: 'us-east-1',
   USER_POOL_ID: 'us-east-1_Y5JI7ysvY',
   CLIENT_ID: '22gr1lfintehcaac2cdmmsur52',
