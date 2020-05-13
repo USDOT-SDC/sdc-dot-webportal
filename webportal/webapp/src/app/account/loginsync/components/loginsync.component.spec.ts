@@ -99,17 +99,15 @@ fdescribe('LoginsyncComponent', () => {
             expect(fixture.debugElement.nativeElement.querySelector('#alert_text').textContent).toEqual( 'Oh noes...');
         });
 
-        it('it shows the user the regular sync screen once the temporary password has been changed', () => {
-            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({}));
+        it('redirects the user to login.gov', () => {
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
             component.newPassword = 'Lets-Switch-To-React';
             component.newPasswordConfirmation = 'Lets-Switch-To-React';
 
             fixture.debugElement.query(By.css('#temporary_credentials_form')).triggerEventHandler('submit', null);
             fixture.detectChanges();
 
-            expect(component.changeTemporaryPassword).toEqual(false);
-            expect(mockLoginSyncService.resetTemporaryPassword).toHaveBeenCalledTimes(1);
-            expect(fixture.debugElement.nativeElement.querySelector('#signin_form')).toBeTruthy();
+            expect(mockWindow.location.href).toEqual('login_gov');
         });
     });
 });

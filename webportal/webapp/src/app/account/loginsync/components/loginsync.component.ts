@@ -33,7 +33,6 @@ export class LoginSyncComponent implements OnInit {
             this.window.location.href = this.cognitoService.buildLoginGovRedirectUrl();
           },
           error => {
-            console.log('erroring');
             if(error.body.passwordExpired) {
                 this.changeTemporaryPassword = true;
             } else {
@@ -51,8 +50,8 @@ export class LoginSyncComponent implements OnInit {
         .resetTemporaryPassword(this.username, this.password, this.newPassword, this.newPasswordConfirmation)
         .subscribe(
           result => {
-            this.changeTemporaryPassword = false;
-            this.password = "";
+            // Redirect back to login page
+            this.window.location.href = this.cognitoService.buildLoginGovRedirectUrl();
           },
           error => {
             this.errorMessage = error.userErrorMessage;
