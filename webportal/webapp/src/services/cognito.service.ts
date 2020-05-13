@@ -133,10 +133,20 @@ export class CognitoService {
                 idToken = session.getIdToken().getJwtToken()
             });
         } else {
-            console.log("NO TOKEN - wiping localStorage");
-            // try wiping local storage and see if we can recover session?
-            localStorage.clear();
-            //userAuth.getSession(); // maybe revive session?
+            console.log("NO TOKEN - Forcing logout.");
+            // this seems to work, but during a hard-refresh it causes a log out, so that may be preferable.
+            // localStorage.clear();
+            // var userAuth = new CognitoAuth(CognitoService._AUTH_DATA);
+            // userAuth.userhandler = {
+            //     onSuccess: function(result) {
+            //     },
+            //     onFailure: function(err) {
+            //     }
+            // };
+            // userAuth.getSession();
+
+            // try forcing a logout?
+            this.logout();
         }
         return idToken
     }
