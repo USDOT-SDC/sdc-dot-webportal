@@ -17,12 +17,11 @@ At this point, you should verify it is stable in a distinct DNS.
 
 Now that the cutover is about to occur, you will need to update configurations to use the preexisting DNS. This means that the standalone DNS will likely become unstable, but that's OK.
 
-1. Modify the `environment.dev-private.ts` file to use the preexisting DNS _(e.g. `dev-portal.securedatacommons.com`)_
+1. Modify the `environment.dev-private.ts` file to use the preexisting DNS _(e.g. `dev-portal.securedatacommons.com`)_ and re-deploy it to S3.
 1. Add a new certificate into Sophos for the existing DNS (if one does not already exist)
 1. Add a new `Virtual webserver` into Sophos. It can reuse the existing `Real webserver` that was made for the proxy.
-
-**One-Time change**
-1. For the initial cutover, you must modify the nginx proxy to skip caching for ALL resources or you may not get the correct configuration values. Change the following line to `expires 0;`: https://github.com/usdot-jpo-sdc-projects/sdc-dot-web-proxy/blob/30e7e99431abb6dc5b2b5a81885c3ed9cce066e5/terraform/nginx/default.nginx.conf#L13 - you can either do this manually on the live instances, or run a `terraform apply` and replace the proxy instance.
+1. **For the initial cutover,** you must modify the nginx proxy to skip caching for ALL resources or you may not get the correct configuration values. Change the following line to `expires 0;`: https://github.com/usdot-jpo-sdc-projects/sdc-dot-web-proxy/blob/30e7e99431abb6dc5b2b5a81885c3ed9cce066e5/terraform/nginx/default.nginx.conf#L13 - you can either do this manually on the live instances, or run a `terraform apply` and replace the proxy instance.
+1. Modify the Route 53 record to point to the nginx load balancer instead of Cloudfront
 
 ## Note: Existing bucket caching
 
@@ -42,7 +41,10 @@ _**Footnote:** You can also terminate the live EC2 instances so they get refresh
 
 Take a moment to verify everything is stable before doing cleanup.
 
-## Clean up
+## Clean up - After 1 day?
+
+Due to the way caching is set up, unless we had hashes into our relative CSS/JS links, I think we will need to wait 24 hours before we can safely re-enable caching.
 
 1. Reset nginx caching back to `expires 86400;` manually or with terraform
 1. Delete the private bucket
+1. I believe we can delete `webportal-hsts` as it's handled by nginx now
