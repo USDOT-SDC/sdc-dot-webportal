@@ -42,6 +42,19 @@ _**Footnote:** You can also terminate the live EC2 instances so they get refresh
 
 Take a moment to verify everything is stable before doing cleanup.
 
+### Verification scenarios
+
+1. User not logged in - No impact. They will log in as normal and receive traffix via proxy.
+1. User using workstation - No impact. This uses a distinct DNS.
+
+#### User actively logged in
+
+There are a few scenarios for an actively logged in user
+
+1. No hard refresh - site will continue to function as usual until a hard refresh occurs
+1. Hard refresh - user will likely require a new session and be logged out
+1. Bucket cutover - This should behave the same as "no hard refresh", but it _very unlikely_ as we won't swap buckets until the private variant has been stable, and the user would have needed to have an active session for multiple days.
+
 ## Clean up and soft shutdown - After a few days or so?
 
 1. Disable cloudfront & API Gateways
