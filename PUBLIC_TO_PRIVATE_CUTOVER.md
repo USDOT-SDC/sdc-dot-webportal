@@ -25,6 +25,8 @@ Now that the cutover is about to occur, you will need to update configurations t
 
 ## Note: Existing bucket caching
 
+**The current assets in dev do not cache bust** - I've added cache busting into the dev config to more accurately simulate prod.
+
 It should be fine to let the existing bucket cache until we replace its contents. It's possible that some clients would still be hitting cloudfront briefly until the DNS propagates, but once it does the nginx configuration will evict that cache. We will also be replacing the bucket contents to remove the metadata directive, which will also prevent any unusual caching.
 
 ## Move into the existing bucket

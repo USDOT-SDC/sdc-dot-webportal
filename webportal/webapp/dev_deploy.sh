@@ -2,7 +2,7 @@
 
 echo "***"
 echo "Building assets..."
-ng build --aot=true --configuration=dev-private
+ng build --configuration=dev-private
 
 
 # Use distinct dev-private bucket so we can modify URLs, etc. per the environment
