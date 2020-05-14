@@ -142,7 +142,7 @@ export class CognitoService {
             // If no token is available, clear localStorage and attempt to get a new session
             // Generally, this appears to result in a logout, which seems OK
             localStorage.clear();
-            var userAuth = new CognitoAuth(CognitoService._AUTH_DATA);
+            var userAuth = new CognitoAuth(this.authData());
             userAuth.userhandler = {
                 onSuccess: function(result) {
                 },
