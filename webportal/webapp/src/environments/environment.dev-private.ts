@@ -12,4 +12,5 @@ export const environment = {
   ACCOUNT_LINK_URL: 'https://dev-portal.securedatacommons.com/account-link-dev',
   LINK_ACCOUNT_PATH: 'dev-link-account-private',
   ACCOUNT_LINKED_PATH: 'dev-account-linked-private',
+  RESET_TEMPORARY_PASSWORD_PATH: 'dev-reset-temporary-password-private',
 };
