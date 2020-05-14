@@ -15,7 +15,6 @@ matrix:
         - TEST_DIR=webportal/webapp/
       script:
         - cd $TEST_DIR && npm install && npm run test-headless
-        - cd ../../ && sonar-scanner -X -D sonar.login=$SONAR_TOKEN
     - langauge: python
       python: 3.6
       branches:
