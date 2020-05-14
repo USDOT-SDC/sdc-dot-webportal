@@ -133,20 +133,18 @@ export class CognitoService {
                 idToken = session.getIdToken().getJwtToken()
             });
         } else {
-            console.log("NO TOKEN - Forcing logout.");
-            // this seems to work, but during a hard-refresh it causes a log out, so that may be preferable.
-            // localStorage.clear();
-            // var userAuth = new CognitoAuth(CognitoService._AUTH_DATA);
-            // userAuth.userhandler = {
-            //     onSuccess: function(result) {
-            //     },
-            //     onFailure: function(err) {
-            //     }
-            // };
-            // userAuth.getSession();
-
-            // try forcing a logout?
-            this.logout();
+            console.log("NO TOKEN - Retrieving new session.");
+            // If no token is available, clear localStorage and attempt to get a new session
+            // Generally, this appears to result in a logout, which seems OK
+            localStorage.clear();
+            var userAuth = new CognitoAuth(CognitoService._AUTH_DATA);
+            userAuth.userhandler = {
+                onSuccess: function(result) {
+                },
+                onFailure: function(err) {
+                }
+            };
+            userAuth.getSession();
         }
         return idToken
     }
