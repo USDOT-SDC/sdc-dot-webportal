@@ -138,7 +138,18 @@ export class CognitoService {
                 idToken = session.getIdToken().getJwtToken()
             });
         } else {
-            console.log("NO TOKEN")
+            console.log("NO TOKEN - Retrieving new session.");
+            // If no token is available, clear localStorage and attempt to get a new session
+            // Generally, this appears to result in a logout, which seems OK
+            localStorage.clear();
+            var userAuth = new CognitoAuth(this.authData());
+            userAuth.userhandler = {
+                onSuccess: function(result) {
+                },
+                onFailure: function(err) {
+                }
+            };
+            userAuth.getSession();
         }
         return idToken
     }

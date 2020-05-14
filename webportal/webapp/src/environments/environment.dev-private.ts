@@ -1,15 +1,16 @@
 export const environment = {
   production: false,
-  STREAMING_URL: 'https://dev-proxy-portal.securedatacommons.com/guacamole/?authToken=',
+  STREAMING_URL: 'https://dev-portal.securedatacommons.com/guacamole/?authToken=',
   REGION: 'us-east-1',
   USER_POOL_ID: 'us-east-1_Y5JI7ysvY',
   CLIENT_ID: '22gr1lfintehcaac2cdmmsur52',
   IDENTITY_PROVIDER: 'dev-dot-ad',
   APP_DOMAIN: 'dev-sdc-dot-webportal',
-  REDIRECT_URL: 'https://dev-proxy-portal.securedatacommons.com/index.html', //dev environment
-  API_ENDPOINT: 'https://dev-proxy-portal.securedatacommons.com/webportal-api/',
+  REDIRECT_URL: 'https://dev-portal.securedatacommons.com/index.html',
+  API_ENDPOINT: 'https://dev-portal.securedatacommons.com/webportal-api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3ikuiqen3fdfl5brs5uk49cvsu',
-  ACCOUNT_LINK_URL: 'https://dev-proxy-portal.securedatacommons.com/account-link-dev',
+  ACCOUNT_LINK_URL: 'https://dev-portal.securedatacommons.com/account-link-dev',
   LINK_ACCOUNT_PATH: 'dev-link-account-private',
   ACCOUNT_LINKED_PATH: 'dev-account-linked-private',
+  RESET_TEMPORARY_PASSWORD_PATH: 'dev-reset-temporary-password-private',
 };
