@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RoutingModule } from './app.routes';
 import { HttpModule } from '@angular/http';
@@ -12,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
+import { WindowToken, windowProvider } from '../factories/window.factory';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HomeComponent } from './main/home/home.component';
@@ -67,6 +69,7 @@ import { LoaderInterceptor } from './account/loginsync/services/loader.intercept
   ],
   imports: [
     BrowserModule,
+    RouterModule.forRoot([]),
     RoutingModule,
     FormsModule,
     HttpModule,
@@ -101,15 +104,19 @@ import { LoaderInterceptor } from './account/loginsync/services/loader.intercept
     MatNativeDateModule,
     MarkdownModule.forRoot(),
     ToastyModule.forRoot(),
+    //DataTableModule
   ],
-  exports: [BrowserModule, ToastyModule],
+  //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
+  exports: [BrowserModule, ToastyModule, RouterModule ],
   providers: [
+    //{provide: APP_BASE_HREF, useValue: '/'},
     CognitoService,
     ApiGatewayService,
     LoginSyncService,
     LoginSyncGuard,
     LoaderService,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    { provide: WindowToken, useFactory: windowProvider },
     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
    // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
   ],

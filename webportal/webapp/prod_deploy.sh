@@ -1,5 +1,5 @@
 #/bin/bash
-ng build --prod --aot
+ng build --aot=true --prod=true
 #Copy everything over to S3 bucket
 aws s3 cp --profile sdc ./dist s3://prod-sdc-webportal-hosting --recursive --metadata-directive REPLACE --cache-control max-age=86400 --acl public-read
 #Bust open the cache
