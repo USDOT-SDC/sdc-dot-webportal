@@ -10,9 +10,13 @@ export const environment = {
   REDIRECT_URL: 'https://portal.securedatacommons.com/index.html',
   API_ENDPOINT: 'https://bzzlrrsxa4.execute-api.us-east-1.amazonaws.com/api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3mlku34f58oeloqqc3hpiko6l3',
+<<<<<<< HEAD
   ACCOUNT_LINK_URL: 'https://2l418womp5.execute-api.us-east-1.amazonaws.com/prod',
   LINK_ACCOUNT_PATH: 'prod-link-account',
   ACCOUNT_LINKED_PATH: 'prod-account-linked',
   RESET_TEMPORARY_PASSWORD_PATH: 'prod-reset-temporary-password',
+=======
+  LOGIN_GOV_ACCOUNT_LINK_URL: 'https://2l418womp5.execute-api.us-east-1.amazonaws.com',
+>>>>>>> 7102614d7c0fe7af6c8a886aeaf3a257c5df8f8c
   ENVIRONMENT: 'prod',
 };

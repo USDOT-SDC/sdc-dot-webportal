@@ -154,6 +154,7 @@ export class CognitoService {
         return idToken
     }
 
+<<<<<<< HEAD
     buildDoTADRedirectUrl(): string {
         return this.buildBaseRedirectUrl() + `&client_id=${environment.CLIENT_ID}`;
     }
@@ -172,5 +173,16 @@ export class CognitoService {
         return `${this.window.location.origin}/index.html`;
     }
 
+=======
+    buildLoginGovRedirectUrl(): string {
+        return this.buildBaseRedirectUrl() + `&client_id=${environment.LOGIN_GOV_COGNITO_APP_CLIENT_ID}`
+    }
+
+    buildBaseRedirectUrl(): string {
+        return `https://${environment.APP_DOMAIN}.auth.${environment.REGION}` +
+               `.amazoncognito.com/oauth2/authorize?redirect_uri=${environment.REDIRECT_URL}` +
+               `&response_type=token`;
+    }
+>>>>>>> 7102614d7c0fe7af6c8a886aeaf3a257c5df8f8c
     // TODO: Add refresh token logic
 }
