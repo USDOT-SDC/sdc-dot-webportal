@@ -14,7 +14,7 @@ export const environment = {
   REDIRECT_URL: 'https://dev-portal.securedatacommons.com/index.html', //dev environment
   //REDIRECT_URL: 'http://localhost:4200/index.html', // local development
   API_ENDPOINT: 'https://u2zksemc1h.execute-api.us-east-1.amazonaws.com/api/',
-  LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3ikuiqen3fdfl5brs5uk49cvsu',
+  LOGIN_GOV_COGNITO_APP_CLIENT_ID: '5d0d3k4la9lfdu4l0ofhd83u1d',
   LOGIN_GOV_ACCOUNT_LINK_URL: 'https://dhclxz0yoa.execute-api.us-east-1.amazonaws.com',
   ACCOUNT_LINK_URL: 'https://dhclxz0yoa.execute-api.us-east-1.amazonaws.com/dev',
   LINK_ACCOUNT_PATH: 'dev-link-account',
