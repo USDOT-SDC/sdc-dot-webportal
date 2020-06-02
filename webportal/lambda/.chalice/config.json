@@ -103,7 +103,9 @@
       }
     },
     "production-private": {
-      "api_gateway_stage": "api",
+      "api_gateway_endpoint_type": "PRIVATE",
+      "api_gateway_endpoint_vpce": "vpce-0052333c172f0faa2",
+      "api_gateway_stage": "webportal-api",
       "tags": {
         "Environment": "prod",
         "Project": "SDC-Platform",
@@ -113,8 +115,8 @@
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "prod-AutoExportUsersTable",
-        "RESTAPIID": "TODO",
-        "AUTHORIZERID": "TODO",
+        "RESTAPIID": "0dfuembq49",
+        "AUTHORIZERID": "9cf7hf",
         "TABLENAME_TRUSTED_USERS": "production-TrustedUsersTable",
         "TABLENAME_EXPORT_FILE_REQUEST": "production-RequestExportTable",
         "TABLENAME_MANAGE_USER": "production-ManageUserWorkstationTable",
