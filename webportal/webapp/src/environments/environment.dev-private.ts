@@ -8,7 +8,7 @@ export const environment = {
   APP_DOMAIN: 'dev-sdc-dot-webportal',
   REDIRECT_URL: 'https://dev-portal.securedatacommons.com/index.html',
   API_ENDPOINT: 'https://dev-portal.securedatacommons.com/webportal-api/',
-  LOGIN_GOV_COGNITO_APP_CLIENT_ID: '5d0d3k4la9lfdu4l0ofhd83u1d',
+  LOGIN_GOV_COGNITO_APP_CLIENT_ID: '38iih2917o8s5rl9e8du6b8iqp',
   ACCOUNT_LINK_URL: 'https://dev-portal.securedatacommons.com/account-link-dev',
   LINK_ACCOUNT_PATH: 'dev-link-account-private',
   ACCOUNT_LINKED_PATH: 'dev-account-linked-private',
