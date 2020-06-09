@@ -14,6 +14,10 @@ export const environment = {
   REDIRECT_URL: 'https://test-portal.securedatacommons.com/index.html',
   API_ENDPOINT: 'https://z2jk3bjo2m.execute-api.us-east-1.amazonaws.com/api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3fhjldmdh5rsjmck509u507qlu',
+  ACCOUNT_LINK_URL: 'https://xf6y7x17bg.execute-api.us-east-1.amazonaws.com/test',
+  LINK_ACCOUNT_PATH: 'test-link-account',
+  ACCOUNT_LINKED_PATH: 'test-account-linked',
+  RESET_TEMPORARY_PASSWORD_PATH: 'test-reset-temporary-password',
   LOGIN_GOV_ACCOUNT_LINK_URL: 'https://xf6y7x17bg.execute-api.us-east-1.amazonaws.com',
   ENVIRONMENT: 'test',
 };

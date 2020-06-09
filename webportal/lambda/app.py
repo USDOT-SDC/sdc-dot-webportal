@@ -1550,3 +1550,8 @@ def get_instances_prices(cpu, memory, os):
   
     return instance_types
   
+@app.route('/health')
+def get_health():
+    return Response(body=json.dumps({"isHealthy": True, "source": "webportal-api"}),
+                    status_code=200,
+                    headers={'Content-Type': 'application/json'})

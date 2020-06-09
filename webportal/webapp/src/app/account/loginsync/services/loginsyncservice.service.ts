@@ -8,8 +8,9 @@ import { CognitoService } from '../../../../services/cognito.service';
 @Injectable()
 export class LoginSyncService {
   httpOptions = {};
-  linkAccountUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${environment.ENVIRONMENT}/${environment.ENVIRONMENT}-link-account`;
-  accountLinkedUrl = `${environment.LOGIN_GOV_ACCOUNT_LINK_URL}/${environment.ENVIRONMENT}/${environment.ENVIRONMENT}-account-linked`;
+  linkAccountUrl = `${environment.ACCOUNT_LINK_URL}/${environment.LINK_ACCOUNT_PATH}`;
+  accountLinkedUrl = `${environment.ACCOUNT_LINK_URL}/${environment.ACCOUNT_LINKED_PATH}`;
+  resetTemporaryPasswordUrl = `${environment.ACCOUNT_LINK_URL}/${environment.RESET_TEMPORARY_PASSWORD_PATH}`;
 
   constructor(private http: HttpClient, private cognitoService: CognitoService) {
     this.httpOptions = {
@@ -40,12 +41,26 @@ export class LoginSyncService {
       }).catch(this.handleError);
   }
 
+  resetTemporaryPassword(username: string, currentPassword: string, newPassword: string, newPasswordConfirmation: string): Observable<any> {
+    const payload = {
+      'username': username,
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+      'newPasswordConfirmation': newPasswordConfirmation
+    };
+
+    return this.http.post(this.resetTemporaryPasswordUrl, payload, this.httpOptions)
+      .map((response) => {
+        return response;
+      }).catch(this.handleError);
+  }
+
   private handleError(error: HttpErrorResponse) {
     const devErrorMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    const userErrorMsg = (error.error) ? error.error['userErrorMessage'] : 'Sorry, something went wrong. Please try again later';
+    const userErrorMessage = (error.error) ? error.error['userErrorMessage'] : 'Sorry, something went wrong. Please try again later';
 
     console.log(devErrorMsg);
-    return Observable.throw(userErrorMsg);
+    return Observable.throw({ userErrorMessage: userErrorMessage, body: error.error});
   }
 }

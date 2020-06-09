@@ -8,12 +8,10 @@ export const environment = {
   IDENTITY_PROVIDER: 'USDOT-ADFS',
   APP_DOMAIN: 'prod-sdc-dot-webportal',
   REDIRECT_URL: 'https://portal.securedatacommons.com/index.html',
-  API_ENDPOINT: 'https://bzzlrrsxa4.execute-api.us-east-1.amazonaws.com/api/',
+  API_ENDPOINT: 'https://portal.securedatacommons.com/webportal-api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3mlku34f58oeloqqc3hpiko6l3',
-  ACCOUNT_LINK_URL: 'https://2l418womp5.execute-api.us-east-1.amazonaws.com/prod',
-  LINK_ACCOUNT_PATH: 'prod-link-account',
-  ACCOUNT_LINKED_PATH: 'prod-account-linked',
-  RESET_TEMPORARY_PASSWORD_PATH: 'prod-reset-temporary-password',
-  LOGIN_GOV_ACCOUNT_LINK_URL: 'https://2l418womp5.execute-api.us-east-1.amazonaws.com',
-  ENVIRONMENT: 'prod',
+  ACCOUNT_LINK_URL: 'https://portal.securedatacommons.com/account-link-prod',
+  LINK_ACCOUNT_PATH: 'prod-link-account-private',
+  ACCOUNT_LINKED_PATH: 'prod-account-linked-private',
+  RESET_TEMPORARY_PASSWORD_PATH: 'prod-reset-temporary-password-private'
 };

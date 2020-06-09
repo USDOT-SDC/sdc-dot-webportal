@@ -37,14 +37,13 @@ import {RadioButtonModule} from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
-import { AlertComponent } from './account/loginsync/components/alert/alert.component';
+import { AlertComponent } from './account/components/alert/alert.component';
 import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
 import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
-import { LoaderComponent } from './account/loginsync/components/loader/loader.component';
-import { LoaderService } from './account/loginsync/services/loader.service';
-import { LoaderInterceptor } from './account/loginsync/services/loader.interceptor';
-
+import { LoaderComponent } from './account/components/loader/loader.component';
+import { LoaderService } from './account/services/loader.service';
+import { LoaderInterceptor } from './account/services/loader.interceptor';
 
 @NgModule({
   declarations: [
@@ -65,7 +64,7 @@ import { LoaderInterceptor } from './account/loginsync/services/loader.intercept
     LoginSyncComponent,
     AlertComponent,
     TogglePasswordDirective,
-    LoaderComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
