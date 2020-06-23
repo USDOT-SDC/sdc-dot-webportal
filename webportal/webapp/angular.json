@@ -119,7 +119,7 @@
                   "with": "src/environments/environment.ecs-dev.ts"
                 }
               ]
-            }	            }
+            }
           }
         },
         "serve": {
