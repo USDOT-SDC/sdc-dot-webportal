@@ -52,7 +52,7 @@
         "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_jmVDLcCIr"
       }
     },
-    "ecs-dev-private": {
+    "ecs-dev": {
       "api_gateway_endpoint_type": "PRIVATE",
       "api_gateway_endpoint_vpce": "vpce-021b0fcf6c2083fbe",
       "api_gateway_stage": "webportal-api",
@@ -76,7 +76,7 @@
         "TABLENAME_MANAGE_UPTIME": "dev-ScheduleUptimeTable",
         "TABLENAME_MANAGE_UPTIME_INDEX":"dev-scheduleuptime-username-index",
         "COGNITO_USER_POOL":"dev-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_jmVDLcCIr"
+        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_sNIwupW53"
       }
     },
     "test": {
