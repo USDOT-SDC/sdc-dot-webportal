@@ -1,6 +1,7 @@
 import boto3
 import json
 from . import chalice_config_reader
+import os
 
 LOG_FORMAT = "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
 
@@ -49,14 +50,22 @@ def get_log_setting_destination_arn(rest_api_id, stage_name):
 
 
 def get_region():
-    return boto3.Session(profile_name='sdc').region_name
+    return get_session().region_name
 
 
 def api_gateway_client():
-    session = boto3.Session(profile_name='sdc')
+    session = get_session()
     return session.client('apigateway')
 
 
 def get_account_number():
-    session = boto3.Session(profile_name='sdc')
+    session = get_session()
     return session.client('sts').get_caller_identity().get('Account')
+
+
+def get_session():
+    on_dot_rhel = os.path.isfile('/proc/sys/crypto/fips_enabled')
+    if on_dot_rhel:
+        return boto3.Session()
+    else:
+        return boto3.Session(profile_name='sdc')
