@@ -2,10 +2,9 @@
 
 echo "***"
 echo "Building assets..."
-ng build --configuration=dev-private
+ng build --configuration=ecs-dev
 
 
-# Use distinct dev-private bucket so we can modify URLs, etc. per the environment
 # Copy everything over to S3 bucket
 echo "Copying to s3..."
 aws s3 cp ./dist s3://dev-webportal-hosting-505135622787 --recursive --only-show-errors
