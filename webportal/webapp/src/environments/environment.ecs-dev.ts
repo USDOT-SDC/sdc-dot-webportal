@@ -8,7 +8,7 @@ export const environment = {
     APP_DOMAIN: 'ecs-dev-sdc-dot-webportal',
     REDIRECT_URL: 'https://internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com/index.html',
     API_ENDPOINT: 'https://internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com/webportal-api/',
-    LOGIN_GOV_COGNITO_APP_CLIENT_ID: 'LOGIN_GOV_id_here',
+    LOGIN_GOV_COGNITO_APP_CLIENT_ID: '122lj1qh9e5qam3u29fpdt9ati',
     ACCOUNT_LINK_URL: 'https://internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com/account-link-dev',
     LINK_ACCOUNT_PATH: 'dev-link-account-private',
     ACCOUNT_LINKED_PATH: 'dev-account-linked-private',
