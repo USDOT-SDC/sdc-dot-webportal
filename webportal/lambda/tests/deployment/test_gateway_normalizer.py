@@ -113,8 +113,3 @@ def test_get_session_with_fips_enabled_returns_session_with_default_profile(part
     result = partially_mocked_gateway_normalizer.get_session('tests/fixtures/some_config.json')
 
     assert result.profile_name == 'default'
-
-def test_get_session_without_fips_enabled_returns_session_with_sdc_profile(partially_mocked_gateway_normalizer):
-    result = partially_mocked_gateway_normalizer.get_session('tests/fixtures/i_do_not_exist.txt')
-
-    assert result.profile_name == 'sdc'
