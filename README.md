@@ -398,3 +398,9 @@ Contact Name: support@securedatacommons.com
 
 ---
 [Back to top](#toc)
+
+
+# NOTES
+
+401s:
+- The chalice config.json may have a misconfigured ARN or cognito pool ID or authorizer
