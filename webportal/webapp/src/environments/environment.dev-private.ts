@@ -6,7 +6,7 @@ export const environment = {
   CLIENT_ID: '53smb4abi8ovad66j1r4o5u2pd',
   IDENTITY_PROVIDER: 'dev-dot-ad',
   APP_DOMAIN: 'dev-sdc-dot-webportal',
-  API_ENDPOINT: '/webportal-api/',
+  API_ENDPOINT: 'webportal-api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '1nej89a7dlvd3f0dt5ocsmrgli',
   ACCOUNT_LINK_URL: 'account-link-dev',
   LINK_ACCOUNT_PATH: 'dev-link-account-private',

@@ -12,7 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class ApiGatewayService {
 
     protected options: RequestOptions;
-    private static _API_ENDPOINT = window.location.origin + environment.API_ENDPOINT;
+    private static _API_ENDPOINT = `${window.location.origin}/${environment.API_ENDPOINT}`;
 
     apiResponse: any;
     extractData: any;
