@@ -8,7 +8,7 @@ import { CognitoService } from '../../../../services/cognito.service';
 @Injectable()
 export class LoginSyncService {
   httpOptions = {};
-  linkAccountUrl = `${environment.ACCOUNT_LINK_URL}/${environment.LINK_ACCOUNT_PATH}`;
+  linkAccountUrl = `${this.window.location.origin}/${environment.LINK_ACCOUNT_PATH}`;
   accountLinkedUrl = `${environment.ACCOUNT_LINK_URL}/${environment.ACCOUNT_LINKED_PATH}`;
   resetTemporaryPasswordUrl = `${environment.ACCOUNT_LINK_URL}/${environment.RESET_TEMPORARY_PASSWORD_PATH}`;
 

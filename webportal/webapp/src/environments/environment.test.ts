@@ -11,7 +11,6 @@ export const environment = {
   CLIENT_ID: '341vdjpnjo7jel2tda2prtvvgf',
   IDENTITY_PROVIDER: 'USDOT-ADFS',
   APP_DOMAIN: 'test-sdc-dot-webportal',
-  REDIRECT_URL: 'https://test-portal.securedatacommons.com/index.html',
   API_ENDPOINT: 'https://z2jk3bjo2m.execute-api.us-east-1.amazonaws.com/api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '3fhjldmdh5rsjmck509u507qlu',
   ACCOUNT_LINK_URL: 'https://xf6y7x17bg.execute-api.us-east-1.amazonaws.com/test',

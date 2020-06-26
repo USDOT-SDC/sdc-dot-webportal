@@ -7,7 +7,6 @@ export const environment = {
   CLIENT_ID: 'gt6jl7jeqogmelu5tm7ce1vnb',
   IDENTITY_PROVIDER: 'USDOT-ADFS',
   APP_DOMAIN: 'prod-sdc-dot-webportal',
-  REDIRECT_URL: 'https://portal.securedatacommons.com/index.html',
   API_ENDPOINT: 'https://portal.securedatacommons.com/webportal-api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '5s27prc70o5sj84u2ksq7n8opo',
   ACCOUNT_LINK_URL: 'https://portal.securedatacommons.com/account-link-prod',

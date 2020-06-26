@@ -6,7 +6,6 @@ export const environment = {
   CLIENT_ID: '341vdjpnjo7jel2tda2prtvvgf',
   IDENTITY_PROVIDER: 'dev-dot-ad',
   APP_DOMAIN: 'test-sdc-dot-webportal',
-  REDIRECT_URL: 'https://test-portal.securedatacommons.com/index.html',
   API_ENDPOINT: 'https://test-portal.securedatacommons.com/webportal-api/',
   LOGIN_GOV_COGNITO_APP_CLIENT_ID: '62qhkiigk4db7k4or5d58l8c7k',
   ACCOUNT_LINK_URL: 'https://test-portal.securedatacommons.com/account-link-test',
