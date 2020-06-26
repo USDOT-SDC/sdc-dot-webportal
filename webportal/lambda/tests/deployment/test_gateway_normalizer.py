@@ -107,3 +107,14 @@ def test_normalize_sets_vpce(mock_chalice_config_reader, partially_mocked_gatewa
         api_gateway_stubber.assert_no_pending_responses()
         chalice_config_reader.find_deployed_config.assert_called_with('rest_api', environment)
         chalice_config_reader.chalice_config.assert_called_with()
+
+
+def test_get_session_with_fips_enabled_returns_session_with_default_profile(partially_mocked_gateway_normalizer):
+    result = partially_mocked_gateway_normalizer.get_session('tests/fixtures/some_config.json')
+
+    assert result.profile_name == 'default'
+
+def test_get_session_without_fips_enabled_returns_session_with_sdc_profile(partially_mocked_gateway_normalizer):
+    result = partially_mocked_gateway_normalizer.get_session('tests/fixtures/i_do_not_exist.txt')
+
+    assert result.profile_name == 'sdc'

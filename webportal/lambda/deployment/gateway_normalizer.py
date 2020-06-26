@@ -63,8 +63,8 @@ def get_account_number():
     return session.client('sts').get_caller_identity().get('Account')
 
 
-def get_session():
-    on_dot_rhel = os.path.isfile('/proc/sys/crypto/fips_enabled')
+def get_session(file_name = '/proc/sys/crypto/fips_enabled'):
+    on_dot_rhel = os.path.isfile(file_name)
     if on_dot_rhel:
         return boto3.Session()
     else:
