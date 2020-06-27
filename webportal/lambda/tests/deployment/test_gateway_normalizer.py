@@ -118,9 +118,9 @@ def test_get_session_with_fips_enabled_returns_session_with_default_profile(part
 
 def test_get_region_returns_region():
     home = os.path.expanduser("~")
-    os.makedirs(home + '/.aws', exist_ok=True)
+    os.makedirs(f'{home}/.aws', exist_ok=True)
     con_parser = configparser.RawConfigParser()
-    config_file = home + '/config'
+    config_file = f'{home}/.aws/config'
     con_parser.read(config_file)
     if not con_parser.has_section('profile sdc'):
         con_parser.add_section('profile sdc')
@@ -128,7 +128,5 @@ def test_get_region_returns_region():
     con_parser.set('profile sdc', 'region', 'us-east-1')
     with open(config_file, 'w+') as configfile:
         con_parser.write(configfile)
-    f = open("~/.aws/config", "r")
-    print(f.read())
 
     assert 'us-east-1' == gateway_normalizer.get_region()
