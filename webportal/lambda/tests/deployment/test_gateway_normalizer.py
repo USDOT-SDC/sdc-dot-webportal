@@ -128,6 +128,7 @@ def test_get_region_returns_region():
     con_parser.set('profile sdc', 'region', 'us-east-1')
     with open(config_file, 'w+') as configfile:
         con_parser.write(configfile)
-
+    f = open("~/.aws/config", "r")
+    print(f.read())
 
     assert 'us-east-1' == gateway_normalizer.get_region()
