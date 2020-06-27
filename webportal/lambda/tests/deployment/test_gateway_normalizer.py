@@ -3,6 +3,7 @@ import os
 import boto3
 import pytest
 from botocore.stub import Stubber
+import configparser
 
 
 TEST_ENVIRONMENT = 'some_environment'
@@ -113,3 +114,20 @@ def test_get_session_with_fips_enabled_returns_session_with_default_profile(part
     result = partially_mocked_gateway_normalizer.get_session('tests/fixtures/some_config.json')
 
     assert result.profile_name == 'default'
+
+
+def test_get_region_returns_region():
+    home = os.path.expanduser("~")
+    os.makedirs(home + '/.aws', exist_ok=True)
+    con_parser = configparser.RawConfigParser()
+    config_file = home + '/config'
+    con_parser.read(config_file)
+    if not con_parser.has_section('profile sdc'):
+        con_parser.add_section('profile sdc')
+    con_parser.set('profile sdc', 'output', 'json')
+    con_parser.set('profile sdc', 'region', 'us-east-1')
+    with open(config_file, 'w+') as configfile:
+        con_parser.write(configfile)
+
+
+    assert 'us-east-1' == gateway_normalizer.get_region()
