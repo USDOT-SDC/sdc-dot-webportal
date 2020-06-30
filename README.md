@@ -46,6 +46,10 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**July 7, 2020. SDC sdc-dot-webportal Release 2.6**
+### What's New in Release 2.6
+* Redirect traffic from securedatacommons.com to sdc.dot.gov
+
 **April 7, 2020. SDC sdc-dot-webportal Release 2.5**
 ### What's New in Release 2.5
 * Add Auto-Export request option for users with trusted status in the export request pop-up window
