@@ -367,9 +367,9 @@ For any queries you can reach to support@securedatacommons.com
 ## XII. Known Bugs
 
 If you are seeing 401s in the front-end, some of the possible issues are:
-- The chalice config.json may have a misconfigured Rest API ID or authorizer ID (check the API Gateway for correct values): https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/2734ce28a165a10078d510ac58e17b2e65cba958/webportal/lambda/.chalice/config.json#L14-L15
-- The chalice confi.json may have a misconfigured Cognito pool or IDP: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/2734ce28a165a10078d510ac58e17b2e65cba958/webportal/lambda/.chalice/config.json#L24-L25
-- The Angular environment.ts may have an incorrect value for Cognito User Pool or client IDs:
+- The chalice `config.json` may have a misconfigured Rest API ID or authorizer ID (check the API Gateway for correct values): https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/2734ce28a165a10078d510ac58e17b2e65cba958/webportal/lambda/.chalice/config.json#L14-L15
+- The chalice `config.json` may have a misconfigured Cognito pool or IDP: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/2734ce28a165a10078d510ac58e17b2e65cba958/webportal/lambda/.chalice/config.json#L24-L25
+- The Angular `environment.ts` may have an incorrect value for Cognito User Pool or client IDs:
   - User pool, AD Client ID, IDP name, domain: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/fe29d326ee83434ff0fc5f423c96b02062d193ef/webportal/webapp/src/environments/environment.prod-private.ts#L6-L9
   - Login.gov client ID: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/fe29d326ee83434ff0fc5f423c96b02062d193ef/webportal/webapp/src/environments/environment.prod-private.ts#L11
 
