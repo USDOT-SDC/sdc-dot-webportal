@@ -125,7 +125,7 @@ export class WorkstationComponent implements OnInit {
         );
       } else {
         const authToken = this.cognitoService.getIdToken();
-        this.streamingUrl = WorkstationComponent.STREAMING_URL + authToken;
+        this.streamingUrl = `${window.location.origin}/guacamole/?authToken=` + authToken;
         window.open(this.streamingUrl);
       }
     }
