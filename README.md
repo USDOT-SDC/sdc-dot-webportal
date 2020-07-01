@@ -304,7 +304,6 @@ Cognito configuration
     - APP_DOMAIN - App domain name
     - REDIRECT_URL - Re-direct URL for the user pool
     - API_ENDPOINT - URL for the API endpoint
-    - STREAMING_URL - Streaming URL for the webportal
 
 ## Deployment steps for the application UI
 
