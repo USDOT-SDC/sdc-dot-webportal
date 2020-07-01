@@ -371,6 +371,7 @@ If you are seeing 401s in the front-end, some of the possible issues are:
 - The Angular `environment.ts` may have an incorrect value for Cognito User Pool or client IDs:
   - User pool, AD Client ID, IDP name, domain: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/fe29d326ee83434ff0fc5f423c96b02062d193ef/webportal/webapp/src/environments/environment.prod-private.ts#L6-L9
   - Login.gov client ID: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/fe29d326ee83434ff0fc5f423c96b02062d193ef/webportal/webapp/src/environments/environment.prod-private.ts#L11
+- The app client may be misconfigured if you are getting a 401 with a `Error verifying JWT: Invalid audience` - double check that the correct app client is being used in the configuration files and that the lambdas in `sdc-dot-cognito-account-sync` are using the correct app client.
 
 
 <!---                                    -->
