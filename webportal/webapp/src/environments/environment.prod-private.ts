@@ -1,4 +1,5 @@
 // Sample prod values below:
+// TODO: Use dot-ad provider
 export const environment = {
   production: true,
   STREAMING_URL: 'https://portal.securedatacommons.com/guacamole/?authToken=',
