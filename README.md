@@ -48,7 +48,9 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 ## I. Release Notes
 **July 7, 2020. SDC sdc-dot-webportal Release 2.6**
 ### What's New in Release 2.6
-* Redirect traffic from securedatacommons.com to sdc.dot.gov
+* Change URL for the Secure Data Commons Webportal from portal.securedatacommons.com to portal.sdc.dot.gov
+* Create a redirect for traffic from securedatacommons.com to sdc.dot.gov
+* Enable PIV log-in for DOT users
 
 **April 7, 2020. SDC sdc-dot-webportal Release 2.5**
 ### What's New in Release 2.5
