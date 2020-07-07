@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   REGION: 'us-east-1',
   USER_POOL_ID: 'us-east-1_89P1HiXoV',
-  CLIENT_ID: '341vdjpnjo7jel2tda2prtvvgf',
+  CLIENT_ID: '6vagoqg82ol1lao3l63mlk0vag',
   IDENTITY_PROVIDER: 'dev-dot-ad',
   APP_DOMAIN: 'test-sdc-dot-webportal',
   API_ENDPOINT: 'webportal-api/',
