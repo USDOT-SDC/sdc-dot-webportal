@@ -34,7 +34,7 @@
       "Condition": {
         "ArnLike": {
           "apigateway:CognitoUserPoolProviderArn": [
-            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_sNIwupW53"
+            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_RqSIpOZN3"
           ]
         }
       }
@@ -48,7 +48,7 @@
       "Condition": {
         "ArnLike": {
           "apigateway:CognitoUserPoolProviderArn": [
-            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_sNIwupW53"
+            "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_RqSIpOZN3"
           ]
         }
       }

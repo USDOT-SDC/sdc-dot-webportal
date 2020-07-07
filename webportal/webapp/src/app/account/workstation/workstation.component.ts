@@ -25,9 +25,6 @@ export class WorkstationComponent implements OnInit {
     allow_resize: Bool;
     transformedConfigurations = [];
 
-    // tslint:disable-next-line:member-ordering
-    private static STREAMING_URL= environment.STREAMING_URL; // Apache Guacamole Streaming Url
-
     constructor(
         private gatewayService: ApiGatewayService,
         private cognitoService: CognitoService,
@@ -125,7 +122,7 @@ export class WorkstationComponent implements OnInit {
         );
       } else {
         const authToken = this.cognitoService.getIdToken();
-        this.streamingUrl = WorkstationComponent.STREAMING_URL + authToken;
+        this.streamingUrl = `${window.location.origin}/guacamole/?authToken=` + authToken;
         window.open(this.streamingUrl);
       }
     }
