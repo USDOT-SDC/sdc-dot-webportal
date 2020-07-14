@@ -14,6 +14,10 @@ I am proposing we add a third step:
 
 Terraform is already being used by a lot of our other repos, and gives us a lot more flexibility than chalice. The unfortunate side effect is that a "full deploy" ultimately consists of 3 steps, but we could add a `deploy_all.sh` that would run all 3 of these commands for convenience.
 
+# All-Master
+
+Prior to branching (see next section) it is often possible to replicate the current infrastructure in our terraform recipes and import the relevant resources. This should be attempted first. If there are substantial difficulties, then use the branching approach in which we have some bits of infrastructure that only apply in ECS.
+
 # Branching
 
 I recommend we have a long-lived `ecs-migration` branch that is spawned **DIRECTLY FROM MASTER**. 
