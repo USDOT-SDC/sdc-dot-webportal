@@ -43,3 +43,37 @@ resource "aws_dynamodb_table" "available_dataset" {
 
   tags = local.global_tags
 }
+
+resource "aws_dynamodb_table" "auto_export_users_table" {
+  name           = "${var.deploy_env}-AutoExportUsersTable"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+  hash_key       = "UserID"
+  range_key      = "Dataset-DataProvider-Datatype"
+
+  attribute {
+    name = "UserID"
+    type = "S"
+  }
+  attribute {
+    name = "Dataset-DataProvider-Datatype"
+    type = "S"
+  }
+  attribute {
+    name = "ReqReceivedTime"
+    type = "N"
+  }
+
+  global_secondary_index {
+    hash_key           = "Dataset-DataProvider-Datatype"
+    name               = "DataInfo-ReqReceivedtimestamp-index"
+    non_key_attributes = []
+    projection_type    = "ALL"
+    range_key          = "ReqReceivedTime"
+    read_capacity      = 5
+    write_capacity     = 5
+  }
+
+  tags = local.global_tags
+}
