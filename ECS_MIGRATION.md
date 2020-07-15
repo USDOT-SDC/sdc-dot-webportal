@@ -14,9 +14,21 @@ I am proposing we add a third step:
 
 Terraform is already being used by a lot of our other repos, and gives us a lot more flexibility than chalice. The unfortunate side effect is that a "full deploy" ultimately consists of 3 steps, but we could add a `deploy_all.sh` that would run all 3 of these commands for convenience.
 
-# All-Master
+# All-Master / Imports
 
 Prior to branching (see next section) it is often possible to replicate the current infrastructure in our terraform recipes and import the relevant resources. This should be attempted first. If there are substantial difficulties, then use the branching approach in which we have some bits of infrastructure that only apply in ECS.
+
+## Example imports
+
+Here are some example imports you'll need when running in a new environment with preexisting resources:
+
+```
+# s3 bucket
+terraform import -var-file="config/dev.tfvars" aws_s3_bucket.webportal_bucket dev-private-sdc-webportal-hosting
+
+# dynamo table
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.user_stacks_table dev-UserStacksTable
+```
 
 # Branching
 
