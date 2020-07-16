@@ -183,9 +183,7 @@
         "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index",
         "COGNITO_USER_POOL":"prod-sdc-dot-cognito-pool",
         "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_1zLqP2XrI"
-      },
-      "subnet_ids": ["subnet-1d181f40", "subnet-b29f87d6"],
-      "security_group_ids": ["sg-98eae8ee"]
+      }
     }
   },
   "version": "2.0",
