@@ -110,7 +110,7 @@ resource "aws_dynamodb_table" "trusted_users_table" {
 }
 
 resource "aws_dynamodb_table" "request_export_table" {
-  name           = "${var.mismatch_deploy_env}-RequestExportTable"
+  name           = "${local.mismatch_deploy_env}-RequestExportTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -148,7 +148,7 @@ resource "aws_dynamodb_table" "request_export_table" {
 }
 
 resource "aws_dynamodb_table" "manage_user_workstation_table" {
-  name           = "${var.mismatch_deploy_env}-ManageUserWorkstationTable"
+  name           = "${local.mismatch_deploy_env}-ManageUserWorkstationTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -207,7 +207,7 @@ resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
 }
 
 resource "aws_dynamodb_table" "schedule_uptime_table" {
-  name           = "${var.mismatch_deploy_env}-ScheduleUptimeTable"
+  name           = "${local.mismatch_deploy_env}-ScheduleUptimeTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
