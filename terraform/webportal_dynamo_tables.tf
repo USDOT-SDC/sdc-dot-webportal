@@ -4,11 +4,8 @@ locals {
   mismatch_deploy_env = var.deploy_env == "prod" ? "production" : var.deploy_env
 }
 
-#
-# NOTE: Probably not worth doing a module for these as the redundancy is pretty limited
-#
-#
-#
+# NOTE: Probably not worth doing a module for these as the redundancy is pretty limited,
+# and pulling them apart later would be difficult
 resource "aws_dynamodb_table" "user_stacks_table" {
   name           = "${var.deploy_env}-UserStacksTable"
   billing_mode   = "PROVISIONED"
