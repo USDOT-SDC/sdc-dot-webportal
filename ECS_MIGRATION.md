@@ -33,6 +33,7 @@ terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.trusted_users_
 terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.request_export_table dev-RequestExportTable
 terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.manage_user_workstation_table dev-ManageUserWorkstationTable
 terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.manage_diskspace_requests_table dev-ManageDiskspaceRequestsTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.schedule_uptime_table dev-ScheduleUptimeTable
 ```
 
 # Branching

@@ -207,3 +207,32 @@ resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
 
   tags = local.global_tags
 }
+
+resource "aws_dynamodb_table" "schedule_uptime_table" {
+  name           = "${var.deploy_env}-ScheduleUptimeTable"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+  hash_key       = "RequestId"
+  range_key      = "username"
+
+  attribute {
+    name = "RequestId"
+    type = "S"
+  }
+  attribute {
+    name = "username"
+    type = "S"
+  }
+
+  global_secondary_index {
+    hash_key           = "username"
+    name               = "dev-scheduleuptime-username-index"
+    non_key_attributes = []
+    projection_type    = "ALL"
+    read_capacity      = 5
+    write_capacity     = 5
+  }
+
+  tags = local.global_tags
+}
