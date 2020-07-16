@@ -77,3 +77,75 @@ resource "aws_dynamodb_table" "auto_export_users_table" {
 
   tags = local.global_tags
 }
+
+resource "aws_dynamodb_table" "trusted_users_table" {
+  name           = "${var.deploy_env}-TrustedUsersTable"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+  hash_key       = "UserID"
+  range_key      = "Dataset-DataProvider-Datatype"
+
+  attribute {
+    name = "UserID"
+    type = "S"
+  }
+  attribute {
+    name = "Dataset-DataProvider-Datatype"
+    type = "S"
+  }
+  attribute {
+    name = "ReqReceivedTimestamp"
+    type = "N"
+  }
+
+  global_secondary_index {
+    hash_key           = "Dataset-DataProvider-Datatype"
+    name               = "DataInfo-ReqReceivedtimestamp-index"
+    non_key_attributes = []
+    projection_type    = "ALL"
+    range_key          = "ReqReceivedTimestamp"
+    read_capacity      = 5
+    write_capacity     = 5
+  }
+
+  tags = local.global_tags
+}
+
+resource "aws_dynamodb_table" "request_export_table" {
+  name           = "${var.deploy_env}-RequestExportTable"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+  hash_key       = "S3KeyHash"
+  range_key      = "RequestedBy_Epoch"
+
+  attribute {
+    name = "S3KeyHash"
+    type = "S"
+  }
+  attribute {
+    name = "RequestedBy_Epoch"
+    type = "S"
+  }
+  attribute {
+    name = "Dataset-DataProvider-Datatype"
+    type = "S"
+  }
+  attribute {
+    name = "ReqReceivedTimestamp"
+    type = "N"
+  }
+
+  global_secondary_index {
+    hash_key           = "Dataset-DataProvider-Datatype"
+    name               = "DataInfo-ReqReceivedtimestamp-index"
+    non_key_attributes = []
+    projection_type    = "ALL"
+    range_key          = "ReqReceivedTimestamp"
+    read_capacity      = 5
+    write_capacity     = 5
+  }
+
+  tags = local.global_tags
+}

@@ -26,8 +26,11 @@ Here are some example imports you'll need when running in a new environment with
 # s3 bucket
 terraform import -var-file="config/dev.tfvars" aws_s3_bucket.webportal_bucket dev-private-sdc-webportal-hosting
 
-# dynamo table
+# dynamo tables
 terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.user_stacks_table dev-UserStacksTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.auto_export_users_table dev-AutoExportUsersTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.trusted_users_table dev-TrustedUsersTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.request_export_table dev-RequestExportTable
 ```
 
 # Branching
