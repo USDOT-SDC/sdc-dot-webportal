@@ -76,7 +76,7 @@ resource "aws_dynamodb_table" "auto_export_users_table" {
 }
 
 resource "aws_dynamodb_table" "trusted_users_table" {
-  name           = "${var.deploy_env}-TrustedUsersTable"
+  name           = "${local.mismatch_deploy_env}-TrustedUsersTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -110,7 +110,7 @@ resource "aws_dynamodb_table" "trusted_users_table" {
 }
 
 resource "aws_dynamodb_table" "request_export_table" {
-  name           = "${var.deploy_env}-RequestExportTable"
+  name           = "${var.mismatch_deploy_env}-RequestExportTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -148,7 +148,7 @@ resource "aws_dynamodb_table" "request_export_table" {
 }
 
 resource "aws_dynamodb_table" "manage_user_workstation_table" {
-  name           = "${var.deploy_env}-ManageUserWorkstationTable"
+  name           = "${var.mismatch_deploy_env}-ManageUserWorkstationTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -176,6 +176,7 @@ resource "aws_dynamodb_table" "manage_user_workstation_table" {
   tags = local.global_tags
 }
 
+# NOTE: does not exist in prod?
 resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
   name           = "${var.deploy_env}-ManageDiskspaceRequestsTable"
   billing_mode   = "PROVISIONED"
@@ -206,7 +207,7 @@ resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
 }
 
 resource "aws_dynamodb_table" "schedule_uptime_table" {
-  name           = "${var.deploy_env}-ScheduleUptimeTable"
+  name           = "${var.mismatch_deploy_env}-ScheduleUptimeTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
