@@ -3,7 +3,7 @@ export const environment = {
     STREAMING_URL: 'https://internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com/guacamole/?authToken=',
     REGION: 'us-east-1',
     USER_POOL_ID: 'us-east-1_sNIwupW53',
-    CLIENT_ID: 'DOT_AD_id_here',
+    CLIENT_ID: '6s90hhstst6td8sdo1ntl3laet',
     IDENTITY_PROVIDER: 'dev-dot-ad',
     APP_DOMAIN: 'ecs-dev-sdc-dot-webportal',
     REDIRECT_URL: 'https://internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com/index.html',
