@@ -46,3 +46,4 @@ html_coverage_reports/
 
 .idea/
 .vscode/
+.terraform

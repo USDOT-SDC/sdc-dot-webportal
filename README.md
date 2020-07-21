@@ -222,6 +222,25 @@ coverage run -m pytest
 
 The following instructions describe the procedure to build and deploy the webportal.
 
+### Deploying pre-requisite infrastructure
+
+We are using terraform to create some of the base infrastructure for webportal. Here are the steps for creating the infrastructure:
+```sh
+# Initialize the backend
+# If you are switching environments, do NOT overwrite the existing state! (enter "no" when prompted)
+
+# pwd: /terraform
+terraform init -backend-config=config/backend-dev.conf 
+```
+
+Apply the changes:
+```sh
+# pwd: /terraform
+terraform apply -var-file="config/dev.tfvars"
+```
+
+See [ECS_MIGRATION.md](ECS_MIGRATION.md) for specifics on how this applies when moving into ECS.
+
 ### Deploy the Backend -
 
 To deploy run below command at the lambda folder:

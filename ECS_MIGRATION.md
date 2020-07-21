@@ -14,6 +14,28 @@ I am proposing we add a third step:
 
 Terraform is already being used by a lot of our other repos, and gives us a lot more flexibility than chalice. The unfortunate side effect is that a "full deploy" ultimately consists of 3 steps, but we could add a `deploy_all.sh` that would run all 3 of these commands for convenience.
 
+# All-Master / Imports
+
+Prior to branching (see next section) it is often possible to replicate the current infrastructure in our terraform recipes and import the relevant resources. This should be attempted first. If there are substantial difficulties, then use the branching approach in which we have some bits of infrastructure that only apply in ECS.
+
+## Example imports
+
+Here are some example imports you'll need when running in a new environment with preexisting resources:
+
+```
+# s3 bucket
+terraform import -var-file="config/dev.tfvars" aws_s3_bucket.webportal_bucket dev-private-sdc-webportal-hosting
+
+# dynamo tables
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.user_stacks_table dev-UserStacksTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.auto_export_users_table dev-AutoExportUsersTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.trusted_users_table dev-TrustedUsersTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.request_export_table dev-RequestExportTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.manage_user_workstation_table dev-ManageUserWorkstationTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.manage_diskspace_requests_table dev-ManageDiskspaceRequestsTable
+terraform import -var-file="config/dev.tfvars" aws_dynamodb_table.schedule_uptime_table dev-ScheduleUptimeTable
+```
+
 # Branching
 
 I recommend we have a long-lived `ecs-migration` branch that is spawned **DIRECTLY FROM MASTER**. 
