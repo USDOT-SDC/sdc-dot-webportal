@@ -166,7 +166,7 @@ resource "aws_dynamodb_table" "manage_user_workstation_table" {
 
   global_secondary_index {
     hash_key           = "username"
-    name               = "dev-workstation-username-index"
+    name               = "${local.mismatch_deploy_env}-workstation-username-index"
     non_key_attributes = []
     projection_type    = "ALL"
     read_capacity      = 5
@@ -196,7 +196,7 @@ resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
 
   global_secondary_index {
     hash_key           = "username"
-    name               = "dev-diskspace-username-index"
+    name               = "${var.deploy_env}-diskspace-username-index"
     non_key_attributes = []
     projection_type    = "ALL"
     read_capacity      = 5
@@ -225,7 +225,7 @@ resource "aws_dynamodb_table" "schedule_uptime_table" {
 
   global_secondary_index {
     hash_key           = "username"
-    name               = "dev-scheduleuptime-username-index"
+    name               = "${local.mismatch_deploy_env}-scheduleuptime-username-index"
     non_key_attributes = []
     projection_type    = "ALL"
     read_capacity      = 5
