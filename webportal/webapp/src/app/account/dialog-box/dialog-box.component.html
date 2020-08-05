@@ -725,18 +725,26 @@
 </div>
 
 <div *ngIf="requestType == 'Upload Files To S3'">
-    <h4>Upload files to SDC platform</h4>
-    <hr>
+  <h4>Upload files to SDC platform</h4>
+  <hr>
+  <div *ngIf="!uploadNotice">
+    <p><b>IMPORTANT: Do not upload any data that contains PII or CBI (as defined on the Data Provider Form)</b>></p>
+    <div>
+      <button class="btn btn-primary dotBtn upload-okayBtn" (click)="onOkayUploadClick()">OKAY</button>
+      <button class="btn btn-primary dotBtn upload-cancelBtn" (click)="onNoClick()">CANCEL</button>
+    </div>
+  </div>
+  <div *ngIf="uploadNotice">
     <p>Files will be uploaded to the bucket - <b>{{ userBucketName }}</b></p>
 
-  <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)"
-  multiple="multiple">
-    <ng-template pTemplate="content">
-      <ul *ngIf="selectedFiles.length">
-          <li *ngFor="let file of selectedFiles"><b> Uploaded {{file.name}} - {{file.size}} bytes </b> </li>
-      </ul>
-    </ng-template>
-</p-fileUpload>
+    <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)" multiple="multiple">
+      <ng-template pTemplate="content">
+        <ul *ngIf="selectedFiles.length">
+            <li *ngFor="let file of selectedFiles"><b> Uploaded {{file.name}} - {{file.size}} bytes </b> </li>
+        </ul>
+      </ng-template>
+    </p-fileUpload>
+  </div>
 </div>
 
 <div *ngIf="mailType == 'Details for export request'">
