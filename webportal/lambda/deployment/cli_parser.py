@@ -1,6 +1,6 @@
 import argparse
 
-VALID_ENVIRONMENTS = ['dev', 'ecs-dev', 'dev-private', 'test', 'test-private', 'production', 'production-private']
+VALID_ENVIRONMENTS = ['dev', 'ecs-dev', 'ecs-prod', 'dev-private', 'test', 'test-private', 'production', 'production-private']
 
 
 def parse_arguments(args):
