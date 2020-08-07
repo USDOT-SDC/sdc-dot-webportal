@@ -47,7 +47,7 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 ## I. Release Notes
 **August 7, 2020. SDC sdc-dot-webportal Release 2.6.1**
-### What's New in Release 2.6
+### What's New in Release 2.6.1
 * PDF for SDC Access Request Form updated to v2
 * The words "Data Definition" have been removed from the information titles for the projects
 * The workstation resizing bug has been fixed with providing ARM workstations as possible choices
