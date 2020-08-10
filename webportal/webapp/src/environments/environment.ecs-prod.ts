@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
+    production: true,
     REGION: 'us-east-1',
     USER_POOL_ID: 'us-east-1_e13lOvIqH',
     CLIENT_ID: '6cuv84i9t3lprgu28kt5h2hi53',
