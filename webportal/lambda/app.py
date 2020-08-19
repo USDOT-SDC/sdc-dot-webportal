@@ -1529,7 +1529,6 @@ def get_instances_prices(cpu, memory, os):
         terms = json.loads(data1)
         pricePerUnit=(round(float(terms['pricePerUnit']['USD']),4))
         info = {"instanceFamily" : instanceFamily,"instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : VCPU, "memory" : MEMORY,"storage" : storage, "cost" : pricePerUnit}
-        print(info)
 
         if 'a1' not in info['instanceType'] and 'm6g' not in info['instanceType'] and 'c6g' not in info['instanceType'] and 'r6g' not in info['instanceType']:
             instances['pricelist'].append(info)
