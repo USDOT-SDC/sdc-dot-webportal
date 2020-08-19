@@ -63,6 +63,7 @@ export class DialogBoxComponent implements OnInit {
     detailedDerivedDataset: string;
     derivedDataSetName: string;
     trustedAcceptableUseDisabled: boolean;
+    uploadNotice = false
     resizeFilterFormSubmitted = false;
     diskSizeChange = true;
     cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
@@ -198,6 +199,7 @@ export class DialogBoxComponent implements OnInit {
         this.currentConfiguration = data.stack && data.stack.current_configuration;
         this.currentStack = data.stack;
         this.states = data.states;
+        this.uploadNotice = false;
     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -893,6 +895,10 @@ export class DialogBoxComponent implements OnInit {
         }
     }
 
+    onOkayUploadClick(): void {
+        this.uploadNotice = true;
+    }
+
     uploadFiles(event1) {
         const totalFilesCount = event1.files.length;
         for (const file of event1.files) {
@@ -928,6 +934,7 @@ export class DialogBoxComponent implements OnInit {
                                 this.snackBar.open('Your file(s) has been uploaded successfully', 'close', {
                                     duration: 2000,
                                 });
+                                this.uploadNotice = false;
                                 this.onNoClick();
                             }
                         }
