@@ -12,6 +12,7 @@
       },
       {
         "Action": [
+          "ses:SendEmail",
           "pricing:DescribeServices",
           "pricing:GetAttributeValues",
           "s3:*",
