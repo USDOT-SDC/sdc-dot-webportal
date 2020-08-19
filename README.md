@@ -46,6 +46,10 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**August 21, 2020. SDC sdc-dot-webportal Release 2.7**
+### What's New in Release 2.7
+* Change SDC support email address from support@securedatacommons.com to sdc-support@dot.gov
+
 **August 7, 2020. SDC sdc-dot-webportal Release 2.6.1**
 ### What's New in Release 2.6.1
 * PDF for SDC Access Request Form updated to v2
@@ -373,7 +377,7 @@ August 8, 2019. SDC sdc-dot-webportal Release 2.1
 
 ## X. Contact Information
 
-For any queries you can reach to support@securedatacommons.com
+For any queries you can reach to sdc-support@dot.gov
 
 
 <!---                           -->
@@ -429,7 +433,7 @@ Tags: transportation, connected vehicles, intelligent transportation systems
 
 Labor Hours:
 
-Contact Name: support@securedatacommons.com
+Contact Name: sdc-support@dot.gov
 
 <!-- Contact Phone: -->
 

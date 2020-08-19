@@ -1250,7 +1250,7 @@ def ec2_instance_start(params):
 
 ######
 def manage_workstation_send_email(email,subject,body_text):
-    SENDER = "SDC Administrator <support@securedatacommons.com>"
+    SENDER = "SDC Support <sdc-support@dot.gov>"
     RECIPIENT = email
     AWS_REGION = "us-east-1"
 
