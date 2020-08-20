@@ -28,10 +28,10 @@
         </mat-radio-group>
       </div>
       <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'true'">
-          <p>Kindly email a copy of your data agreement with the requested data provider at <strong>support@securedatacommons.com</strong>. Access will be provided after the SDC team has validated the agreement.</p>
+          <p>Kindly email a copy of your data agreement with the requested data provider at <strong>sdc-support@dot.gov</strong>. Access will be provided after the SDC team has validated the agreement.</p>
       </div>
       <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'false'">
-          <p>Would you like to sign an agreement to use the data available on the SDC Platform? Kindly write to <strong>support@securedatacommons.com</strong></p>
+          <p>Would you like to sign an agreement to use the data available on the SDC Platform? Kindly write to <strong>sdc-support@dot.gov</strong></p>
       </div>
       <hr>
       <h5 style="font-size:16px;padding-top: 10px;">Geographic Extent of Access</h5>
@@ -725,18 +725,26 @@
 </div>
 
 <div *ngIf="requestType == 'Upload Files To S3'">
-    <h4>Upload files to SDC platform</h4>
-    <hr>
+  <h4>Upload files to SDC platform</h4>
+  <hr>
+  <div *ngIf="!uploadNotice">
+    <p><b>IMPORTANT: Users cannot upload PII or CBI data on their own. If you would like to upload data containing PII or CBI, you must contact the SDC Support Desk so that the request and its associated data can be tracked appropriately.</b></p>
+    <div>
+      <button class="btn btn-primary dotBtn upload-okayBtn" (click)="onOkayUploadClick()">OKAY</button>
+      <button class="btn btn-primary dotBtn upload-cancelBtn" (click)="onNoClick()">CANCEL</button>
+    </div>
+  </div>
+  <div *ngIf="uploadNotice">
     <p>Files will be uploaded to the bucket - <b>{{ userBucketName }}</b></p>
 
-  <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)"
-  multiple="multiple">
-    <ng-template pTemplate="content">
-      <ul *ngIf="selectedFiles.length">
-          <li *ngFor="let file of selectedFiles"><b> Uploaded {{file.name}} - {{file.size}} bytes </b> </li>
-      </ul>
-    </ng-template>
-</p-fileUpload>
+    <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)" multiple="multiple">
+      <ng-template pTemplate="content">
+        <ul *ngIf="selectedFiles.length">
+            <li *ngFor="let file of selectedFiles"><b> Uploaded {{file.name}} - {{file.size}} bytes </b> </li>
+        </ul>
+      </ng-template>
+    </p-fileUpload>
+  </div>
 </div>
 
 <div *ngIf="mailType == 'Details for export request'">

@@ -1250,7 +1250,7 @@ def ec2_instance_start(params):
 
 ######
 def manage_workstation_send_email(email,subject,body_text):
-    SENDER = "SDC Administrator <support@securedatacommons.com>"
+    SENDER = "SDC Support <sdc-support@dot.gov>"
     RECIPIENT = email
     AWS_REGION = "us-east-1"
 
@@ -1510,7 +1510,7 @@ def get_instances_prices(cpu, memory, os):
         instanceFamily = attributes['attributes']['instanceFamily']
         instanceType = attributes['attributes']['instanceType']
         storage =  attributes['attributes']['storage']
-        ### move up the jason string
+        ### move up the json string
         data = json.dumps(product['terms'])
         terms = json.loads(data)
         data = json.dumps(terms['OnDemand'])
@@ -1530,7 +1530,8 @@ def get_instances_prices(cpu, memory, os):
         pricePerUnit=(round(float(terms['pricePerUnit']['USD']),4))
         info = {"instanceFamily" : instanceFamily,"instanceType" : instanceType,"operatingSystem" : operatingSystem,"vcpu" : VCPU, "memory" : MEMORY,"storage" : storage, "cost" : pricePerUnit}
 
-        instances['pricelist'].append(info)
+        if 'a1' not in info['instanceType'] and 'm6g' not in info['instanceType'] and 'c6g' not in info['instanceType'] and 'r6g' not in info['instanceType']:
+            instances['pricelist'].append(info)
 
 ### sort by lowest cost
     familyList = []
