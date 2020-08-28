@@ -105,7 +105,7 @@
         "TABLENAME_MANAGE_UPTIME": "prod-ScheduleUptimeTable",
         "TABLENAME_MANAGE_UPTIME_INDEX":"prod-scheduleuptime-username-index",
         "COGNITO_USER_POOL":"prod-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:004118380849:userpool/us-east-1_sNIwupW53"
+        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:004118380849:userpool/us-east-1_e13lOvIqH"
       }
     },
     "test": {
