@@ -99,11 +99,11 @@
         "TABLENAME_TRUSTED_USERS": "production-TrustedUsersTable",
         "TABLENAME_EXPORT_FILE_REQUEST": "production-RequestExportTable",
         "TABLENAME_MANAGE_USER": "production-ManageUserWorkstationTable",
-        "TABLENAME_MANAGE_USER_INDEX": "prod-workstation-username-index",
+        "TABLENAME_MANAGE_USER_INDEX": "production-workstation-username-index",
         "TABLENAME_MANAGE_DISK": "prod-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "prod-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "production-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"prod-scheduleuptime-username-index",
+        "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index",
         "COGNITO_USER_POOL":"prod-sdc-dot-cognito-pool",
         "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:004118380849:userpool/us-east-1_e13lOvIqH"
       }
