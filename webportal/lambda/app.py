@@ -280,7 +280,7 @@ def perform_instance_action():
             raise ChaliceViewError("Internal error at server side")
     else:
         try:
-            response = instance.stop(Force=true)
+            response = instance.stop(Force=True)
         except BaseException as be:
             logging.exception("Error: Failed to stop instance" + str(be) )
             raise ChaliceViewError("Internal error at server side")
