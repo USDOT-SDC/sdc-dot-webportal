@@ -269,13 +269,8 @@ def perform_instance_action():
 
     if params['action'] == 'run':
         try:
-            print('ready_go')
-            print(f"start_{params['instance_id']}_end")
             response = instance.start()
-            print('done')
-            print(response)
         except BaseException as be:
-            print('exception?')
             logging.exception("Error: Failed to start instance" + str(be) )
             raise ChaliceViewError("Internal error at server side")
     else:
