@@ -263,17 +263,15 @@ def perform_instance_action():
     if not params or "action" not in params:
         logger.error("The query parameters 'action' is missing")
         raise BadRequestError("The query parameters 'action' is missing")
+    
+    client_ec2 = boto3.client('ec2')
+    instance = client_ec2.instance(params['instance_id'])
 
     if params['action'] == 'run':
         try:
             print('ready_go')
             print(f"start_{params['instance_id']}_end")
-            client_ec2 = boto3.client('ec2')
-            response = client_ec2.start_instances(
-                InstanceIds=[
-                    params['instance_id'],
-                ]
-            )
+            response = instance.start()
             print('done')
             print(response)
         except BaseException as be:
@@ -282,13 +280,7 @@ def perform_instance_action():
             raise ChaliceViewError("Internal error at server side")
     else:
         try:
-            client_ec2 = boto3.client('ec2')
-            response = client_ec2.stop_instances(
-                InstanceIds=[
-                    params['instance_id'],
-                ],
-                Force=True
-            )
+            response = instance.stop(Force=true)
         except BaseException as be:
             logging.exception("Error: Failed to stop instance" + str(be) )
             raise ChaliceViewError("Internal error at server side")
