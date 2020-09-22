@@ -264,8 +264,8 @@ def perform_instance_action():
         logger.error("The query parameters 'action' is missing")
         raise BadRequestError("The query parameters 'action' is missing")
     
-    client_ec2 = boto3.client('ec2')
-    instance = client_ec2.instance(params['instance_id'])
+    resource = boto3.resource('ec2')
+    instance = resource.Instance(params['instance_id'])
 
     if params['action'] == 'run':
         try:
