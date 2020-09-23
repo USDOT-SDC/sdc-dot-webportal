@@ -3,6 +3,7 @@ import logging
 import os
 from urllib.parse import unquote_plus
 
+
 def lambda_handler(event, context):
     bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
     s3_object_key = event["Records"][0]["s3"]["object"]["key"]
@@ -38,9 +39,11 @@ def lambda_handler(event, context):
     else:
         logger.info("Ignored this file with key:"+s3_object_key)
     
-    storage_gateway = boto3.client('storagegateway')
-    share=os.environ["SHARE"].split(',')
+    #storage_gateway = boto3.client('storagegateway')
+    #share=os.environ["SHARE"].split(',')
 
-    for sh in share:
-        print('refresh cache attempt on {}'.format(sh))
-        status = storage_gateway.refresh_cache(FileShareARN = 'arn:aws:storagegateway:us-east-1:911061262852:share/'+sh)
+    #for sh in share:
+     #   print('refresh cache attempt on {}'.format(sh))
+      #  status = storage_gateway.refresh_cache(FileShareARN = 'arn:aws:storagegateway:us-east-1:911061262852:share/'+sh)
+
+        

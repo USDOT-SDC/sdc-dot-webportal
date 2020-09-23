@@ -1,2 +1,3 @@
 deploy_env = "dev"
 webportal_bucket_name = "dev-private-sdc-webportal-hosting"
+lambda_binary_bucket  = "dev-dot-sdc-regional-lambda-bucket-911061262852-us-east-1"
