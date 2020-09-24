@@ -41,53 +41,62 @@ data "aws_s3_bucket" "lambda_trigger_buckets" {
   bucket  = var.lambda_trigger_buckets[count.index]
 }
 
-resource "aws_iam_policy" "LambdaPermissions" {
-    count   = length(var.lambda_trigger_buckets)
-    name = "${var.deploy_env}-${var.lambda_name}-permissions"
-    policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "logs:CreateLogGroup",
-      "Resource": "arn:aws:logs:${var.aws_region}:${var.account_number}:*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-      ],
-      "Resource": [
-          "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/lambda/${var.deploy_env}-${var.lambda_name}:*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:GetObjectTagging",
-        "s3:PutObjectTagging"
-      ],
-      "Resource": ["arn:aws:s3:::${data.aws_s3_bucket.lambda_trigger_buckets[count.index].bucket}/*", 
-                   "arn:aws:s3:::${data.aws_s3_bucket.lambda_trigger_buckets[count.index].bucket}"]
-    }
-  ]
+data "aws_iam_policy_document" "policy_doc" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${var.account_number}:*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/lambda/${var.deploy_env}-${var.lambda_name}:*"
+    ]
+  }
+
+  statement {
+     effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:GetObjectTagging",
+      "s3:PutObjectTagging"
+    ]
+
+    resources = [
+      for id in var.lambda_trigger_buckets[*]:
+        "arn:aws:s3:::${id}/*"
+    ]   
+  }
 }
-  EOF
+
+resource "aws_iam_policy" "LambdaPermissions" {
+    name    = "${var.deploy_env}-${var.lambda_name}-permissions"
+    policy  = "${data.aws_iam_policy_document.policy_doc.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "CloudWatchLogsAttachment" {
-  count = length(var.lambda_trigger_buckets)
   role = aws_iam_role.LambdaRole.name
-  policy_arn = aws_iam_policy.LambdaPermissions[count.index].arn
+  policy_arn = aws_iam_policy.LambdaPermissions.arn
 }
 
 resource "aws_lambda_permission" "allow_lambda_trigger_buckets" {
   count         = length(var.lambda_trigger_buckets)
-  statement_id  = "AllowExecutionFromS3Bucket"
+  statement_id  = "AllowExecutionFromS3Bucket-${count.index}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.add_metadata.arn
   principal     = "s3.amazonaws.com"
