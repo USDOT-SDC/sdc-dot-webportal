@@ -1,31 +1,3 @@
-variable "aws_region" {
-  type = string
-  default = "us-east-1"
-}
-
-variable "lambda_name" {
-  type = string
-  default = "add-metadata-to-s3-object"
-}
-
-variable "lambda_binary_bucket" {
-  type = string
-}
-
-variable "account_number" {
-  type = string
-  default = "911061262852"
-}
-
-variable "EXPORT_REQUEST_FOLDER" {
-  type = string
-  default = "export_requests"
-}
-
-variable "lambda_trigger_buckets" {
-  type = list(string)
-}
-
 resource "aws_lambda_function" "add_metadata" {
   s3_bucket         = var.lambda_binary_bucket
   s3_key            = "sdc-dot-webportal/add_metadata.zip"

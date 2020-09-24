@@ -9,11 +9,33 @@ variable "webportal_bucket_name" {
   description = "The name for the bucket in which we store all the webportal static assets"
 }
 
-variable "lambda_binary_bucket" {
+variable "aws_region" {
   type = string
-  description = "The name of the bucket that holds Lambda binaries"
+  default = "us-east-1"
 }
 
+variable "lambda_name" {
+  type = string
+  default = "add-metadata-to-s3-object"
+}
+
+variable "lambda_binary_bucket" {
+  type = string
+}
+
+variable "account_number" {
+  type = string
+  default = "911061262852"
+}
+
+variable "EXPORT_REQUEST_FOLDER" {
+  type = string
+  default = "export_requests"
+}
+
+variable "lambda_trigger_buckets" {
+  type = list(string)
+}
 #
 # locals to be provided globally
 #
