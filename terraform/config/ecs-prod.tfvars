@@ -1,4 +1,6 @@
 deploy_env = "prod"
+account_number = "004118380849"
+lambda_binary_bucket  = "prod-lambda-bucket-004118380849"
 webportal_bucket_name = "prod-webportal-hosting-004118380849"
 lambda_trigger_buckets = [ "prod-sdc-wydot-004118380849",
                            "prod-sdc-waze-ccp-academic-004118380849",

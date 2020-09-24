@@ -9,6 +9,11 @@ variable "webportal_bucket_name" {
   description = "The name for the bucket in which we store all the webportal static assets"
 }
 
+variable "lambda_binary_bucket" {
+  type = string
+  description = "The name of the bucket that holds Lambda binaries"
+}
+
 #
 # locals to be provided globally
 #
