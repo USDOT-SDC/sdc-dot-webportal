@@ -47,3 +47,6 @@ html_coverage_reports/
 .idea/
 .vscode/
 .terraform
+.DS_Store
+v-env
+*.zip

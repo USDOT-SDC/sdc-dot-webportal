@@ -1,37 +1,29 @@
 variable "aws_region" {
   type = string
+  default = "us-east-1"
 }
 
 variable "lambda_name" {
-    type = string
-}
-
-variable "lambda_handler" {
-    type = string
-}
-
-variable "environment" {
-    type = string
+  type = string
+  default = "add-metadata-to-s3-object"
 }
 
 variable "lambda_binary_bucket" {
-    type = string
+  type = string
 }
 
 variable "account_number" {
-    type = string
+  type = string
+  default = "911061262852"
 }
 
 variable "EXPORT_REQUEST_FOLDER" {
-    type = string
+  type = string
+  default = "export_requests"
 }
 
-variable "FILE_EXTENSIONS" {
-    type = string
-}
-
-variable "tags" {
-    type  = map
+variable "lambda_trigger_buckets" {
+  type = list(string)
 }
 
 resource "aws_lambda_function" "add_metadata" {
@@ -39,17 +31,15 @@ resource "aws_lambda_function" "add_metadata" {
   s3_key            = "sdc-dot-webportal/add_metadata.zip"
   function_name     = "${var.deploy_env}-${var.lambda_name}"
   role              = aws_iam_role.LambdaRole.arn
-  handler           = var.lambda_handler
+  handler           = "add_metadata.lambda_handler"
   source_code_hash  = base64sha256(timestamp()) # Bust cache of deployment... we want a fresh deployment everytime Terraform runs for now...
   runtime           = "python3.7"
   timeout           = 300
-  tags              = var.tags
+  tags              = local.global_tags
   environment {
     variables = {
       ENVIRONMENT                       = "${var.deploy_env}"
       EXPORT_REQUEST_FOLDER             = "${var.EXPORT_REQUEST_FOLDER}"
-      FILE_EXTENSIONS                   = "${var.FILE_EXTENSIONS}"
-
     }
   }
 }
@@ -74,8 +64,13 @@ resource "aws_iam_role" "LambdaRole" {
   EOF
 }
 
+data "aws_s3_bucket" "lambda_trigger_buckets" {
+  count   = length(var.lambda_trigger_buckets)
+  bucket  = var.lambda_trigger_buckets[count.index]
+}
 
 resource "aws_iam_policy" "LambdaPermissions" {
+    count   = length(var.lambda_trigger_buckets)
     name = "${var.deploy_env}-${var.lambda_name}-permissions"
     policy = <<EOF
 {
@@ -99,13 +94,13 @@ resource "aws_iam_policy" "LambdaPermissions" {
     {
       "Effect": "Allow",
       "Action": [
-       "ec2:CreateNetworkInterface",
-            "s3:PutObject",
-            "s3:GetObject"
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:GetObjectTagging",
+        "s3:PutObjectTagging"
       ],
-      "Resource": [
-        "*"
-      ]
+      "Resource": ["arn:aws:s3:::${data.aws_s3_bucket.lambda_trigger_buckets[count.index].bucket}/*", 
+                   "arn:aws:s3:::${data.aws_s3_bucket.lambda_trigger_buckets[count.index].bucket}"]
     }
   ]
 }
@@ -113,6 +108,28 @@ resource "aws_iam_policy" "LambdaPermissions" {
 }
 
 resource "aws_iam_role_policy_attachment" "CloudWatchLogsAttachment" {
+  count = length(var.lambda_trigger_buckets)
   role = aws_iam_role.LambdaRole.name
-  policy_arn = aws_iam_policy.LambdaPermissions.arn
+  policy_arn = aws_iam_policy.LambdaPermissions[count.index].arn
+}
+
+resource "aws_lambda_permission" "allow_lambda_trigger_buckets" {
+  count         = length(var.lambda_trigger_buckets)
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.add_metadata.arn
+  principal     = "s3.amazonaws.com"
+  source_arn    = data.aws_s3_bucket.lambda_trigger_buckets[count.index].arn
+}
+
+resource "aws_s3_bucket_notification" "lambda_trigger_buckets_notification" {
+    count  = length(var.lambda_trigger_buckets)
+    bucket = var.lambda_trigger_buckets[count.index]
+
+    lambda_function {
+        lambda_function_arn = aws_lambda_function.add_metadata.arn
+        events              = ["s3:ObjectCreated:Put", "s3:ObjectCreated:CompleteMultipartUpload"]
+    }
+
+    depends_on = [aws_lambda_permission.allow_lambda_trigger_buckets]
 }

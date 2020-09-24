@@ -3,6 +3,7 @@ variable "deploy_env" {
   type        = string
   description = "Deploy environment (dev, prod, test)"
 }
+
 variable "webportal_bucket_name" {
   type        = string
   description = "The name for the bucket in which we store all the webportal static assets"

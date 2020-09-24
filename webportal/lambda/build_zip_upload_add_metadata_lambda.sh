@@ -18,8 +18,8 @@ export CURRENT_DIR=$(pwd)
 pushd v-env/lib/python3.7/site-packages
 zip -r $CURRENT_DIR/add_metadata.zip .
 popd
-zip -g add_metadata.zip ./*.py
+zip -g add_metadata.zip ./add_metadata.py
 
 # Push zipped file up to S3
-aws s3 cp --profile sdc process_workstation_updates.zip s3://${environment}-dot-sdc-regional-lambda-bucket-911061262852-us-east-1/sdc-dot-webportal/add_metadata.zip --region us-east-1 --acl public-read
+aws s3 cp --profile sdc add_metadata.zip s3://${environment}-dot-sdc-regional-lambda-bucket-911061262852-us-east-1/sdc-dot-webportal/add_metadata.zip --region us-east-1 --acl public-read
 
