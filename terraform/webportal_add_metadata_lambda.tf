@@ -68,6 +68,18 @@ data "aws_iam_policy_document" "policy_doc" {
   }
 
   statement {
+    effect = "Allow"
+
+    actions = [
+      "kms:*"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+
+  statement {
      effect = "Allow"
 
     actions = [
