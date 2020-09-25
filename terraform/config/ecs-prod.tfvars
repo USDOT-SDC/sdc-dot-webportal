@@ -10,4 +10,5 @@ lambda_trigger_buckets = [ "prod-sdc-wydot-004118380849",
                            "prod-sdc-nyc-004118380849",
                            "prod-sdc-waze-volpe-testbed-004118380849",
                            "prod-sdc-fta-004118380849",
-                           "prod-sdc-sdi-004118380849" ]
+                           "prod-sdc-sdi-004118380849",
+                           "prod-sdc-waze-covid-004118380849" ]
