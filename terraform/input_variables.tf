@@ -36,6 +36,46 @@ variable "EXPORT_REQUEST_FOLDER" {
 variable "lambda_trigger_buckets" {
   type = list(string)
 }
+
+variable "sns_trigger_buckets" {
+  type = list(string)
+}
+
+variable "DYNAMODB_AVAILABLE_DATASET" {
+  type = string
+  default = "prod-AvailableDataset"
+}
+
+variable "EMAIL_SENDER" {
+  type = string
+  default = "sdc-support@sdc.gov"
+}
+
+variable "SDI_TEAM_BUCKET" {
+  type = string
+  default = "prod-sdc-sdi-004118380849"
+}
+
+variable "TFHRC_TEAM_BUCKET" {
+  type = string
+  default = "prod-sdc-waze-covid-004118380849"
+}
+
+variable "WAZE_AUTOEXPORT_BUCKET" {
+  type = string
+  default = "prod-sdc-waze-autoexport-004118380849"
+}
+
+variable "WYDOT_AUTOEXPORT_BUCKET" {
+  type = string
+  default = "prod-sdc-wydot-autoexport-004118380849"
+}
+
+variable "WYDOT_TEAM_BUCKET" {
+  type = string
+  default = "prod-sdc-wydot-004118380849"
+}
+
 #
 # locals to be provided globally
 #
