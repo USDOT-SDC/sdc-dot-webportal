@@ -14,7 +14,7 @@ resource "aws_lambda_function" "auto_export" {
   s3_object_version = data.aws_s3_bucket_object.auto_export_lambda_zip.version_id
   function_name     = "${var.deploy_env}-${var.auto_export_lambda_name}"
   role              = aws_iam_role.AutoExportLambdaRole.arn
-  handler           = "add_metadata.lambda_handler"
+  handler           = "auto_export_lambda.lambda_handler"
   runtime           = "python3.7"
   timeout           = 300
   tags              = local.global_tags
