@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "sns_policy_doc" {
 
       values = [
         for id in var.sns_trigger_buckets[*]:
-          "arn:aws:s3:::${id}/*"
+          "arn:aws:s3:::${id}"
       ]  
     }  
   }
