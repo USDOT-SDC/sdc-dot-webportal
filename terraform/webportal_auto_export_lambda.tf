@@ -3,13 +3,18 @@ variable "auto_export_lambda_name" {
   default = "sdc-auto-export"
 }
 
+data "aws_s3_bucket_object" "auto_export_lambda_zip" {
+  bucket = var.lambda_binary_bucket
+  key = "sdc-dot-webportal/auto_export_lambda.zip"
+}
+
 resource "aws_lambda_function" "auto_export" {
-  s3_bucket         = var.lambda_binary_bucket
-  s3_key            = "sdc-dot-webportal/auto_export_lambda.zip"
+  s3_bucket = data.aws_s3_bucket_object.auto_export_lambda_zip.bucket
+  s3_key    = data.aws_s3_bucket_object.auto_export_lambda_zip.key
+  s3_object_version = data.aws_s3_bucket_object.auto_export_lambda_zip.version_id
   function_name     = "${var.deploy_env}-${var.auto_export_lambda_name}"
   role              = aws_iam_role.AutoExportLambdaRole.arn
   handler           = "add_metadata.lambda_handler"
-  source_code_hash  = base64sha256(timestamp()) # Bust cache of deployment... we want a fresh deployment everytime Terraform runs for now...
   runtime           = "python3.7"
   timeout           = 300
   tags              = local.global_tags
