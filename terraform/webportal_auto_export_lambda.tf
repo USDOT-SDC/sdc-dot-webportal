@@ -28,11 +28,6 @@ resource "aws_lambda_function" "auto_export" {
   }
 }
 
-data "aws_s3_bucket" "sns_trigger_buckets" {
-  count   = length(var.sns_trigger_buckets)
-  bucket  = var.sns_trigger_buckets[count.index]
-}
-
 data "aws_iam_policy_document" "sns_policy_doc" {
   statement {
     effect = "Allow"
@@ -52,7 +47,7 @@ data "aws_iam_policy_document" "sns_policy_doc" {
       variable = "aws:SourceArn"
 
       values = [
-        for id in var.sns_trigger_buckets[*]:
+        for id in var.lambda_trigger_buckets[*]:
           "arn:aws:s3:::${id}"
       ]  
     }  

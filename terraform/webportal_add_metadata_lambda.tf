@@ -16,7 +16,6 @@ resource "aws_lambda_function" "add_metadata" {
   }
 }
 
-
 resource "aws_iam_role" "LambdaRole" {
     name = "${var.deploy_env}-${var.lambda_name}"
     assume_role_policy = <<EOF

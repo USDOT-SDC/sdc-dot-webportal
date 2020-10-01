@@ -37,10 +37,6 @@ variable "lambda_trigger_buckets" {
   type = list(string)
 }
 
-variable "sns_trigger_buckets" {
-  type = list(string)
-}
-
 variable "DYNAMODB_AVAILABLE_DATASET" {
   type = string
   default = "prod-AvailableDataset"
