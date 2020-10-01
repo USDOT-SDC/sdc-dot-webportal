@@ -74,6 +74,10 @@ def lambda_handler(event, context):
     print('Copy From: ' + source_bucket + '/' + source_key)
     print('Copy To: ' + bucket_mapping[source_bucket] + '/' + source_key[12:])
 
+    if bucket_mapping.get(source_bucket) == None:
+        print(f'No bucket mapping found for {source_bucket}, returning')
+        return
+
     try:
         s3_client.copy_object(
             Bucket=bucket_mapping[source_bucket],

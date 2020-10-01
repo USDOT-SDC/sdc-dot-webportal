@@ -64,17 +64,6 @@ resource "aws_sns_topic" "topic" {
   policy  = "${data.aws_iam_policy_document.sns_policy_doc.json}"
 }
 
-resource "aws_s3_bucket_notification" "auto_export_bucket_notification" {
-  count         = length(var.sns_trigger_buckets)
-  bucket        = var.sns_trigger_buckets[count.index]
-
-  topic {
-    topic_arn     = aws_sns_topic.topic.arn
-    events        = ["s3:ObjectCreated:*"]
-    filter_prefix = "auto_export/"
-  }
-}
-
 resource "aws_iam_role" "AutoExportLambdaRole" {
     name = "${var.deploy_env}-${var.auto_export_lambda_name}"
     assume_role_policy = <<EOF
