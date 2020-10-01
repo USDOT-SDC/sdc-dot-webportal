@@ -1,7 +1,12 @@
+variable "auto_export_lambda_name" {
+  type = "string"
+  default = "sdc-auto-export"
+}
+
 resource "aws_lambda_function" "auto_export" {
   s3_bucket         = var.lambda_binary_bucket
   s3_key            = "sdc-dot-webportal/auto_export_lambda.zip"
-  function_name     = "${var.deploy_env}-sdc-auto-export"
+  function_name     = "${var.deploy_env}-${var.auto_export_lambda_name}"
   role              = aws_iam_role.AutoExportLambdaRole.arn
   handler           = "add_metadata.lambda_handler"
   source_code_hash  = base64sha256(timestamp()) # Bust cache of deployment... we want a fresh deployment everytime Terraform runs for now...
@@ -71,7 +76,7 @@ resource "aws_s3_bucket_notification" "auto_export_bucket_notification" {
 }
 
 resource "aws_iam_role" "AutoExportLambdaRole" {
-    name = "${var.deploy_env}-${aws_lambda_function.auto_export.function_name}"
+    name = "${var.deploy_env}-${var.auto_export_lambda_name}"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -91,7 +96,7 @@ resource "aws_iam_role" "AutoExportLambdaRole" {
 
 
 resource "aws_iam_policy" "AutoExportLambdaPermissions" {
-    name = "${var.deploy_env}-${aws_lambda_function.auto_export.function_name}-permissions"
+    name = "${var.deploy_env}-${var.auto_export_lambda_name}-permissions"
     policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -108,7 +113,7 @@ resource "aws_iam_policy" "AutoExportLambdaPermissions" {
           "logs:PutLogEvents"
       ],
       "Resource": [
-          "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/lambda/${var.deploy_env}-${aws_lambda_function.auto_export.function_name}:*"
+          "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/lambda/${var.deploy_env}-${var.auto_export_lambda_name}:*"
       ]
     },
     {
