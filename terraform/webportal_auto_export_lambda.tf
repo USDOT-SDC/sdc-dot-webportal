@@ -59,7 +59,7 @@ resource "aws_sns_topic" "topic" {
   policy  = "${data.aws_iam_policy_document.sns_policy_doc.json}"
 }
 
-resource "aws_s3_bucket_notification" "bucket_notification" {
+resource "aws_s3_bucket_notification" "auto_export_bucket_notification" {
   count         = length(var.sns_trigger_buckets)
   bucket        = var.sns_trigger_buckets[count.index]
 
