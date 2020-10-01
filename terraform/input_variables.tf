@@ -44,7 +44,7 @@ variable "DYNAMODB_AVAILABLE_DATASET" {
 
 variable "EMAIL_SENDER" {
   type = string
-  default = "sdc-support@sdc.gov"
+  default = "sdc-support@dot.gov"
 }
 
 variable "SDI_TEAM_BUCKET" {
