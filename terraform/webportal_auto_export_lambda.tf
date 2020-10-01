@@ -225,3 +225,9 @@ resource "aws_lambda_permission" "sns" {
   principal     = "sns.amazonaws.com"
   source_arn    = "${aws_sns_topic.topic.arn}"
 }
+
+resource "aws_sns_topic_subscription" "auto_export_subscription_to_lambda" {
+  topic_arn = aws_sns_topic.topic.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.auto_export.arn
+}
