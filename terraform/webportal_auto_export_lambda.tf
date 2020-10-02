@@ -3,13 +3,18 @@ variable "auto_export_lambda_name" {
   default = "sdc-auto-export"
 }
 
+data "aws_s3_bucket_object" "auto_export_lambda_zip" {
+  bucket = var.lambda_binary_bucket
+  key = "sdc-dot-webportal/auto_export_lambda.zip"
+}
+
 resource "aws_lambda_function" "auto_export" {
-  s3_bucket         = var.lambda_binary_bucket
-  s3_key            = "sdc-dot-webportal/auto_export_lambda.zip"
+  s3_bucket = data.aws_s3_bucket_object.auto_export_lambda_zip.bucket
+  s3_key    = data.aws_s3_bucket_object.auto_export_lambda_zip.key
+  s3_object_version = data.aws_s3_bucket_object.auto_export_lambda_zip.version_id
   function_name     = "${var.deploy_env}-${var.auto_export_lambda_name}"
   role              = aws_iam_role.AutoExportLambdaRole.arn
-  handler           = "add_metadata.lambda_handler"
-  source_code_hash  = base64sha256(timestamp()) # Bust cache of deployment... we want a fresh deployment everytime Terraform runs for now...
+  handler           = "auto_export_lambda.lambda_handler"
   runtime           = "python3.7"
   timeout           = 300
   tags              = local.global_tags
@@ -26,11 +31,6 @@ resource "aws_lambda_function" "auto_export" {
       
     }
   }
-}
-
-data "aws_s3_bucket" "sns_trigger_buckets" {
-  count   = length(var.sns_trigger_buckets)
-  bucket  = var.sns_trigger_buckets[count.index]
 }
 
 data "aws_iam_policy_document" "sns_policy_doc" {
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "sns_policy_doc" {
       variable = "aws:SourceArn"
 
       values = [
-        for id in var.sns_trigger_buckets[*]:
+        for id in var.lambda_trigger_buckets[*]:
           "arn:aws:s3:::${id}"
       ]  
     }  
@@ -62,17 +62,6 @@ data "aws_iam_policy_document" "sns_policy_doc" {
 resource "aws_sns_topic" "topic" {
   name    = "sdc-autoexport-topic"
   policy  = "${data.aws_iam_policy_document.sns_policy_doc.json}"
-}
-
-resource "aws_s3_bucket_notification" "auto_export_bucket_notification" {
-  count         = length(var.sns_trigger_buckets)
-  bucket        = var.sns_trigger_buckets[count.index]
-
-  topic {
-    topic_arn     = aws_sns_topic.topic.arn
-    events        = ["s3:ObjectCreated:*"]
-    filter_prefix = "auto_export/"
-  }
 }
 
 resource "aws_iam_role" "AutoExportLambdaRole" {
@@ -240,4 +229,10 @@ resource "aws_lambda_permission" "sns" {
   function_name = "${aws_lambda_function.auto_export.function_name}"
   principal     = "sns.amazonaws.com"
   source_arn    = "${aws_sns_topic.topic.arn}"
+}
+
+resource "aws_sns_topic_subscription" "auto_export_subscription_to_lambda" {
+  topic_arn = aws_sns_topic.topic.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.auto_export.arn
 }

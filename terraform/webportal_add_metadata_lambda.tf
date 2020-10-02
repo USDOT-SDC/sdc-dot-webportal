@@ -16,7 +16,6 @@ resource "aws_lambda_function" "add_metadata" {
   }
 }
 
-
 resource "aws_iam_role" "LambdaRole" {
     name = "${var.deploy_env}-${var.lambda_name}"
     assume_role_policy = <<EOF
@@ -115,14 +114,3 @@ resource "aws_lambda_permission" "allow_lambda_trigger_buckets" {
   source_arn    = data.aws_s3_bucket.lambda_trigger_buckets[count.index].arn
 }
 
-resource "aws_s3_bucket_notification" "lambda_trigger_buckets_notification" {
-    count  = length(var.lambda_trigger_buckets)
-    bucket = var.lambda_trigger_buckets[count.index]
-
-    lambda_function {
-        lambda_function_arn = aws_lambda_function.add_metadata.arn
-        events              = ["s3:ObjectCreated:Put", "s3:ObjectCreated:CompleteMultipartUpload"]
-    }
-
-    depends_on = [aws_lambda_permission.allow_lambda_trigger_buckets]
-}
