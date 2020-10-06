@@ -112,7 +112,7 @@ resource "aws_dynamodb_table" "trusted_users_table" {
 resource "aws_dynamodb_table" "request_export_table" {
   name           = "${local.mismatch_deploy_env}-RequestExportTable"
   billing_mode   = "PROVISIONED"
-  read_capacity  = 5
+  read_capacity  = 15
   write_capacity = 5
   hash_key       = "S3KeyHash"
   range_key      = "RequestedBy_Epoch"
