@@ -36,6 +36,7 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 [XIV.  CODE.GOV Registration Info](#code-gov-registration-info)
 
+[XV.  Code Quality Monitor](#code-quality-monitor)
 
 ---
 
@@ -437,7 +438,11 @@ Contact Name: sdc-support@dot.gov
 
 <!-- Contact Phone: -->
 
+<a name="code-quality-monitor">
 
+## XV. Code Quality Monitor
+
+[![Code quality status](https://codescene.io/projects/10167/status.svg) Full analysis results at **codescene.io**.](https://codescene.io/projects/10167/jobs/latest-successful/results)
 
 ---
 [Back to top](#toc)
