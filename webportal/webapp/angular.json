@@ -147,6 +147,12 @@
           "configurations": {
             "production": {
               "browserTarget": "angular.io-example:build:production"
+            },
+            "ecs-dev": {
+              "browserTarget": "angular.io-example:build:ecs-dev"
+            },
+            "ecs-prod": {
+              "browserTarget": "angular.io-example:build:ecs-prod"
             }
           }
         },
