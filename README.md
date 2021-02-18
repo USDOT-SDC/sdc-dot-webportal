@@ -47,6 +47,13 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+
+**February 10, 2021. SDC sdc-dot-webportal Release 2.8**
+### What's New in Release 2.8
+* The workstation resizing message has been updated so the user is told to stop their workstation and save their work before resize.
+* The SDC Support email address change is being deployed to the post-migration site.
+* The message about PII or CBI data is being deployed to the post-migration site. 
+
 **August 21, 2020. SDC sdc-dot-webportal Release 2.7**
 ### What's New in Release 2.7
 * Change SDC support email address from support@securedatacommons.com to sdc-support@dot.gov
