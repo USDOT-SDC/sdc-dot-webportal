@@ -8,7 +8,8 @@ matrix:
           - develop
       addons:
         - sonarcloud:
-          - organization: "USDOT-SDC"
+#          - organization: "USDOT-SDC"
+          - organization: "kbrpurchase1"
       before_script:
         - npm install -g @angular/cli
       env:
@@ -23,7 +24,8 @@ matrix:
           - develop
       addons:
         - sonarcloud:
-          - organization: "USDOT-SDC"
+#          - organization: "USDOT-SDC"
+          - organization: "kbrpurchase1"
       install:
         - pip install -r webportal/lambda/requirements.txt -r webportal/lambda/development_requirements.txt
       env:
