@@ -191,11 +191,6 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## IV. Installation
 
-You can install dependencies for the web app via:
-```sh
-# pwd: /webportal/webapp
-npm install
-```
 
 <!---                                 -->
 <!---     Design and Architecture     -->
@@ -310,20 +305,27 @@ chmod u+x sdc-add-metadata-to-s3-object.sh
 
 ##### Goto ../webapp/ folder and run the command below -
 1. Install Nodejs
-   * curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-   * sudo apt-get install -y nodejs
+    * Linux:
+        * curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+        * sudo apt-get install -y nodejs
+    * Windows:
+        * Go to [nodejs.org/en](nodejs.org/en) and download and run the installer for version 14. Under Tools for Native 
+    Modules, check the box to install the necessary tools.
 
 2. Install NPM:-
-   * sudo npm install -g npm
-   * Install Angular CLI `sudo npm install -g @angular/cli@1.7.4`
-   * Install TSLint `sudo npm install -g tslint typescript`
-   * Install Protractor for e2e testing `sudo npm install -g protractor`
-   * `sudo npm i -g typings`
-   * Install Node modules library `npm i`
+    * sudo npm install -g npm
+    * Install Angular CLI `sudo npm install -g @angular/cli@1.7.4`
+    * Install TSLint `sudo npm install -g tslint typescript`
+    * Install Protractor for e2e testing `sudo npm install -g protractor`
+    * `sudo npm i -g typings`
+    * Install Node modules library `npm i`
+    * Reset the package.json file from head via git. `git checkout HEAD -- package.json`
+    * Enable legacy peer dependency behavior via `npm i --legacy-peer-deps`
 
 3. Run local build
-   * ../webportal/webapp$  `ng serve`
-   * open `http://localhost:4200`
+    * cd into `webportal\webapp`
+    * run `ng build` and then `ng serve`
+    * open `http://localhost:4200`
    
    
 ## Configuration UI changes
@@ -354,6 +356,11 @@ Cognito configuration
 2. Run the command below for Production Deployment:
    * `cd` into `webportal/webapp/`
    * Run `./ecs_prod_deploy.sh`
+    
+What these do: 
+* Builds the webportal files (the `dist` folder)
+* Moves the files into the webportal hosting s3 bucket
+* Calls the AWS Systems Manager document, `prod-nginx-asset-update`, which moves the files onto the `prod-nginx-web-proxy servers`. 
 
 ### Prerequisites
 * Your environment.ts file must be fully filled out with the required environment variables before you can deploy to any environment
