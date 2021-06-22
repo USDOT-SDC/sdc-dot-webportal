@@ -33,4 +33,3 @@ def lambda_handler(event, context):
             logger.info("Adding metadata to S3 object has been completed successfully")
     else:
         logger.info("Ignored this file with key:"+s3_object_key)
-        

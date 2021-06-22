@@ -68,4 +68,5 @@ def get_session(file_name = '/proc/sys/crypto/fips_enabled'):
     if on_dot_rhel:
         return boto3.Session()
     else:
-        return boto3.Session(profile_name='sdc')
+        # not really necessary anymore
+        return boto3.Session()
