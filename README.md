@@ -257,12 +257,13 @@ See [ECS_MIGRATION.md](ECS_MIGRATION.md) for specifics on how this applies when 
 To deploy run below command at the lambda folder:
 
 ```sh
-. ./setup_venv.sh # Note space between the 2 periods
-
-python3 deploy_chalice.py --environment <whatever>
+# create a virtual environment
+pip install -r requirements.txt
+pip install -r development_requirements.txt
+python3 deploy_chalice.py --environment=<env>
 ```
 
-where, `--environment` can be `dev`, `prod` and so on.
+where, `--environment` can be `ecs-dev`, `ecs-prod` and so on.
 
 ### Deleting the Backend
 
