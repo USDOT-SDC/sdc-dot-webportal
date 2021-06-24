@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "add_metadata" {
   s3_bucket         = var.lambda_binary_bucket
-  s3_key            = "sdc-dot-webportal/add_metadata.zip"
+  s3_key            = "sdc-dot-webportal/add-metadata-to-s3-object.zip"
   function_name     = "${var.deploy_env}-${var.lambda_name}"
   role              = aws_iam_role.LambdaRole.arn
   handler           = "add_metadata.lambda_handler"

@@ -1,5 +1,5 @@
 variable "auto_export_lambda_name" {
-  type = "string"
+  type = string
   default = "sdc-auto-export"
 }
 
@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "sns_policy_doc" {
 
 resource "aws_sns_topic" "topic" {
   name    = "sdc-autoexport-topic"
-  policy  = "${data.aws_iam_policy_document.sns_policy_doc.json}"
+  policy  = data.aws_iam_policy_document.sns_policy_doc.json
 }
 
 resource "aws_iam_role" "AutoExportLambdaRole" {

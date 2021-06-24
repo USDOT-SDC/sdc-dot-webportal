@@ -1,0 +1,17 @@
+environments:
+    dev:
+        terraform_bucket: dev.sdc.dot.gov.platform.terraform
+    test:
+        terraform_bucket: test.sdc.dot.gov.platform.terraform
+    stage:
+        terraform_bucket: stage.sdc.dot.gov.platform.terraform
+    prod:
+        terraform_bucket: prod.sdc.dot.gov.platform.terraform
+
+lambdas:
+    add-metadata-to-s3-object:
+        scripts:
+            - "add_metadata.py"
+    auto_export_lambda:
+        scripts:
+            - "auto_export_lambda.py"

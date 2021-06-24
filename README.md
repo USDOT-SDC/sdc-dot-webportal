@@ -266,7 +266,7 @@ To deploy run below command at the lambda folder:
 
 ```sh
 . ./setup_venv.sh # Note space between the 2 periods
-python3 deploy.py --environment <whatever>
+python3 deploy_chalice.py --environment <whatever>
 ```
 
 where, `--environment` can be `dev`, `prod` and so on.
