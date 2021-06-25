@@ -238,20 +238,12 @@ The following instructions describe the procedure to build and deploy the webpor
 
 ### Deploying pre-requisite infrastructure
 
-We are using terraform to create some of the base infrastructure for webportal. Here are the steps for creating the infrastructure:
-```sh
-# Initialize the backend
-# If you are switching environments, do NOT overwrite the existing state! (enter "no" when prompted)
+We are using terraform to create some of the base infrastructure for webportal. Here are the steps for creating the 
+infrastructure.  In order to deploy it, run:
 
-# pwd: /terraform
-terraform init -backend-config=config/backend-dev.conf 
-```
+```deploy.py```
 
-Apply the changes:
-```sh
-# pwd: /terraform
-terraform apply -var-file="config/dev.tfvars"
-```
+from the top directory.
 
 See [ECS_MIGRATION.md](ECS_MIGRATION.md) for specifics on how this applies when moving into ECS.
 
@@ -260,11 +252,13 @@ See [ECS_MIGRATION.md](ECS_MIGRATION.md) for specifics on how this applies when 
 To deploy run below command at the lambda folder:
 
 ```sh
-. ./setup_venv.sh # Note space between the 2 periods
-python3 deploy.py --environment <whatever>
+# create a virtual environment
+pip install -r requirements.txt
+pip install -r development_requirements.txt
+python3 deploy_chalice.py --environment=<env>
 ```
 
-where, `--environment` can be `dev`, `prod` and so on.
+where, `--environment` can be `ecs-dev`, `ecs-prod` and so on.
 
 ### Deleting the Backend
 
