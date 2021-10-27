@@ -313,9 +313,9 @@
 
     <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex<2'>
       <hr>
-      <p><b>Trusted Status is a mechanism for analysts to obtain a passport from a data provider. Obtaining this passport allows analyst to export their data immediately (for subsequent similar requests), as opposed to waiting for the review and approval of a data provider.</b>
+      <p><b>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests - and will enable immediate export of data, at the time of your request.</b>
         <br>
-        <b>This status is acquired per Project + Data Provider + Sub-Dataset/Data Type.</b></p>
+        <b>A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.</b></p>
       <mat-dialog-content *ngIf="trustedStatus">
         <br>
         <p>Note - Based on the dataset and datatype selection, you currently have Trusted Status from this Data Provider. We will notify the Data Provider about your request.</p>
