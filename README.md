@@ -48,7 +48,7 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 ## I. Release Notes
 
-**November,24,2021. SDC sdc-dot-webportal Release 2.8.1**
+**November 24,2021. SDC sdc-dot-webportal Release 2.8.1**
 ### What's New in Release 2.8.1
 * Bug fix for register/login redirects.
 
