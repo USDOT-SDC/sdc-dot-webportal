@@ -5,7 +5,7 @@
 ### Objectives:
 The test objectives are to verify the functionality of the feature improvements defined in the CRB, as well as to ensure there's been no negative impact on the, otherwise, normal functioning of the web portal within the production environment
 
-###Scope:
+### Scope:
 1. Manual functional system testing of the web portal - with focus on the Approval Form and Trusted Status tabs of the Request for Data Export Form.
 2. Manual regression testing of the web portal.
 
@@ -35,6 +35,6 @@ The test objectives are to verify the functionality of the feature improvements 
       5. Validate start/stop of workstations.
       6. Validate by functionality of all the tabs in portal.
       
-###Deliverables:
+### Deliverables:
 Test results will be documented within the CRB.
 

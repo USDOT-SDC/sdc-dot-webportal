@@ -1,15 +1,15 @@
-#Rollback Plan
+# Rollback Plan
 
 [v2.9.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.9.0)
 
-###Before deployment:
+### Before deployment:
 
 1. Make a backup of webportal files
    1. Within build machine, make an html directory and run the following:
      `aws s3 cp s3://prod-webportal-hosting-004118380849 html/ --recursive`
    
 
-###If rollback is required after deployment:
+### If rollback is required after deployment:
 
 1. Restore web portal files from backup:
    - `aws s3 cp html/ s3://prod-webportal-hosting-004118380849 --recursive`
