@@ -36,7 +36,6 @@ export class DialogBoxComponent implements OnInit {
     selectedDataProvider: string;
     selectedDatatype: string;
     datasources: string;
-    deriveddataset: string;
     detailedderiveddataset: string;
     autoderiveddataset: string;
     autoreason: string;
@@ -57,7 +56,6 @@ export class DialogBoxComponent implements OnInit {
     autoExportRequestSelected: boolean;
     acceptableUse: string;
     approvalForm: string;
-    derivedDataSet: string;
     dataType: string;
     dataSources: string;
     detailedDerivedDataset: string;
@@ -151,7 +149,6 @@ export class DialogBoxComponent implements OnInit {
         dataProviderName: '',
         subDataSet: '',
         datasources: '',
-        deriveddataset: '',
         detailedderiveddataset: '',
         tags: '',
         justifyExport: '',
@@ -322,10 +319,9 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDatatype = this.messageModel.subDataSet;
 
         this.derivedDataSetName = this.messageModel.derivedDatasetname;
+        this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
         this.dataType = this.messageModel.datatype;
         this.dataSources = this.messageModel.datasources;
-        this.derivedDataSet = this.messageModel.deriveddataset;
-        this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
         this.tags = this.messageModel.tags;
         this.justifyExport = this.messageModel.justifyExport;
 
@@ -791,6 +787,9 @@ export class DialogBoxComponent implements OnInit {
         if (this.derivedDataSetName) {
             approvalForm['derivedDataSetname'] = this.derivedDataSetName;
         }
+        if (this.detailedDerivedDataset) {
+            approvalForm['detailedderiveddataset'] = this.detailedDerivedDataset;
+        }
         if (this.selectedDataProvider) {
             approvalForm['dataprovider'] = this.selectedDataProvider;
         }
@@ -799,12 +798,6 @@ export class DialogBoxComponent implements OnInit {
         }
         if (this.dataSources) {
             approvalForm['datasources'] = this.dataSources;
-        }
-        if (this.derivedDataSet) {
-            approvalForm['deriveddataset'] = this.derivedDataSet;
-        }
-        if (this.detailedDerivedDataset) {
-            approvalForm['detailedderiveddataset'] = this.detailedDerivedDataset;
         }
         if (this.tags) {
             approvalForm['tags'] = this.tags;

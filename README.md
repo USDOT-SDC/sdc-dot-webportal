@@ -48,7 +48,13 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 ## I. Release Notes
 
-**November 24,2021. SDC sdc-dot-webportal Release 2.8.1**
+
+**December 8, 2021. SDC sdc-dot-webportal Release 2.9.0**
+### What's New in Release 2.9.0
+* The Request to Export Data Form has been improved with consolidated dataset description requirements on the Approval Form tab.
+* The description on the Trusted Status tab has been revised for improved clarity.
+
+**November 24, 2021. SDC sdc-dot-webportal Release 2.8.1**
 ### What's New in Release 2.8.1
 * Bug fix for register/login redirects.
 
