@@ -246,6 +246,10 @@
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
         </mat-form-field>
         <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}" required>
+          <mat-error align="end" *ngIf="!messageModel.detailedderiveddataset">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
           <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
           <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error>
         </mat-form-field>
@@ -257,14 +261,7 @@
           <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}" required>
           <mat-error align="end" *ngIf="!messageModel.datasources">Required</mat-error>
         </mat-form-field>
-        <mat-form-field style='width: 100%'>
-          <input matInput placeholder="High level description of derived dataset" [(ngModel)]="messageModel.deriveddataset" value="{{messageModel.deriveddataset}}" required>
-          <mat-error align="end" *ngIf="!messageModel.deriveddataset">Required</mat-error>
-        </mat-form-field>
-        <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}" required>
-          <mat-error align="end" *ngIf="!messageModel.detailedderiveddataset">Required</mat-error>
-        </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
         </mat-form-field>
@@ -275,7 +272,7 @@
         <hr>
         <mat-dialog-actions>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
-                    [disabled]="!messageModel.derivedDatasetname || !messageModel.justifyExport || !messageModel.detailedderiveddataset || !messageModel.deriveddataset || !messageModel.datasources"
+                    [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
                     (click)="onApprovalformClick()">NEXT
             </button>
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
@@ -287,6 +284,9 @@
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
         </mat-form-field>
         <mat-form-field style='width: 100%'>
+          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}">
+        </mat-form-field>
+        <mat-form-field style='width: 100%'>
           <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
           <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
         </mat-form-field>
@@ -295,12 +295,6 @@
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}">
-        </mat-form-field>
-        <mat-form-field style='width: 100%'>
-          <input matInput placeholder="High level description of derived dataset" [(ngModel)]="messageModel.deriveddataset" value="{{messageModel.deriveddataset}}">
-        </mat-form-field>
-        <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}">
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
@@ -319,9 +313,9 @@
 
     <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex<2'>
       <hr>
-      <p><b>Trusted Status is a mechanism for analysts to obtain a passport from a data provider. Obtaining this passport allows analyst to export their data immediately (for subsequent similar requests), as opposed to waiting for the review and approval of a data provider.</b>
+      <p><b>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests - and will enable immediate export of data, at the time of your request.</b>
         <br>
-        <b>This status is acquired per Project + Data Provider + Sub-Dataset/Data Type.</b></p>
+        <b>A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.</b></p>
       <mat-dialog-content *ngIf="trustedStatus">
         <br>
         <p>Note - Based on the dataset and datatype selection, you currently have Trusted Status from this Data Provider. We will notify the Data Provider about your request.</p>
@@ -397,7 +391,7 @@
                 <input matInput placeholder="Reason for requesting permission" [(ngModel)]="messageModel.autoreason" value="{{messageModel.autoreason}}" required>
             </mat-form-field>
           </div>
-        </mat-dialog-content> 
+      </mat-dialog-content>
         <br/><br/>
         <div>
           <button class="btn btn-primary dotBtn"
@@ -754,6 +748,9 @@
       <input matInput placeholder="Name or short description of your derived dataset" [value]="approvalForm.derivedDataSetname">
     </mat-form-field>
     <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Detailed description of the derived dataset" [value]="approvalForm.detailedderiveddataset" >
+    </mat-form-field>
+    <mat-form-field style='width: 100%'>
       <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="approvalForm.dataprovider">
     </mat-form-field>
     <mat-form-field style='width: 100%'>
@@ -761,12 +758,6 @@
     </mat-form-field>
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Additional datasources" [value]="approvalForm.datasources">
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="High level description of derived dataset" [value]="approvalForm.deriveddataset" >
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Detailed description of the derived dataset" [value]="approvalForm.detailedderiveddataset" >
     </mat-form-field>
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Tags" [value]="approvalForm.tags">
