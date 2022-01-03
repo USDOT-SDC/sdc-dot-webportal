@@ -179,6 +179,7 @@ export class DatasetsComponent implements OnInit {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '65vw',
             height: '75vh',
+            disableClose: true,
             data: { userBucketName: this.userBucketName, mailType: mailType, datasetName: datasetName }
         });
 
