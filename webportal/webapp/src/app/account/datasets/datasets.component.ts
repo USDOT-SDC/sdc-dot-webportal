@@ -177,8 +177,8 @@ export class DatasetsComponent implements OnInit {
 
     requestExport(BucketName, mailType, datasetName) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
-            width: '700px',
-            height: '630px',
+            width: '65vw',
+            height: '75vh',
             data: { userBucketName: this.userBucketName, mailType: mailType, datasetName: datasetName }
         });
 
