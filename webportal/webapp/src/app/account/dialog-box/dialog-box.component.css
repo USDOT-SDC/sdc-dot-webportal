@@ -23,11 +23,19 @@ mat_tab_style{
 }
 .request-exportNextBtn {
     float: right;
-    margin-left: 7px;
+    margin-right: 7px;
+}
+.request-exportPreviousBtn {
+    float: right;
+    margin-right: 40px;
 }
 .request-exportCancelBtn {
+    float: left;
+    margin-left: 7px;
+}
+.request-exportSubmitBtn {
     float: right;
-    margin-left: 40px;
+    margin-right: 7px;
 }
 /* FileUpload */
 .ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget, .ui-fileupload-choose.ui-button .ui-state-default {

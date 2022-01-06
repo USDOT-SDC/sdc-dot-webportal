@@ -317,18 +317,21 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
-
         this.derivedDataSetName = this.messageModel.derivedDatasetname;
         this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
         this.dataType = this.messageModel.datatype;
         this.dataSources = this.messageModel.datasources;
         this.tags = this.messageModel.tags;
         this.justifyExport = this.messageModel.justifyExport;
-
         this.selectedIndex = 2;
     }
     onTrustedformClick() {
         this.selectedIndex = 3;
+    }
+    OnPreviousBtnClick() {
+        if (this.selectedIndex >= 1){
+        this.selectedIndex -= 1;
+        };
     }
 
     validateEmailRegex(email) {
