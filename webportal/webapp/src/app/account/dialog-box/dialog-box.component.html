@@ -273,11 +273,11 @@
         <hr>
         <mat-dialog-actions>
             <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
                     [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
                     (click)="onApprovalformClick()">NEXT
             </button>
+            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
         </mat-dialog-actions>
       </mat-dialog-content>
       <mat-dialog-content *ngIf="trustedStatus">
@@ -304,11 +304,11 @@
         <hr>
         <mat-dialog-actions>
             <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
                     [disabled]="!messageModel.derivedDatasetname"
                     (click)="onApprovalformClick()">NEXT
             </button>
+            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
         </mat-dialog-actions>
       </mat-dialog-content>
       
@@ -406,7 +406,6 @@
       <br/><br/>
       <mat-dialog-actions>
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
       </mat-dialog-actions>
       <div>
           <button class="btn btn-primary dotBtn request-exportSubmitBtn"
@@ -414,6 +413,9 @@
                   (click)="submitRequest()">SUBMIT
           </button>
       </div>
+      <mat-dialog-actions>
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
+      </mat-dialog-actions>
     </mat-tab>
   </mat-tab-group>
 </div>
