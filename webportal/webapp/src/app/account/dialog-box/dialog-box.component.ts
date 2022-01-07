@@ -324,13 +324,15 @@ export class DialogBoxComponent implements OnInit {
         this.tags = this.messageModel.tags;
         this.justifyExport = this.messageModel.justifyExport;
         this.selectedIndex = 2;
+        console.log(this.selectedIndex);
     }
     onTrustedformClick() {
         this.selectedIndex = 3;
     }
-    OnPreviousBtnClick() {
-        if (this.selectedIndex >= 1){
-        this.selectedIndex -= 1;
+
+    onPreviousBtnClick() {
+        if (this.selectedIndex != 0){
+        this.selectedIndex = this.selectedIndex - 1;
         };
     }
 

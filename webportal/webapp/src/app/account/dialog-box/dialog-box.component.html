@@ -352,19 +352,22 @@
       <br/><br/>
       <mat-dialog-actions *ngIf="trustedStatus">
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
           <button class="btn btn-primary dotBtn request-exportNextBtn"
                   [disabled]="!messageModel.derivedDatasetname"
                   (click)="onTrustedformClick()">NEXT
           </button>
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
       </mat-dialog-actions>
       <br *ngIf="!trustedStatus"/><br *ngIf="!trustedStatus"/>
       <mat-dialog-actions *ngIf="!trustedStatus">
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
       </mat-dialog-actions>
       <div *ngIf="!trustedStatus"><button class="btn btn-primary dotBtn request-exportSubmitBtn" (click)="submitRequest()">SUBMIT</button></div>
+      <mat-dialog-actions *ngIf="!trustedStatus">
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
+      </mat-dialog-actions>
     </mat-tab>
+
 
     <mat-tab label="Auto-Export Status" #tab4 [disabled]='selectedIndex!=3' *ngIf="trustedStatus">
       <hr>
