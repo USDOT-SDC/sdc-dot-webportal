@@ -15,12 +15,13 @@ The test objectives are to verify the functionality of the feature improvements 
 
 2. Login to the production web portal, navigate to the DataSets page, and verify the following for the Data Export Request modal:
    1. The modal/form will open successfully.
-   2. The modal's width has increased to match the table borders of the background/opening page, and height has also increased vs. previous release (inspects to 65vw x 75vh).
-   3. For Trusted and Non-Trusted datasets/each:
+   2. The modal/form will not close on background click.
+   3. The modal's width has increased to match the table borders of the background/opening page, and height has also increased vs. previous release (inspects to 65vw x 75vh).
+   4. For Trusted and Non-Trusted datasets/each:
       1. Ensure that Cancel, Previous, Next, Submit buttons are aligned as per SDC-4197.
       2. Ensure that Cancel, Previous, Next, Submit buttons function properly.
-   4. Verify font-size for tab labels, form field data is 16px.
-   5. Verify that floating labels have also increased in scale to .90.
+   5. Verify font-size for tab labels, form field data is 16px.
+   6. Verify that floating labels have also increased in scale to .90.
    
 
 3. Perform regression testing:
