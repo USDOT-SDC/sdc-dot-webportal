@@ -317,18 +317,23 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
-
         this.derivedDataSetName = this.messageModel.derivedDatasetname;
         this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
         this.dataType = this.messageModel.datatype;
         this.dataSources = this.messageModel.datasources;
         this.tags = this.messageModel.tags;
         this.justifyExport = this.messageModel.justifyExport;
-
         this.selectedIndex = 2;
+        console.log(this.selectedIndex);
     }
     onTrustedformClick() {
         this.selectedIndex = 3;
+    }
+
+    onPreviousBtnClick() {
+        if (this.selectedIndex != 0){
+        this.selectedIndex = this.selectedIndex - 1;
+        };
     }
 
     validateEmailRegex(email) {
