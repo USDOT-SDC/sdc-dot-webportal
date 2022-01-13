@@ -223,17 +223,18 @@
         </mat-form-field>
         <hr>
         <mat-dialog-actions>
+            <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
                     [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet"
                     (click)="onSelectionOfDataset()">NEXT
             </button>
           </span>&nbsp;
-          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
         </mat-dialog-actions>
       </mat-dialog-content>
       <hr>
     </mat-tab>
+
     <mat-tab label="Approval Form" #tab2 [disabled]='selectedIndex==0'>
       <br>
       <p><b>Please provide additional information pertaining to your request for exporting data, by filling out the fields below. These details will be shared with the Data Provider to help them review your request and provide their decision.</b></p>
@@ -271,11 +272,12 @@
         </mat-form-field>
         <hr>
         <mat-dialog-actions>
+            <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
                     [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
                     (click)="onApprovalformClick()">NEXT
             </button>
-          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
         </mat-dialog-actions>
       </mat-dialog-content>
       <mat-dialog-content *ngIf="trustedStatus">
@@ -301,11 +303,12 @@
         </mat-form-field>
         <hr>
         <mat-dialog-actions>
+            <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
-            [disabled]="!messageModel.derivedDatasetname"
+                    [disabled]="!messageModel.derivedDatasetname"
                     (click)="onApprovalformClick()">NEXT
             </button>
-          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
         </mat-dialog-actions>
       </mat-dialog-content>
       
@@ -348,19 +351,27 @@
       </mat-dialog-content>
       <br/><br/>
       <mat-dialog-actions *ngIf="trustedStatus">
-        <button class="btn btn-primary dotBtn request-exportNextBtn"
-                [disabled]="!messageModel.derivedDatasetname"
-                (click)="onTrustedformClick()">NEXT
-        </button>
-        <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+          <button class="btn btn-primary dotBtn request-exportNextBtn"
+                  [disabled]="!messageModel.derivedDatasetname"
+                  (click)="onTrustedformClick()">NEXT
+          </button>
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
       </mat-dialog-actions>
       <br *ngIf="!trustedStatus"/><br *ngIf="!trustedStatus"/>
-      <div *ngIf="!trustedStatus"><button class="btn btn-primary dotBtn" (click)="submitRequest()">Submit</button></div>
+      <mat-dialog-actions *ngIf="!trustedStatus">
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+      </mat-dialog-actions>
+      <div *ngIf="!trustedStatus"><button class="btn btn-primary dotBtn request-exportSubmitBtn" (click)="submitRequest()">SUBMIT</button></div>
+      <mat-dialog-actions *ngIf="!trustedStatus">
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
+      </mat-dialog-actions>
     </mat-tab>
+
 
     <mat-tab label="Auto-Export Status" #tab4 [disabled]='selectedIndex!=3' *ngIf="trustedStatus">
       <hr>
-      <p><b>Auto-Export is a feature that allows data analysts to export their derived data or analysis products automatically. It avoids the need to manually request exports many times for a similar type of export (as a trusted user). Data analysts must request access to this feature for specific types of exports from data providers. At any point after approval, the data provider may revoke this permission. The trusted status associated with access to the auto-export functionality is given per Project, Data Provider, and Per Sub-Dataset/Datatype.</b>
+      <p><b>Auto-Export is a feature that allows data analysts to export their derived data or analysis products automatically. It avoids the need to manually request exports many times for a similar type of export (as a trusted user). Data analysts must request access to this feature for specific types of exports from data providers. At any point after approval, the data provider may revoke this permission. The trusted status associated with access to the auto-export functionality is given per Project, Data Provider, and Per Sub-Dataset/Datatype.</b></p>
       <br>
       <mat-dialog-content *ngIf="!trustedStatus">
         <br>
@@ -392,13 +403,19 @@
             </mat-form-field>
           </div>
       </mat-dialog-content>
-        <br/><br/>
-        <div>
-          <button class="btn btn-primary dotBtn"
+      <br/><br/>
+      <mat-dialog-actions>
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+      </mat-dialog-actions>
+      <div>
+          <button class="btn btn-primary dotBtn request-exportSubmitBtn"
                   [disabled]="(!messageModel.autoderiveddataset || !messageModel.autoreason) && autoExportRequestSelected"
-                  (click)="submitRequest()">Submit
+                  (click)="submitRequest()">SUBMIT
           </button>
-        </div>
+      </div>
+      <mat-dialog-actions>
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
+      </mat-dialog-actions>
     </mat-tab>
   </mat-tab-group>
 </div>

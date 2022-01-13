@@ -99,6 +99,19 @@ html {
     font-size: 14px;
   }
   
-  .usa-show-password {
+ .usa-show-password {
     cursor: pointer;
   }
+
+.custom-export-dialog .mat-form-field {
+font-size: 16px;
+}
+
+.custom-export-dialog .mat-tab-label {
+font-size: 16px;
+}
+
+.custom-export-dialog .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label. {
+transform: translateY(-1.28125em) scale(.90) perspective(100px) translateZ(0.001px);
+width: 133.33333%;
+}
