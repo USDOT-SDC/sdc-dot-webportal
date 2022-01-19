@@ -47,7 +47,11 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
-**December 13, 2022**
+**January 19, 2022**
+### What's New in Release 2.11.0
+* The Sign Up link on the Register page now refers to the external page where the 'Researcher Agreement and Access Request' form is maintained.
+
+**January 13, 2022**
 ### What's New in Release 2.10.0
 * The font and dimensions of the 'Request to Export Data' form have been increased.
 * Buttons within the form have been reorganized and a Previous button has been added for improved user navigation.
