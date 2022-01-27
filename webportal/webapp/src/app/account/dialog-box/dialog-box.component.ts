@@ -855,7 +855,7 @@ export class DialogBoxComponent implements OnInit {
             reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
         }
 
-        this.gatewayService.sendExportRequest('export?message=' + encodeURI(JSON.stringify(reqBody))).subscribe(
+        this.gatewayService.sendExportRequest('export?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
                 this.snackBar.open('Your request has been sent successfully', 'close', {
                     duration: 2000,
