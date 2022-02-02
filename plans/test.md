@@ -1,24 +1,22 @@
 # Test Plan
 
-[v2.11.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.11.0)
+[v2.12.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.12.0)
 
 ### Objectives:
 The test objectives are to verify the functionality of the feature improvements defined in the CRB, as well as to ensure there's been no negative impact on the, otherwise, normal functioning of the web portal within the production environment
 
 ### In Scope:
-1. Manual functional system testing of the web portal - with focus on the Data Export Form.
+1. Manual functional system testing of the web portal - with focus on the Data Export Form and restricted to character set found on standard US QWERTY keyboard.
 2. Manual regression testing of the SDC web portal.
 
 ### Test Plan:
 1. Verify the web portal s3 bucket has data from the date of deployment.
 
 
-2. Navigate to the beta-portal-sdc.dot.gov/register page, and verify the following under the SIGN UP heading:
-   1. The 'external link' icon appears to the right of the Access Request Form link.
-   2. The tooltip '(link is external)' appears when hovering over the external link icon.
-   3. The Access Request Form link opens 'https:// securedatacommons.atlassian.net/wiki/spaces/DESK/pages/1349484563/RT+Form+Researcher+Agreement+and+Access+Request' in a seperate tab.
-   4. The paragraph below SIGN UP heading reads:
-     - "Please download the access request form linked below, fill out the required details and send an email to sdc-support@dot.gov. Once approved, we will send you an email with the instructions for accessing the platform."
+2. Navigate to the beta-portal-sdc.dot.gov/account/datasets page, open and REQUEST TO EXPORT DATA modal, select any ACME dataset, and verify the following:
+   1. On the approval form tab, verify that hint message "Alpha-numeric characters only" right-aligned under each non-prepopulated field. It should be light gray color.
+   2. Verify that export request submits successfully when entering '&' ';' or '#' characters in any of the Approval Form fields.
+   3. Verify that export request submits successfully for entries that include each of the remaining 29, out of 32, special characters.
    
 
 3. Perform regression testing:
