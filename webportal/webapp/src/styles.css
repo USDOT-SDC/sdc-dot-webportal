@@ -115,3 +115,7 @@ font-size: 16px;
 transform: translateY(-1.28125em) scale(.90) perspective(100px) translateZ(0.001px);
 width: 133.33333%;
 }
+
+.custom-export-dialog .mat-hint {
+    color: lightgray;
+    }
