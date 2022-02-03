@@ -412,9 +412,11 @@
             <br/>
             <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
                 <input matInput placeholder="Specify the derived dataset name" [(ngModel)]="messageModel.autoderiveddataset" value="{{messageModel.autoderiveddataset}}" required>
+                <mat-hint align="end">Alpha-numeric characters only</mat-hint>
             </mat-form-field>
             <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
                 <input matInput placeholder="Reason for requesting permission" [(ngModel)]="messageModel.autoreason" value="{{messageModel.autoreason}}" required>
+                <mat-hint align="end">Alpha-numeric characters only</mat-hint>
             </mat-form-field>
           </div>
       </mat-dialog-content>

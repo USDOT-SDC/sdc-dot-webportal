@@ -19,8 +19,9 @@
 3. Verify the website is running.
 
 
-4. On the DATASETS page, open a REQUEST TO EXPORT DATA modal,and select and ACME dataset:
-   - Verify that entereing '&' ';' and '#' characters in the Approval form fields cause  request submission to fail.
+4. On the DATASETS page, open a REQUEST TO EXPORT DATA modal, and select any ACME dataset:
+   - Verify (individually, per char) that entering '&' ';' and '#' characters in the Approval form or Auto Export Status form fields cause request submissions to fail.
+   - Verify that entering other special characters in the Approval form fields do not result in a failed submit request.
    - Verify that no hint messages appear for any of the Approval Form tab fields.
 
 
