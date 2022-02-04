@@ -47,11 +47,16 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
-**January 19, 2022**
+**February 04, 2022. SDC sdc-dot-webportal Release 2.12.0**
+### What's New in Release 2.12.0
+* The message "Alpha-numeric characters only" has been added to user input fields in the 'Request to Export Data' form.
+* Encoding (for requests which are generated as part of data export form submission) has been changed to handle more characters.
+
+**January 19, 2022. SDC sdc-dot-webportal Release 2.11.0**
 ### What's New in Release 2.11.0
 * The Sign Up link on the Register page now refers to the external page where the 'Researcher Agreement and Access Request' form is maintained.
 
-**January 13, 2022**
+**January 13, 2022. SDC sdc-dot-webportal Release 2.10.0**
 ### What's New in Release 2.10.0
 * The font and dimensions of the 'Request to Export Data' form have been increased.
 * Buttons within the form have been reorganized and a Previous button has been added for improved user navigation.

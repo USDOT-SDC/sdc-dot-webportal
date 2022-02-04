@@ -1,13 +1,13 @@
 # Deployment Plan
 
-[v2.11.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.11.0)
+[v2.12.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.12.0)
 
 
 ### Pre-Deployment - General Tasks:
 1. Merge open PR into master.
-2. Reset the 2.11.0 tag in the remote repo, deleting from (development) branch and adding to main.
-3. Ensure a minimum of 4 ACME test export files are enabled on PROD webportal, so they’re available for export as part of post-release testing.
-4. On PROD site, grab full-screen and close-up screenshot of the login/register page.
+2. Reset the 2.12.0 tag in the remote repo, deleting from (development) branch and adding to main.
+3. Ensure a minimum of 10 ACME test export files are enabled on PROD webportal, so they’re available for export as part of post-release testing.
+4. On PROD site, grab full-screen and close-up screenshot of the Data Export modal/ Approval Form Tab (with some fields empty and some filled) for post release testing reference.
 
 
 ### Pre-Deployment - Ready the Build Environment:
@@ -23,12 +23,12 @@
    
    
 2. Make a backup of the current webportal files
-   1. Within build machine, create an 'backup-20220119' directory and run the following:
+   1. Within build machine, create a 'backup-20220203' directory and run the following:
      `aws s3 cp s3://prod-webportal-hosting-004118380849 html/ --recursive`
    
       
-### Deployment Plan for v2.11.0:
-1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 2.11.0
+### Deployment Plan for v2.12.0:
+1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 2.12.0
 
 
 2. Navigate to the webportal\webapp folder, within the repo directory, and run `ecs_prod_deploy.sh`.

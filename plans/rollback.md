@@ -1,12 +1,12 @@
 # Rollback Plan
 
-[v2.11.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.11.0)
+[v2.12.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.12.0)
 
 
 ### If rollback is required after deployment:
 
 1. Restore web portal files from backup:
-   - `aws s3 cp html/ s3://prod-webportal-hosting-004118380849 --recursive`
+   - `aws s3 cp backup-20220203/ s3://prod-webportal-hosting-004118380849 --recursive`
 
 
 2. Refresh assets on nginx proxies, using the following command:
@@ -19,11 +19,10 @@
 3. Verify the website is running.
 
 
-4. On REGISTER/LOGIN page:
-   - Verify that no 'external link' icon appears to the right of the Access Request Form link.
-   - Verify that the Access Request Form link opens 'https:// beta-portal-sdc.dot.gov/assets/SDC_Form/SDCAccessRequestForm' in a seperate tab.
-   - Verify that the paragraph under SIGN UP heading reads:
-     - "Please download the access request form below, fill out the required details and send an email to sdc-support@dot.gov. Once approved, we will send you an email with the instructions for accessing the platform."
+4. On the DATASETS page, open a REQUEST TO EXPORT DATA modal, and select any ACME dataset:
+   - Verify (individually, per char) that entering '&' ';' and '#' characters in the Approval form or Auto Export Status form fields cause request submissions to fail.
+   - Verify that entering other special characters in the Approval form fields do not result in a failed submit request.
+   - Verify that no hint messages appear for any of the Approval Form tab fields.
 
 
 5. Verify that login redirects, data upload, data export, and data export approval functions are working.

@@ -244,32 +244,43 @@
       <mat-dialog-content *ngIf="!trustedStatus">
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}" required>
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.detailedderiveddataset">Required</mat-error>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
           <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype" required>
           <mat-error align="end" *ngIf="!messageModel.datatype">Required</mat-error>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}" required>
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.datasources">Required</mat-error>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Justification of Export" [(ngModel)]="messageModel.justifyExport" value="{{messageModel.justifyExport}}" required>
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.justifyExport">Required</mat-error>
         </mat-form-field>
+
         <hr>
         <mat-dialog-actions>
             <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
@@ -283,10 +294,12 @@
       <mat-dialog-content *ngIf="trustedStatus">
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}">
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
@@ -297,9 +310,11 @@
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}">
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
+          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
         <hr>
         <mat-dialog-actions>
@@ -397,9 +412,11 @@
             <br/>
             <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
                 <input matInput placeholder="Specify the derived dataset name" [(ngModel)]="messageModel.autoderiveddataset" value="{{messageModel.autoderiveddataset}}" required>
+                <mat-hint align="end">Alpha-numeric characters only</mat-hint>
             </mat-form-field>
             <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
                 <input matInput placeholder="Reason for requesting permission" [(ngModel)]="messageModel.autoreason" value="{{messageModel.autoreason}}" required>
+                <mat-hint align="end">Alpha-numeric characters only</mat-hint>
             </mat-form-field>
           </div>
       </mat-dialog-content>

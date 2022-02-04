@@ -84,7 +84,7 @@ export class ExportRequestsComponent implements OnInit {
         let reqBody = {};
         reqBody['userEmail'] = this.userEmail;
 
-        this.gatewayService.post("export/requests?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+        this.gatewayService.post("export/requests?message=" + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
                 for(let items of response['exportRequests']) {
                     for(let item of items) {
