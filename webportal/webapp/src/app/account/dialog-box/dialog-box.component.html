@@ -243,6 +243,7 @@
       <br>
       <label style="float:right"> * All fields are mandatory </label>
       <hr>
+      <!-- Approval Form - Non-Trusted Status -->
       <mat-dialog-content *ngIf="!trustedStatus">
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
@@ -283,6 +284,7 @@
           <mat-error align="end" *ngIf="!messageModel.justifyExport">Required</mat-error>
         </mat-form-field>
 
+        <!-- -SDC-4813 -  Moved Acceptable Use Policy to Approval Form - Non Trusted Users-->
         <hr>
         <br/>
         <p-panel header="Acceptable Use Policy" >
@@ -297,17 +299,19 @@
         </div>
 
       <!--</mat-dialog-content> -->
+        <!-- -SDC-4813 -  FIX: Submit Button on Approval Form for Non-Trusted Users-->
         <hr>
         <mat-dialog-actions>
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-          <button class="btn btn-primary dotBtn request-exportNextBtn"
+          <button class="btn btn-primary dotBtn request-exportSubmitBtn"
                   [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
-                  (click)="onApprovalformClick()">NEXT
+                  (click)="submitRequest()">SUBMIT
           </button>
           <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
       </mat-dialog-actions>
     </mat-dialog-content>
 
+      <!-- Approval Form - Trusted Status -->
       <mat-dialog-content *ngIf="trustedStatus">
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
@@ -341,18 +345,17 @@
 
 <!--
     <hr>
-
         <p-panel header="Acceptable Use Policy" >
           <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
         </p-panel>
         <br/>
-        <div *ngIf="!trustedStatus">
+        <div *ngIf="trustedStatus">      -- SDC-4813- Radio buttons previously only displayed if user was non-trusted -- remove this div once we are sure they will display for both trusted and non-trusted users --
           <div class="ui-g">
             <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
             <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
           </div>
         </div>
---> 
+-->
 
         <hr>
         <mat-dialog-actions>
@@ -366,11 +369,12 @@
       </mat-dialog-content>
     </mat-tab>
 
+      <!-- Auto Export Form  - Trusted Status -->
     <mat-tab label="Auto-Export Status" #tab3 [disabled]='selectedIndex!=2' *ngIf="trustedStatus">
       <hr>
       <p><b>Auto-Export is a feature that allows data analysts to export their derived data or analysis products automatically. It avoids the need to manually request exports many times for a similar type of export (as a trusted user). Data analysts must request access to this feature for specific types of exports from data providers. At any point after approval, the data provider may revoke this permission. The trusted status associated with access to the auto-export functionality is given per Project, Data Provider, and Per Sub-Dataset/Datatype.</b></p>
       <br>
-      <mat-dialog-content *ngIf="!trustedStatus">
+      <mat-dialog-content *ngIf="!trustedStatus"> 
         <br>
         <p>Note - Based on the dataset and datatype selection, you currently are not eligible for auto-export permissions. You must apply to be a trusted user first. Once approved, you may request auto-export permissions.</p>
       </mat-dialog-content>
