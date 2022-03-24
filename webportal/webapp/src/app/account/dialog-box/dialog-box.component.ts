@@ -156,8 +156,7 @@ export class DialogBoxComponent implements OnInit {
         dataprovider: '',
         datatype: '',
         autoderiveddataset: '',
-        autoreason: ''
-
+        autoreason: '',
     };
 
     resize = {
@@ -198,9 +197,11 @@ export class DialogBoxComponent implements OnInit {
         this.states = data.states;
         this.uploadNotice = false;
     }
+
     onNoClick(): void {
         this.dialogRef.close();
     }
+
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
@@ -292,6 +293,7 @@ export class DialogBoxComponent implements OnInit {
             }
         }
     }
+
     selectedIndexChange(val: number) {
         console.log('--- ', val, ' ---');
         this.selectedIndex = val;
@@ -313,6 +315,7 @@ export class DialogBoxComponent implements OnInit {
         this.acceptableUse = '';
         this.selectedIndex = 1;
     }
+
     onApprovalformClick() {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
@@ -326,12 +329,15 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndex = 2;
         console.log(this.selectedIndex);
     }
-    onTrustedformClick() {
+    /*
+    onTrustedformClick() {                                                                           // DEL This  -4813
         this.selectedIndex = 3;
     }
+    */
 
     onPreviousBtnClick() {
-        if (this.selectedIndex != 0){
+        //if (this.selectedIndex != 0){                                                            //Fixed Code -4813      
+        if (this.selectedIndex >= 1){
         this.selectedIndex = this.selectedIndex - 1;
         };
     }
@@ -835,16 +841,20 @@ export class DialogBoxComponent implements OnInit {
                 duration: 2000,
             });
         } else { */
+
         if (this.trustedRequest === 'Yes') {
             // Submit API gateway request
             reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted' };
         }
+        // Given that the acceptable use policy is no longer coupled with trusted status request, the below logic is now irrelevant
+        /*
         // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
         if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted' };
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
+        */
         if (this.trustedRequest === 'No' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['RequestReviewStatus'] = 'Rejected';

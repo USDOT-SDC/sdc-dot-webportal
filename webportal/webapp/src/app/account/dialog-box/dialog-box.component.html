@@ -183,6 +183,8 @@
   </mat-dialog-actions>
 </div>
 
+
+<!--4813  REVISED Export Dataset Dialogbox--STARTS HERE-->
 <!--Request Export Dataset Dialogbox-->
 <div *ngIf="mailType == 'Dataset export Mail'">
   <h3>Request to Export Data</h3>
@@ -282,76 +284,63 @@
         </mat-form-field>
 
         <hr>
+        <br/>
+        <p-panel header="Acceptable Use Policy" >
+          <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
+        </p-panel>
+        <br/>
+        <div *ngIf="!trustedStatus">
+          <div class="ui-g">
+            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
+            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
+          </div>
+        </div>
+
+      <!--</mat-dialog-content> -->
+        <hr>
         <mat-dialog-actions>
-            <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-            <button class="btn btn-primary dotBtn request-exportNextBtn"
-                    [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
-                    (click)="onApprovalformClick()">NEXT
-            </button>
-            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
-        </mat-dialog-actions>
-      </mat-dialog-content>
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+          <button class="btn btn-primary dotBtn request-exportNextBtn"
+                  [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
+                  (click)="onApprovalformClick()">NEXT
+          </button>
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
+      </mat-dialog-actions>
+    </mat-dialog-content>
+
       <mat-dialog-content *ngIf="trustedStatus">
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
           <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype">
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
+
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
-        <hr>
-        <mat-dialog-actions>
-            <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-            <button class="btn btn-primary dotBtn request-exportNextBtn"
-                    [disabled]="!messageModel.derivedDatasetname"
-                    (click)="onApprovalformClick()">NEXT
-            </button>
-            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
-        </mat-dialog-actions>
-      </mat-dialog-content>
-      
-    </mat-tab>
 
-    <mat-tab label="Trusted Status" #tab3 [disabled]='selectedIndex<2'>
-      <hr>
-      <p><b>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests - and will enable immediate export of data, at the time of your request.</b>
-        <br>
-        <b>A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.</b></p>
-      <mat-dialog-content *ngIf="trustedStatus">
-        <br>
-        <p>Note - Based on the dataset and datatype selection, you currently have Trusted Status from this Data Provider. We will notify the Data Provider about your request.</p>
-      </mat-dialog-content>
-
-      <mat-dialog-content>
-        <div *ngIf="!trustedStatus">
-          <br>
-          <p>Note - Based on the dataset and datatype selection, you currently do not have a Trusted Status from this Data Provider. We will notify the Data Provider about your request and send it for approval. Your request will be processed based on the decision from the Data Provider.</p>
-          <h5>Do you wish to request Trusted Status from the Data Provider?</h5>
-
-          <br/>
-          <div class="ui-g">
-            <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="Yes" label="Yes"  (onClick) = "onTrustedRequestGrpChange('Yes')" [(ngModel)]="trustedRequest"></p-radioButton> </div>
-            <div class="ui-g-2"><p-radioButton  name="trustedRequestGrp" value="No" label="No"   (onClick) = "onTrustedRequestGrpChange('No')"  [(ngModel)]="trustedRequest" checked> </p-radioButton> </div>
-          </div>
-          <br/>
-        </div>
+<!--
+    <hr>
 
         <p-panel header="Acceptable Use Policy" >
           <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
@@ -363,28 +352,21 @@
             <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
           </div>
         </div>
+--> 
+
+        <hr>
+        <mat-dialog-actions>
+           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+           <button class="btn btn-primary dotBtn request-exportNextBtn"
+                   [disabled]="!messageModel.derivedDatasetname"
+                   (click)="onApprovalformClick()">NEXT
+            </button>
+            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
+        </mat-dialog-actions>    
       </mat-dialog-content>
-      <br/><br/>
-      <mat-dialog-actions *ngIf="trustedStatus">
-          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-          <button class="btn btn-primary dotBtn request-exportNextBtn"
-                  [disabled]="!messageModel.derivedDatasetname"
-                  (click)="onTrustedformClick()">NEXT
-          </button>
-          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
-      </mat-dialog-actions>
-      <br *ngIf="!trustedStatus"/><br *ngIf="!trustedStatus"/>
-      <mat-dialog-actions *ngIf="!trustedStatus">
-          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-      </mat-dialog-actions>
-      <div *ngIf="!trustedStatus"><button class="btn btn-primary dotBtn request-exportSubmitBtn" (click)="submitRequest()">SUBMIT</button></div>
-      <mat-dialog-actions *ngIf="!trustedStatus">
-          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
-      </mat-dialog-actions>
     </mat-tab>
 
-
-    <mat-tab label="Auto-Export Status" #tab4 [disabled]='selectedIndex!=3' *ngIf="trustedStatus">
+    <mat-tab label="Auto-Export Status" #tab3 [disabled]='selectedIndex!=2' *ngIf="trustedStatus">
       <hr>
       <p><b>Auto-Export is a feature that allows data analysts to export their derived data or analysis products automatically. It avoids the need to manually request exports many times for a similar type of export (as a trusted user). Data analysts must request access to this feature for specific types of exports from data providers. At any point after approval, the data provider may revoke this permission. The trusted status associated with access to the auto-export functionality is given per Project, Data Provider, and Per Sub-Dataset/Datatype.</b></p>
       <br>
