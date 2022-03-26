@@ -785,10 +785,19 @@ export class DialogBoxComponent implements OnInit {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
+        this.derivedDataSetName = this.messageModel.derivedDatasetname;                           //4813
+        this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;                     //4813
+        this.dataType = this.messageModel.datatype;                                                                  //4813
+        this.dataSources = this.messageModel.datasources;                                                        //4813
+        this.tags = this.messageModel.tags;                                                                                  //4813
+        this.justifyExport = this.messageModel.justifyExport;                                                        //4813
         this.autoderiveddataset = this.messageModel.autoderiveddataset;
         this.autoreason = this.messageModel.autoreason;
 
         console.log(this.userBucketName);
+        console.log(this.selectedDataSet);                                                                            //4813
+        console.log(this.derivedDataSetName);                                                                   //4813   
+        console.log(this.autoreason);                                                                                   //4813
 
         const approvalForm = {};
 
