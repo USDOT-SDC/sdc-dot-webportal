@@ -343,19 +343,19 @@
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
 
-<!--
     <hr>
         <p-panel header="Acceptable Use Policy" >
           <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
         </p-panel>
         <br/>
-        <div *ngIf="trustedStatus">      -- SDC-4813- Radio buttons previously only displayed if user was non-trusted -- remove this div once we are sure they will display for both trusted and non-trusted users --
+        <!--  SDC-4813 --
+        <div *ngIf="trustedStatus">      -- SDC-4813- Radio buttons previously only displayed if user was non-trusted -- reconsider this div once we are sure they will display for both trusted and non-trusted users --
           <div class="ui-g">
             <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
             <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
           </div>
         </div>
--->
+         -->
 
         <hr>
         <mat-dialog-actions>

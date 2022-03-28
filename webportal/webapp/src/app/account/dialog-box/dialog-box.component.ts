@@ -855,15 +855,14 @@ export class DialogBoxComponent implements OnInit {
             // Submit API gateway request
             reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted' };
         }
-        // Given that the acceptable use policy is no longer coupled with trusted status request, the below logic is now irrelevant
-        /*
+        
         // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
         if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted' };
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
-        */
+        
         if (this.trustedRequest === 'No' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['RequestReviewStatus'] = 'Rejected';
