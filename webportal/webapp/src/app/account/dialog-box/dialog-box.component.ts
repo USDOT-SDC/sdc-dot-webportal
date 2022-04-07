@@ -52,6 +52,7 @@ export class DialogBoxComponent implements OnInit {
     allProvidersJson: any;
     allDataTypes: any;
     trustedRequest: string;
+    trustedUserJustification: string;    //NEW -4813   
     autoExportRequest: string;
     autoExportRequestSelected: boolean;
     acceptableUse: string;
@@ -157,6 +158,7 @@ export class DialogBoxComponent implements OnInit {
         datatype: '',
         autoderiveddataset: '',
         autoreason: '',
+        trustedUserJustification:'' 
     };
 
     resize = {
@@ -186,6 +188,7 @@ export class DialogBoxComponent implements OnInit {
         this.autoExportRequestSelected = false;
         this.autoderiveddataset = '';
         this.autoreason = '';
+        this.trustedUserJustification = '';                            //-4813   Add new  trustedUserjustfiication
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -780,6 +783,56 @@ export class DialogBoxComponent implements OnInit {
         }
     }
 
+    chkTrustedStatus(event) {
+        console.log(event.value);
+        console.log('trustedStatusBeforeCheck:' + this.trustedStatus);
+        console.log(this.userTrustedStatus);
+        this.selectedDataSet = this.messageModel.datasettype;
+        this.selectedDataProvider = this.messageModel.dataProviderName;
+        this.selectedDatatype = this.messageModel.subDataSet;
+        console.log('SelectedDataType:' + this.selectedDatatype);
+        const key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
+        console.log('key:' + key);
+        this.trustedStatus = key in this.userTrustedStatus;
+        console.log('this.userTrustedStatus:' + this.userTrustedStatus);
+        console.log('trustedStatusAfterCheck:' + this.trustedStatus);
+    }
+
+    /* FOR TEMP REFERENCE
+
+    onSelectionOfDataset() {
+       this.selectedDataSet = this.messageModel.datasettype;
+       this.selectedDataProvider = this.messageModel.dataProviderName;
+       this.selectedDatatype = this.messageModel.subDataSet;
+       console.log('SelectedDataType:' + this.selectedDatatype);
+        const key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
+        this.trustedStatus = key in this.userTrustedStatus;
+        this.autoExportStatus = key in this.userAutoExportStatus;
+        this.trustedRequest = 'No';
+        this.autoExportRequest = 'No';
+        this.autoExportRequestSelected = false;
+        this.autoderiveddataset = ''
+        this.autoreason = ''
+        this.acceptableUse = '';
+        this.selectedIndex = 1;
+
+
+*/
+
+onTrustedStatusRequest(){
+    this.trustedRequest = 'Yes';
+    //this.acceptableUse =  'Yes';
+    this.submitRequest();
+}
+/*
+  [NgModel]='trustedRequest' -- this binds the input value of the radio button to trustedRequest, so dont need to
+  then call submitRequest()
+  make sure acceptalbe use = accepted to override default decline in applySourceSpanToExpressionIfNeeded.py
+}
+*/
+
+
+// NEED TO QUALIFY IF THESE THINGS OCCUR FOR TRUSTED REQUEST OR NOT
     submitRequest() {
         // alert(this.trustedAcceptableUse);
         this.selectedDataSet = this.messageModel.datasettype;
@@ -793,13 +846,16 @@ export class DialogBoxComponent implements OnInit {
         this.justifyExport = this.messageModel.justifyExport;                                                        //4813
         this.autoderiveddataset = this.messageModel.autoderiveddataset;
         this.autoreason = this.messageModel.autoreason;
+        this.trustedUserJustification = this.messageModel.trustedUserJustification;                       //4813
 
-        console.log(this.userBucketName);
-        console.log(this.selectedDataSet);                                                                            //4813
-        console.log(this.derivedDataSetName);                                                                   //4813   
-        console.log(this.autoreason);                                                                                   //4813
-
-        const approvalForm = {};
+        console.log ('this.userBucketName:' + this.userBucketName);                                               //4813
+        console.log('this.selectedDataSet:' + this.selectedDataSet);                                                   //4813
+        console.log('this.derivedDataSetName:' + this.derivedDataSetName);                                 //4813   
+        console.log('this.autoreason:' + this.autoreason);                                                                 //4813
+        console.log('this.trustedUserJustification:' + this.trustedUserJustification);                          //4813
+        console.log('this.trustedRequest:' + this.trustedRequest);                                                     //4813
+                             ///          need qualifier here so that 'submitted' trusted status requests dont fill out approval form? 
+        const approvalForm = {};                                                                       
 
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
@@ -851,15 +907,15 @@ export class DialogBoxComponent implements OnInit {
             });
         } else { */
 
-        if (this.trustedRequest === 'Yes') {
+        if (this.trustedRequest === 'Yes') { 
             // Submit API gateway request
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted' };
+            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted', 'trustedRequestReason': this.trustedUserJustification };   //4813 do additional params/variables need to be added here now?  (see autoExportRequest below)
         }
-        
+    
         // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
         if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted' };
+            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted', 'trustedRequestReason': this.trustedUserJustification };
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
         
@@ -871,7 +927,7 @@ export class DialogBoxComponent implements OnInit {
         if (this.autoExportRequest === 'Yes') {
             // Submit API gateway request
             reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
-        }
+        } 
 
         this.gatewayService.sendExportRequest('export?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
@@ -884,7 +940,7 @@ export class DialogBoxComponent implements OnInit {
         );
         // }
     }
-
+//SDC-4813 -- this can stay the same
     onTrustedRequestGrpChange(selectedVal: any) {
         // if(selectedVal === "No") {
         // //  this.trustedAcceptableUseDisabled = true;

@@ -31,8 +31,8 @@
                       <!-- <td><a style="cursor:pointer;word-break:break-all;" (click)="requestDownload(exportFileRequest)">{{exportFileRequest.reviewFile}}</a></td> -->
                       <td><div style="word-break:break-all;">{{exportFileRequest.reviewFile}}</div></td>   
                         <td>
-                            <div *ngIf="exportFileRequest.RequestReviewStatus == 'Submitted'"><i class="material-icons iconFont" (click)="submitApproval('Approved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportFileRequest)" >close</i></div>
-                           
+                            <div *ngIf="exportFileRequest.RequestReviewStatus == 'Submitted'"><i class="material-icons iconFont" (click)="submitApproval('Approved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportFileRequest)" >close</i></div>                           
+                            
                             <div *ngIf="exportFileRequest.RequestReviewStatus == 'Approved'">
                                     <p-message severity="success" text="{{exportFileRequest.RequestReviewStatus}}"></p-message> 
                             </div> 
@@ -77,8 +77,12 @@
                 <tr>
                     <td>{{trustedRequest.userFullName}}</td>
                     <td>{{trustedRequest.dataset}}</td>
+                    <td>{{trustedRequest.justification}}   <!--SDC-4813 new -->
                     <td>
-                        <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'"> <i class="material-icons iconFont" (click)="submitTrustedApproval('Trusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >done</i><i class="material-icons iconFont" (click)="submitTrustedApproval('Untrusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >close</i></div>
+                        <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'">   <!--SDC-4813 --no change needed here-->
+                            <i class="material-icons iconFont" (click)="submitTrustedApproval('Trusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >done</i>
+                            <i class="material-icons iconFont" (click)="submitTrustedApproval('Untrusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >close</i>
+                        </div>
                         <div *ngIf="trustedRequest.TrustedStatus == 'Trusted'">
                                 <p-message severity="success" text="{{trustedRequest.TrustedStatus}}"></p-message> 
                         </div> 
@@ -116,9 +120,12 @@
                             <td>{{autoExportRequest.dataset}}</td>
                             <td>{{autoExportRequest.justification}}</td>
                             <td>
-                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"> <em class="material-icons iconFont" (click)="submitAutoExportApproval('Approved',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >done</em><em class="material-icons iconFont" (click)="submitAutoExportApproval('Denied',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</em></div>
+                                <div *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"> 
+                                    <em class="material-icons iconFont" (click)="submitAutoExportApproval('Approved',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >done</em>
+                                    <em class="material-icons iconFont" (click)="submitAutoExportApproval('Denied',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</em>
+                                </div>
                                 <div *ngIf="autoExportRequest.AutoExportStatus == 'Approved'">
-                                    <p-message severity="success" text="{{autoExportRequest.AutoExportStatus}}"></p-message>
+                                    <p-message severity="success" text="{{autoExportRequest.AutoExportStatus}}"></p-message>           <!--SDC-4813 -  angular primeNG messages component-->
                                 </div>
                                 <div *ngIf="autoExportRequest.AutoExportStatus == 'Denied'">
                                     <p-message severity="error" text="{{autoExportRequest.AutoExportStatus}}"></p-message>

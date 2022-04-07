@@ -119,3 +119,7 @@ width: 133.33333%;
 .custom-export-dialog .mat-hint {
      color: lightgray;
 }
+
+.custom-export-dialog .mat-dialog-content {
+    overflow-y: hidden;
+}
