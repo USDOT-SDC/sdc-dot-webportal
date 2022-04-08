@@ -382,6 +382,7 @@ def get_user_details_from_username(username):
         raise ChaliceViewError("Failed to get the team name for the user")
     return team_name
 
+  ## -4813 - TRUSTED USERS
 @app.route('/export', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def export():
     paramsQuery = app.current_request.query_params
@@ -389,6 +390,8 @@ def export():
     logger.setLevel("INFO")
     logging.info("Received request {}".format(paramsString))
     params = json.loads(paramsString)
+    bypassExportFileRequestTable = False
+
     try:
         selctedDataSet=params['selectedDataInfo']['selectedDataSet']
         selectedDataProvider=params['selectedDataInfo']['selectedDataProvider']
@@ -425,7 +428,11 @@ def export():
         if 'trustedRequest' in params:
             trustedUsersTable = dynamodb.Table(TABLENAME_TRUSTED_USERS)
 
-            trustedStatus=params['trustedRequest']['trustedRequestStatus']
+            trustedStatus = params['trustedRequest']['trustedRequestStatus']
+            trustedReason = params['trustedRequest']['trustedRequestReason']
+
+            if trustedStatus == 'Submitted' :
+                bypassExportFileRequestTable = True
 
             if acceptableUse == 'Decline':
                 trustedStatus = 'Untrusted'
@@ -436,17 +443,22 @@ def export():
             else:
                 emailContent = "<br/>Trusted status has been requested by <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
 
+             #send email to List of POC for Trusted Status Requests
+            send_notification(listOfPOC,emailContent)    
+
             response = trustedUsersTable.put_item(
                 Item = {
                     'UserID': userID,
                     'UserEmail': user_email,
                     'Dataset-DataProvider-Datatype': combinedDataInfo,
                     'TrustedStatus': trustedStatus,
+                    'TrustedJustification': trustedReason,                                                                      ##-4813 - NEW
                     'UsagePolicyStatus': acceptableUse,
                     'ReqReceivedTimestamp': int(time.time()),
                     'LastUpdatedTimestamp': datetime.datetime.utcnow().strftime("%Y%m%d")
                 }
             )
+
         if 'autoExportRequest' in params:
             autoExportUsersTable = dynamodb.Table(TABLENAME_AUTOEXPORT_USERS)
 
@@ -468,49 +480,50 @@ def export():
                             }
                         )
 
-        requestReviewStatus = params['RequestReviewStatus']
-        download = 'false'
-        export = 'true'
-        publish = 'false'
-        if nonTrustedWorkflowStatus == 'Notify' or userTrustedStatusForSelectedDataset is True:
-            requestReviewStatus = 'Approved'
-            download = 'true'
-            publish = 'true'
-            export = 'false'
-            emailContent += "<br/>Export request has been approved to <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
-        else:
-            emailContent += "<br/>Export request has been requested by <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
+        if not bypassExportFileRequestTable :
+            requestReviewStatus = params['RequestReviewStatus']
+            download = 'false'
+            export = 'true'
+            publish = 'false'
+            if nonTrustedWorkflowStatus == 'Notify' or userTrustedStatusForSelectedDataset is True:
+                requestReviewStatus = 'Approved'
+                download = 'true'
+                publish = 'true'
+                export = 'false'
+                emailContent += "<br/>Export request has been approved to <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
+            else:
+                emailContent += "<br/>Export request has been requested by <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
 
-        exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
-        hashed_object = hashlib.md5(params['S3Key'].encode())
-        timemills = int(time.time())
-        response = exportFileRequestTable.put_item(
-            Item={
-                'S3KeyHash': hashed_object.hexdigest(),
-                'Dataset-DataProvider-Datatype': combinedDataInfo,
-                'ApprovalForm': params['ApprovalForm'],
-                'RequestReviewStatus': requestReviewStatus,
-                'S3Key': params['S3Key'],
-                'RequestedBy_Epoch': userID + "_" + str(timemills),
-                'RequestedBy': userID,
-                'TeamBucket': params['TeamBucket'],
-                'ReqReceivedTimestamp': timemills,
-                'UserEmail': user_email,
-                'ReqReceivedDate': datetime.datetime.now().strftime('%Y-%m-%d')
-            }
-        )
-        availableDatasets = get_datasets()['datasets']['Items']
-        logging.info("Available datasets:" + str(availableDatasets))
+            exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
+            hashed_object = hashlib.md5(params['S3Key'].encode())
+            timemills = int(time.time())
+            response = exportFileRequestTable.put_item(
+                Item={
+                    'S3KeyHash': hashed_object.hexdigest(),
+                    'Dataset-DataProvider-Datatype': combinedDataInfo,
+                    'ApprovalForm': params['ApprovalForm'],
+                    'RequestReviewStatus': requestReviewStatus,
+                    'S3Key': params['S3Key'],
+                    'RequestedBy_Epoch': userID + "_" + str(timemills),
+                    'RequestedBy': userID,
+                    'TeamBucket': params['TeamBucket'],
+                    'ReqReceivedTimestamp': timemills,
+                    'UserEmail': user_email,
+                    'ReqReceivedDate': datetime.datetime.now().strftime('%Y-%m-%d')
+                }
+            )
+            availableDatasets = get_datasets()['datasets']['Items']
+            logging.info("Available datasets:" + str(availableDatasets))
 
-        s3 = boto3.resource('s3')
-        s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
-        #s3_object.metadata.update()
-        s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
-                            Metadata={'download': download, 'export': export, 'publish': publish},
-                            MetadataDirective='REPLACE')
+            s3 = boto3.resource('s3')
+            s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
+            #s3_object.metadata.update()
+            s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
+                                Metadata={'download': download, 'export': export, 'publish': publish},
+                                MetadataDirective='REPLACE')
 
-        #send email to List of POC
-        send_notification(listOfPOC,emailContent)
+            #send email to List of POC
+            send_notification(listOfPOC,emailContent)
 
 
     except BaseException as be:
@@ -555,6 +568,7 @@ def send_notification(listOfPOC, emailContent, subject = 'Export Notification'):
     except BaseException as ke:
         logging.exception("Failed to send notification "+ str(ke))
         raise NotFoundError("Failed to send notification")
+
 
 @app.route('/export/requests', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def getSubmittedRequests():
@@ -622,6 +636,7 @@ def getSubmittedRequests():
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
 
+
 @app.route('/export/requests/updatefilestatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def updatefilestatus():
     paramsQuery = app.current_request.query_params
@@ -686,6 +701,7 @@ def updatefilestatus():
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
 
+
 @app.route('/export/requests/exportFileforReview', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def exportFileforReview():
     paramsQuery = app.current_request.query_params
@@ -716,6 +732,7 @@ def exportFileforReview():
     return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
+
 
 @app.route('/export/requests/updatetrustedtatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def updatetrustedtatus():
@@ -756,6 +773,7 @@ def updatetrustedtatus():
     return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
+
 
 @app.route('/export/requests/updateautoexportstatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def updateautoexportstatus():
