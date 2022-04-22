@@ -106,6 +106,7 @@
   </mat-dialog-actions>
 </div>
 
+
 <!--Publish Dataset / Algorithm Request Dialogbox-->
 <div *ngIf="mailType == 'Dataset publish Mail'">
   <h4>Publish Dataset / Algorithm Request</h4>
@@ -184,7 +185,6 @@
 </div>
 
 
-<!--4813 REVISED Export Dataset Dialogbox STARTS HERE-->
 <!--Request Export Dataset Dialogbox-->
 <div *ngIf="mailType == 'Dataset export Mail'">
   <h3>Request to Export Data</h3>
@@ -284,8 +284,7 @@
           <mat-error align="end" *ngIf="!messageModel.justifyExport">Required</mat-error>
         </mat-form-field>
 
-        <hr>      
-        <!-- SDC4813  Moved Acceptable Use Policy to Approval Form for NonTrusted Users -->
+        <hr>
         <br/>
         <p-panel header="Acceptable Use Policy" >
           <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
@@ -298,8 +297,7 @@
           </div>
         </div>
 
-        <hr>     
-        <!-- SDC4813 Changed from Next  to Submit Button on Approval Form for NonTrusted Users -->
+        <hr>
         <mat-dialog-actions>
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <button class="btn btn-primary dotBtn request-exportSubmitBtn"
@@ -347,14 +345,6 @@
           <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
         </p-panel>
         <br/>
-        <!--  SDC-4813 --
-        <div *ngIf="trustedStatus">      -- SDC-4813- Radio buttons previously only displayed if user was non-trusted -- reconsider this div once we are sure they will display for both trusted and non-trusted users --
-          <div class="ui-g">
-            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
-            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
-          </div>
-        </div>
-         -->
 
         <hr>
         <mat-dialog-actions>
@@ -421,12 +411,11 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<!--4813 - Note: Auto Export Request is not being submitted anywhere in webapp or app.py-- despite radio button being checked?? -->
+<!--Note: Auto Export Request is not being submitted anywhere in webapp or app.py-- despite radio button being checked?? -->
 
 
-<!-- -4813 - NEW  Request Trusted User Status is moved a separate Dialogbox-->
 <!--Request Trusted User Status Dialogbox-->
-<div *ngIf="mailType == 'Request Trusted Status Mail'">    
+<div *ngIf="mailType == 'Request Trusted Status Mail'">
   <h3>Request Trusted User Status</h3>
   <mat-dialog-content style="height: 100%;">
     <hr>
@@ -462,16 +451,16 @@
             </mat-option>
           </mat-select>
           <mat-error *ngIf="!messageModel.subDataSet">Please select Sub DataSet Type </mat-error>
-          <!--<mat-error *ngif="this.trustedStatus = 'Yes'">You have already been granted Trusted Status for this Dataset.</mat-error>-->
+          <!--<mat-error *ngif="trustedStatus === true">You've already been granted Trusted User Status for this Dataset.</mat-error>-->
         </mat-form-field>
+        <br>
 
-<!----4813 - NEW VARIABLE -->
         <div>
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Justification for Request?" [(ngModel)]="messageModel.trustedUserJustification" value="{{messageModel.trustedUserJustification}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.trustedUserJustification">Required</mat-error>
-          <mat-error *ngIf="!messageModel.trustedUserJustification">Please enter your justification for this request </mat-error>
+          <mat-error *ngIf="!messageModel.trustedUserJustification">Please enter your justification for this request</mat-error>
         </mat-form-field>
       </div>
         <br>
@@ -483,8 +472,7 @@
         <br/>
         <div> <!--*ngIf="!trustedStatus" -->
           <div class="ui-g">
-            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"  [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse" required></p-radioButton></div>
-<!----- -4813 - DOES THE DECLINE POLICY BUTTON ACTUALLY NEED TO BE HERE?--------------------------------------------------------------------------------------------------------------------------------------> 
+            <div class="ui-g-6"><p-radioButton name="acceptableUseGrp" value="Accept" label="I have read and accept the Acceptable Use Policy"  [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"  Checked=false  required></p-radioButton></div>
         <!--<div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>-->      
           </div>
         </div>
@@ -493,7 +481,7 @@
             <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <span>
              <button class="btn btn-primary dotBtn request-exportSubmitBtn"
-                    [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.trustedUserJustification || !acceptableUse" 
+                    [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.trustedUserJustification || acceptableUse !== 'Accept' || trustedStatus === true " 
                     (click)="onTrustedStatusRequest()">SUBMIT
              </button>
           </span>
@@ -841,7 +829,7 @@
 </div>
 
 <div *ngIf="mailType == 'Details for export request'">
-  <h3>cf6 Details for approval form</h3>
+  <h3>Details for approval form</h3>
   <hr>
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Name or short description of your derived dataset" [value]="approvalForm.derivedDataSetname">

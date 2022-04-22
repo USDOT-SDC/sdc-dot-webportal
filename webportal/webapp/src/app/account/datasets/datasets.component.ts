@@ -37,7 +37,7 @@ export class DatasetsComponent implements OnInit {
 
     ngOnInit() {
         this.componentName = "Datasets";
-        this.getUserInfo();                                                ////-4813 console log
+        this.getUserInfo();
         var sdcDatasetsString = sessionStorage.getItem('datasets');
         this.sdcElements = JSON.parse(sdcDatasetsString);
         var stacksString = sessionStorage.getItem('stacks');
@@ -60,19 +60,19 @@ export class DatasetsComponent implements OnInit {
                     this.sdcDatasets.push(element);
             }
         });
-        this.getMyDatasetsList();                    ///// -4813- 2 console logs inside of this object/function (this runs after ngOnInit and get User Info are done?)
+        this.getMyDatasetsList();
         console.log("My Datasets length = " + this.myDatasets.length);
         
-        this.cols = [                                          ////-4813 data export table columns
+        this.cols = [
           { field: 'filename', header: 'Filename' },
           { field: 'export', header: 'Export' },
           { field: 'publish', header: 'Publish' },
           { field: 'exportRequestStatus', header: 'Export Request Status'}
         ]
         let trustedStatus = sessionStorage.getItem('userTrustedStatus');
-        console.log("Trusted status"+trustedStatus);               // -4813 returns dictionary of datasets where TrustedStatus = "Trusted" for the given user
-        this.userTrustedStatus = JSON.parse(trustedStatus);   //-4813 parse it and assign it
-        console.log("Trusted status"+ JSON.stringify(this.userTrustedStatus));    //-4813 This returned teh same list of datasets with Trusted Status = "Trusted" and they have been stringified -- should match!!
+        console.log("Trusted status"+trustedStatus);
+        this.userTrustedStatus = JSON.parse(trustedStatus);
+        console.log("Trusted status"+ JSON.stringify(this.userTrustedStatus));
     }
 
     getUserInfo() {
@@ -84,7 +84,7 @@ export class DatasetsComponent implements OnInit {
                 sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
                 sessionStorage.setItem('datasets', JSON.stringify(response.datasets));
                 sessionStorage.setItem('roles', response.role);
-                sessionStorage.setItem('userTrustedStatus', JSON.stringify(response.userTrustedStatus));               ////-4813 --this sets the userTrustedStatus variable/
+                sessionStorage.setItem('userTrustedStatus', JSON.stringify(response.userTrustedStatus));
                 console.log("User info:"+response.userTrustedStatus);
                 // Extract and exportWorkflow all exportWorkflow from datasets                                                   
                 let combinedEW = {};
@@ -105,8 +105,7 @@ export class DatasetsComponent implements OnInit {
             }
         );
     }
-
-    ////     -4813 This doesnt need to be changed -- it uses this.userTrustedStatus from ngOnInit...    
+ 
     getMyDatasetsList() {
         console.log('getMyDatasetsList called: get URL = ' + this.userBucketName + '&username=' + this.userName);
         this.gatewayService.get('user_data?userBucketName=' + this.userBucketName + '&username=' + this.userName).subscribe(
@@ -114,13 +113,13 @@ export class DatasetsComponent implements OnInit {
             for(let x of response) {
                 this.getMetadataForS3Objects(x).subscribe(
                     metadata => {
-                        if (metadata != null) {                                              /////-4813 HOw does metadata get asssigned to a file stored in S3 bucket???
+                        if (metadata != null) {
                                let  trusted = false;
-                                // check if user is trutsted for a dataset
+                                // check if user is trusted for a dataset
                                 for( var dt in this.userTrustedStatus) {
                                     //console.log(dt);
                                     //console.log()
-                                    if(dt in metadata) {                                     ///// -4813 Need to figure out what this metadata is and where it is assigned from
+                                    if(dt in metadata) {
                                         this.myDatasets.push({'filename':x, 'download': 'true', 'export': 'false', 'publish': 'true', 'requestReviewStatus': metadata["requestReviewStatus"]});
                                         trusted = true;
                                     }
@@ -134,8 +133,8 @@ export class DatasetsComponent implements OnInit {
                     }
                 );
              }
-             console.log("My Datasets: " + JSON.stringify(this.myDatasets));         ////-4813 THIS logs on console, after the datasets are loaded -- it shows empty dataset for me
-             console.log("my Datasets length = " + this.myDatasets.length);         ////-4813  THIS does log, must be after the datasets are loaded
+             console.log("My Datasets: " + JSON.stringify(this.myDatasets));
+             console.log("my Datasets length = " + this.myDatasets.length);
             }
         );
     }
@@ -197,26 +196,22 @@ export class DatasetsComponent implements OnInit {
         });
     }
 
+    
+    requestTrustedStatus(/*BucketName,*/ mailType) {
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            panelClass: 'custom-export-dialog',
+            width: '65vw',
+            height: '75vh',
+            disableClose: true,
+            data: { /*userBucketName: this.userBucketName,*/ mailType: mailType }
+            });
 
-    //-4813     ################### NEW ###########################################################
-      //                                                                                                                                     //// should this be requestTrust(RequestType) ??
-           requestTrustedStatus(/*BucketName,*/ mailType) {                                                           //// need to retrace why I was going to omit bucketNam? before.....
-            const dialogRef = this.dialog.open(DialogBoxComponent, {
-               panelClass: 'custom-export-dialog',
-               width: '65vw',
-                height: '75vh',
-               disableClose: true,
-               data: { /*userBucketName: this.userBucketName,*/ mailType: mailType }
-             });
-
-            dialogRef.afterClosed().subscribe(result => {
-                //can I assign trustedStatus = 'Yes' here and then also direct to SubmitRequest?
-                 console.log('The Trusted Status request dialog was closed');
-               //this.myDatasets = [];
-               //this.getMyDatasetsList();                                          ////     do we need to re-render the datasets table here? or is it simply the same?  <<<< I dont think we do                                                                     
-            });                                                                                   ////      or is it the same as after sending request for publish access?  <<<<< yes, should be this!!!
-        }
- //-4813######################################################################################################################
+        dialogRef.afterClosed().subscribe(result => {
+                console.log('The Trusted Status request dialog was closed');
+            //this.myDatasets = [];
+            //this.getMyDatasetsList();                                                                     
+        });
+    }
 
  
     uploadFilesToS3(requestType) {

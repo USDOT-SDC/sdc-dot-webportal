@@ -52,7 +52,7 @@ export class DialogBoxComponent implements OnInit {
     allProvidersJson: any;
     allDataTypes: any;
     trustedRequest: string;
-    trustedUserJustification: string;    //NEW -4813   
+    trustedUserJustification: string;
     autoExportRequest: string;
     autoExportRequestSelected: boolean;
     acceptableUse: string;
@@ -62,7 +62,7 @@ export class DialogBoxComponent implements OnInit {
     detailedDerivedDataset: string;
     derivedDataSetName: string;
     trustedAcceptableUseDisabled: boolean;
-    uploadNotice = false
+    uploadNotice = false;
     resizeFilterFormSubmitted = false;
     diskSizeChange = true;
     cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
@@ -188,7 +188,7 @@ export class DialogBoxComponent implements OnInit {
         this.autoExportRequestSelected = false;
         this.autoderiveddataset = '';
         this.autoreason = '';
-        this.trustedUserJustification = '';                            //-4813   Add new  trustedUserjustfiication
+        this.trustedUserJustification = '';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -332,14 +332,8 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndex = 2;
         console.log(this.selectedIndex);
     }
-    /*
-    onTrustedformClick() {                                                                           // DEL This  -4813
-        this.selectedIndex = 3;
-    }
-    */
 
     onPreviousBtnClick() {
-        //if (this.selectedIndex != 0){                                                            //Fixed Code -4813      
         if (this.selectedIndex >= 1){
         this.selectedIndex = this.selectedIndex - 1;
         };
@@ -784,7 +778,7 @@ export class DialogBoxComponent implements OnInit {
     }
 
     chkTrustedStatus(event) {
-        console.log(event.value);
+        console.log('event.value:' + event.value);
         console.log('trustedStatusBeforeCheck:' + this.trustedStatus);
         console.log(this.userTrustedStatus);
         this.selectedDataSet = this.messageModel.datasettype;
@@ -796,65 +790,44 @@ export class DialogBoxComponent implements OnInit {
         this.trustedStatus = key in this.userTrustedStatus;
         console.log('this.userTrustedStatus:' + this.userTrustedStatus);
         console.log('trustedStatusAfterCheck:' + this.trustedStatus);
+        const msg: string = 'Oops. You already have \'Trusted User Status\' for this dataset. \nPlease select another dataset or cancel this request.';
+        if (this.trustedStatus === true){
+            this.snackBar.open(msg, 'close', {
+            duration: 10000,
+            panelClass: 'existing-trust-snackbar',
+             })
+        };
+        return this.trustedStatus;
     }
 
-    /* FOR TEMP REFERENCE
+    onTrustedStatusRequest(){
+        this.trustedRequest = 'Yes';
+        //this.acceptableUse =  'Yes';
+        this.submitRequest();
+    }
 
-    onSelectionOfDataset() {
-       this.selectedDataSet = this.messageModel.datasettype;
-       this.selectedDataProvider = this.messageModel.dataProviderName;
-       this.selectedDatatype = this.messageModel.subDataSet;
-       console.log('SelectedDataType:' + this.selectedDatatype);
-        const key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
-        this.trustedStatus = key in this.userTrustedStatus;
-        this.autoExportStatus = key in this.userAutoExportStatus;
-        this.trustedRequest = 'No';
-        this.autoExportRequest = 'No';
-        this.autoExportRequestSelected = false;
-        this.autoderiveddataset = ''
-        this.autoreason = ''
-        this.acceptableUse = '';
-        this.selectedIndex = 1;
-
-
-*/
-
-onTrustedStatusRequest(){
-    this.trustedRequest = 'Yes';
-    //this.acceptableUse =  'Yes';
-    this.submitRequest();
-}
-/*
-  [NgModel]='trustedRequest' -- this binds the input value of the radio button to trustedRequest, so dont need to
-  then call submitRequest()
-  make sure acceptalbe use = accepted to override default decline in applySourceSpanToExpressionIfNeeded.py
-}
-*/
-
-
-// NEED TO QUALIFY IF THESE THINGS OCCUR FOR TRUSTED REQUEST OR NOT
     submitRequest() {
         // alert(this.trustedAcceptableUse);
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
-        this.derivedDataSetName = this.messageModel.derivedDatasetname;                           //4813
-        this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;                     //4813
-        this.dataType = this.messageModel.datatype;                                                                  //4813
-        this.dataSources = this.messageModel.datasources;                                                        //4813
-        this.tags = this.messageModel.tags;                                                                                  //4813
-        this.justifyExport = this.messageModel.justifyExport;                                                        //4813
+        this.derivedDataSetName = this.messageModel.derivedDatasetname;
+        this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
+        this.dataType = this.messageModel.datatype;
+        this.dataSources = this.messageModel.datasources;
+        this.tags = this.messageModel.tags;
+        this.justifyExport = this.messageModel.justifyExport;
         this.autoderiveddataset = this.messageModel.autoderiveddataset;
         this.autoreason = this.messageModel.autoreason;
-        this.trustedUserJustification = this.messageModel.trustedUserJustification;                       //4813
+        this.trustedUserJustification = this.messageModel.trustedUserJustification; 
 
-        console.log ('this.userBucketName:' + this.userBucketName);                                               //4813
-        console.log('this.selectedDataSet:' + this.selectedDataSet);                                                   //4813
-        console.log('this.derivedDataSetName:' + this.derivedDataSetName);                                 //4813   
-        console.log('this.autoreason:' + this.autoreason);                                                                 //4813
-        console.log('this.trustedUserJustification:' + this.trustedUserJustification);                          //4813
-        console.log('this.trustedRequest:' + this.trustedRequest);                                                     //4813
-                             ///          need qualifier here so that 'submitted' trusted status requests dont fill out approval form? 
+        console.log ('this.userBucketName:' + this.userBucketName);
+        console.log('this.selectedDataSet:' + this.selectedDataSet);
+        console.log('this.derivedDataSetName:' + this.derivedDataSetName);
+        console.log('this.autoreason:' + this.autoreason);
+        console.log('this.trustedUserJustification:' + this.trustedUserJustification);
+        console.log('this.trustedRequest:' + this.trustedRequest);
+        
         const approvalForm = {};                                                                       
 
         if (this.selectedDataSet) {
@@ -909,7 +882,7 @@ onTrustedStatusRequest(){
 
         if (this.trustedRequest === 'Yes') { 
             // Submit API gateway request
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted', 'trustedRequestReason': this.trustedUserJustification };   //4813 do additional params/variables need to be added here now?  (see autoExportRequest below)
+            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted', 'trustedRequestReason': this.trustedUserJustification };
         }
     
         // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
@@ -938,9 +911,9 @@ onTrustedStatusRequest(){
                 console.log('Request Sent Successfully');
             }
         );
-        // }
     }
-//SDC-4813 -- this can stay the same
+
+    //TODO verify whether this is still called
     onTrustedRequestGrpChange(selectedVal: any) {
         // if(selectedVal === "No") {
         // //  this.trustedAcceptableUseDisabled = true;

@@ -123,3 +123,7 @@ width: 133.33333%;
 .custom-export-dialog .mat-dialog-content {
     overflow-y: hidden;
 }
+
+.existing-trust-snackbar {
+    white-space: pre-wrap
+}

@@ -77,9 +77,9 @@
                 <tr>
                     <td>{{trustedRequest.userFullName}}</td>
                     <td>{{trustedRequest.dataset}}</td>
-                    <td>{{trustedRequest.justification}}   <!--SDC-4813 new -->
+                    <td>{{trustedRequest.justification}}
                     <td>
-                        <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'">   <!--SDC-4813 --no change needed here-->
+                        <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'">
                             <i class="material-icons iconFont" (click)="submitTrustedApproval('Trusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >done</i>
                             <i class="material-icons iconFont" (click)="submitTrustedApproval('Untrusted',trustedRequest.userFullName,trustedRequest.dataset,trustedRequest)" >close</i>
                         </div>
@@ -125,7 +125,7 @@
                                     <em class="material-icons iconFont" (click)="submitAutoExportApproval('Denied',autoExportRequest.userFullName,autoExportRequest.dataset,autoExportRequest)" >close</em>
                                 </div>
                                 <div *ngIf="autoExportRequest.AutoExportStatus == 'Approved'">
-                                    <p-message severity="success" text="{{autoExportRequest.AutoExportStatus}}"></p-message>           <!--SDC-4813 -  angular primeNG messages component-->
+                                    <p-message severity="success" text="{{autoExportRequest.AutoExportStatus}}"></p-message>
                                 </div>
                                 <div *ngIf="autoExportRequest.AutoExportStatus == 'Denied'">
                                     <p-message severity="error" text="{{autoExportRequest.AutoExportStatus}}"></p-message>

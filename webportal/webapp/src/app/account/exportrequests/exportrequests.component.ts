@@ -54,7 +54,7 @@ export class ExportRequestsComponent implements OnInit {
         this.colsTrusted = [
             { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
-            { field: 'justification', header: 'Justification' },    //-4813 - s/b all sets field matches with .push -line 131
+            { field: 'justification', header: 'Justification' },
             { field: 'approval', header: 'Approval' }
           ]
 
@@ -117,12 +117,12 @@ export class ExportRequestsComponent implements OnInit {
                 for(let items of response['trustedRequests']) {
                     for(let item of items) {
                          console.log(item);
-                         this.trustedRequests.push({'userFullName' : item['UserID'],               //-4813 local col var? : item[Key from response ]
+                         this.trustedRequests.push({'userFullName' : item['UserID'],
                                                     'dataset' : item['Dataset-DataProvider-Datatype'],
                                                     'TrustedStatus' : item['TrustedStatus'],
                                                     'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
                                                     'UserEmail': item['UserEmail'],
-                                                    'justification':item['TrustedJustification'] });       //-4813 ---NEW variable
+                                                    'justification':item['TrustedJustification'] });
                     } 
                 }
 
@@ -227,12 +227,11 @@ export class ExportRequestsComponent implements OnInit {
         );
     }
     
-    //-4813 - Dont think we need to add justification here also -- should be good as is....
     submitTrustedApproval(status,key1,key2,trustedRequest) {
         let reqBody = {};
-        reqBody['status'] = status;             //Trusted or Untrusted
-        reqBody['key1'] = key1;                //username
-        reqBody['key2'] = key2;               //combinedDataSet for which Trusted status was requested
+        reqBody['status'] = status;
+        reqBody['key1'] = key1;
+        reqBody['key2'] = key2;
         reqBody['userEmail'] = trustedRequest['UserEmail'];
 
         this.gatewayService.post("export/requests/updatetrustedtatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
