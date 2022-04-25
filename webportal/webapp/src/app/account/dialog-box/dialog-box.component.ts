@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
+import { CheckboxModule } from 'primeng/primeng';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
@@ -56,6 +57,7 @@ export class DialogBoxComponent implements OnInit {
     autoExportRequest: string;
     autoExportRequestSelected: boolean;
     acceptableUse: string;
+    acceptableUseTUSR = false;
     approvalForm: string;
     dataType: string;
     dataSources: string;
@@ -802,7 +804,7 @@ export class DialogBoxComponent implements OnInit {
 
     onTrustedStatusRequest(){
         this.trustedRequest = 'Yes';
-        //this.acceptableUse =  'Yes';
+        this.acceptableUse =  'Accept';
         this.submitRequest();
     }
 

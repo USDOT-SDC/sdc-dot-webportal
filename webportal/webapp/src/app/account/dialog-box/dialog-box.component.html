@@ -472,8 +472,10 @@
         <br/>
         <div> <!--*ngIf="!trustedStatus" -->
           <div class="ui-g">
-            <div class="ui-g-6"><p-radioButton name="acceptableUseGrp" value="Accept" label="I have read and accept the Acceptable Use Policy"  [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"  Checked=false  required></p-radioButton></div>
-        <!--<div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>-->      
+             <div class="ui-g-6"><p-checkbox  name="single"  [(ngModel)]="acceptableUseTUSR"  label="I have read and accept the Acceptable Use Policy" binary=true   required>I have read and accept the Acceptable Use Policy</p-checkbox></div>
+              <!--<div class="ui-g-6"><mat-checkbox  [(ngModel)]="acceptableUseTUSR"  color=primary   required>I have read and accept the Acceptable Use Policy</mat-checkbox></div>-->
+              <!--<div class="ui-g-6"><p-radioButton name="acceptableUseGrp" value="Accept" label="I have read and accept the Acceptable Use Policy"  [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"  Checked=false  required></p-radioButton></div> -->
+              <!--<div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>-->      
           </div>
         </div>
         <hr>
@@ -481,7 +483,7 @@
             <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <span>
              <button class="btn btn-primary dotBtn request-exportSubmitBtn"
-                    [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.trustedUserJustification || acceptableUse !== 'Accept' || trustedStatus === true " 
+                    [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.trustedUserJustification || !acceptableUseTUSR || trustedStatus === true" 
                     (click)="onTrustedStatusRequest()">SUBMIT
              </button>
           </span>

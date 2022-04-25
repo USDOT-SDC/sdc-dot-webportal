@@ -139,3 +139,7 @@ mat_tab_style{
     justify-content: space-around;
     height: 140px;
 }
+
+/deep/ .ui-chkbox {
+vertical-align: top;
+}
