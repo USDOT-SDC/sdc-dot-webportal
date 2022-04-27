@@ -1,12 +1,12 @@
 # Rollback Plan
 
-[v2.12.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.12.0)
+[v2.13.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.13.0)
 
 
 ### If rollback is required after deployment:
 
 1. Restore web portal files from backup:
-   - `aws s3 cp backup-20220203/ s3://prod-webportal-hosting-004118380849 --recursive`
+   - `aws s3 cp backup-20220428/ s3://prod-webportal-hosting-004118380849 --recursive`
 
 
 2. Refresh assets on nginx proxies, using the following command:
@@ -19,10 +19,19 @@
 3. Verify the website is running.
 
 
-4. On the DATASETS page, open a REQUEST TO EXPORT DATA modal, and select any ACME dataset:
-   - Verify (individually, per char) that entering '&' ';' and '#' characters in the Approval form or Auto Export Status form fields cause request submissions to fail.
-   - Verify that entering other special characters in the Approval form fields do not result in a failed submit request.
-   - Verify that no hint messages appear for any of the Approval Form tab fields.
+4. On the DATASETS page verify that no "Request Trusted User Status" button appears below the datasets table.
 
 
-5. Verify that login redirects, data upload, data export, and data export approval functions are working.
+5.  On the DATASETS page, open a REQUEST TO EXPORT DATA modal, and select any non-trusted ACME dataset:
+   - Verify that the Trusted Status tab appears and that all tabs render the same as  pre-release screenshots.
+   - Repeat the above two steps for any trusted ACME dataset..
+
+6.  On the EXPORT REQUESTS page, ensure that no Justification column exists in the Trusted Requests table.
+
+
+7. Submit data export requests for both trusted and non-trusted datasets.
+   -Verify for each that confirmation emails are received and that data loads to the EXPORT REQUESTS page as expected.
+   -Approve or reject each request and ensure that additional confirmation emails are received.
+
+
+8. Verify that login redirects, data upload, data export, and data export approval functions are working.

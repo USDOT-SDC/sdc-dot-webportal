@@ -54,6 +54,7 @@ export class ExportRequestsComponent implements OnInit {
         this.colsTrusted = [
             { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
+            { field: 'justification', header: 'Justification' },
             { field: 'approval', header: 'Approval' }
           ]
 
@@ -91,7 +92,7 @@ export class ExportRequestsComponent implements OnInit {
                         let justifyExport = "";
                         if('justifyExport' in item['ApprovalForm']) {
                             justifyExport = item['ApprovalForm']['justifyExport'];
-                        }
+                             }
                         this.exportFileRequests.push({
                             'userFullName' : item['RequestedBy'], 
                             'description' : justifyExport, 
@@ -108,19 +109,23 @@ export class ExportRequestsComponent implements OnInit {
                             'UserEmail': item['UserEmail'],
                             'TeamName': item['TeamName'],
                             'ReqReceivedDate': item['ReqReceivedDate']
-                           }
+                            }
                         );
                     } 
-                }    
+                }  
+                       
                 for(let items of response['trustedRequests']) {
                     for(let item of items) {
-                         this.trustedRequests.push({'userFullName' : item['UserID'], 
+                         console.log(item);
+                         this.trustedRequests.push({'userFullName' : item['UserID'],
                                                     'dataset' : item['Dataset-DataProvider-Datatype'],
                                                     'TrustedStatus' : item['TrustedStatus'],
                                                     'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
-                                                    'UserEmail': item['UserEmail']});
+                                                    'UserEmail': item['UserEmail'],
+                                                    'justification':item['TrustedJustification'] });
                     } 
                 }
+
                 for(let items of response['autoExportRequests']) {
                     for(let item of items) {
                         //console.log(item);
@@ -145,6 +150,7 @@ export class ExportRequestsComponent implements OnInit {
                 });
             }
         );
+
         /*this.gatewayService.get('user_data?userBucketName=' + this.userBucketName).subscribe(
             (response: any) => {
             for(let x of response) {
@@ -162,6 +168,7 @@ export class ExportRequestsComponent implements OnInit {
             }
         );*/
     }
+    
     renderApprovalForm(approvalForm) {
         console.log(approvalForm.details);
         this.detailsOnclick = 1;
@@ -218,8 +225,8 @@ export class ExportRequestsComponent implements OnInit {
                 console.log('Request Sent Successfully');
             }
         );
-
     }
+    
     submitTrustedApproval(status,key1,key2,trustedRequest) {
         let reqBody = {};
         reqBody['status'] = status;
@@ -233,7 +240,6 @@ export class ExportRequestsComponent implements OnInit {
                 console.log('Request Sent Successfully');
             }
         );
-
     }
 
     submitAutoExportApproval(status,key1,key2,autoExportRequest) {

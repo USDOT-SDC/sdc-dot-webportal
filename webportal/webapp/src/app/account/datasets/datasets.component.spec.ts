@@ -217,6 +217,12 @@ describe('DatasetsComponent', () => {
     expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
   });
 
+  it('should open and close requestTrustedStatus dialog box', () => {
+    component.requestTrustedStatus('mailType');
+    expect(dialogSpy).toHaveBeenCalled(); 
+    expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+  });
+
   it('should open and close uploadFilesToS3 dialog box', () => {
     component.uploadFilesToS3('uploadFiles'); 
     expect(dialogSpy).toHaveBeenCalled(); 

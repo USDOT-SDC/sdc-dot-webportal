@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
+import { CheckboxModule } from 'primeng/primeng';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
@@ -52,16 +53,18 @@ export class DialogBoxComponent implements OnInit {
     allProvidersJson: any;
     allDataTypes: any;
     trustedRequest: string;
+    trustedUserJustification: string;
     autoExportRequest: string;
     autoExportRequestSelected: boolean;
     acceptableUse: string;
+    acceptableUseTUSR = false;
     approvalForm: string;
     dataType: string;
     dataSources: string;
     detailedDerivedDataset: string;
     derivedDataSetName: string;
     trustedAcceptableUseDisabled: boolean;
-    uploadNotice = false
+    uploadNotice = false;
     resizeFilterFormSubmitted = false;
     diskSizeChange = true;
     cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
@@ -156,8 +159,8 @@ export class DialogBoxComponent implements OnInit {
         dataprovider: '',
         datatype: '',
         autoderiveddataset: '',
-        autoreason: ''
-
+        autoreason: '',
+        trustedUserJustification:'' 
     };
 
     resize = {
@@ -187,6 +190,7 @@ export class DialogBoxComponent implements OnInit {
         this.autoExportRequestSelected = false;
         this.autoderiveddataset = '';
         this.autoreason = '';
+        this.trustedUserJustification = '';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -198,9 +202,11 @@ export class DialogBoxComponent implements OnInit {
         this.states = data.states;
         this.uploadNotice = false;
     }
+
     onNoClick(): void {
         this.dialogRef.close();
     }
+
     ngOnInit() {
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
@@ -292,6 +298,7 @@ export class DialogBoxComponent implements OnInit {
             }
         }
     }
+
     selectedIndexChange(val: number) {
         console.log('--- ', val, ' ---');
         this.selectedIndex = val;
@@ -313,6 +320,7 @@ export class DialogBoxComponent implements OnInit {
         this.acceptableUse = '';
         this.selectedIndex = 1;
     }
+
     onApprovalformClick() {
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
@@ -326,12 +334,9 @@ export class DialogBoxComponent implements OnInit {
         this.selectedIndex = 2;
         console.log(this.selectedIndex);
     }
-    onTrustedformClick() {
-        this.selectedIndex = 3;
-    }
 
     onPreviousBtnClick() {
-        if (this.selectedIndex != 0){
+        if (this.selectedIndex >= 1){
         this.selectedIndex = this.selectedIndex - 1;
         };
     }
@@ -774,17 +779,58 @@ export class DialogBoxComponent implements OnInit {
         }
     }
 
+    chkTrustedStatus(event) {
+        console.log('event.value:' + event.value);
+        console.log('trustedStatusBeforeCheck:' + this.trustedStatus);
+        console.log(this.userTrustedStatus);
+        this.selectedDataSet = this.messageModel.datasettype;
+        this.selectedDataProvider = this.messageModel.dataProviderName;
+        this.selectedDatatype = this.messageModel.subDataSet;
+        console.log('SelectedDataType:' + this.selectedDatatype);
+        const key = this.selectedDataSet + '-' + this.selectedDataProvider + '-' + this.selectedDatatype;
+        console.log('key:' + key);
+        this.trustedStatus = key in this.userTrustedStatus;
+        console.log('this.userTrustedStatus:' + this.userTrustedStatus);
+        console.log('trustedStatusAfterCheck:' + this.trustedStatus);
+        const msg: string = 'Oops. You already have \'Trusted User Status\' for this dataset. \nPlease select another dataset or cancel this request.';
+        if (this.trustedStatus === true){
+            this.snackBar.open(msg, 'close', {
+            duration: 10000,
+            panelClass: 'existing-trust-snackbar',
+             })
+        };
+        return this.trustedStatus;
+    }
+
+    onTrustedStatusRequest(){
+        this.trustedRequest = 'Yes';
+        this.acceptableUse =  'Accept';
+        this.submitRequest();
+    }
+
     submitRequest() {
         // alert(this.trustedAcceptableUse);
         this.selectedDataSet = this.messageModel.datasettype;
         this.selectedDataProvider = this.messageModel.dataProviderName;
         this.selectedDatatype = this.messageModel.subDataSet;
+        this.derivedDataSetName = this.messageModel.derivedDatasetname;
+        this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
+        this.dataType = this.messageModel.datatype;
+        this.dataSources = this.messageModel.datasources;
+        this.tags = this.messageModel.tags;
+        this.justifyExport = this.messageModel.justifyExport;
         this.autoderiveddataset = this.messageModel.autoderiveddataset;
         this.autoreason = this.messageModel.autoreason;
+        this.trustedUserJustification = this.messageModel.trustedUserJustification; 
 
-        console.log(this.userBucketName);
-
-        const approvalForm = {};
+        console.log ('this.userBucketName:' + this.userBucketName);
+        console.log('this.selectedDataSet:' + this.selectedDataSet);
+        console.log('this.derivedDataSetName:' + this.derivedDataSetName);
+        console.log('this.autoreason:' + this.autoreason);
+        console.log('this.trustedUserJustification:' + this.trustedUserJustification);
+        console.log('this.trustedRequest:' + this.trustedRequest);
+        
+        const approvalForm = {};                                                                       
 
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
@@ -835,16 +881,19 @@ export class DialogBoxComponent implements OnInit {
                 duration: 2000,
             });
         } else { */
-        if (this.trustedRequest === 'Yes') {
+
+        if (this.trustedRequest === 'Yes') { 
             // Submit API gateway request
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted' };
+            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted', 'trustedRequestReason': this.trustedUserJustification };
         }
+    
         // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
         if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted' };
+            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted', 'trustedRequestReason': this.trustedUserJustification };
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
+        
         if (this.trustedRequest === 'No' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['RequestReviewStatus'] = 'Rejected';
@@ -853,7 +902,7 @@ export class DialogBoxComponent implements OnInit {
         if (this.autoExportRequest === 'Yes') {
             // Submit API gateway request
             reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
-        }
+        } 
 
         this.gatewayService.sendExportRequest('export?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
@@ -864,9 +913,9 @@ export class DialogBoxComponent implements OnInit {
                 console.log('Request Sent Successfully');
             }
         );
-        // }
     }
 
+    //TODO verify whether this is still called
     onTrustedRequestGrpChange(selectedVal: any) {
         // if(selectedVal === "No") {
         // //  this.trustedAcceptableUseDisabled = true;

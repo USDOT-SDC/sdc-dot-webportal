@@ -34,6 +34,7 @@ import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 import {PanelModule, SharedModule} from 'primeng/primeng';
 import {RadioButtonModule} from 'primeng/primeng';
+import { CheckboxModule } from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import {MessageModule} from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
@@ -98,6 +99,7 @@ import { LoaderInterceptor } from './account/services/loader.interceptor';
     SharedModule,
     PanelModule,
     RadioButtonModule,
+    CheckboxModule,
     MessageModule,
     MatDatepickerModule,
     MatNativeDateModule,

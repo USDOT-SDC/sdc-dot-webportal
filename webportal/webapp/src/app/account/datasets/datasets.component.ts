@@ -10,6 +10,7 @@ import * as $ from 'jquery';
     templateUrl: './datasets.component.html',
     styleUrls: ['./datasets.component.css']
 })
+
 export class DatasetsComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService,
         public snackBar: MatSnackBar,
@@ -60,7 +61,7 @@ export class DatasetsComponent implements OnInit {
             }
         });
         this.getMyDatasetsList();
-        console.log("my Datasets length = " + this.myDatasets.length);
+        console.log("My Datasets length = " + this.myDatasets.length);
         
         this.cols = [
           { field: 'filename', header: 'Filename' },
@@ -73,8 +74,9 @@ export class DatasetsComponent implements OnInit {
         this.userTrustedStatus = JSON.parse(trustedStatus);
         console.log("Trusted status"+ JSON.stringify(this.userTrustedStatus));
     }
+
     getUserInfo() {
-        console.log("getUserInfo calledl");
+        console.log("getUserInfo called");
         this.gatewayService.getUserInfo('user').subscribe(
             (response: any) => {
                 sessionStorage.setItem('username', response.username);
@@ -84,7 +86,7 @@ export class DatasetsComponent implements OnInit {
                 sessionStorage.setItem('roles', response.role);
                 sessionStorage.setItem('userTrustedStatus', JSON.stringify(response.userTrustedStatus));
                 console.log("User info:"+response.userTrustedStatus);
-                // Extract and exportWorkflow all exportWorkflow from datasets
+                // Extract and exportWorkflow all exportWorkflow from datasets                                                   
                 let combinedEW = {};
                 for (let dset in response.datasets) {                  
                   let key = "exportWorkflow";
@@ -103,6 +105,7 @@ export class DatasetsComponent implements OnInit {
             }
         );
     }
+ 
     getMyDatasetsList() {
         console.log('getMyDatasetsList called: get URL = ' + this.userBucketName + '&username=' + this.userName);
         this.gatewayService.get('user_data?userBucketName=' + this.userBucketName + '&username=' + this.userName).subscribe(
@@ -112,7 +115,7 @@ export class DatasetsComponent implements OnInit {
                     metadata => {
                         if (metadata != null) {
                                let  trusted = false;
-                                // check if user is trutsted for a dataset
+                                // check if user is trusted for a dataset
                                 for( var dt in this.userTrustedStatus) {
                                     //console.log(dt);
                                     //console.log()
@@ -135,6 +138,7 @@ export class DatasetsComponent implements OnInit {
             }
         );
     }
+
     getRequestReviewStatus(filename) {
         console.log("getRequestReviewStatus called, filename: " + filename);
         let reqBody = {};
@@ -147,6 +151,7 @@ export class DatasetsComponent implements OnInit {
             var resp = response["Items"][0];
         });
     }
+
     selectsdcDataset(dataset) {
         this.selectedsdcDataset = dataset;
         this.showDictionary = true;
@@ -191,6 +196,24 @@ export class DatasetsComponent implements OnInit {
         });
     }
 
+    
+    requestTrustedStatus(/*BucketName,*/ mailType) {
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            panelClass: 'custom-export-dialog',
+            width: '65vw',
+            height: '75vh',
+            disableClose: true,
+            data: { /*userBucketName: this.userBucketName,*/ mailType: mailType }
+            });
+
+        dialogRef.afterClosed().subscribe(result => {
+                console.log('The Trusted Status request dialog was closed');
+            //this.myDatasets = [];
+            //this.getMyDatasetsList();                                                                     
+        });
+    }
+
+ 
     uploadFilesToS3(requestType) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '500px',
