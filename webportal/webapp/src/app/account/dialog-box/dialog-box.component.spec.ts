@@ -10,6 +10,7 @@ import { Routes } from '@angular/router';
 import { of } from 'rxjs/observable/of';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { DatasetinfoComponent } from '../../main/datasetinfo/datasetinfo.component';
 
 let RESULT = { 'message': 'dialog box closed' };
 
@@ -349,4 +350,33 @@ describe('DialogBoxComponent', () => {
   //   expect(spy).toHaveBeenCalled();
   //   expect(mockObjectMap['mockHttp'].request).toHaveBeenCalled(); 
   //  });
+
+  it('should trigger event to chkTrustedStatus', () => { 
+    let event = {value: 'SPAT'};    
+    let spy = spyOn(component, 'chkTrustedStatus').and.callThrough();    
+    component.chkTrustedStatus(event);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should open snackBar when trustedStatus is true', () => { 
+    let event = {value: 'SPAT'};   
+    let spy = spyOn(component, 'chkTrustedStatus').and.callThrough();
+    component.userTrustedStatus = {"CVP-THEA-SPAT": "Trusted"};
+    component.messageModel.datasettype = "CVP";
+    component.messageModel.dataProviderName = "THEA";
+    component.messageModel.subDataSet = "SPAT";
+    component.chkTrustedStatus(event);
+    expect(component.snackBar.open).toHaveBeenCalled();
+  });
+
+  it('should submit trustedStatusRequest', () => { 
+    component.messageModel.datasettype = "CVP";
+    component.messageModel.dataProviderName = "THEA";
+    component.messageModel.subDataSet = "SPAT";
+    component.trustedUserJustification = 'justify';
+    component.acceptableUse = 'Accept';
+    component.onTrustedStatusRequest();
+    expect(mockObjectMap['mockApiGatewayService'].sendExportRequest).toHaveBeenCalled();
+  });
+
 });

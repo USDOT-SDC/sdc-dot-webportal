@@ -13,21 +13,39 @@ The test objectives are to verify the functionality of the feature improvements 
 1. Verify the web portal s3 bucket has data from the date of deployment.
 
 
-2. Navigate to the beta-portal-sdc.dot.gov/account/datasets page, open and REQUEST TO EXPORT DATA modal, select any ACME dataset, and verify the following:
-   1. On the Approval Form and Auto-Export Status tabs, verify that hint message "Alpha-numeric characters only" right-aligned under each non-prepopulated field. Font color should be light gray.
-   2. Verify that hint messages are replaced with "Required" error msg. when a "required" form field is touched and then left empty.
-   3. Verify that the hint messages reappear once data is entered into the empty, "required" form field.
-   4. Verify that export request submits successfully when entering '&' ';' or '#' characters into any of the fields on either the Approval Form or Auto-Export Status tabs.
-   5. Verify that export request also submits successfully for entries that include each of the remaining 29, out of 32, special characters.
+2.  On the DATASETS page:
+   - verify that the new "Request Trusted User Status" button appears below the datasets table and that it opens the corresponding dialog.
+
+
+3.  Within the opened REQUEST TRUSTED USER STATUS modal:
+   - Verify that the Trusted Status Request will not submit with an ACME dataset which has pre-existing Trusted Status and that snackbar with error message opens when attempting to do so.
+   - Verify that the Trusted Status Request submits as expected for non-trusted ACME dataset.
+   - Verify that email confirmation is delivered.
+   - Verify on the EXPORT REQUESTS page, that the submitted request appears in the Trusted Requests table with correct data populated there.
+   - Approve or reject the request and confirm.
+   - Verify that approval or rejection email confirmation is delivered.
+
+
+4.  On the DATASETS page, open a REQUEST TO EXPORT DATA modal, and select any ACME dataset:
+   - Verify that the Trusted Status tab does not appear when selecting either trusted and non-trusted datasets.
+   - Verify that Acceptable Use Policy now appears at bottom of the Approval Form tab for non-Trusted dataset with required Accept or  Decline radio button choices.
+   - Verify that Acceptable Use Policy now appears at bottom of the Approval Form tab for Trusted dataset without any radio buttons.
+   - Submit data export request for 'non-trusted' ACME dataset and ensure correct info loads to the Export Requests table on the EXPORT REQUESTS page. 
+   - Verify the details form will render.
+   - Verify that email confirmation is received for the data export request.
+   - Repeat the last 3 steps to submit an export request for a 'trusted' ACME dataset - and verify that the request loads to the Export Requests table (on the EXPORT REQUESTS page) as already approved.
+
+
+5. Verify that login redirects, data upload, data export, and data export approval functions are working.
    
 
-3. Perform regression testing:
+6. Perform regression testing:
    1. Validate if you were able to access the portal.
    2. Validate portal login is working.
    3. Validate Import/Export/Approval functionality.
    4. Validate launching of workstations. 
    5. Validate start/stop of workstations.
-   6. Validate by functionality of all the tabs in portal.
+   6. Validate functionality of all the tabs in portal.
      
 ### Deliverables:
 Test results will be documented within the CRB.

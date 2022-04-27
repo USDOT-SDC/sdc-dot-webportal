@@ -53,7 +53,22 @@
           </p-table>
           <hr />
           <button class="btn btn-primary dotBtn" [disabled]="this.selectedFiles.length==0" (click)=requestDownload()>Download Files</button>
-          </mat-expansion-panel>
+          <hr>
+          <!--Trusted User Status Request-->
+          <div>
+            <p style="font-size:15px">Request Trusted User Status</p>
+          <span style="color:grey">
+            <p>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests  and will enable immediate export of data, at the time of your request.
+              <br>
+               A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.
+            </p>
+            <br>
+          </span>
+                  <div><button class="btn btn-primary dotBtn" (click)="requestTrustedStatus('Request Trusted Status Mail')">Request Trusted User Status</button></div>
+            <br>
+          </div>
+        </mat-expansion-panel>
+
 
           <!--Curated Datasets table-->
           <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">

@@ -47,6 +47,10 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**April 28, 2022. SDC sdc-dot-webportal Release 2.13.0**
+### What's New in Release 2.13.0
+* The Trusted User Status Request has been moved from the Data Export Request form to a separate dialog box.
+
 **February 04, 2022. SDC sdc-dot-webportal Release 2.12.0**
 ### What's New in Release 2.12.0
 * The message "Alpha-numeric characters only" has been added to user input fields in the 'Request to Export Data' form.
