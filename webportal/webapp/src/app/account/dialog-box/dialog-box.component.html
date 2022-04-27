@@ -323,7 +323,6 @@
 
         <mat-form-field style='width: 100%'>
           <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
-          <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
@@ -358,7 +357,7 @@
       </mat-dialog-content>
     </mat-tab>
 
-      <!-- Auto Export Form  - Trusted Users -->
+      <!-- Auto Export Form - Trusted Users -->
     <mat-tab label="Auto-Export Status" #tab3 [disabled]='selectedIndex!=2' *ngIf="trustedStatus">
       <hr>
       <p><b>Auto-Export is a feature that allows data analysts to export their derived data or analysis products automatically. It avoids the need to manually request exports many times for a similar type of export (as a trusted user). Data analysts must request access to this feature for specific types of exports from data providers. At any point after approval, the data provider may revoke this permission. The trusted status associated with access to the auto-export functionality is given per Project, Data Provider, and Per Sub-Dataset/Datatype.</b></p>
@@ -411,7 +410,6 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<!--Note: Auto Export Request is not being submitted anywhere in webapp or app.py-- despite radio button being checked?? -->
 
 
 <!--Request Trusted User Status Dialogbox-->
@@ -451,7 +449,6 @@
             </mat-option>
           </mat-select>
           <mat-error *ngIf="!messageModel.subDataSet">Please select Sub DataSet Type </mat-error>
-          <!--<mat-error *ngif="trustedStatus === true">You've already been granted Trusted User Status for this Dataset.</mat-error>-->
         </mat-form-field>
         <br>
 
@@ -470,12 +467,9 @@
          <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
        </p-panel>
         <br/>
-        <div> <!--*ngIf="!trustedStatus" -->
+        <div>
           <div class="ui-g">
              <div class="ui-g-6"><p-checkbox  name="single"  [(ngModel)]="acceptableUseTUSR"  label="I have read and accept the Acceptable Use Policy" binary=true   required>I have read and accept the Acceptable Use Policy</p-checkbox></div>
-              <!--<div class="ui-g-6"><mat-checkbox  [(ngModel)]="acceptableUseTUSR"  color=primary   required>I have read and accept the Acceptable Use Policy</mat-checkbox></div>-->
-              <!--<div class="ui-g-6"><p-radioButton name="acceptableUseGrp" value="Accept" label="I have read and accept the Acceptable Use Policy"  [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"  Checked=false  required></p-radioButton></div> -->
-              <!--<div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>-->      
           </div>
         </div>
         <hr>
