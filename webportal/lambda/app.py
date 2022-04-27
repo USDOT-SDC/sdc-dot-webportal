@@ -382,7 +382,6 @@ def get_user_details_from_username(username):
         raise ChaliceViewError("Failed to get the team name for the user")
     return team_name
 
-  ## -4813 - TRUSTED USERS
 @app.route('/export', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def export():
     paramsQuery = app.current_request.query_params
@@ -452,7 +451,7 @@ def export():
                     'UserEmail': user_email,
                     'Dataset-DataProvider-Datatype': combinedDataInfo,
                     'TrustedStatus': trustedStatus,
-                    'TrustedJustification': trustedReason,                                                                      ##-4813 - NEW
+                    'TrustedJustification': trustedReason,
                     'UsagePolicyStatus': acceptableUse,
                     'ReqReceivedTimestamp': int(time.time()),
                     'LastUpdatedTimestamp': datetime.datetime.utcnow().strftime("%Y%m%d")
