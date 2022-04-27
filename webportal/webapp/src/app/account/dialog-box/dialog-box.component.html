@@ -3,48 +3,65 @@
   <h4>SDC Data Access Request Form</h4>
   <hr>
   <mat-dialog-content>
-      <p>Please fill out the following information to obtain access to the data set.</p>
-      <h5 style="font-size:16px;padding-top: 10px;">Basis for Access</h5>
-      <div style='width: 100%;padding-top: 15px;'>
-        <p>Are you a USDOT Employee or researcher under contract to USDOT?</p>
-        <mat-radio-group name="dotEmployee" id="dotEmployee" required [(ngModel)]="messageModel.dotEmployee">
-          <mat-radio-button value="true">Yes</mat-radio-button>
-          <br/><mat-radio-button value="false">No</mat-radio-button>
-        </mat-radio-group>
-      </div>
-      <mat-form-field style='width: 100%' *ngIf="messageModel.dotEmployee === 'true'">
-          <input matInput placeholder="If yes, please provide valid USDOT email address" (ngModelChange)="isEmailValid=validateEmailRegex()" [(ngModel)]="messageModel.dotEmployeeEmail" value="{{messageModel.dotEmployeeEmail}}" required>
-          <mat-error align="start" *ngIf="!isEmailValid">Please enter a valid email address</mat-error>
-          <!-- <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+    <p>Please fill out the following information to obtain access to the data set.</p>
+    <h5 style="font-size:16px;padding-top: 10px;">Basis for Access</h5>
+    <div style='width: 100%;padding-top: 15px;'>
+      <p>Are you a USDOT Employee or researcher under contract to USDOT?</p>
+      <mat-radio-group name="dotEmployee" id="dotEmployee" required [(ngModel)]="messageModel.dotEmployee">
+        <mat-radio-button value="true">Yes</mat-radio-button>
+        <br />
+        <mat-radio-button value="false">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-form-field style='width: 100%' *ngIf="messageModel.dotEmployee === 'true'">
+      <input matInput placeholder="If yes, please provide valid USDOT email address"
+        (ngModelChange)="isEmailValid=validateEmailRegex()" [(ngModel)]="messageModel.dotEmployeeEmail"
+        value="{{messageModel.dotEmployeeEmail}}" required>
+      <mat-error align="start" *ngIf="!isEmailValid">Please enter a valid email address</mat-error>
+      <!-- <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
               Please enter a valid email address
           </mat-error> -->
-          <mat-error align="end" *ngIf="!messageModel.dotEmployeeEmail">Required</mat-error>
-      </mat-form-field>
-      <div style='width: 100%;padding-top: 15px;' *ngIf="messageModel.dotEmployee === 'false'">
-        <p>If No, Do you or your agency have an existing agreement with the data provider?</p>
-        <mat-radio-group name="dotEmployeeExistingContract" id="dotEmployeeExistingContract" required [(ngModel)]="messageModel.dotEmployeeExistingContract">
-          <mat-radio-button value="true">Yes</mat-radio-button>
-          <br/><mat-radio-button value="false">No</mat-radio-button>
-        </mat-radio-group>
-      </div>
-      <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'true'">
-          <p>Kindly email a copy of your data agreement with the requested data provider at <strong>sdc-support@dot.gov</strong>. Access will be provided after the SDC team has validated the agreement.</p>
-      </div>
-      <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'false'">
-          <p>Would you like to sign an agreement to use the data available on the SDC Platform? Kindly write to <strong>sdc-support@dot.gov</strong></p>
-      </div>
-      <hr>
-      <h5 style="font-size:16px;padding-top: 10px;">Geographic Extent of Access</h5>
-      <mat-form-field style='width: 100%'>
-        <textarea matInput name="stateList" id="stateList" placeholder="Enter the state(s) for which you would like to request access." [(ngModel)]="messageModel.stateList" required></textarea>
-        <mat-error align="end" *ngIf="!messageModel.stateList">Required</mat-error>
-      </mat-form-field>
-      <p style="margin-top: -15px;color: #a09e9e;font-size: 12px;"> use commas when requesting multiple states (e.g. KN, VI)</p>
-      <hr>
-      <mat-checkbox [(ngModel)]="agreed" [disabled]="!messageModel.stateList && (!messageModel.dotEmployee === 'false' && !messageModel.dotEmployeeExistingContract) || (messageModel.dotEmployee === 'true' && !messageModel.dotEmployeeEmail)"></mat-checkbox>
-      <p>By clicking accept, the user agrees to the conditions set in the data provider agreement. If you are a USDOT employee or engaged in USDOT-sponsored research activity, you are agreeing to the overall data agreements that USDOT has with the data providers.</p>
-      <p style="padding-top:10px;">Failure to comply with these terms may result in termination of the user account for the site and associated data in those accounts.</p>
-    </mat-dialog-content>
+      <mat-error align="end" *ngIf="!messageModel.dotEmployeeEmail">Required</mat-error>
+    </mat-form-field>
+    <div style='width: 100%;padding-top: 15px;' *ngIf="messageModel.dotEmployee === 'false'">
+      <p>If No, Do you or your agency have an existing agreement with the data provider?</p>
+      <mat-radio-group name="dotEmployeeExistingContract" id="dotEmployeeExistingContract" required
+        [(ngModel)]="messageModel.dotEmployeeExistingContract">
+        <mat-radio-button value="true">Yes</mat-radio-button>
+        <br />
+        <mat-radio-button value="false">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'true'">
+      <p>Kindly email a copy of your data agreement with the requested data provider at
+        <strong>sdc-support@dot.gov</strong>. Access will be provided after the SDC team has validated the agreement.
+      </p>
+    </div>
+    <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.dotEmployeeExistingContract === 'false'">
+      <p>Would you like to sign an agreement to use the data available on the SDC Platform? Kindly write to
+        <strong>sdc-support@dot.gov</strong>
+      </p>
+    </div>
+    <hr>
+    <h5 style="font-size:16px;padding-top: 10px;">Geographic Extent of Access</h5>
+    <mat-form-field style='width: 100%'>
+      <textarea matInput name="stateList" id="stateList"
+        placeholder="Enter the state(s) for which you would like to request access."
+        [(ngModel)]="messageModel.stateList" required></textarea>
+      <mat-error align="end" *ngIf="!messageModel.stateList">Required</mat-error>
+    </mat-form-field>
+    <p style="margin-top: -15px;color: #a09e9e;font-size: 12px;"> use commas when requesting multiple states (e.g. KN,
+      VI)</p>
+    <hr>
+    <mat-checkbox [(ngModel)]="agreed"
+      [disabled]="!messageModel.stateList && (!messageModel.dotEmployee === 'false' && !messageModel.dotEmployeeExistingContract) || (messageModel.dotEmployee === 'true' && !messageModel.dotEmployeeEmail)">
+    </mat-checkbox>
+    <p>By clicking accept, the user agrees to the conditions set in the data provider agreement. If you are a USDOT
+      employee or engaged in USDOT-sponsored research activity, you are agreeing to the overall data agreements that
+      USDOT has with the data providers.</p>
+    <p style="padding-top:10px;">Failure to comply with these terms may result in termination of the user account for
+      the site and associated data in those accounts.</p>
+  </mat-dialog-content>
   <hr>
   <mat-dialog-actions>
     <button class="btn btn-primary dotBtn" [disabled]="!agreed" (click)="sendMail()">SEND REQUEST</button>&nbsp;
@@ -58,47 +75,63 @@
   <h4>SDC Data Access Request Form</h4>
   <hr>
   <mat-dialog-content>
-      <p>Please fill out the following information to obtain access to the data set.</p>
-      <h5 style="font-size:16px;padding-top: 10px;">Basis for Access</h5>
-      <div style='width: 100%;padding-top: 15px;'>
-        <p>Are you a member of either the NYC, THEA or Wyoming CV Pilot Team?</p>
-        <mat-radio-group name="isCVPilotTeamMember" id="isCVPilotTeamMember" required [(ngModel)]="messageModel.isCVPilotTeamMember">
-          <mat-radio-button value="true">Yes</mat-radio-button>
-          <br/><mat-radio-button value="false">No</mat-radio-button>
-        </mat-radio-group>
+    <p>Please fill out the following information to obtain access to the data set.</p>
+    <h5 style="font-size:16px;padding-top: 10px;">Basis for Access</h5>
+    <div style='width: 100%;padding-top: 15px;'>
+      <p>Are you a member of either the NYC, THEA or Wyoming CV Pilot Team?</p>
+      <mat-radio-group name="isCVPilotTeamMember" id="isCVPilotTeamMember" required
+        [(ngModel)]="messageModel.isCVPilotTeamMember">
+        <mat-radio-button value="true">Yes</mat-radio-button>
+        <br />
+        <mat-radio-button value="false">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div style='width: 100%' *ngIf="messageModel.isCVPilotTeamMember === 'true'">
+      <p>If yes, please indicate which CV Pilot Team you are affiliated with</p>
+      <mat-radio-group name="cvPilotTeamName" id="cvPilotTeamName" required [(ngModel)]="messageModel.cvPilotTeamName">
+      </mat-radio-group>
+      <mat-radio-button value="NYC">NYC CV Pilot Team</mat-radio-button>
+      <br />
+      <mat-radio-button value="THEA">THEA CV Pilot Team</mat-radio-button>
+      <br />
+      <mat-radio-button value="Wyoming">Wyoming CV Pilot Team</mat-radio-button>
+    </div>
+    <div style='width: 100%;padding-top: 15px;'>
+      <p>Are you a member of the CV Pilot Independent Evaluation Team?</p>
+      <mat-radio-group name="isCVPilotIETMember" id="isCVPilotIETMember" required
+        [(ngModel)]="messageModel.isCVPilotIETMember">
+        <mat-radio-button value="true">Yes</mat-radio-button>
+        <br />
+        <mat-radio-button value="false">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div style='width: 100%;padding-top:10px;'
+      *ngIf="messageModel.isCVPilotTeamMember === 'false' && messageModel.isCVPilotIETMember === 'false'">
+      <p>If you answered no to both the questions, please provide the following information</p>
+      <p>Please indicate which CV Pilot you are requesting data access for: </p>
+      <mat-radio-group name="cvPilotDataSets" id="cvPilotDataSets" required [(ngModel)]="messageModel.cvPilotDataSets">
+        <mat-radio-button value="Wyoming">Wyoming</mat-radio-button>
+        <br />
+        <mat-radio-button value="Tampa">Tampa Hillsborough Expressway Authority</mat-radio-button>
+        <br />
+        <mat-radio-button value="NYC">New York City DOT</mat-radio-button>
+        <br />
+        <mat-radio-button value="All">All Sites</mat-radio-button>
+      </mat-radio-group>
+      <p>Please provide a brief explanation on the reason for the request</p>
+      <div>
+        <textarea style='width: 100%' matInput name="accessReason" id="accessReason"
+          placeholder="Enter the explanation here" [(ngModel)]="messageModel.accessReason"></textarea>
       </div>
-      <div style='width: 100%' *ngIf="messageModel.isCVPilotTeamMember === 'true'">
-          <p>If yes, please indicate which CV Pilot Team you are affiliated with</p>
-          <mat-radio-group name="cvPilotTeamName" id="cvPilotTeamName" required [(ngModel)]="messageModel.cvPilotTeamName"></mat-radio-group>
-            <mat-radio-button value="NYC">NYC CV Pilot Team</mat-radio-button>
-            <br/><mat-radio-button value="THEA">THEA CV Pilot Team</mat-radio-button>
-            <br/><mat-radio-button value="Wyoming">Wyoming CV Pilot Team</mat-radio-button>
-      </div>
-      <div style='width: 100%;padding-top: 15px;'>
-        <p>Are you a member of the CV Pilot Independent Evaluation Team?</p>
-        <mat-radio-group name="isCVPilotIETMember" id="isCVPilotIETMember" required [(ngModel)]="messageModel.isCVPilotIETMember">
-          <mat-radio-button value="true">Yes</mat-radio-button>
-          <br/><mat-radio-button value="false">No</mat-radio-button>
-        </mat-radio-group>
-      </div>
-      <div style='width: 100%;padding-top:10px;' *ngIf="messageModel.isCVPilotTeamMember === 'false' && messageModel.isCVPilotIETMember === 'false'">
-          <p>If you answered no to both the questions, please provide the following information</p>
-          <p>Please indicate which CV Pilot you are requesting data access for: </p>
-          <mat-radio-group name="cvPilotDataSets" id="cvPilotDataSets" required [(ngModel)]="messageModel.cvPilotDataSets">
-            <mat-radio-button value="Wyoming">Wyoming</mat-radio-button>
-            <br/><mat-radio-button value="Tampa">Tampa Hillsborough Expressway Authority</mat-radio-button>
-            <br/><mat-radio-button value="NYC">New York City DOT</mat-radio-button>
-            <br/><mat-radio-button value="All">All Sites</mat-radio-button>
-          </mat-radio-group>
-          <p>Please provide a brief explanation on the reason for the request</p>
-          <div>
-            <textarea style='width: 100%' matInput name="accessReason" id="accessReason" placeholder="Enter the explanation here" [(ngModel)]="messageModel.accessReason"></textarea>
-          </div>
-      </div>
-      <hr>
-      <mat-checkbox [(ngModel)]="agreed"></mat-checkbox>
-      <p>By clicking accept, the user agrees to the terms and conditions set forth by the CV Pilot data providers. For the CVP deployment team and the IE, please refer to your data use agreements with the CV Pilot sites. For other users, please note that the access to CV Pilot evaluation data on the SDC is made on a case-by-case basis by the individual CV Pilot sites. If data access is provided, additional agreements may be necessary to ensure that the CV Pilot data protection needs are satisfied.</p>
-    </mat-dialog-content>
+    </div>
+    <hr>
+    <mat-checkbox [(ngModel)]="agreed"></mat-checkbox>
+    <p>By clicking accept, the user agrees to the terms and conditions set forth by the CV Pilot data providers. For the
+      CVP deployment team and the IE, please refer to your data use agreements with the CV Pilot sites. For other users,
+      please note that the access to CV Pilot evaluation data on the SDC is made on a case-by-case basis by the
+      individual CV Pilot sites. If data access is provided, additional agreements may be necessary to ensure that the
+      CV Pilot data protection needs are satisfied.</p>
+  </mat-dialog-content>
   <hr>
   <mat-dialog-actions>
     <button class="btn btn-primary dotBtn" [disabled]="!agreed" (click)="sendMail()">SEND REQUEST</button>&nbsp;
@@ -137,31 +170,37 @@
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Description" [(ngModel)]="messageModel.description" value="{{messageModel.description}}" required>
+      <input matInput placeholder="Description" [(ngModel)]="messageModel.description"
+        value="{{messageModel.description}}" required>
       <mat-error align="end" *ngIf="!messageModel.description">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>
-      <input matInput placeholder="File/folder name" [(ngModel)]="messageModel.fileFolderName" value="{{messageModel.fileFolderName}}" required>
+      <input matInput placeholder="File/folder name" [(ngModel)]="messageModel.fileFolderName"
+        value="{{messageModel.fileFolderName}}" required>
       <mat-error align="end" *ngIf="!messageModel.fileFolderName">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Readme / Data dictionary file name" [(ngModel)]="messageModel.readmeFileName" value="{{messageModel.readmeFileName}}" required>
+      <input matInput placeholder="Readme / Data dictionary file name" [(ngModel)]="messageModel.readmeFileName"
+        value="{{messageModel.readmeFileName}}" required>
       <mat-error align="end" *ngIf="!messageModel.readmeFileName">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
-      <input matInput placeholder="Geographic Scope" [(ngModel)]="messageModel.geographicScope" value="{{messageModel.geographicScope}}" required>
+      <input matInput placeholder="Geographic Scope" [(ngModel)]="messageModel.geographicScope"
+        value="{{messageModel.geographicScope}}" required>
       <mat-error *ngIf="!messageModel.geographicScope">Required</mat-error>
     </mat-form-field>
     <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'dataset'">
-      <input matInput placeholder="Start/End Date for Data Availability" [(ngModel)]="messageModel.dataAvailability" value="{{messageModel.dataAvailability}}" required>
+      <input matInput placeholder="Start/End Date for Data Availability" [(ngModel)]="messageModel.dataAvailability"
+        value="{{messageModel.dataAvailability}}" required>
       <mat-error align="end" *ngIf="!messageModel.dataAvailability">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field style='width: 100%' *ngIf="messageModel.type == 'algorithm'">
-      <input matInput placeholder="Programming Tools/language" [(ngModel)]="messageModel.ProgrammingTool" value="{{messageModel.ProgrammingTool}}" required>
+      <input matInput placeholder="Programming Tools/language" [(ngModel)]="messageModel.ProgrammingTool"
+        value="{{messageModel.ProgrammingTool}}" required>
       <mat-error align="end" *ngIf="!messageModel.ProgrammingTool">Required</mat-error>
     </mat-form-field>
 
@@ -170,14 +209,14 @@
   <mat-dialog-actions>
     <span *ngIf="messageModel.type == 'dataset'">
       <button class="btn btn-primary dotBtn"
-              [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.geographicScope || !messageModel.dataAvailability"
-              (click)="sendMail()">SEND REQUEST
+        [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.geographicScope || !messageModel.dataAvailability"
+        (click)="sendMail()">SEND REQUEST
       </button>
     </span>&nbsp;
     <span *ngIf="messageModel.type == 'algorithm'">
       <button class="btn btn-primary dotBtn"
-              [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.ProgrammingTool"
-              (click)="sendMail()">SEND REQUEST
+        [disabled]="!messageModel.type || !messageModel.name || !messageModel.description || !messageModel.fileFolderName || !messageModel.readmeFileName || !messageModel.ProgrammingTool"
+        (click)="sendMail()">SEND REQUEST
       </button>
     </span>&nbsp;
     <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
@@ -193,12 +232,18 @@
     <mat-tab label="Select Project" #tab1>
       <mat-dialog-content style="height: 100%;">
         <hr>
-        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to create your derived dataset. This will help us to route your request to the appropriate Data Provider for approval.</b></p>
-        <span style="color:grey; font-style: italic;">Note - If your derived Dataset is created using multiple Sub-Datasets/Data Types, that are available within SDC or external Datasets/Data Sources that you have uploaded into the system, you will be provided an option to list all such Datasets/Data Types in the next section of the workflow.</span>
+        <p><b>Please select the Project, Data Provider, and the primary Sub-Dataset/Data Type, that you have used to
+            create your derived dataset. This will help us to route your request to the appropriate Data Provider for
+            approval.</b></p>
+        <span style="color:grey; font-style: italic;">Note - If your derived Dataset is created using multiple
+          Sub-Datasets/Data Types, that are available within SDC or external Datasets/Data Sources that you have
+          uploaded into the system, you will be provided an option to list all such Datasets/Data Types in the next
+          section of the workflow.</span>
         <br>
         <br>
         <mat-form-field style='width: 100%'>
-          <mat-select class="exportSelect" placeholder='Project/Dataset' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)">
+          <mat-select class="exportSelect" placeholder='Project/Dataset' [(ngModel)]="messageModel.datasettype"
+            (selectionChange)="setDataProviders($event)">
             <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value" required>
               {{ dataSetType.viewValue }}
             </mat-option>
@@ -207,7 +252,8 @@
         </mat-form-field>
 
         <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
-          <mat-select class="exportSelect" placeholder='Data Provider' [(ngModel)]="messageModel.dataProviderName" (selectionChange)="setSubDatasets($event)">
+          <mat-select class="exportSelect" placeholder='Data Provider' [(ngModel)]="messageModel.dataProviderName"
+            (selectionChange)="setSubDatasets($event)">
             <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value" required>
               {{ dataProviderName.viewValue }}
             </mat-option>
@@ -225,11 +271,11 @@
         </mat-form-field>
         <hr>
         <mat-dialog-actions>
-            <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <span>
             <button class="btn btn-primary dotBtn request-exportNextBtn"
-                    [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet"
-                    (click)="onSelectionOfDataset()">NEXT
+              [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet"
+              (click)="onSelectionOfDataset()">NEXT
             </button>
           </span>&nbsp;
         </mat-dialog-actions>
@@ -239,61 +285,81 @@
 
     <mat-tab label="Approval Form" #tab2 [disabled]='selectedIndex==0'>
       <br>
-      <p><b>Please provide additional information pertaining to your request for exporting data, by filling out the fields below. These details will be shared with the Data Provider to help them review your request and provide their decision.</b></p>
+      <p><b>Please provide additional information pertaining to your request for exporting data, by filling out the
+          fields below. These details will be shared with the Data Provider to help them review your request and provide
+          their decision.</b></p>
       <br>
       <label style="float:right"> * All fields are mandatory </label>
       <hr>
       <!-- Approval Form - Non-Trusted Status -->
       <mat-dialog-content *ngIf="!trustedStatus">
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
+          <input matInput title="e.g. Aggregated Jam Counts, Virginia Alerts in 2020, etc."
+            placeholder="Name or short description of your derived dataset"
+            [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}" required>
+          <input matInput
+            title="e.g. Waze jams aggregated and counted in 2022, Average number of Waze alerts per day in Virginia in 2020, etc."
+            placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset"
+            value="{{messageModel.detailedderiveddataset}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.detailedderiveddataset">Required</mat-error>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
+          <input matInput title="e.g. CVP, Waze, ARDS, etc." placeholder="Anchor dataset of interest or data provider"
+            [value]="selectedDataProvider" required>
           <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype" required>
+          <input matInput title="e.g. Speed, BSM, Alerts, Jams, Railroad, etc."
+            placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype" required>
           <mat-error align="end" *ngIf="!messageModel.datatype">Required</mat-error>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}" required>
+          <input matInput title="e.g. US Census Bureau, ArcGIS Online, US Geological Survey, etc."
+            placeholder="Additional datasources" [(ngModel)]="messageModel.datasources"
+            value="{{messageModel.datasources}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.datasources">Required</mat-error>
         </mat-form-field>
-
-        <mat-form-field style='width: 100%'>
+        <!-- <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
-        </mat-form-field>
-
+        </mat-form-field> -->
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Justification of Export" [(ngModel)]="messageModel.justifyExport" value="{{messageModel.justifyExport}}" required>
+          <input matInput
+            title="e.g. Used in CVP dashboard, Used for presentation at SDC Quarterly Executive Briefing, etc."
+            placeholder="Justification of Export" [(ngModel)]="messageModel.justifyExport"
+            value="{{messageModel.justifyExport}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.justifyExport">Required</mat-error>
         </mat-form-field>
 
         <hr>
-        <br/>
-        <p-panel header="Acceptable Use Policy" >
-          <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
+        <br />
+        <p-panel header="Acceptable Use Policy">
+          <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']"
+            *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]">
+          </div>
         </p-panel>
-        <br/>
+        <br />
         <div *ngIf="!trustedStatus">
           <div class="ui-g">
-            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"   [disabled]="trustedAcceptableUseDisabled"  [(ngModel)]="acceptableUse"></p-radioButton></div>
-            <div class="ui-g-3"><p-radioButton name="acceptableUseGrp" value="Decline" label="Decline" [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton></div>
+            <div class="ui-g-3">
+              <p-radioButton name="acceptableUseGrp" value="Accept" label="Accept"
+                [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton>
+            </div>
+            <div class="ui-g-3">
+              <p-radioButton name="acceptableUseGrp" value="Decline" label="Decline"
+                [disabled]="trustedAcceptableUseDisabled" [(ngModel)]="acceptableUse"></p-radioButton>
+            </div>
           </div>
         </div>
 
@@ -301,111 +367,142 @@
         <mat-dialog-actions>
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <button class="btn btn-primary dotBtn request-exportSubmitBtn"
-                  [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
-                  (click)="submitRequest()">SUBMIT
+            [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
+            (click)="submitRequest()">SUBMIT
           </button>
-          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
-      </mat-dialog-actions>
-    </mat-dialog-content>
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn"
+            (click)="onPreviousBtnClick()">PREVIOUS</button>
+        </mat-dialog-actions>
+      </mat-dialog-content>
 
       <!-- Approval Form - Trusted Users -->
       <mat-dialog-content *ngIf="trustedStatus">
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Name or short description of your derived dataset" [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
+          <input matInput title="e.g. Aggregated Jam Counts, Virginia Alerts in 2020, etc."
+            placeholder="Name or short description of your derived dataset"
+            [(ngModel)]="messageModel.derivedDatasetname" value="{{messageModel.derivedDatasetname}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname">Required</mat-error>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset" value="{{messageModel.detailedderiveddataset}}">
+          <input matInput
+            title="e.g. Waze jams aggregated and counted in 2022, Average number of Waze alerts per day in Virginia in 2020, etc."
+            placeholder="Detailed description of the derived dataset" [(ngModel)]="messageModel.detailedderiveddataset"
+            value="{{messageModel.detailedderiveddataset}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="selectedDataProvider" required>
+          <input matInput title="e.g. CVP, Waze, ARDS, etc." placeholder="Anchor dataset of interest or data provider"
+            [value]="selectedDataProvider" required>
+          <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype">
+          <input matInput title="e.g. Speed, BSM, Alerts, Jams, Railroad, etc."
+            placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype">
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Additional datasources" [(ngModel)]="messageModel.datasources" value="{{messageModel.datasources}}">
+          <input matInput title="e.g. US Census Bureau, ArcGIS Online, US Geological Survey, etc."
+            placeholder="Additional datasources" [(ngModel)]="messageModel.datasources"
+            value="{{messageModel.datasources}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field>
 
-        <mat-form-field style='width: 100%'>
+        <!-- <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
-        </mat-form-field>
+        </mat-form-field> -->
 
-        <hr>      
-        <p-panel header="Acceptable Use Policy" >
-          <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
+        <hr>
+        <p-panel header="Acceptable Use Policy">
+          <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']"
+            *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]">
+          </div>
         </p-panel>
-        <br/>
+        <br />
 
         <hr>
         <mat-dialog-actions>
-           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-           <button class="btn btn-primary dotBtn request-exportNextBtn"
-                   [disabled]="!messageModel.derivedDatasetname"
-                   (click)="onApprovalformClick()">NEXT
-            </button>
-            <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
-        </mat-dialog-actions>    
+          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+          <button class="btn btn-primary dotBtn request-exportNextBtn" [disabled]="!messageModel.derivedDatasetname"
+            (click)="onApprovalformClick()">NEXT
+          </button>
+          <button class="btn btn-primary dotBtn request-exportPreviousBtn"
+            (click)="onPreviousBtnClick()">PREVIOUS</button>
+        </mat-dialog-actions>
       </mat-dialog-content>
     </mat-tab>
 
-      <!-- Auto Export Form - Trusted Users -->
+    <!-- Auto Export Form - Trusted Users -->
     <mat-tab label="Auto-Export Status" #tab3 [disabled]='selectedIndex!=2' *ngIf="trustedStatus">
       <hr>
-      <p><b>Auto-Export is a feature that allows data analysts to export their derived data or analysis products automatically. It avoids the need to manually request exports many times for a similar type of export (as a trusted user). Data analysts must request access to this feature for specific types of exports from data providers. At any point after approval, the data provider may revoke this permission. The trusted status associated with access to the auto-export functionality is given per Project, Data Provider, and Per Sub-Dataset/Datatype.</b></p>
+      <p><b>Auto-Export is a feature that allows data analysts to export their derived data or analysis products
+          automatically. It avoids the need to manually request exports many times for a similar type of export (as a
+          trusted user). Data analysts must request access to this feature for specific types of exports from data
+          providers. At any point after approval, the data provider may revoke this permission. The trusted status
+          associated with access to the auto-export functionality is given per Project, Data Provider, and Per
+          Sub-Dataset/Datatype.</b></p>
       <br>
-      <mat-dialog-content *ngIf="!trustedStatus"> 
+      <mat-dialog-content *ngIf="!trustedStatus">
         <br>
-        <p>Note - Based on the dataset and datatype selection, you currently are not eligible for auto-export permissions. You must apply to be a trusted user first. Once approved, you may request auto-export permissions.</p>
+        <p>Note - Based on the dataset and datatype selection, you currently are not eligible for auto-export
+          permissions. You must apply to be a trusted user first. Once approved, you may request auto-export
+          permissions.</p>
       </mat-dialog-content>
 
       <mat-dialog-content *ngIf="autoExportStatus && trustedStatus">
         <br>
-        <p>Note - Based on the dataset and datatype selection, you currently have Auto-Export Status from this Data Provider.</p>
-      </mat-dialog-content> 
-        
-      <mat-dialog-content>
-          <div *ngIf="!autoExportStatus && trustedStatus">
-            <br>
-            <p>Note - You currently do not have Auto-Export Status from this Data Provider. We will notify you when the Data Provider has made a decision.</p>
-            <h5>Do you wish to request Auto-Export permissions from the Data Provider?</h5>
-            
-            <br/>
-            <div class="ui-g">
-                <div class="ui-g-2"><p-radioButton  name="autoExportRequestGrp" value="Yes" label="Yes"  (onClick) = "onAutoExportRequestGrpChange('Yes')" [(ngModel)]="autoExportRequest"></p-radioButton> </div>
-                <div class="ui-g-2"><p-radioButton  name="autoExportRequestGrp" value="No" label="No"   (onClick) = "onAutoExportRequestGrpChange('No')"  [(ngModel)]="autoExportRequest" checked> </p-radioButton> </div>
-            </div>
-            <br/>
-            <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
-                <input matInput placeholder="Specify the derived dataset name" [(ngModel)]="messageModel.autoderiveddataset" value="{{messageModel.autoderiveddataset}}" required>
-                <mat-hint align="end">Alpha-numeric characters only</mat-hint>
-            </mat-form-field>
-            <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
-                <input matInput placeholder="Reason for requesting permission" [(ngModel)]="messageModel.autoreason" value="{{messageModel.autoreason}}" required>
-                <mat-hint align="end">Alpha-numeric characters only</mat-hint>
-            </mat-form-field>
-          </div>
+        <p>Note - Based on the dataset and datatype selection, you currently have Auto-Export Status from this Data
+          Provider.</p>
       </mat-dialog-content>
-      <br/><br/>
+
+      <mat-dialog-content>
+        <div *ngIf="!autoExportStatus && trustedStatus">
+          <br>
+          <p>Note - You currently do not have Auto-Export Status from this Data Provider. We will notify you when the
+            Data Provider has made a decision.</p>
+          <h5>Do you wish to request Auto-Export permissions from the Data Provider?</h5>
+
+          <br />
+          <div class="ui-g">
+            <div class="ui-g-2">
+              <p-radioButton name="autoExportRequestGrp" value="Yes" label="Yes"
+                (onClick)="onAutoExportRequestGrpChange('Yes')" [(ngModel)]="autoExportRequest"></p-radioButton>
+            </div>
+            <div class="ui-g-2">
+              <p-radioButton name="autoExportRequestGrp" value="No" label="No"
+                (onClick)="onAutoExportRequestGrpChange('No')" [(ngModel)]="autoExportRequest" checked> </p-radioButton>
+            </div>
+          </div>
+          <br />
+          <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
+            <input matInput placeholder="Specify the derived dataset name" [(ngModel)]="messageModel.autoderiveddataset"
+              value="{{messageModel.autoderiveddataset}}" required>
+            <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+          </mat-form-field>
+          <mat-form-field style='width: 100%' *ngIf="autoExportRequestSelected">
+            <input matInput placeholder="Reason for requesting permission" [(ngModel)]="messageModel.autoreason"
+              value="{{messageModel.autoreason}}" required>
+            <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+          </mat-form-field>
+        </div>
+      </mat-dialog-content>
+      <br /><br />
       <mat-dialog-actions>
-          <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+        <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
       </mat-dialog-actions>
       <div>
-          <button class="btn btn-primary dotBtn request-exportSubmitBtn"
-                  [disabled]="(!messageModel.autoderiveddataset || !messageModel.autoreason) && autoExportRequestSelected"
-                  (click)="submitRequest()">SUBMIT
-          </button>
+        <button class="btn btn-primary dotBtn request-exportSubmitBtn"
+          [disabled]="(!messageModel.autoderiveddataset || !messageModel.autoreason) && autoExportRequestSelected"
+          (click)="submitRequest()">SUBMIT
+        </button>
       </div>
       <mat-dialog-actions>
-          <button class="btn btn-primary dotBtn request-exportPreviousBtn" (click)="onPreviousBtnClick()">PREVIOUS</button>
+        <button class="btn btn-primary dotBtn request-exportPreviousBtn"
+          (click)="onPreviousBtnClick()">PREVIOUS</button>
       </mat-dialog-actions>
     </mat-tab>
   </mat-tab-group>
@@ -417,72 +514,87 @@
   <h3>Request Trusted User Status</h3>
   <mat-dialog-content style="height: 100%;">
     <hr>
-    <p><b>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests - and will enable immediate export of data, at the time of your request.</b>
-    <br>
-    <b>A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.</b></p>
+    <p><b>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining
+        Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests - and
+        will enable immediate export of data, at the time of your request.</b>
+      <br>
+      <b>A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider,
+        and Sub-Data Set/Data Type requested for export.</b>
+    </p>
     <br>
     <label style="float:right"> * All fields are mandatory </label>
-    <hr>  
+    <hr>
 
-        <mat-form-field style='width: 100%'>
-          <mat-select class="exportSelect" placeholder='For which Project/Dataset would you like to become a Trusted User?' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)" required>
-            <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value">
-              {{ dataSetType.viewValue }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="!messageModel.datasettype">Please select Dataset name</mat-error>
-        </mat-form-field>
+    <mat-form-field style='width: 100%'>
+      <mat-select class="exportSelect" placeholder='For which Project/Dataset would you like to become a Trusted User?'
+        [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)" required>
+        <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value">
+          {{ dataSetType.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.datasettype">Please select Dataset name</mat-error>
+    </mat-form-field>
 
-        <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
-          <mat-select class="exportSelect" placeholder='Data Provider' [(ngModel)]="messageModel.dataProviderName" (selectionChange)="setSubDatasets($event)" required>
-            <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value">
-              {{ dataProviderName.viewValue }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="!messageModel.dataProviderName">Please select Data Provider Name</mat-error>
-        </mat-form-field>
+    <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
+      <mat-select class="exportSelect" placeholder='Data Provider' [(ngModel)]="messageModel.dataProviderName"
+        (selectionChange)="setSubDatasets($event)" required>
+        <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value">
+          {{ dataProviderName.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.dataProviderName">Please select Data Provider Name</mat-error>
+    </mat-form-field>
 
-        <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
-          <mat-select class="exportSelect" placeholder='Sub-Dataset/Data Type' [(ngModel)]="messageModel.subDataSet" (selectionChange)="chkTrustedStatus($event)" required>
-            <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value">
-              {{ subDataSet.viewValue }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="!messageModel.subDataSet">Please select Sub DataSet Type </mat-error>
-        </mat-form-field>
-        <br>
+    <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
+      <mat-select class="exportSelect" placeholder='Sub-Dataset/Data Type' [(ngModel)]="messageModel.subDataSet"
+        (selectionChange)="chkTrustedStatus($event)" required>
+        <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value">
+          {{ subDataSet.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.subDataSet">Please select Sub DataSet Type </mat-error>
+    </mat-form-field>
+    <br>
 
-        <div>
-        <mat-form-field style='width: 100%'>
-          <input matInput placeholder="Justification for Request?" [(ngModel)]="messageModel.trustedUserJustification" value="{{messageModel.trustedUserJustification}}" required>
-          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
-          <mat-error align="end" *ngIf="!messageModel.trustedUserJustification">Required</mat-error>
-          <mat-error *ngIf="!messageModel.trustedUserJustification">Please enter your justification for this request</mat-error>
-        </mat-form-field>
+    <div>
+      <mat-form-field style='width: 100%'>
+        <input matInput placeholder="Justification for Request?" [(ngModel)]="messageModel.trustedUserJustification"
+          value="{{messageModel.trustedUserJustification}}" required>
+        <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+        <mat-error align="end" *ngIf="!messageModel.trustedUserJustification">Required</mat-error>
+        <mat-error *ngIf="!messageModel.trustedUserJustification">Please enter your justification for this request
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <br>
+    <hr>
+
+    <p-panel header="Acceptable Use Policy">
+      <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']"
+        *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]">
       </div>
-        <br>
-        <hr>
-
-       <p-panel header="Acceptable Use Policy" >
-         <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']" *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]"></div>
-       </p-panel>
-        <br/>
-        <div>
-          <div class="ui-g">
-             <div class="ui-g-6"><p-checkbox  name="single"  [(ngModel)]="acceptableUseTUSR"  label="I have read and accept the Acceptable Use Policy" binary=true   required>I have read and accept the Acceptable Use Policy</p-checkbox></div>
-          </div>
+    </p-panel>
+    <br />
+    <div>
+      <div class="ui-g">
+        <div class="ui-g-6">
+          <p-checkbox name="single" [(ngModel)]="acceptableUseTUSR"
+            label="I have read and accept the Acceptable Use Policy" binary=true required>I have read and accept the
+            Acceptable Use Policy</p-checkbox>
         </div>
-        <hr>
-        <mat-dialog-actions>
-            <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
-          <span>
-             <button class="btn btn-primary dotBtn request-exportSubmitBtn"
-                    [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.trustedUserJustification || !acceptableUseTUSR || trustedStatus === true" 
-                    (click)="onTrustedStatusRequest()">SUBMIT
-             </button>
-          </span>
-        </mat-dialog-actions>
-      </mat-dialog-content>
+      </div>
+    </div>
+    <hr>
+    <mat-dialog-actions>
+      <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+      <span>
+        <button class="btn btn-primary dotBtn request-exportSubmitBtn"
+          [disabled]="!messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.trustedUserJustification || !acceptableUseTUSR || trustedStatus === true"
+          (click)="onTrustedStatusRequest()">SUBMIT
+        </button>
+      </span>
+    </mat-dialog-actions>
+  </mat-dialog-content>
 </div>
 
 
@@ -496,7 +608,8 @@
         <hr>
         <p>
           <b>
-            Please select one or multiple options below for managing your workstation. The appropriate workflow will be displayed based on the selection.
+            Please select one or multiple options below for managing your workstation. The appropriate workflow will be
+            displayed based on the selection.
           </b>
         </p>
         <hr>
@@ -505,22 +618,23 @@
             <mat-checkbox [(ngModel)]="resizeWorkSpaceOnly"></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
-                Resize Workstation 
+                Resize Workstation
               </b>
             </p>
-            <span [matTooltipPosition]="'above'" matTooltip="Schedule and resize your default workstation with extra CPU and Memory">
-            <i class="material-icons">
+            <span [matTooltipPosition]="'above'"
+              matTooltip="Schedule and resize your default workstation with extra CPU and Memory">
+              <i class="material-icons">
                 info
-                </i>
-                </span>
+              </i>
+            </span>
           </div>
           <div>
-          <p style="margin-left: 30px">
-            <b>
-              <i>Please shut down your workstation before resizing.</i>
-            </b>
-          </p>
-        </div>
+            <p style="margin-left: 30px">
+              <b>
+                <i>Please shut down your workstation before resizing.</i>
+              </b>
+            </p>
+          </div>
           <div style="display: none;" class="resize-filter-start-workspace">
             <mat-checkbox [disabled]="blockVolumeManage" [(ngModel)]="resizeAddDiskOnly"></mat-checkbox>
             <p style="padding-left: 10px;">
@@ -528,45 +642,54 @@
                 Add Additional Disk Space
               </b>
             </p>
-            <span [matTooltipPosition]="'above'" matTooltip="Schedule and attach additional filesystem/storage to your workstation">
-                <i class="material-icons">
-                    info
-                    </i>
-                    </span>
+            <span [matTooltipPosition]="'above'"
+              matTooltip="Schedule and attach additional filesystem/storage to your workstation">
+              <i class="material-icons">
+                info
+              </i>
+            </span>
           </div>
           <div class="resize-filter-start-workspace">
-            <mat-checkbox [(ngModel)]="scheduleUpTime" [matTooltipPosition]="'above'" matTooltip={{getScheduleUptimeTooltip()}}></mat-checkbox>
+            <mat-checkbox [(ngModel)]="scheduleUpTime" [matTooltipPosition]="'above'"
+              matTooltip={{getScheduleUptimeTooltip()}}></mat-checkbox>
             <p style="padding-left: 10px;">
               <b>
                 Schedule Workstation UpTime
               </b>
             </p>
-            <span [matTooltipPosition]="'above'" matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
-                <i class="material-icons">
-                    info
-                    </i>
-                    </span>
+            <span [matTooltipPosition]="'above'"
+              matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
+              <i class="material-icons">
+                info
+              </i>
+            </span>
           </div>
-          <button [disabled]="!resizeWorkSpaceOnly && !resizeAddDiskOnly && !scheduleUpTime" style="align-self: flex-end; margin-right: 24px;" (click)="handleResizeWorkNext(1)"
+          <button [disabled]="!resizeWorkSpaceOnly && !resizeAddDiskOnly && !scheduleUpTime"
+            style="align-self: flex-end; margin-right: 24px;" (click)="handleResizeWorkNext(1)"
             class="btn btn-primary dotBtn">Next</button>
         </div>
       </mat-dialog-content>
     </mat-tab>
-    <mat-tab *ngIf="(resizeWorkSpaceOnly)" label="Resize Workstation" #tab2 [disabled]='selectedIndex==0 || (!resizeWorkSpaceOnly)'>
+    <mat-tab *ngIf="(resizeWorkSpaceOnly)" label="Resize Workstation" #tab2
+      [disabled]='selectedIndex==0 || (!resizeWorkSpaceOnly)'>
       <mat-dialog-content style="height: 100%;">
         <hr>
         <p>
           <b>
-            Your current workstation configuration is {{(currentConfigurations || [''])[0]}} CPU and {{(currentConfigurations || ['', ''])[1]}} GB RAM
+            Your current workstation configuration is {{(currentConfigurations || [''])[0]}} CPU and
+            {{(currentConfigurations || ['', ''])[1]}} GB RAM
           </b>
         </p>
-        <div><b>Please choose the appropriate instance type by selecting the desired CPU and RAM<span [matTooltipPosition]="'above'" matTooltip="Schedule and resize your default workstation with extra CPU and Memory">
-            <i class="material-icons">
+        <div><b>Please choose the appropriate instance type by selecting the desired CPU and RAM<span
+              [matTooltipPosition]="'above'"
+              matTooltip="Schedule and resize your default workstation with extra CPU and Memory">
+              <i class="material-icons">
                 info
-                </i>
-                </span> For pricing related details <a href="https://aws.amazon.com/ec2/pricing/on-demand/" target="_blank">click here</a>.</b>
+              </i>
+            </span> For pricing related details <a href="https://aws.amazon.com/ec2/pricing/on-demand/"
+              target="_blank">click here</a>.</b>
           <p>
-          <i>Note: Make sure your work is saved and your workstation is stopped before requesting a resize.</i>
+            <i>Note: Make sure your work is saved and your workstation is stopped before requesting a resize.</i>
           </p>
         </div>
         <hr>
@@ -578,7 +701,8 @@
             <div class="resize-filters-form">
               <mat-form-field style='width: 42%; max-width: 42%;'>
                 <mat-select class="exportSelect" placeholder='CPU' [(ngModel)]="resize.cpu">
-                  <mat-option *ngFor="let dataSetType of cpuOptions" [value]="dataSetType" [disabled]="dataSetType === (currentConfigurations || '')[0]" required>
+                  <mat-option *ngFor="let dataSetType of cpuOptions" [value]="dataSetType"
+                    [disabled]="dataSetType === (currentConfigurations || '')[0]" required>
                     {{ dataSetType }}
                   </mat-option>
                 </mat-select>
@@ -587,7 +711,8 @@
 
               <mat-form-field style='width: 42%; max-width: 42%;'>
                 <mat-select class="exportSelect" placeholder='RAM' [(ngModel)]="resize.memory">
-                  <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType" [disabled]="dataSetType === (currentConfigurations || '')[1]" required>
+                  <mat-option *ngFor="let dataSetType of memoryOptions" [value]="dataSetType"
+                    [disabled]="dataSetType === (currentConfigurations || '')[1]" required>
                     {{ dataSetType.toString().concat(' GB') }}
                   </mat-option>
                 </mat-select>
@@ -634,7 +759,7 @@
                         COST
                       </div>
                     </div>
-                    
+
                     <div class="general-purpose-body" *ngFor="let item of pricingGroups[j]; let i = index">
                       <div *ngIf="isValidIntanceTypeOption(item)" class="pricing-instance">
                         <input (click)="handlePricingSelection(j,i)" type="radio" name="pricing">
@@ -661,60 +786,69 @@
           <br>
           <div *ngIf='resizeFilterFormSubmitted && callResolved' class="resize-filter-button-group">
             <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button [disabled]="!hasPriceSelection()" style="margin-left: 10px;" (click)="handleResizeWorkNext(2)" class="btn btn-primary dotBtn">Next</button>
+            <button [disabled]="!hasPriceSelection()" style="margin-left: 10px;" (click)="handleResizeWorkNext(2)"
+              class="btn btn-primary dotBtn">Next</button>
           </div>
         </div>
       </mat-dialog-content>
     </mat-tab>
-    <mat-tab *ngIf="(scheduleUpTime)" label="Schedule Workstation UpTime" #tab5 [disabled]='selectedIndex==0 || selectedIndex==1 || (!scheduleUpTime)'>
-        <mat-dialog-content style="height: 100%;">
-          <hr>
-          <p><b><span [matTooltipPosition]="'above'" matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
+    <mat-tab *ngIf="(scheduleUpTime)" label="Schedule Workstation UpTime" #tab5
+      [disabled]='selectedIndex==0 || selectedIndex==1 || (!scheduleUpTime)'>
+      <mat-dialog-content style="height: 100%;">
+        <hr>
+        <p><b><span [matTooltipPosition]="'above'"
+              matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process">
               <!-- <i class="material-icons">
                   info
                   </i> -->
-                  </span> 
-                  Please select the dates you would want the workstation to be up and opted out of the nightly stop scheduler from stopping your instance automatically. An email notification will be sent after the uptime request is completed.</b></p>
-          <hr>
-          <p>
-            <b>
-              Schedule Workstation UpTime
-            </b>
-          </p>
-  
-          <div class="resize-disk-space-container">
-              <div class="resize-date-form">
-                  <mat-form-field style='width: 42%;'>
-                    <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="uptimeFromDate"
-                      [min]="systemDate">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-        
-                  <mat-form-field style="width: 42%">
-                    <input matInput [matDatepicker]="picker2" placeholder="To date" [min]="workSpaceFromDate" [(ngModel)]="uptimeToDate">
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker>
-                  </mat-form-field>
-                  <div style='width: 10%;'></div>
-                </div>
-            <div class="resize-filter-button-group">
-              <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-              <button style="margin-left: 10px;" [disabled]=' !uptimeFromDate || !uptimeToDate'
-                (click)="handleUptimeButtonClick()" class="btn btn-primary dotBtn">{{getUptimeContinueButton()}}</button>
-            </div>
+            </span>
+            Please select the dates you would want the workstation to be up and opted out of the nightly stop scheduler
+            from stopping your instance automatically. An email notification will be sent after the uptime request is
+            completed.</b></p>
+        <hr>
+        <p>
+          <b>
+            Schedule Workstation UpTime
+          </b>
+        </p>
+
+        <div class="resize-disk-space-container">
+          <div class="resize-date-form">
+            <mat-form-field style='width: 42%;'>
+              <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="uptimeFromDate"
+                [min]="systemDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field style="width: 42%">
+              <input matInput [matDatepicker]="picker2" placeholder="To date" [min]="workSpaceFromDate"
+                [(ngModel)]="uptimeToDate">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <div style='width: 10%;'></div>
           </div>
-        </mat-dialog-content>
-  
-      </mat-tab>
-    <mat-tab *ngIf="(resizeAddDiskOnly || ManageBoth)" label="Disk Space" #tab3 [disabled]='selectedIndex==0 || selectedIndex==1 || (!resizeAddDiskOnly && !ManageBoth)'>
+          <div class="resize-filter-button-group">
+            <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
+            <button style="margin-left: 10px;" [disabled]=' !uptimeFromDate || !uptimeToDate'
+              (click)="handleUptimeButtonClick()" class="btn btn-primary dotBtn">{{getUptimeContinueButton()}}</button>
+          </div>
+        </div>
+      </mat-dialog-content>
+
+    </mat-tab>
+    <mat-tab *ngIf="(resizeAddDiskOnly || ManageBoth)" label="Disk Space" #tab3
+      [disabled]='selectedIndex==0 || selectedIndex==1 || (!resizeAddDiskOnly && !ManageBoth)'>
       <mat-dialog-content style="height: 100%;">
         <hr>
-        <p><b>Please specify additional disk space that should be added to the workstation</b>  <span [matTooltipPosition]="'above'" matTooltip="Schedule and attach additional filesystem/storage to your workstation">
-          <i class="material-icons">
+        <p><b>Please specify additional disk space that should be added to the workstation</b> <span
+            [matTooltipPosition]="'above'"
+            matTooltip="Schedule and attach additional filesystem/storage to your workstation">
+            <i class="material-icons">
               info
-              </i>
-              </span></p>
+            </i>
+          </span></p>
         <hr>
         <p>
           <b>
@@ -740,62 +874,66 @@
       </mat-dialog-content>
 
     </mat-tab>
-    <mat-tab *ngIf="(resizeAddDiskOnly || resizeWorkSpaceOnly || ManageBoth)" label="Schedule Date" #tab4 [disabled]='selectedIndex!=3'>
+    <mat-tab *ngIf="(resizeAddDiskOnly || resizeWorkSpaceOnly || ManageBoth)" label="Schedule Date" #tab4
+      [disabled]='selectedIndex!=3'>
       <mat-dialog-content>
         <hr>
-        <p><b>Please select the schedule between what dates you would want the workstation to be in resized state. An email
+        <p><b>Please select the schedule between what dates you would want the workstation to be in resized state. An
+            email
             notification will be sent after the resize is completed.</b>
           <hr>
-          <div *ngIf="!(!resizeWorkSpaceOnly && !ManageBoth)">
-            <p>
-              <b>
-                Workspace resize schedule
-              </b>
-            </p>
-            <div class="resize-date-form">
-              <mat-form-field style='width: 42%;'>
-                <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="workSpaceFromDate"
-                  [min]="systemDate">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-    
-              <mat-form-field style="width: 42%">
-                <input matInput [matDatepicker]="picker2" placeholder="To date" [min]="workSpaceFromDate"
-                  [(ngModel)]="workSpaceToDate">
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-              </mat-form-field>
-              <div style='width: 10%;'></div>
-            </div>
-            <hr>
+        <div *ngIf="!(!resizeWorkSpaceOnly && !ManageBoth)">
+          <p>
+            <b>
+              Workspace resize schedule
+            </b>
+          </p>
+          <div class="resize-date-form">
+            <mat-form-field style='width: 42%;'>
+              <input matInput [matDatepicker]="picker" placeholder="From date" [(ngModel)]="workSpaceFromDate"
+                [min]="systemDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field style="width: 42%">
+              <input matInput [matDatepicker]="picker2" placeholder="To date" [min]="workSpaceFromDate"
+                [(ngModel)]="workSpaceToDate">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <div style='width: 10%;'></div>
           </div>
-          <div *ngIf="!(!resizeAddDiskOnly && !ManageBoth)">
-            <p>
-              <b>
-                Additional diskspace schedule
-              </b>
-            </p>
-            <div class="resize-date-form">
-              <mat-form-field style="width: 42%">
-                <input matInput [matDatepicker]="picker3" placeholder="From date" [(ngModel)]="diskSpaceFromDate" [min]="systemDate">
-                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                <mat-datepicker #picker3></mat-datepicker>
-              </mat-form-field>
-    
-              <mat-form-field style="width: 42%">
-                <input matInput [matDatepicker]="picker4" placeholder="To date" [(ngModel)]="diskSpaceToDate" [min]="diskSpaceFromDate">
-                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-                <mat-datepicker #picker4></mat-datepicker>
-              </mat-form-field>
-    
-              <div style='width: 10%;'></div>
-            </div>
+          <hr>
+        </div>
+        <div *ngIf="!(!resizeAddDiskOnly && !ManageBoth)">
+          <p>
+            <b>
+              Additional diskspace schedule
+            </b>
+          </p>
+          <div class="resize-date-form">
+            <mat-form-field style="width: 42%">
+              <input matInput [matDatepicker]="picker3" placeholder="From date" [(ngModel)]="diskSpaceFromDate"
+                [min]="systemDate">
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field style="width: 42%">
+              <input matInput [matDatepicker]="picker4" placeholder="To date" [(ngModel)]="diskSpaceToDate"
+                [min]="diskSpaceFromDate">
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+
+            <div style='width: 10%;'></div>
           </div>
-          <div class="resize-filter-button-group">
-            <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
-            <button style="margin-left: 10px;" (click)="postResizeJSON()" class="btn btn-primary dotBtn">Submit</button>
-          </div>
+        </div>
+        <div class="resize-filter-button-group">
+          <button class="btn btn-primary dotBtn" (click)="onNoClick()">Cancel</button>
+          <button style="margin-left: 10px;" (click)="postResizeJSON()" class="btn btn-primary dotBtn">Submit</button>
+        </div>
       </mat-dialog-content>
     </mat-tab>
   </mat-tab-group>
@@ -805,7 +943,9 @@
   <h4>Upload files to SDC platform</h4>
   <hr>
   <div *ngIf="!uploadNotice">
-    <p><b>IMPORTANT: Users cannot upload PII or CBI data on their own. If you would like to upload data containing PII or CBI, you must contact the SDC Support Desk so that the request and its associated data can be tracked appropriately.</b></p>
+    <p><b>IMPORTANT: Users cannot upload PII or CBI data on their own. If you would like to upload data containing PII
+        or CBI, you must contact the SDC Support Desk so that the request and its associated data can be tracked
+        appropriately.</b></p>
     <div>
       <button class="btn btn-primary dotBtn upload-okayBtn" (click)="onOkayUploadClick()">OKAY</button>
       <button class="btn btn-primary dotBtn upload-cancelBtn" (click)="onNoClick()">CANCEL</button>
@@ -814,10 +954,11 @@
   <div *ngIf="uploadNotice">
     <p>Files will be uploaded to the bucket - <b>{{ userBucketName }}</b></p>
 
-    <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)" multiple="multiple">
+    <p-fileUpload #fileUpload name="selectedFiles[]" customUpload="true" (uploadHandler)="uploadFiles($event)"
+      multiple="multiple">
       <ng-template pTemplate="content">
         <ul *ngIf="selectedFiles.length">
-            <li *ngFor="let file of selectedFiles"><b> Uploaded {{file.name}} - {{file.size}} bytes </b> </li>
+          <li *ngFor="let file of selectedFiles"><b> Uploaded {{file.name}} - {{file.size}} bytes </b> </li>
         </ul>
       </ng-template>
     </p-fileUpload>
@@ -827,28 +968,30 @@
 <div *ngIf="mailType == 'Details for export request'">
   <h3>Details for approval form</h3>
   <hr>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Name or short description of your derived dataset" [value]="approvalForm.derivedDataSetname">
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Detailed description of the derived dataset" [value]="approvalForm.detailedderiveddataset" >
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Anchor dataset of interest or data provider"  [value]="approvalForm.dataprovider">
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Specific sub-datasets or data types used" [value]="approvalForm.datatype">
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Additional datasources" [value]="approvalForm.datasources">
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Tags" [value]="approvalForm.tags">
-    </mat-form-field>
-    <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Justification of Export" [value]="approvalForm.justifyExport" >
-    </mat-form-field>
-    <mat-dialog-actions>
-      <button class="btn btn-primary" style="float:right;" (click)="onNoClick()">CLOSE</button>
-    </mat-dialog-actions>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Name or short description of your derived dataset"
+      [value]="approvalForm.derivedDataSetname">
+  </mat-form-field>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Detailed description of the derived dataset"
+      [value]="approvalForm.detailedderiveddataset">
+  </mat-form-field>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Anchor dataset of interest or data provider" [value]="approvalForm.dataprovider">
+  </mat-form-field>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Specific sub-datasets or data types used" [value]="approvalForm.datatype">
+  </mat-form-field>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Additional datasources" [value]="approvalForm.datasources">
+  </mat-form-field>
+  <!-- <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Tags" [value]="approvalForm.tags">
+  </mat-form-field> -->
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Justification of Export" [value]="approvalForm.justifyExport">
+  </mat-form-field>
+  <mat-dialog-actions>
+    <button class="btn btn-primary" style="float:right;" (click)="onNoClick()">CLOSE</button>
+  </mat-dialog-actions>
 </div>

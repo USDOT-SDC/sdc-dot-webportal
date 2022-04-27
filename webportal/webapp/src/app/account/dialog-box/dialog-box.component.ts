@@ -40,7 +40,7 @@ export class DialogBoxComponent implements OnInit {
     detailedderiveddataset: string;
     autoderiveddataset: string;
     autoreason: string;
-    tags: string;
+    // tags: string;
     justifyExport: string;
     trustedStatus: boolean;
     autoExportStatus: boolean;
@@ -120,7 +120,7 @@ export class DialogBoxComponent implements OnInit {
     desiredMemory = '';
     blockVolumeManage = false;
     startAfterResize = false;
-    didManageWorkStation = {posted: false, data: {}};
+    didManageWorkStation = { posted: false, data: {} };
     disableUptimeOption = false;
     schedulesOnInstance = [];
     currentConfiguration = '';
@@ -153,14 +153,14 @@ export class DialogBoxComponent implements OnInit {
         subDataSet: '',
         datasources: '',
         detailedderiveddataset: '',
-        tags: '',
+        // tags: '',
         justifyExport: '',
         derivedDatasetname: '',
         dataprovider: '',
         datatype: '',
         autoderiveddataset: '',
         autoreason: '',
-        trustedUserJustification:'' 
+        trustedUserJustification: ''
     };
 
     resize = {
@@ -178,7 +178,7 @@ export class DialogBoxComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
-            this.messageModel.bucketName = data.bucketName;
+        this.messageModel.bucketName = data.bucketName;
         this.mailType = data.mailType;
         this.datasetName = data.datasetName;
         this.messageModel.fileFolderName = data.datasetName;
@@ -252,8 +252,8 @@ export class DialogBoxComponent implements OnInit {
             // tslint:disable-next-line:radix
             const currentDate = Date.parse(new Date().toString());
             // tslint:disable-next-line:radix
-            const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));            
-            if (((currentDate - lastUpdatTime) / (1000) / (60) / (60) ) < 1) {
+            const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));
+            if (((currentDate - lastUpdatTime) / (1000) / (60) / (60)) < 1) {
                 // tslint:disable-next-line:radix
                 if (parseInt(this.volumeCount) >= 2) {
                     this.blockVolumeManage = true;
@@ -329,15 +329,15 @@ export class DialogBoxComponent implements OnInit {
         this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
         this.dataType = this.messageModel.datatype;
         this.dataSources = this.messageModel.datasources;
-        this.tags = this.messageModel.tags;
+        // this.tags = this.messageModel.tags;
         this.justifyExport = this.messageModel.justifyExport;
         this.selectedIndex = 2;
         console.log(this.selectedIndex);
     }
 
     onPreviousBtnClick() {
-        if (this.selectedIndex >= 1){
-        this.selectedIndex = this.selectedIndex - 1;
+        if (this.selectedIndex >= 1) {
+            this.selectedIndex = this.selectedIndex - 1;
         };
     }
 
@@ -411,7 +411,7 @@ export class DialogBoxComponent implements OnInit {
                     '    </ul>' +
                     '    Thanks, <br>' + this.userName +
                     '</div>';
-            } 
+            }
         }
         this.gatewayService.sendRequestMail('send_email?sender=' + this.userEmail + '&message=' + this.message).subscribe(
             (response: any) => {
@@ -560,7 +560,7 @@ export class DialogBoxComponent implements OnInit {
         message['instance_id'] = this.instanceId;
         message['operating_system'] = this.operatingSystem;
         message['startAfterResize'] = this.startAfterResize;
-        
+
         if (this.resizeWorkSpaceOnly) {
             message['workstation_schedule_from_date'] = this.workSpaceFromDate;
             message['workstation_schedule_to_date'] = this.workSpaceToDate;
@@ -635,9 +635,9 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getScheduleUptimeData() {
-        const message = {username: this.userName, instance_id: this.instanceId};
-      this.gatewayService.get('get_workstation_schedule?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
-        // this.gatewayService.get('get_workstation_schedule?username=' + this.userName).subscribe(
+        const message = { username: this.userName, instance_id: this.instanceId };
+        this.gatewayService.get('get_workstation_schedule?wsrequest=' + encodeURI(JSON.stringify(message))).subscribe(
+            // this.gatewayService.get('get_workstation_schedule?username=' + this.userName).subscribe(
             (response: any) => {
                 if (response['schedulelist'].some(e => e['uptime_instnace_id'] === this.instanceId)) {
                     this.schedulesOnInstance = response['schedulelist'];
@@ -793,18 +793,18 @@ export class DialogBoxComponent implements OnInit {
         console.log('this.userTrustedStatus:' + this.userTrustedStatus);
         console.log('trustedStatusAfterCheck:' + this.trustedStatus);
         const msg: string = 'Oops. You already have \'Trusted User Status\' for this dataset. \nPlease select another dataset or cancel this request.';
-        if (this.trustedStatus === true){
+        if (this.trustedStatus === true) {
             this.snackBar.open(msg, 'close', {
-            duration: 10000,
-            panelClass: 'existing-trust-snackbar',
-             })
+                duration: 10000,
+                panelClass: 'existing-trust-snackbar',
+            })
         };
         return this.trustedStatus;
     }
 
-    onTrustedStatusRequest(){
+    onTrustedStatusRequest() {
         this.trustedRequest = 'Yes';
-        this.acceptableUse =  'Accept';
+        this.acceptableUse = 'Accept';
         this.submitRequest();
     }
 
@@ -817,20 +817,20 @@ export class DialogBoxComponent implements OnInit {
         this.detailedDerivedDataset = this.messageModel.detailedderiveddataset;
         this.dataType = this.messageModel.datatype;
         this.dataSources = this.messageModel.datasources;
-        this.tags = this.messageModel.tags;
+        // this.tags = this.messageModel.tags;
         this.justifyExport = this.messageModel.justifyExport;
         this.autoderiveddataset = this.messageModel.autoderiveddataset;
         this.autoreason = this.messageModel.autoreason;
-        this.trustedUserJustification = this.messageModel.trustedUserJustification; 
+        this.trustedUserJustification = this.messageModel.trustedUserJustification;
 
-        console.log ('this.userBucketName:' + this.userBucketName);
+        console.log('this.userBucketName:' + this.userBucketName);
         console.log('this.selectedDataSet:' + this.selectedDataSet);
         console.log('this.derivedDataSetName:' + this.derivedDataSetName);
         console.log('this.autoreason:' + this.autoreason);
         console.log('this.trustedUserJustification:' + this.trustedUserJustification);
         console.log('this.trustedRequest:' + this.trustedRequest);
-        
-        const approvalForm = {};                                                                       
+
+        const approvalForm = {};
 
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
@@ -850,9 +850,9 @@ export class DialogBoxComponent implements OnInit {
         if (this.dataSources) {
             approvalForm['datasources'] = this.dataSources;
         }
-        if (this.tags) {
-            approvalForm['tags'] = this.tags;
-        }
+        // if (this.tags) {
+        //     approvalForm['tags'] = this.tags;
+        // }
         if (this.justifyExport) {
             approvalForm['justifyExport'] = this.justifyExport;
         }
@@ -882,18 +882,18 @@ export class DialogBoxComponent implements OnInit {
             });
         } else { */
 
-        if (this.trustedRequest === 'Yes') { 
+        if (this.trustedRequest === 'Yes') {
             // Submit API gateway request
             reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted', 'trustedRequestReason': this.trustedUserJustification };
         }
-    
+
         // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
         if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted', 'trustedRequestReason': this.trustedUserJustification };
             reqBody['RequestReviewStatus'] = 'Rejected';
         }
-        
+
         if (this.trustedRequest === 'No' && this.acceptableUse === 'Decline') {
             console.log('Declined acceptable usage policy');
             reqBody['RequestReviewStatus'] = 'Rejected';
@@ -902,7 +902,7 @@ export class DialogBoxComponent implements OnInit {
         if (this.autoExportRequest === 'Yes') {
             // Submit API gateway request
             reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
-        } 
+        }
 
         this.gatewayService.sendExportRequest('export?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
