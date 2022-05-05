@@ -108,13 +108,13 @@ variable "TABLENAME_USER_STACKS" {
 #
 locals {
   aws_region            = var.aws_region
-  account_number        = "${data.aws_ssm_parameter.account_number.value}"
-  environment           = "${data.aws_ssm_parameter.environment.value}"
+  account_id            = data.aws_caller_identity.current.account_id
+  environment           = data.aws_ssm_parameter.environment.value
   log_level             = var.log_level
 
   AUTHORIZERID = var.AUTHORIZERID
   COGNITO_USER_POOL = var.COGNITO_USER_POOL
-  IDP_PROVIDER_ARNS = "arn:aws:cognito-idp:us-east-1:${data.aws_ssm_parameter.account_number.value}:userpool/${var.USER_POOL_ID}"
+  IDP_PROVIDER_ARNS = "arn:aws:cognito-idp:us-east-1:${data.aws_caller_identity.current.account_id}:userpool/${var.USER_POOL_ID}"
   RECEIVER_EMAIL = var.RECEIVER_EMAIL
   RESTAPIID = var.RESTAPIID
   TABLENAME_AUTOEXPORT_USERS = var.TABLENAME_AUTOEXPORT_USERS

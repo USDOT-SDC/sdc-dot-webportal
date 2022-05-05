@@ -14,20 +14,13 @@ terraform {
   }
 }
 
-
-data "aws_ssm_parameter" "account_number" {
-  name = "/common/secrets/account_number"
-}
+data "aws_caller_identity" "current" {}
 
 data "aws_ssm_parameter" "environment" {
-  name = "/common/secrets/environment"
+  name = "environment"
 }
 
 data "aws_ssm_parameter" "lambda_binary_bucket" {
   name = "/common/secrets/lambda_binary_bucket"
 }
-
-#data "local_file" "webportal_lambda_policy_json" {
-#  filename = "webportal_lambda_policy.json"
-#}
 
