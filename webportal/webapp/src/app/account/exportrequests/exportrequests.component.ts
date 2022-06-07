@@ -18,7 +18,8 @@ export class ExportRequestsComponent implements OnInit {
         public snackBar: MatSnackBar,
         public dialog: MatDialog) { }
      
-    exportFileRequests = [];
+    exportFileRequests_s3 = [];
+    exportFileRequests_table = [];
     trustedRequests = [];
     autoExportRequests = [];
     metadata = {};
@@ -67,7 +68,8 @@ export class ExportRequestsComponent implements OnInit {
     }
 
     getExportFileRequests() {
-        this.exportFileRequests = [];
+        this.exportFileRequests_s3 = [];
+        this.exportFileRequests_table = [];
         this.trustedRequests = [];
         this.autoExportRequests = [];
         //this.exportFileRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'description' : 'This is derived Dataset', 'team' : 'team1 bucket', 'dataset' : 'Waze-Waze-alert', 'details' : 'Details'  ,'reviewFile' : 'reviewFileOrLink'});
@@ -87,13 +89,13 @@ export class ExportRequestsComponent implements OnInit {
 
         this.gatewayService.post("export/requests?message=" + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
-                for(let items of response['exportRequests']) {
+                for(let items of response['exportRequests']['s3Requests']) {
                     for(let item of items) {
                         let justifyExport = "";
                         if('justifyExport' in item['ApprovalForm']) {
                             justifyExport = item['ApprovalForm']['justifyExport'];
                              }
-                        this.exportFileRequests.push({
+                        this.exportFileRequests_s3.push({
                             'userFullName' : item['RequestedBy'], 
                             'description' : justifyExport, 
                             'team' : item['TeamBucket'], 
@@ -113,6 +115,60 @@ export class ExportRequestsComponent implements OnInit {
                         );
                     } 
                 }  
+                for(let items of response['exportRequests']['tableRequests']) {
+                    for(let item of items) {
+                        let justifyExport = "";
+                        if('justifyExport' in item['ApprovalForm']) {
+                            justifyExport = item['ApprovalForm']['justifyExport'];
+                             }
+                        this.exportFileRequests_table.push({
+                            'userFullName' : item['RequestedBy'], 
+                            'description' : justifyExport, 
+                            'team' : item['TeamBucket'], 
+                            'dataset' : item['Dataset-DataProvider-Datatype'], 
+                            'details' : item['ApprovalForm'],
+                            'reviewFile' : item['S3Key'],
+                            'S3KeyHash' : item['S3KeyHash'],
+                            'RequestedBy_Epoch':item['RequestedBy_Epoch'],
+                            'S3Key' : item['S3Key'],
+                            'TeamBucket' : item['TeamBucket'],
+                            'RequestReviewStatus': item['RequestReviewStatus'],
+                            'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
+                            'UserEmail': item['UserEmail'],
+                            'TeamName': item['TeamName'],
+                            'ReqReceivedDate': item['ReqReceivedDate']
+                            }
+                        );
+                    } 
+                }  
+        // this.gatewayService.post("export/requests?message=" + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
+        //     (response: any) => {
+        //         for(let items of response['exportRequests']) {
+        //             for(let item of items) {
+        //                 let justifyExport = "";
+        //                 if('justifyExport' in item['ApprovalForm']) {
+        //                     justifyExport = item['ApprovalForm']['justifyExport'];
+        //                      }
+        //                 this.exportFileRequests.push({
+        //                     'userFullName' : item['RequestedBy'], 
+        //                     'description' : justifyExport, 
+        //                     'team' : item['TeamBucket'], 
+        //                     'dataset' : item['Dataset-DataProvider-Datatype'], 
+        //                     'details' : item['ApprovalForm'],
+        //                     'reviewFile' : item['S3Key'],
+        //                     'S3KeyHash' : item['S3KeyHash'],
+        //                     'RequestedBy_Epoch':item['RequestedBy_Epoch'],
+        //                     'S3Key' : item['S3Key'],
+        //                     'TeamBucket' : item['TeamBucket'],
+        //                     'RequestReviewStatus': item['RequestReviewStatus'],
+        //                     'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
+        //                     'UserEmail': item['UserEmail'],
+        //                     'TeamName': item['TeamName'],
+        //                     'ReqReceivedDate': item['ReqReceivedDate']
+        //                     }
+        //                 );
+        //             } 
+        //         }  
                        
                 for(let items of response['trustedRequests']) {
                     for(let item of items) {

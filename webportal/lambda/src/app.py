@@ -604,13 +604,14 @@ def getSubmittedRequests():
             if exportFileRequestResponse['Items']:
                 s3_export_requests = []
                 table_export_requests = []
-                for entry in exportFileRequestResponse['Items']:
-                    type = entry['RequestType'] if hasattr(entry,'RequestType') else None
-                    if type:
-                        if type == 'table':
-                            table_export_requests.append(entry)
-                        else:
-                            s3_export_requests.append(entry)
+                for list in exportFileRequestResponse['Items']:
+                    for entry in list:
+                        type = entry['RequestType'] if hasattr(entry,'RequestType') else None
+                        if type:
+                            if type == 'table':
+                                table_export_requests.append(entry)
+                            else:
+                                s3_export_requests.append(entry)
                     
                 response['exportRequests']['tableRequests'].append(table_export_requests)
                 response['exportRequests']['s3Requests'].append(s3_export_requests)
@@ -646,49 +647,6 @@ def getSubmittedRequests():
     return Response(body=response,
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
-
-def getTableSchema(database, table, schema):
-    try:
-        ssm_client = boto3.client('ssm', config=aws_config)
-        aws_config = Config(
-            region_name='us-east-1',
-            signature_version='v4',
-            retries={
-                'max_attempts': 10,
-                'mode': 'standard'
-            }
-        )
-        user_response = ssm_client.get_parameter(Name='/data_export/privateDB/user')
-        pass_response = ssm_client.get_parameter(Name='/data_export/privateDB/password')
-        
-    
-        ENDPOINT = "postgresql://aurora-dataexport-internal.cbldpsthn7bv.us-east-1.rds.amazonaws.com:5432/"+database
-        PORT = 5432
-        USR = user_response['Parameter']['Value']
-        REGION = "us-east-1"
-        DBNAME = database
-        PASS= pass_response['Parameter']['Value']
-
-        # gets the credentials from .aws/credentials
-        session = boto3.Session(profile_name='default')
-        client = session.client('rds')
-        print(f'Client: {client}')
-
-        # token = client.generate_db_auth_token(DBHostname=ENDPOINT, Port=PORT, DBUsername=USR, Region=REGION)
-        # print(f'Token: {token}')
-
-        try:
-            conn = psycopg2.connect(host=ENDPOINT, port=PORT, database=DBNAME, user=USR, password=PASS)
-            cur = conn.cursor()
-            cur.execute(f"""SELECT * FROM {schema+'.'+table};""")
-            query_results = cur.fetchall()
-            print(f'Query results: {query_results}')
-        except Exception as e:
-            print("Database connection failed due to {}".format(e))
-
-        return None
-    except Exception as error:
-        logging.error(f'in Creating connection ! {error}')
 
 
 @app.route('/export/table/create', methods=['POST'], authorizer=authorizer, cors=cors_config)
@@ -804,9 +762,8 @@ def createTableExportRequests():
             target_db_schema = 'edge'
             database_name = params['DatabaseName']
             table_name = params['TableName']
-            table_schema = getTableSchema(database_name, table_name, source_db_schema)
-            emailContent = "<br/>Export to EdgeDB request has been requested by <b>" + userID + "</b> for database table <b>" + table_name + "</b>" + "<b> in the private database " + database_name + "./b"
-            emailContent += "<b> The table schema is as follows: " + table_schema + "</b>"
+            # emailContent = "<br/>Export to EdgeDB request has been requested by <b>" + userID + "</b> for database table <b>" + table_name + "</b>" + "<b> in the private database " + database_name + "./b"
+            # emailContent += "<b> The table schema is as follows: " + table_schema + "</b>"
             exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
             table_key_hash = database_name +'.'+source_db_schema+'.'+table_name
             timemills = int(time.time())
@@ -828,23 +785,25 @@ def createTableExportRequests():
                     'TargetDatabaseSchema': target_db_schema,
                     'RequestType': 'Table',
                     'DatabaseName': database_name,
-                    'ListOfPOC': listOfPOC,
-                    'TableSchema': table_schema
+                    'ListOfPOC': listOfPOC
+                    # 'TableSchema': table_schema
                 }
             )
             availableDatasets = get_datasets()['datasets']['Items']
             logging.info("Available datasets:" + str(availableDatasets))
 
-            # s3 = boto3.resource('s3')
-            # s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
-            # #s3_object.metadata.update()
-            # s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
-            #                     Metadata={'download': download, 'export': export, 'publish': publish},
-            #                     MetadataDirective='REPLACE')
-
-            #send email to List of POC
-            send_notification(listOfPOC,emailContent)
-
+            glue_client = boto3.resource('glue')
+            glueJobName = f"data_export_populate_schema"
+            response = glue_client.start_job_run(
+                JobName = glueJobName,
+                Arguments = {
+                    '--S3KeyHash': table_key_hash,
+                    '--RequestedBy_Epoch': userID + "_" + str(timemills),
+                    '--databaseName': database_name,
+                    '--tableName': table_name,
+                    '--internalSchema': source_db_schema,
+                    '--listOfPOC': listOfPOC
+                })
 
     except BaseException as be:
         logging.exception("Error: Failed to process export request" + str(be))
