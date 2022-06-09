@@ -1,165 +1,186 @@
 <div class="container">
-    <mat-card>
-     <div class="row">
-        <div class="col-md-12">
-          <!--My Datasets table-->
-          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                My Datasets / Algorithm
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div *ngIf="!myDatasets">No Data Available</div>
-            <span style="color:grey">This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They
-              are not available to anyone else unless you publish the dataset. <a [routerLink]="['/account/faq']" fragment="datasetPublish">Learn more </a> on how to upload your
-              datasets / algorithms and publish them for other users.
-            </span><hr>
-            <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
-            <hr>
-            <p> The files shown in the below table are available in the team bucket assigned to your workstation.</p>
-            <p> Team bucket name - <b>{{ userBucketName }}</b></p>
-            <p> Files that are uploaded from the web portal will be saved in the folder - <b>{{ userName }}</b><b>/uploaded_files</b></p>
-            <p> Files that you would like to export out of the system must be uploaded to the folder - <b>export_requests</b></p>
-            <span style="color:grey">Any file type can be downloaded.</span>
-            <p-table #dt [columns]="cols" [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="myDatasets.length"  dataKey="filename">
-              <ng-template pTemplate="header" let-columns>
-                  <tr>
-                      <th style="width: 2.25em">
-                          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                      </th>
-                      <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
-                          {{col.header}} <br/>
-                          <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
-                      </th>
-                  </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-myDataset let-columns="columns">
-                  <tr *ngIf="!myDataset.filename.endsWith('/')">
-                      <td>
-                          <p-tableCheckbox [value]="myDataset" [disabled]="!myDataset.download || myDataset.download=='false'"></p-tableCheckbox>
-                      </td>
-                      <td>{{myDataset.filename}}</td>
-                      
-                      <td *ngIf="myDataset.export=='true' && myDataset.requestReviewStatus=='-1'"><i class="material-icons iconFont" (click)="requestExport('','Dataset export Mail', myDataset.filename)" >exit_to_app</i></td>
-                      <td *ngIf="!myDataset.export || myDataset.export=='false' || myDataset.requestReviewStatus!='-1'"><i class="material-icons iconFont material-icons md-dark md-inactive" >exit_to_app</i></td>
-                      <td *ngIf="myDataset.publish=='true'"><i class="material-icons iconFont"  (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
-                      <td *ngIf="!myDataset.publish || myDataset.publish=='false'"><i class="material-icons iconFont material-icons md-dark md-inactive">cloud_upload</i></td>
-                      <td *ngIf="myDataset.requestReviewStatus=='Approved'">Approved</td>
-                      <td *ngIf="myDataset.requestReviewStatus=='Rejected'">Rejected</td>
-                      <td *ngIf="myDataset.requestReviewStatus=='Submitted'">Submitted</td>
-                      <td *ngIf="myDataset.requestReviewStatus=='-1'">-</td>
-                  </tr>
-              </ng-template>
+  <mat-card>
+   <div class="row">
+      <div class="col-md-12">
+        <!--My Datasets table-->
+        <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              My Datasets / Algorithm
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngIf="!myDatasets">No Data Available</div>
+          <span style="color:grey">This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They
+            are not available to anyone else unless you publish the dataset. <a [routerLink]="['/account/faq']" fragment="datasetPublish">Learn more </a> on how to upload your
+            datasets / algorithms and publish them for other users.
+          </span><hr>
+          <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
+          <hr>
+          <p> The files shown in the below table are available in the team bucket assigned to your workstation.</p>
+          <p> Team bucket name - <b>{{ userBucketName }}</b></p>
+          <p> Files that are uploaded from the web portal will be saved in the folder - <b>{{ userName }}</b><b>/uploaded_files</b></p>
+          <p> Files that you would like to export out of the system must be uploaded to the folder - <b>export_requests</b></p>
+          <span style="color:grey">Any file type can be downloaded.</span>
+          <p-table #dt [columns]="cols" [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [totalRecords]="myDatasets.length"  dataKey="filename">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="width: 2.25em">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                        {{col.header}} <br/>
+                        <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-myDataset let-columns="columns">
+                <tr *ngIf="!myDataset.filename.endsWith('/')">
+                    <td>
+                        <p-tableCheckbox [value]="myDataset" [disabled]="!myDataset.download || myDataset.download=='false'"></p-tableCheckbox>
+                    </td>
+                    <td>{{myDataset.filename}}</td>
+                    
+                    <td *ngIf="myDataset.export=='true' && myDataset.requestReviewStatus=='-1'"><i class="material-icons iconFont" (click)="requestExport('','Dataset export Mail', myDataset.filename)" >exit_to_app</i></td>
+                    <td *ngIf="!myDataset.export || myDataset.export=='false' || myDataset.requestReviewStatus!='-1'"><i class="material-icons iconFont material-icons md-dark md-inactive" >exit_to_app</i></td>
+                    <td *ngIf="myDataset.publish=='true'"><i class="material-icons iconFont"  (click)="requestMail('','Dataset publish Mail', myDataset.filename)">cloud_upload</i></td>
+                    <td *ngIf="!myDataset.publish || myDataset.publish=='false'"><i class="material-icons iconFont material-icons md-dark md-inactive">cloud_upload</i></td>
+                    <td *ngIf="myDataset.requestReviewStatus=='Approved'">Approved</td>
+                    <td *ngIf="myDataset.requestReviewStatus=='Rejected'">Rejected</td>
+                    <td *ngIf="myDataset.requestReviewStatus=='Submitted'">Submitted</td>
+                    <td *ngIf="myDataset.requestReviewStatus=='-1'">-</td>
+                </tr>
+            </ng-template>
           </p-table>
           <hr />
           <button class="btn btn-primary dotBtn" [disabled]="this.selectedFiles.length==0" (click)=requestDownload()>Download Files</button>
           <hr>
           <!--Trusted User Status Request-->
-          <div>
-            <p style="font-size:15px">Request Trusted User Status</p>
+         <div>
+          <p style="font-size:15px">Request Trusted User Status</p>
           <span style="color:grey">
-            <p>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests  and will enable immediate export of data, at the time of your request.
-              <br>
-               A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.
-            </p>
+           <p>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests  and will enable immediate export of data, at the time of your request.
             <br>
+             A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.
+           </p>
+           <br>
           </span>
-                  <div><button class="btn btn-primary dotBtn" (click)="requestTrustedStatus('Request Trusted Status Mail')">Request Trusted User Status</button></div>
-            <br>
-          </div>
+            <div><button class="btn btn-primary dotBtn" (click)="requestTrustedStatus('Request Trusted Status Mail')">Request Trusted User Status</button></div>
+          <br>
+        </div>
         </mat-expansion-panel>
 
+        <!--NEW: Table Export Panel-->
+        <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+            My Edge Database 
+            </mat-panel-title>
+          </mat-expansion-panel-header> 
+          <!--TO DO: Create NEW FAQ SECTION eventually-->
+          <span style="color: grey">DRAFT TEXT<br/>
+            <p>Researchers can export internal SDC database tables, which do not contain sensitive data, to the public Edge database.  
+            This enhances analytical capabilities, enabling connections from the Edge database to local applications and/or other public data sources.</p>
+            <p>Each table export request must be reviewed for approval by the respective data owner.  Any significant change to a previously approved/exported table schema should be requested for approval.  
+            Researchers will be notified if such changes are detected and access to that table will remain pending data owner approval.</p>
+            <p>
+            <a [routerLink]="['/account/faq']" fragment="edgeTableExport">Learn more </a> A potential link to additional related FAQ might go here.
+            </p>
+          </span>
+          <hr>
+            <div><button class="btn btn-primary dotBtn" (click)="requestTableExport('Request Table Export')">Request Table Export to Edge DB</button></div>
+          <br>
+        </mat-expansion-panel>
 
-          <!--Curated Datasets table-->
-          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                SDC Datasets
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <span style="color: grey">These are datasets that are available within SDC platform that are published / enabled by SDC team or
-              published by other users. Access to these datasets are available upon request. <a [routerLink]="['/account/faq']" fragment="sdcDataset">Learn more </a> about the
-              different types of datasets and how to request access to these datasets.
-            </span><hr>
-            <table class="table">
-              <thead class="thead-inverse">
-              <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Geographic Scope</th>
-                <th>Start / End for Data Availability</th>
-                <th>Owner</th>
-                <th>Request Access</th>
+        <!--Curated Datasets table-->
+        <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              SDC Datasets
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <span style="color: grey">These are datasets that are available within SDC platform that are published / enabled by SDC team or
+            published by other users. Access to these datasets are available upon request. <a [routerLink]="['/account/faq']" fragment="sdcDataset">Learn more </a> about the
+            different types of datasets and how to request access to these datasets.
+          </span><hr>
+          <table class="table">
+            <thead class="thead-inverse">
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Geographic Scope</th>
+              <th>Start / End for Data Availability</th>
+              <th>Owner</th>
+              <th>Request Access</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-template ngFor let-sdcDataset [ngForOf]="sdcDatasets">
+              <tr style="cursor: pointer" (click)="selectsdcDataset(sdcDataset)" [ngClass]="{'selected_row' : selectedsdcDataset == sdcDataset}">
+                <td>{{sdcDataset.Name}}</td>
+                <td>{{sdcDataset.Category}}</td>
+                <td>{{sdcDataset.Description}}</td>
+                <!-- <td>
+                  <div *ngIf="sdcDataset.Programming_tool">{{sdcDataset.Programming_tool}}</div>
+                  <div *ngIf="!sdcDataset.Programming_tool">-----</div>
+                </td> -->
+                <td>
+                  <div *ngIf="sdcDataset.Geographic_Scope">{{sdcDataset.Geographic_Scope}}</div>
+                  <div *ngIf="!sdcDataset.Geographic_Scope">-----</div>
+                </td>
+                <td>
+                  <div *ngIf="sdcDataset.Data_Availability_Span">{{sdcDataset.Data_Availability_Span}}</div>
+                  <div *ngIf="!sdcDataset.Data_Availability_Span">-----</div>
+                </td>
+                <td>
+                  <div *ngIf="sdcDataset.Owner">{{sdcDataset.Owner}}</div>
+                </td>
+                <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', sdcDataset.Name)">Request</button></td>
               </tr>
-              </thead>
-              <tbody>
-              <ng-template ngFor let-sdcDataset [ngForOf]="sdcDatasets">
-                <tr style="cursor: pointer" (click)="selectsdcDataset(sdcDataset)" [ngClass]="{'selected_row' : selectedsdcDataset == sdcDataset}">
-                  <td>{{sdcDataset.Name}}</td>
-                  <td>{{sdcDataset.Category}}</td>
-                  <td>{{sdcDataset.Description}}</td>
-                  <!-- <td>
-                    <div *ngIf="sdcDataset.Programming_tool">{{sdcDataset.Programming_tool}}</div>
-                    <div *ngIf="!sdcDataset.Programming_tool">-----</div>
-                  </td> -->
-                  <td>
-                    <div *ngIf="sdcDataset.Geographic_Scope">{{sdcDataset.Geographic_Scope}}</div>
-                    <div *ngIf="!sdcDataset.Geographic_Scope">-----</div>
-                  </td>
-                  <td>
-                    <div *ngIf="sdcDataset.Data_Availability_Span">{{sdcDataset.Data_Availability_Span}}</div>
-                    <div *ngIf="!sdcDataset.Data_Availability_Span">-----</div>
-                  </td>
-                  <td>
-                    <div *ngIf="sdcDataset.Owner">{{sdcDataset.Owner}}</div>
-                  </td>
-                  <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', sdcDataset.Name)">Request</button></td>
-                </tr>
-              </ng-template>
-              </tbody>
-            </table>
-          </mat-expansion-panel>
+            </ng-template>
+            </tbody>
+          </table>
+        </mat-expansion-panel>
 
-          <mat-expansion-panel style="margin-top: 40px;">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                SDC Algorithms
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <span style="color: grey">These are algorithms that are available within SDC platform that are published / enabled by SDC team or
-              published by other users. Access to these algorithms are available upon request. <a [routerLink]="['/account/faq']" fragment="sdcDataset">Learn more </a> about the
-              different types of algorithms and how to request access to these algorithms.
-            </span><hr>
-            <table class="table">
-              <thead class="thead-inverse">
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Programming tools / language</th>
-                <th>Owner</th>
-                <th>Request Access</th>
+        <mat-expansion-panel style="margin-top: 40px;">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              SDC Algorithms
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <span style="color: grey">These are algorithms that are available within SDC platform that are published / enabled by SDC team or
+            published by other users. Access to these algorithms are available upon request. <a [routerLink]="['/account/faq']" fragment="sdcDataset">Learn more </a> about the
+            different types of algorithms and how to request access to these algorithms.
+          </span><hr>
+          <table class="table">
+            <thead class="thead-inverse">
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Programming tools / language</th>
+              <th>Owner</th>
+              <th>Request Access</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-template ngFor let-sdcDataset [ngForOf]="sdcAlgorithms">
+              <tr style="cursor: pointer" (click)="selectsdcDataset(sdcDataset)" [ngClass]="{'selected_row' : selectedsdcDataset == sdcDataset}">
+                <td>{{sdcDataset.Name}}</td>
+                <!-- <td>{{sdcDataset.Type}}</td> -->
+                <td>{{sdcDataset.Description}}</td>
+                <td>
+                  <div *ngIf="sdcDataset.Programming_tool">{{sdcDataset.Programming_tool}}</div>
+                  <div *ngIf="!sdcDataset.Programming_tool">-----</div>
+                </td>
+                <td>
+                  <div *ngIf="sdcDataset.Owner">{{sdcDataset.Owner}}</div>
+                </td>
+                <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', sdcDataset.Name)">Request</button></td>
               </tr>
-              </thead>
-              <tbody>
-              <ng-template ngFor let-sdcDataset [ngForOf]="sdcAlgorithms">
-                <tr style="cursor: pointer" (click)="selectsdcDataset(sdcDataset)" [ngClass]="{'selected_row' : selectedsdcDataset == sdcDataset}">
-                  <td>{{sdcDataset.Name}}</td>
-                  <!-- <td>{{sdcDataset.Type}}</td> -->
-                  <td>{{sdcDataset.Description}}</td>
-                  <td>
-                    <div *ngIf="sdcDataset.Programming_tool">{{sdcDataset.Programming_tool}}</div>
-                    <div *ngIf="!sdcDataset.Programming_tool">-----</div>
-                  </td>
-                  <td>
-                    <div *ngIf="sdcDataset.Owner">{{sdcDataset.Owner}}</div>
-                  </td>
-                  <td><button class="btn btn-primary dotBtn" (click)="requestMail(sdcDataset.BucketName, 'Access Request Mail', sdcDataset.Name)">Request</button></td>
-                </tr>
-              </ng-template>
-              </tbody>
-            </table>
-          </mat-expansion-panel>
+            </ng-template>
+            </tbody>
+          </table>
+        </mat-expansion-panel>
 
         <!--data dictionary card-->
         <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 500px">
@@ -169,7 +190,7 @@
             </mat-card-content>
         </mat-card>
 
-        </div>
       </div>
-    </mat-card>
+   </div>
+  </mat-card>
 </div>

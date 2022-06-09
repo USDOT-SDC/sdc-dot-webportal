@@ -329,10 +329,12 @@
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
           <mat-error align="end" *ngIf="!messageModel.datasources">Required</mat-error>
         </mat-form-field>
+
         <!-- <mat-form-field style='width: 100%'>
           <input matInput placeholder="Tags" [(ngModel)]="messageModel.tags" value="{{messageModel.tags}}">
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field> -->
+
         <mat-form-field style='width: 100%'>
           <input matInput
             title="e.g. Used in CVP dashboard, Used for presentation at SDC Quarterly Executive Briefing, etc."
@@ -367,7 +369,7 @@
         <mat-dialog-actions>
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <button class="btn btn-primary dotBtn request-exportSubmitBtn"
-            [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"
+            [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"  
             (click)="submitRequest()">SUBMIT
           </button>
           <button class="btn btn-primary dotBtn request-exportPreviousBtn"
@@ -596,6 +598,136 @@
     </mat-dialog-actions>
   </mat-dialog-content>
 </div>
+
+
+<!--Request Publish Table to Edge DB Dialogbox-->
+<div *ngIf="mailType == 'Request Table Export'">
+  <h3>Request to Publish Table to Edge Database</h3>
+  <mat-dialog-content style="height: 100%;">
+    <!--<hr>-->
+    <!-- TO DO: CLEAN UP WORDING HERE-->
+    <!-- Q:Does data owner require any additional information regarding extra datasets used?-->
+    <!-- Q: Maybe this should be multi-tabbed Do we need additional approval form fields?-->
+    <!--<p><b>Please provide the information requested below, which is required to facilitate the review, approval and processing of your table publication request.</b>-->
+    <br/>
+    <p style="color:grey;">Please provide information relevant to your table request, as requested in the form fields below.  
+    These details will faciliate the processing of your request and will be shared with the Data Provider to help them review your request and provide their decision. </p>
+    <!--br/-->
+    <label style="float:right"> * All fields are mandatory </label>
+    <hr>
+    <br/>
+    <p><b>Please identify your database and the specific table you want published to the public Edge database.</b></p>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Database" [(ngModel)]="messageModel.edgePrivateDatabase"
+        value="{{messageModel.edgePrivateDatabase}}" required>
+      <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+      <mat-error align="end" *ngIf="!messageModel.edgePrivateDatabase">Required</mat-error>
+      <mat-error *ngIf="!messageModel.edgePrivateDatabase">Please enter the database name
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Table" [(ngModel)]="messageModel.edgePrivateTable"
+       value="{{messageModel.edgePrivateTable}}" required>
+      <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+      <mat-error align="end" *ngIf="!messageModel.edgePrivateTable">Required</mat-error>
+      <mat-error *ngIf="!messageModel.edgePrivateTable">Please enter the table name
+      </mat-error>
+    </mat-form-field>
+
+    <!--hr-->
+    <!--<p><b>The additional information, requested below, will be shared with the Data Provider to help them review your request and provide their decision. </b>-->
+     
+    <span style="line-height:200%;">
+      <br/>
+    </span>
+    <p><b>What are the primary Project, Data Provider and Sub-Dataset/Data Type used to create your table</b></p>    
+    <mat-form-field style='width: 100%'>
+      <mat-select class="exportSelect" placeholder='Project/Dataset' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)" required>
+        <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value">
+          {{ dataSetType.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.datasettype">Please select Dataset name</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
+      <mat-select class="exportSelect" placeholder='Data Provider' [(ngModel)]="messageModel.dataProviderName"
+        (selectionChange)="setSubDatasets($event)" required>
+        <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value">
+          {{ dataProviderName.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.dataProviderName">Please select Data Provider Name</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
+      <mat-select class="exportSelect" placeholder='Sub-Dataset/Data Type' [(ngModel)]="messageModel.subDataSet"
+        (selectionChange)="chkTrustedStatus($event)" required>
+        <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value">
+          {{ subDataSet.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!messageModel.subDataSet">Please select Sub DataSet Type </mat-error>
+    </mat-form-field>
+     
+    <span style="line-height:200%;">
+      <br/>
+    </span>
+    <p><b>Please list any additional Sub-Datasets/Data Types, available within SDC, or any external Datasets/DataSources, used to create your table.</b></p>            
+    <mat-form-field style='width: 100%'>
+      <input matInput title="e.g. US Census Bureau, ArcGIS Online, US Geological Survey, etc."
+        placeholder="Additional datasources" [(ngModel)]="messageModel.datasources"
+        value="{{messageModel.datasources}}" required>
+      <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+      <mat-error align="end" *ngIf="!messageModel.datasources">Required</mat-error>
+    </mat-form-field>
+     
+    <span style="line-height:200%;">
+      <br/>
+    </span>
+    <p><b>Please provide the justification for your request.</b></p>
+    <mat-form-field style='width: 100%'>
+      <input matInput placeholder="Justification" [(ngModel)]="messageModel.justifyExport"
+        value="{{messageModel.justifyExport}}" required>
+      <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+      <mat-error align="end" *ngIf="!messageModel.justifyExport">Required</mat-error>
+      <mat-error *ngIf="!messageModel.justifyExport">Please enter your justification for this request
+      </mat-error>
+    </mat-form-field>
+
+    <span style="line-height:150%;">
+      <br/>
+    </span>
+    <hr>
+   <!--Q: Should we display the acceptable use policy for the primary data? -->
+    <p-panel header="Acceptable Use Policy">
+      <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']"
+        *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]">
+      </div>
+    </p-panel>
+    <br />
+    <div>
+      <div class="ui-g">
+        <div class="ui-g-6">
+          <p-checkbox name="single" [(ngModel)]="acceptableUse" label="I have read and accept the Acceptable Use Policy" binary=true required>I have read and accept the Acceptable Use Policy </p-checkbox>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <mat-dialog-actions>
+      <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
+      <span>
+        <button class="btn btn-primary dotBtn request-exportSubmitBtn"
+          [disabled]= "!messageModel.edgePrivateTable || !messageModel.edgePrivateDatabase || !messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.justifyExport || !acceptableUse"
+          (click)="onPublishTableRequest()">SUBMIT
+        </button>
+      </span>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</div>
+
 
 
 <!-- ngIf to render the dialog only when data.mailType is resize -->
@@ -988,6 +1120,37 @@
   <!-- <mat-form-field style='width: 100%'>
     <input matInput placeholder="Tags" [value]="approvalForm.tags">
   </mat-form-field> -->
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Justification of Export" [value]="approvalForm.justifyExport">
+  </mat-form-field>
+  <mat-dialog-actions>
+    <button class="btn btn-primary" style="float:right;" (click)="onNoClick()">CLOSE</button>
+  </mat-dialog-actions>
+</div>
+
+
+
+<div *ngIf="mailType == 'Details for Edge Table Publication Request'">
+  <h3>Details re: Table Publish Request</h3>
+  <hr>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Database Name"      
+      [value]="approvalForm.edgePrivateDatabase">
+  </mat-form-field>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="TableName"
+      [value]="approvalForm.edgePrivateTable">
+  </mat-form-field>
+   <!--Removed Name or short description of your derived dataset" and "Detailed description of the derived dataset"-->
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Anchor dataset of interest or data provider" [value]="approvalForm.dataprovider">
+  </mat-form-field>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Specific sub-datasets or data types used" [value]="approvalForm.datatype">
+  </mat-form-field>
+  <mat-form-field style='width: 100%'>
+    <input matInput placeholder="Additional datasources" [value]="approvalForm.datasources">
+  </mat-form-field>
   <mat-form-field style='width: 100%'>
     <input matInput placeholder="Justification of Export" [value]="approvalForm.justifyExport">
   </mat-form-field>

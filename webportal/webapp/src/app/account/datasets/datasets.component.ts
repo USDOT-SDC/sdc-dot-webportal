@@ -195,8 +195,25 @@ export class DatasetsComponent implements OnInit {
             this.getMyDatasetsList();
         });
     }
-
     
+    //NEW -- may need to add equivalent to datasetname to this if we end up creating a 'table export' table on the datasets page vs a button...
+    requestTableExport(/*BucketName,*/ mailType) {
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            panelClass: 'custom-export-dialog',
+            width: '65vw',
+            height: '75vh',
+            disableClose: true,
+            data: { /*userBucketName: this.userBucketName,*/ mailType: mailType }
+            });
+
+        dialogRef.afterClosed().subscribe(result => {
+                console.log('The Table Export request dialog was closed');
+            //this.myDatasets = [];
+            //this.getMyDatasetsList();                                                                     
+        });
+    }   
+
+
     requestTrustedStatus(/*BucketName,*/ mailType) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             panelClass: 'custom-export-dialog',
@@ -213,7 +230,6 @@ export class DatasetsComponent implements OnInit {
         });
     }
 
- 
     uploadFilesToS3(requestType) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '500px',
