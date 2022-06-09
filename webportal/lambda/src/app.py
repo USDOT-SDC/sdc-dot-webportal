@@ -13,7 +13,7 @@ from boto3.dynamodb.conditions import Attr, Key
 from chalice import CORSConfig
 import time
 import os
-import psycopg2
+
 
 cors_config = CORSConfig(
     allow_origin='*',
@@ -580,7 +580,7 @@ def getSubmittedRequests():
 
     useremail = params['userEmail']
     userdatasets = []
-    response = {"exportRequests": {}, "trustedRequests": [], "autoExportRequests": []}
+    response = {"exportRequests": {"tableRequests":[], "s3Requests":[]}, "trustedRequests": [], "autoExportRequests": []}
     try:
         combinedExportWorkflow = get_combined_export_workflow()
 
@@ -602,19 +602,16 @@ def getSubmittedRequests():
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
                 KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
             if exportFileRequestResponse['Items']:
-                s3_export_requests = []
-                table_export_requests = []
-                for list in exportFileRequestResponse['Items']:
-                    for entry in list:
-                        type = entry['RequestType'] if hasattr(entry,'RequestType') else None
-                        if type:
-                            if type == 'table':
-                                table_export_requests.append(entry)
-                            else:
-                                s3_export_requests.append(entry)
+                for entry in exportFileRequestResponse['Items']:
+                    type = entry['RequestType'] if 'RequestType' in entry.keys() else None
+                    if type:
+                        if type == 'table':
+                            response['exportRequests']['tableRequests'].append(entry)
+                        else:
+                            response['exportRequests']['s3Requests'].append(entry)
+                    else:
+                        response['exportRequests']['s3Requests'].append(entry)
                     
-                response['exportRequests']['tableRequests'].append(table_export_requests)
-                response['exportRequests']['s3Requests'].append(s3_export_requests)
 
             # Trusted User Request query
             trustedRequestResponse = trustedRequestTable.query(
@@ -649,7 +646,7 @@ def getSubmittedRequests():
                     headers={'Content-Type': 'application/json'})
 
 
-@app.route('/export/table/create', methods=['POST'], authorizer=authorizer, cors=cors_config)
+@app.route('/exportTable', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def createTableExportRequests():
     paramsQuery = app.current_request.query_params
     paramsString = paramsQuery['message']
