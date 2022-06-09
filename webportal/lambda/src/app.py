@@ -580,7 +580,7 @@ def getSubmittedRequests():
 
     useremail = params['userEmail']
     userdatasets = []
-    response = {"exportRequests": [], "trustedRequests": [], "autoExportRequests": []}
+    response = {"exportRequests": {}, "trustedRequests": [], "autoExportRequests": []}
     try:
         combinedExportWorkflow = get_combined_export_workflow()
 
@@ -802,7 +802,8 @@ def createTableExportRequests():
                     '--databaseName': database_name,
                     '--tableName': table_name,
                     '--internalSchema': source_db_schema,
-                    '--listOfPOC': listOfPOC
+                    '--listOfPOC': listOfPOC,
+                    '--userID': userID
                 })
 
     except BaseException as be:
