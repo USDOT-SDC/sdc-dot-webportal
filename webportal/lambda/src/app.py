@@ -709,7 +709,7 @@ def createTableExportRequests():
                     'RequestType': 'Table',
                     'DatabaseName': database_name,
                     'ListOfPOC': listOfPOC,
-                    'TableSchema': 'TBD'
+                    'TableSchema': ''
                 }
             )
             availableDatasets = get_datasets()['datasets']['Items']
