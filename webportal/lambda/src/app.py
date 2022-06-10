@@ -679,98 +679,24 @@ def createTableExportRequests():
         dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
         acceptableUse = 'Decline'
 
-        # verify if user is already trusted for selected combinedDataInfo
-        # userTrustedStatus = get_user_trustedstatus(userID)
-        # userTrustedStatusForSelectedDataset = combinedDataInfo in userTrustedStatus and userTrustedStatus[combinedDataInfo] == 'Trusted';
-
-
         if 'acceptableUse' in params and params['acceptableUse']:
             acceptableUse = params['acceptableUse']
 
-        # if 'trustedRequest' in params:
-        #     trustedUsersTable = dynamodb.Table(TABLENAME_TRUSTED_USERS)
-
-        #     trustedStatus = params['trustedRequest']['trustedRequestStatus']
-        #     trustedReason = params['trustedRequest']['trustedRequestReason']
-
-            # if trustedStatus == 'Submitted' :
-            #     bypassExportFileRequestTable = True
-
-            # if acceptableUse == 'Decline':
-            #     trustedStatus = 'Untrusted'
-            #     emailContent = "<br/>Trusted status has been declined to <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
-            # elif trustedWorkflowStatus == 'Notify':
-            #     trustedStatus='Trusted'
-            #     emailContent="<br/>Trusted status has been approved to <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
-            # else:
-            #     emailContent = "<br/>Trusted status has been requested by <b>" + userID + "</b> for dataset <b>" + combinedDataInfo + "</b>"
-
-            #  #send email to List of POC for Trusted Status Requests
-            # send_notification(listOfPOC,emailContent)    
-
-            # response = trustedUsersTable.put_item(
-            #     Item = {
-            #         'UserID': userID,
-            #         'UserEmail': user_email,
-            #         'Dataset-DataProvider-Datatype': combinedDataInfo,
-            #         'TrustedStatus': trustedStatus,
-            #         'TrustedJustification': trustedReason,
-            #         'UsagePolicyStatus': acceptableUse,
-            #         'ReqReceivedTimestamp': int(time.time()),
-            #         'LastUpdatedTimestamp': datetime.datetime.utcnow().strftime("%Y%m%d")
-            #     }
-            # )
-
-        # if 'autoExportRequest' in params:
-        #     autoExportUsersTable = dynamodb.Table(TABLENAME_AUTOEXPORT_USERS)
-
-        #     autoExportStatus = params['autoExportRequest']['autoExportRequestStatus']
-        #     autoExportReason = params['autoExportRequest']['autoExportRequestReason']
-        #     autoExportDataInfo = combinedDataInfo.split('-')[0] + '-' + combinedDataInfo.split('-')[1] + '-' + params['autoExportRequest']['autoExportRequestDataset']
-
-        #     send_notification(listOfPOC,"Auto-Export status has been requested by <b>" + userID + "</b> for dataset <b>" + autoExportDataInfo + "</b>", 'Auto-Export Request')
-
-        #     response = autoExportUsersTable.put_item(
-        #                     Item = {
-        #                         'UserID': userID,
-        #                         'UserEmail': user_email,
-        #                         'Dataset-DataProvider-Datatype': autoExportDataInfo,
-        #                         'AutoExportStatus': autoExportStatus,
-        #                         'ReqReceivedTime': int(time.time()),
-        #                         'LastUpdatedTime': datetime.datetime.utcnow().strftime("%Y%m%d"),
-        #                         'Justification': autoExportReason
-        #                     }
-        #                 )
-
-        # if not bypassExportFileRequestTable :
-        #     requestReviewStatus = params['RequestReviewStatus']
-        #     download = 'false'
-        #     export = 'true'
-        #     publish = 'false'
-        #     if nonTrustedWorkflowStatus == 'Notify' or userTrustedStatusForSelectedDataset is True:
-        #         requestReviewStatus = 'Approved'
-        #         download = 'true'
-        #         publish = 'true'
-        #         export = 'false'
-        #         emailContent += "<br/>Export request has been approved to <b>" + userID + "</b> for database table <b>" + params['S3Key'] + "</b>"
-        #     else:
-        #         emailContent += "<br/>Export request has been requested by <b>" + userID + "</b> for database table <b>" + params['S3Key'] + "</b>"
             source_db_schema = 'internal'
             target_db_schema = 'edge'
             database_name = params['DatabaseName']
             table_name = params['TableName']
-            # emailContent = "<br/>Export to EdgeDB request has been requested by <b>" + userID + "</b> for database table <b>" + table_name + "</b>" + "<b> in the private database " + database_name + "./b"
-            # emailContent += "<b> The table schema is as follows: " + table_schema + "</b>"
+            
             exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
             table_key_hash = database_name +'.'+source_db_schema+'.'+table_name
             timemills = int(time.time())
             response = exportFileRequestTable.put_item(
                 Item={
                     'S3KeyHash': table_key_hash,
+                    'S3Key': table_key_hash,
                     'Dataset-DataProvider-Datatype': combinedDataInfo,
                     'ApprovalForm': params['ApprovalForm'],
-                    # 'RequestReviewStatus': requestReviewStatus,
-                    # 'S3Key': params['S3Key'],
+                    'RequestReviewStatus': 'Submitted',
                     'RequestedBy_Epoch': userID + "_" + str(timemills),
                     'RequestedBy': userID,
                     # 'TeamBucket': params['TeamBucket'],
@@ -782,8 +708,8 @@ def createTableExportRequests():
                     'TargetDatabaseSchema': target_db_schema,
                     'RequestType': 'Table',
                     'DatabaseName': database_name,
-                    'ListOfPOC': listOfPOC
-                    # 'TableSchema': table_schema
+                    'ListOfPOC': listOfPOC,
+                    'TableSchema': 'TBD'
                 }
             )
             availableDatasets = get_datasets()['datasets']['Items']
@@ -857,16 +783,21 @@ def updatefilestatus():
                             },
                             ReturnValues="UPDATED_NEW"
                         )
-        s3 = boto3.resource('s3')
-        s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
-        #s3_object.metadata.update(metadata)
-        s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
-                            Metadata=metadata,
-                            MetadataDirective='REPLACE')
+        emailContent = ''
+        if 'TeamBucket' in params.keys():
+            s3 = boto3.resource('s3')
+            s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
+            #s3_object.metadata.update(metadata)
+            s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
+                                Metadata=metadata,
+                                MetadataDirective='REPLACE')
+            emailContent = "<br/>The Status of the Export Request made by you for the file <b>" + params['S3Key'] + "</b> has been changed to <b>" + params['status'] + "</b>"
+        if 'TableName' in params.keys():
+            emailContent = "<br/>The Status of the Table Export Request made by you for the table" + params['TableName'] + "</b> has been changed to <b>" + params['status'] + "</b>"
+
         # Send notification to the analyst if his request is approved or rejected
         listOfPOC = []
         listOfPOC.append(userEmail)
-        emailContent = "<br/>The Status of the Export Request made by you for the file <b>" + params['S3Key'] + "</b> has been changed to <b>" + params['status'] + "</b>"
         send_notification(listOfPOC, emailContent)
 
     except BaseException as be:
