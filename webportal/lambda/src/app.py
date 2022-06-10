@@ -709,7 +709,7 @@ def createTableExportRequests():
                     'RequestType': 'Table',
                     'DatabaseName': database_name,
                     'ListOfPOC': listOfPOC,
-                    'TableSchema': ''
+                    'TableSchema': '' #Gets populated in glue job execution below.
                 }
             )
             availableDatasets = get_datasets()['datasets']['Items']
