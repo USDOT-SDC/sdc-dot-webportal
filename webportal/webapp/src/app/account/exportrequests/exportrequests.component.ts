@@ -19,11 +19,13 @@ export class ExportRequestsComponent implements OnInit {
         public dialog: MatDialog) { }
      
     exportFileRequests = [];
+    exportTableRequests = [];                //NEW-------------------------------------------------------------------------------------------
     trustedRequests = [];
     autoExportRequests = [];
     metadata = {};
     user: any;
     cols: any = [];
+    colsExportTable: any = [];                 //NEW-------------------------------------------------------------------------------------------
     colsTrusted: any = [];
     colsAutoExport: any = [];
     userEmail: string;
@@ -32,7 +34,7 @@ export class ExportRequestsComponent implements OnInit {
     userBucketName: string;
 
     ngOnInit() {
-        this.userEmail = sessionStorage.getItem('email');
+        this.userEmail = sessionStorage.getItem('email');                   //Reminder: this is data owner/steward information
         console.log(this.userEmail);
         this.userName = sessionStorage.getItem('username');
         console.log(this.userName);
@@ -50,24 +52,39 @@ export class ExportRequestsComponent implements OnInit {
           { field: 'details', header: 'Details' },
           { field: 'exportFileForReview', header: 'Export File for Review'}
         ];
+//NEW--------------------------------------------------------------------------------------------------------------------------------------       
+        this.colsExportTable = [                                                             //TO DO: Compare and fix to work with actual response variables
+            { field: 'Date', header: 'Date' },                                               //Q; is it possible to add email to user fullname column instead?
+            { field: 'userFullName', header: 'User' },                                 // this may need to be updated to be a concatenation of user first and lastname dynamo db cols
+            { field: 'userEmail', header: 'Email'},                                         
+            { field: 'description', header: 'Justification' },
+            { field: 'team', header: 'Team' },
+            { field: 'dataset', header: 'Dataset' },
+            { field: 'database.schema.tablename', header: 'Table' },        //Q: What does data owner need to see here?
+            { field: 'approval', header: 'Approval' },                                 // TO DO: update the related function to trigger new glue job
+            { field: 'details', header: 'Details' },                                        //Q: Do we really need this if same info is loaded elsewhere in the table already? -- do we even actually create this???
+            //{ field: 'top10Rows', header: 'Top 10 Rows for Review'}       //NEW -- this will use new function that copies top 10 rows to S3 bucket
+          ];
+//NEW-END--------------------------------------------------------------------------------------------------------------------------------
 
         this.colsTrusted = [
             { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
             { field: 'justification', header: 'Justification' },
             { field: 'approval', header: 'Approval' }
-          ]
+          ];
 
         this.colsAutoExport = [
             { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
             { field: 'justification', header: 'Justification' },
             { field: 'approval', header: 'Approval' }
-        ]
+        ];
     }
 
-    getExportFileRequests() {
+    getExportFileRequests() {                                      //TO DO: this should probably be renamed
         this.exportFileRequests = [];
+        this.exportTableRequests = [];                          //NEW-------------------------------------------------------------------------------
         this.trustedRequests = [];
         this.autoExportRequests = [];
         //this.exportFileRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'description' : 'This is derived Dataset', 'team' : 'team1 bucket', 'dataset' : 'Waze-Waze-alert', 'details' : 'Details'  ,'reviewFile' : 'reviewFileOrLink'});
@@ -87,23 +104,52 @@ export class ExportRequestsComponent implements OnInit {
 
         this.gatewayService.post("export/requests?message=" + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
-                for(let items of response['exportRequests']) {
-                    for(let item of items) {
-                        let justifyExport = "";
-                        if('justifyExport' in item['ApprovalForm']) {
-                            justifyExport = item['ApprovalForm']['justifyExport'];
-                             }
-                        this.exportFileRequests.push({
-                            'userFullName' : item['RequestedBy'], 
-                            'description' : justifyExport, 
+                for(let item of response['exportRequests']['s3Requests']) {
+                   // for(let item of items) {
+                    let justifyExport = "";
+                    if('justifyExport' in item['ApprovalForm']) {
+                        justifyExport = item['ApprovalForm']['justifyExport'];
+                            }
+                    this.exportFileRequests.push({
+                        'userFullName' : item['RequestedBy'], 
+                        'description' : justifyExport, 
+                        'team' : item['TeamBucket'], 
+                        'dataset' : item['Dataset-DataProvider-Datatype'], 
+                        'details' : item['ApprovalForm'],
+                        'reviewFile' : item['S3Key'],
+                        'S3KeyHash' : item['S3KeyHash'],
+                        'RequestedBy_Epoch':item['RequestedBy_Epoch'],
+                        'S3Key' : item['S3Key'],
+                        'TeamBucket' : item['TeamBucket'],
+                        'RequestReviewStatus': item['RequestReviewStatus'],
+                        'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
+                        'UserEmail': item['UserEmail'],
+                        'TeamName': item['TeamName'],                                                      //TO DO: CHECK  USER STACKS TABLE TO CONFIRM WHAT TEAM NAME VS TEAM BUCKET LOOKS LIKE
+                        'ReqReceivedDate': item['ReqReceivedDate']
+                        }
+                    );
+                   // } 
+                }
+
+   //NEW----------------------------------------------------------------------------------------------------------------------------------------------
+                for(let item of response['exportRequests']['tableRequests']) {
+                  //  for(let item of items) {
+                    let justifyExport = "";
+                    if('justifyExport' in item['ApprovalForm']) {
+                        justifyExport = item['ApprovalForm']['justifyExport'];
+                            }
+                    this.exportTableRequests.push({
+                            'userFullName' : item['RequestedBy'],                                                             //Q: which item is used here  'REquestedBY or UserID??
+                            'justification' :  justifyExport,                                                                            //Q: Should this be justification? ...TO DO: check table.. is it only captured in the Approval Form???
                             'team' : item['TeamBucket'], 
                             'dataset' : item['Dataset-DataProvider-Datatype'], 
+                            'table': item['TableName'],                                                                                 //NEW......Q: WHAT ABOUT DATABASE NAME.. DOES Data Approver need this, is it in approval form??
                             'details' : item['ApprovalForm'],
-                            'reviewFile' : item['S3Key'],
+                            // 'reviewFile' : item['S3Key'],
                             'S3KeyHash' : item['S3KeyHash'],
                             'RequestedBy_Epoch':item['RequestedBy_Epoch'],
                             'S3Key' : item['S3Key'],
-                            'TeamBucket' : item['TeamBucket'],
+                            'TeamBucket' : item['TeamBucket'],                                                                      //Q: why duplicated Team and Teambucket???
                             'RequestReviewStatus': item['RequestReviewStatus'],
                             'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
                             'UserEmail': item['UserEmail'],
@@ -111,9 +157,11 @@ export class ExportRequestsComponent implements OnInit {
                             'ReqReceivedDate': item['ReqReceivedDate']
                             }
                         );
-                    } 
-                }  
-                       
+                      //  } 
+                    }
+    //NEW-END----------------------------------------------------------------------------------------------------------------------------------------------           
+
+
                 for(let items of response['trustedRequests']) {
                     for(let item of items) {
                          console.log(item);
@@ -139,9 +187,15 @@ export class ExportRequestsComponent implements OnInit {
                 }
 
                 console.log('Request Sent Successfully');
+
                 this.exportFileRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
                 });
+//NEW----------------------------------------------------------------------------------------------------------------------------------------------------
+                   this.exportTableRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
+                });
+//NEW-END----------------------------------------------------------------------------------------------------------------------------------------------              
                 this.trustedRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
                 });
@@ -183,7 +237,23 @@ export class ExportRequestsComponent implements OnInit {
         });
     }
 
-    copyFileToTeamBucket(exportFileForReview) {
+    //NEW--------------------------------------------------------------------------------------Q: do i need this orr Use original??
+    renderTableApprovalForm(approvalForm) {
+        console.log(approvalForm.details);
+        this.detailsOnclick = 1;
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            width: '700px',
+            height: '640px',
+            data: { mailType: 'Details for Edge Table Publication Request', approvalForm: approvalForm.details}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+//NEW-END------------------------------------------------------------------------------------
+
+    copyFileToTeamBucket(exportFileForReview) {                                                                                 //where do variables exportFileForReview.TeamBucket and export FileforReview.S3Key come from
         var team_bucket = exportFileForReview.TeamBucket;
         var s3Key = exportFileForReview.S3Key;
         let export_details = {};
@@ -202,12 +272,14 @@ export class ExportRequestsComponent implements OnInit {
         );
     }
     
+
     requestDownload(exportFileRequest) {
         this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
             (response: any) => {
             window.open(response);
         });
     }
+
 
     submitApproval(status,targetObj) {
         let reqBody = {};
@@ -218,6 +290,7 @@ export class ExportRequestsComponent implements OnInit {
         reqBody['S3Key'] = targetObj['S3Key'];
         reqBody['TeamBucket'] = targetObj['TeamBucket'];
         reqBody['userEmail'] = targetObj['UserEmail'];
+        //reqBody['TableName'] = targObj['TableName'];    //OR DOES TABLENAME GO INTO s3KEY and this should be changed to REQUESTTYPE??
 
         this.gatewayService.post("export/requests/updatefilestatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
@@ -226,6 +299,29 @@ export class ExportRequestsComponent implements OnInit {
             }
         );
     }
+
+   //NEW---------------------------DONT NEED THIS------------------------------------------------------------------------------------ 
+   //// Q; This will will talk to a different or multiple apis....???
+//    //TO DO CONFIRM WHAT SHOULD BE IN BODY -- add table and db
+//     submitTableApproval(status,targetObj) {
+//         let reqBody = {};
+//         reqBody['status'] = status;
+//         reqBody['key1'] = targetObj['S3KeyHash'];
+//         reqBody['key2'] = targetObj['RequestedBy_Epoch'];
+//         reqBody['datainfo'] = targetObj['dataset'];
+//         reqBody['S3Key'] = targetObj['S3Key'];
+//         reqBody['TeamBucket'] = targetObj['TeamBucket'];
+//         reqBody['userEmail'] = targetObj['UserEmail'];
+//     ////The New Lambda will trigger glue job to move table AND needs to update file status in dynamo db table so that table can re-render to reflect updated status
+//         this.gatewayService.post("export/requests/updatefilestatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+//             (response: any) => {
+//                 this.getExportFileRequests();
+//                 console.log('Request Sent Successfully');
+//             }
+//         );
+//     }
+   //NEW--------------------------------------------------------------------------------------------------------------- 
+
     
     submitTrustedApproval(status,key1,key2,trustedRequest) {
         let reqBody = {};
