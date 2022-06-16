@@ -755,21 +755,21 @@ def updatefilestatus():
         userEmail = params['userEmail']
 
 
-        download = 'false'
-        export = 'true'
-        publish = 'false'
-        metadata = {'download': download, 'export': export, 'publish': publish}
+        # download = 'false'
+        # export = 'true'
+        # publish = 'false'
+        # metadata = {'download': download, 'export': export, 'publish': publish}
 
-        if status == "Approved":
-            download = 'true'
-            publish = 'true'
-            export = 'false'
-            metadata = {'download': download, 'export': export, 'publish': publish}
-        elif status == "TrustedApproved":
-            metadata = {'download': download, 'export': export, 'publish': publish , datainfo : 'true'}
+        # if status == "Approved":
+        #     download = 'true'
+        #     publish = 'true'
+        #     export = 'false'
+        #     metadata = {'download': download, 'export': export, 'publish': publish}
+        # elif status == "TrustedApproved":
+        #     metadata = {'download': download, 'export': export, 'publish': publish , datainfo : 'true'}
 
-        logging.info(metadata)
-        logging.info(params)
+        # logging.info(metadata)
+        # logging.info(params)
 
         exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
         exportFileRequestTable.update_item(
@@ -785,6 +785,22 @@ def updatefilestatus():
                         )
         emailContent = ''
         if 'TeamBucket' in params.keys():
+            download = 'false'
+            export = 'true'
+            publish = 'false'
+            metadata = {'download': download, 'export': export, 'publish': publish}
+
+            if status == "Approved":
+                download = 'true'
+                publish = 'true'
+                export = 'false'
+                metadata = {'download': download, 'export': export, 'publish': publish}
+            elif status == "TrustedApproved":
+                metadata = {'download': download, 'export': export, 'publish': publish , datainfo : 'true'}
+
+            logging.info(metadata)
+            logging.info(params)
+
             s3 = boto3.resource('s3')
             s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
             #s3_object.metadata.update(metadata)
