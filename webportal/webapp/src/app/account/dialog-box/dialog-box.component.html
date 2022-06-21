@@ -600,9 +600,9 @@
 </div>
 
 
-<!--Request Publish Table to Edge DB Dialogbox-->
+<!--Request Export Table to Edge DB Dialogbox-->
 <div *ngIf="mailType == 'Request Table Export'">
-  <h3>Request to Publish Table to Edge Database</h3>
+  <h3>Request to Export Table to Edge Database</h3>
   <mat-dialog-content style="height: 100%;">
     <!--<hr>-->
     <!-- TO DO: CLEAN UP WORDING HERE-->
@@ -611,12 +611,12 @@
     <!--<p><b>Please provide the information requested below, which is required to facilitate the review, approval and processing of your table publication request.</b>-->
     <br/>
     <p style="color:grey;">Please provide information relevant to your table request, as requested in the form fields below.  
-    These details will faciliate the processing of your request and will be shared with the Data Provider to help them review your request and provide their decision. </p>
+    These details will faciliate the processing of your request and will be shared with the Data Steward to help them review your request and provide their decision. </p>
     <!--br/-->
     <label style="float:right"> * All fields are mandatory </label>
     <hr>
     <br/>
-    <p><b>Please identify your database and the specific table you want published to the public Edge database.</b></p>
+    <p><b>Please identify your database and the specific table to be published to the public Edge database.</b></p>
 
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Database" [(ngModel)]="messageModel.edgePrivateDatabase"
@@ -639,10 +639,10 @@
     <!--hr-->
     <!--<p><b>The additional information, requested below, will be shared with the Data Provider to help them review your request and provide their decision. </b>-->
      
-    <span style="line-height:200%;">
+    <div style="line-height:200%;">
       <br/>
-    </span>
-    <p><b>What are the primary Project, Data Provider and Sub-Dataset/Data Type used to create your table</b></p>    
+    </div>
+    <p><b>What are the primary Project, Data Provider and Sub-Dataset/Data Type used to create your table?</b></p>    
     <mat-form-field style='width: 100%'>
       <mat-select class="exportSelect" placeholder='Project/Dataset' [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)" required>
         <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value">
@@ -672,9 +672,9 @@
       <mat-error *ngIf="!messageModel.subDataSet">Please select Sub DataSet Type </mat-error>
     </mat-form-field>
      
-    <span style="line-height:200%;">
+    <div style="line-height:200%;">
       <br/>
-    </span>
+    </div>
     <p><b>Please list any additional Sub-Datasets/Data Types, available within SDC, or any external Datasets/DataSources, used to create your table.</b></p>            
     <mat-form-field style='width: 100%'>
       <input matInput title="e.g. US Census Bureau, ArcGIS Online, US Geological Survey, etc."
@@ -684,9 +684,9 @@
       <mat-error align="end" *ngIf="!messageModel.datasources">Required</mat-error>
     </mat-form-field>
      
-    <span style="line-height:200%;">
+    <div style="line-height:200%;">
       <br/>
-    </span>
+    </div>
     <p><b>Please provide the justification for your request.</b></p>
     <mat-form-field style='width: 100%'>
       <input matInput placeholder="Justification" [(ngModel)]="messageModel.justifyExport"
@@ -697,11 +697,11 @@
       </mat-error>
     </mat-form-field>
 
-    <span style="line-height:150%;">
+    <div style="line-height:100%;">
       <br/>
-    </span>
+    </div>
     <hr>
-   <!--Q: Should we display the acceptable use policy for the primary data? -->
+
     <p-panel header="Acceptable Use Policy">
       <div class="panel-div" [innerHTML]="expWorkflow[selectedDataSet][selectedDataProvider]['UsagePolicyDesc']"
         *ngIf="expWorkflow && selectedDataSet && selectedDataProvider && expWorkflow[selectedDataSet] && expWorkflow[selectedDataSet][selectedDataProvider]">

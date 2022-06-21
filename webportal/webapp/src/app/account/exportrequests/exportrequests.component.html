@@ -65,10 +65,9 @@
  <!--TODO: Name RequestType -- Confirm where Trusted Request Items come from -- see Trusted Status Table Load below -- do similar here-->           
             <div *ngIf="!exportTableRequests">No table export requests</div>
             <span style="color:grey">This section displays the list of tables requested for export to the Edge DB</span><hr>
-           <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
+            <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
             <p-table #dt [columns]="colsExportTable" [value]="exportTableRequests" [paginator]="true" [rows]="10" [totalRecords]="exportTableRequests.length"  dataKey="filename">
               <ng-template pTemplate="header" let-columns>
-                  <!--VERIFY WHAT IS HAPPENING HERE -- DO WE REMOVE OR ADJUST THIS FOR TABLE EXPORTS VS FILE ASSOCIATIONS-->
                   <tr>
                       <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
                           {{col.header}} <br/>
@@ -105,8 +104,6 @@
           </p-table>
           <hr />
           </mat-expansion-panel>
-
-
 
 
          <!-- Trust Requests-->
