@@ -682,8 +682,8 @@ def createTableExportRequests():
         if 'acceptableUse' in params and params['acceptableUse']:
             acceptableUse = params['acceptableUse']
 
-            source_db_schema = 'internal'
-            target_db_schema = 'edge'
+            source_db_schema = 'internal' #TODO Retrieve this from SSM Param Store
+            target_db_schema = 'edge'#TODO Retrieve this from SSM Param Store
             database_name = params['DatabaseName']
             table_name = params['TableName']
             
@@ -699,7 +699,7 @@ def createTableExportRequests():
                     'RequestReviewStatus': 'Submitted',
                     'RequestedBy_Epoch': userID + "_" + str(timemills),
                     'RequestedBy': userID,
-                    # 'TeamBucket': params['TeamBucket'],
+                    'TeamBucket': '',
                     'ReqReceivedTimestamp': timemills,
                     'UserEmail': user_email,
                     'ReqReceivedDate': datetime.datetime.now().strftime('%Y-%m-%d'),
