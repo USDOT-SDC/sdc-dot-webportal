@@ -141,6 +141,8 @@ def get_user_info():
     # Convert unicode to ascii
     try:
         user_info['stacks']=ast.literal_eval(json.dumps(response_table['Item']['stacks']))
+        user_info['team_slug']=response_table['Item']['teamName']
+
     except KeyError as ke:
         logging.exception("Error: Could not fetch the item for user: " + user_info['username'])
         raise NotFoundError("Unknown role '%s'" % (user_info['userinfo']))
