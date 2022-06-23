@@ -142,7 +142,7 @@ def get_user_info():
     try:
         user_info['stacks']=ast.literal_eval(json.dumps(response_table['Item']['stacks']))
         user_info['team_slug']=response_table['Item']['teamName']
-
+        
     except KeyError as ke:
         logging.exception("Error: Could not fetch the item for user: " + user_info['username'])
         raise NotFoundError("Unknown role '%s'" % (user_info['userinfo']))
@@ -607,7 +607,7 @@ def getSubmittedRequests():
                 for entry in exportFileRequestResponse['Items']:
                     type = entry['RequestType'] if 'RequestType' in entry.keys() else None
                     if type:
-                        if type == 'table':
+                        if type.lower() == 'table':
                             response['exportRequests']['tableRequests'].append(entry)
                         else:
                             response['exportRequests']['s3Requests'].append(entry)
@@ -717,18 +717,22 @@ def createTableExportRequests():
             availableDatasets = get_datasets()['datasets']['Items']
             logging.info("Available datasets:" + str(availableDatasets))
 
-            glue_client = boto3.resource('glue')
+            # fakeListOfPOC = ['gautam.naidu.ctr@dot.gov', 'c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
+
+            glue_client = boto3.client('glue')
             glueJobName = f"data_export_populate_schema"
             response = glue_client.start_job_run(
                 JobName = glueJobName,
                 Arguments = {
                     '--S3KeyHash': table_key_hash,
-                    '--RequestedBy_Epoch': userID + "_" + str(timemills),
+                    '--RequestedByEpoch': userID + "_" + str(timemills),
                     '--databaseName': database_name,
                     '--tableName': table_name,
                     '--internalSchema': source_db_schema,
-                    '--listOfPOC': listOfPOC,
-                    '--userID': userID
+                    # '--listOfPOC': ','.join(fakeListOfPOC), #For Debugging
+                    '--listOfPOC': ','.join(listOfPOC),
+                    '--userID': userID,
+                    '--userEmail': user_email
                 })
 
     except BaseException as be:
@@ -1341,7 +1345,7 @@ def ssm_ec2_instance_linux(instance_id):
     sudo mount /dev/xvdb  /data1/
     cat /etc/fstab | grep data1
     if [ $? -ne 0 ]; then
-    echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
+    echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
     fi
     """
     ]  },MaxErrors='20' )
