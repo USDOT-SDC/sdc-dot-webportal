@@ -815,7 +815,7 @@ def updatefilestatus():
                                 MetadataDirective='REPLACE')
             emailContent = "<br/>The Status of the Export Request made by you for the file <b>" + params['S3Key'] + "</b> has been changed to <b>" + params['status'] + "</b>"
         if 'TableName' in params.keys():
-            emailContent = "<br/>The Status of the Table Export Request made by you for the table" + params['TableName'] + "</b> has been changed to <b>" + params['status'] + "</b>"
+            emailContent = "<br/>The Status of the Table Export Request made by you for the table <b>" + params['TableName'] + "</b> has been changed to <b>" + params['status'] + "</b>"
 
         # Send notification to the analyst if his request is approved or rejected
         listOfPOC = []
