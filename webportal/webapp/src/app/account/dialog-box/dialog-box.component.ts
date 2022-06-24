@@ -922,7 +922,7 @@ export class DialogBoxComponent implements OnInit {
         } else { */
 
         if (this.exportRequestType === 'Table') {
-            this.gatewayService.sendExportRequest('export/table/create?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
+            this.gatewayService.sendExportRequest('exportTable?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
                 (response: any) => {
                     this.snackBar.open('Your request has been sent successfully', 'close', {
                         duration: 2000,
