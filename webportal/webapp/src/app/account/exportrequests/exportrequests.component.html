@@ -86,15 +86,16 @@
                       <td><div style="word-break:break-all;">{{exportTableRequest.table}}</div></td>
                         <!-- <td><div style="word-break:break-all;">{{exportFileRequest.reviewFile}}</div></td> -->   
                         <td>
-                            <div *ngIf="exportTableRequest.RequestReviewStatus == 'Submitted'"><i class="material-icons iconFont" (click)="submitApproval('Approved',exportTableRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportTableRequest)" >close</i></div>                           
-                            
+                            <div *ngIf="exportTableRequest.RequestReviewStatus == 'Submitted'">
+                                <i class="material-icons iconFont" (click)="submitTableApproval('Approved',exportTableRequest)" >done</i>
+                                <i class="material-icons iconFont" (click)="submitTableApproval('Rejected',exportTableRequest)" >close</i>
+                            </div>                                                     
                             <div *ngIf="exportTableRequest.RequestReviewStatus == 'Approved'">
                                     <p-message severity="success" text="{{exportTableRequest.RequestReviewStatus}}"></p-message> 
                             </div> 
                             <div *ngIf="exportTableRequest.RequestReviewStatus == 'Rejected'">
                                         <p-message severity="error" text="{{exportTableRequest.RequestReviewStatus}}"></p-message> 
                             </div>
-                            <!--<button class="btn btn-primary dotBtn"  (click)="submitApproval('Approved',exportFileRequest)">Approve</button><button class="btn btn-primary dotBtn"  (click)="submitApproval('Rejected',exportFileRequest)">Reject</button></td>-->
                         </td>
                         <td>
                             <i class="material-icons iconFont" (click)="renderTableApprovalForm(exportTableRequest)">insert_drive_file</i>
