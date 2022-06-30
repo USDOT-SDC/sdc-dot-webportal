@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';                     //child to parent data sharing via ViewChild 
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
@@ -65,10 +65,8 @@ export class DialogBoxComponent implements OnInit {
     detailedDerivedDataset: string;
     derivedDataSetName: string;
     trustedAcceptableUseDisabled: boolean;
-    targetDatabaseSchema: string;                       //NEW -- do we need this here?    TO DO: Confirm if this is to be used!!
-    edgePrivateDatabase: string;                                  //NEW -- prefer change to 'sourceDatabase?
-    edgePrivateTable: string;                                         //NEW -- prefer change to 'sourceTable'?
-   // edgeJustification: string;                              //NEW -- use existing export justification?
+    edgePrivateDatabase: string;                             //NEW 
+    edgePrivateTable: string;                                    //NEW
     uploadNotice = false;
     resizeFilterFormSubmitted = false;
     diskSizeChange = true;
@@ -166,10 +164,8 @@ export class DialogBoxComponent implements OnInit {
         autoderiveddataset: '',
         autoreason: '',
         trustedUserJustification: '',
-        targetDatabaseSchema: '',           //NEW  -- do we need this here?
-        edgePrivateDatabase: '',                           //NEW
-        edgePrivateTable: '',                               //NEW
-        //edgeJustification: ''                  //NEW    --- reuse existing export justification
+        edgePrivateDatabase: '',                      //NEW
+        edgePrivateTable: '',                             //NEW
     };
 
     resize = {
@@ -187,11 +183,11 @@ export class DialogBoxComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
-        this.messageModel.bucketName = data.bucketName;
+        this.messageModel.bucketName = data.bucketName;   //Constructor is supposed to only declare, not do work...should this be in ngOnInit?
         this.mailType = data.mailType;
         this.datasetName = data.datasetName;
         this.messageModel.fileFolderName = data.datasetName;
-        this.requestType = data.requestType;                                                  //TO DO: Confirm why was requestType defined instead of just using mailType
+        this.requestType = data.requestType;
         //this.exportRequestType = '';                                                              //NEW
         this.userBucketName = data.userBucketName;
         this.datasettype = data.datasettype;
@@ -201,10 +197,8 @@ export class DialogBoxComponent implements OnInit {
         this.autoderiveddataset = '';
         this.autoreason = '';
         this.trustedUserJustification = '';
-        //this.targetDatabaseSchema = '';                                                      //NEW -- this isnt being used
-        //this.edgePrivateDatabase = '';                                                         //NEW -- part of approval form?
-        //this.edgePrivateTable = '';                                                               //NEW -- part of approval form?
-        //this.edgeJustification = '';                                                               //NEW -- use existing justification, which is part of approval form
+        this.edgePrivateDatabase = '';                                                      //NEW -- part of approval form -- RESPONSE returns 'PrivateDatabase' item nested within approval form
+        this.edgePrivateTable = '';                                                              //NEW -- part of approval form?
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -222,8 +216,12 @@ export class DialogBoxComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('constructor this.edgePrivateDatabase:' + this.edgePrivateDatabase);    //NEW
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
+        this.edgePrivateDatabase = sessionStorage.getItem('teamSlug');                       //NEW 
+        this.messageModel.edgePrivateDatabase = this.edgePrivateDatabase;             //NEW
+        console.log('edgePrivateDatabase:' + this.edgePrivateDatabase);                      //NEW 
         (this.mailType === 'reSize Request') && this.setDisableCurrentConfigurations();
         const trustedStatus = sessionStorage.getItem('userTrustedStatus');
         this.userTrustedStatus = JSON.parse(trustedStatus);
@@ -822,11 +820,10 @@ export class DialogBoxComponent implements OnInit {
         this.submitRequest();
     }
 
-// NEW  -- will i still need this if i submit request
+// NEW
     onPublishTableRequest() {
         this.exportRequestType = 'Table';
-        //this.targetDatabaseSchema = 'Edge'
-        this.acceptableUse = 'Accept';        //TO DO: It's possible that no  actual acceptable use policy will be accepted on form, but request will likely reject without it.. need to check this/test
+        this.acceptableUse = 'Accept';
         this.submitRequest();
     }
 
@@ -860,14 +857,13 @@ export class DialogBoxComponent implements OnInit {
 
 
 
-
         const approvalForm = {};
 
         if (this.exportRequestType === 'Table' &&  this.edgePrivateDatabase)
-            approvalForm["privateDatabase"] = this.edgePrivateDatabase;                     //NEW: TO DO: confirm what should go in brackets
+            approvalForm["privateDatabase"] = this.edgePrivateDatabase;                     //NEW
 
         if (this.exportRequestType === 'Table' &&  this.edgePrivateTable)
-            approvalForm["privateTable"] = this.edgePrivateTable;                                   //NEW: TO DO: confirm what should go in brackets
+            approvalForm["privateTable"] = this.edgePrivateTable;                                   //NEW
 
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
@@ -912,8 +908,9 @@ export class DialogBoxComponent implements OnInit {
         reqBody['UserID'] = this.userName;
         reqBody['selectedDataInfo'] = { 'selectedDataSet': this.selectedDataSet, 'selectedDataProvider': this.selectedDataProvider, 'selectedDatatype': this.selectedDatatype };
         reqBody['acceptableUse'] = this.acceptableUse;
-        reqBody['DatabaseName'] = this.edgePrivateDatabase;
-        reqBody['TableName'] = this.edgePrivateTable;
+        //reqBody['DatabaseName'] = this.edgeDBName;                               //NEW
+        reqBody['DatabaseName'] = this.edgePrivateDatabase;                      //NEW
+        reqBody['TableName'] = this.edgePrivateTable;                                   //NEW
         /*if(this.trustedRequest === "Yes" && (this.acceptableUse === "No" || this.acceptableUse == "")) {
             //alert("Usage policy to continue"); // Ribbon...
             this.snackBar.open('Acceptable use policy should be accepted to request trusted status', 'close', {

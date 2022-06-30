@@ -27,6 +27,7 @@ export class DatasetsComponent implements OnInit {
     showDictionary: boolean = false;
     userBucketName: any;
     stacks: any = [];
+    //edgeDBName: any;                                                      //NEW
     cols: any = [];
     selectedFiles: any = [];
     userTrustedStatus: any;
@@ -41,6 +42,7 @@ export class DatasetsComponent implements OnInit {
         var sdcDatasetsString = sessionStorage.getItem('datasets');
         this.sdcElements = JSON.parse(sdcDatasetsString);
         var stacksString = sessionStorage.getItem('stacks');
+        //this.edgeDBName = sessionStorage.getItem('teamSlug')                                                       //NEW
         this.userBucketName = sessionStorage.getItem('team_bucket_name');
         this.userName = sessionStorage.getItem('username');
         this.sortedSdcElements= this.sdcElements.reverse();
@@ -81,6 +83,7 @@ export class DatasetsComponent implements OnInit {
             (response: any) => {
                 sessionStorage.setItem('username', response.username);
                 sessionStorage.setItem('email', response.email);
+                sessionStorage.setItem('teamSlug', response.team_slug);                         //NEW - team_slug from user stacks table is used as both Team Name and  Edge database name 
                 sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
                 sessionStorage.setItem('datasets', JSON.stringify(response.datasets));
                 sessionStorage.setItem('roles', response.role);

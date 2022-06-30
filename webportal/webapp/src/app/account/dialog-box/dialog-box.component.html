@@ -600,6 +600,7 @@
 </div>
 
 
+ <!--NEW--------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 <!--Request Export Table to Edge DB Dialogbox-->
 <div *ngIf="mailType == 'Request Table Export'">
   <h3>Request to Export Table to Edge Database</h3>
@@ -616,15 +617,14 @@
     <label style="float:right"> * All fields are mandatory </label>
     <hr>
     <br/>
-    <p><b>Please identify your database and the specific table to be published to the public Edge database.</b></p>
+    <p><b>Please enter the name of the table to be exported to the public Edge database.</b></p>
 
     <mat-form-field style='width: 100%'>
-      <input matInput placeholder="Database" [(ngModel)]="messageModel.edgePrivateDatabase"
-        value="{{messageModel.edgePrivateDatabase}}" required>
-      <mat-hint align="end">Alpha-numeric characters only</mat-hint>
-      <mat-error align="end" *ngIf="!messageModel.edgePrivateDatabase">Required</mat-error>
-      <mat-error *ngIf="!messageModel.edgePrivateDatabase">Please enter the database name
-      </mat-error>
+      <input matInput placeholder="Your Database:" value="edgePrivateDatabase" [ngModel]="messageModel.edgePrivateDatabase"
+        [readonly]="!editable">  <!--required-->
+      <!--mat-hint align="end">Alpha-numeric characters only</mat-hint-->
+      <!--mat-error align="end" *ngIf="!messageModel.edgePrivateDatabase">Required</mat-error-->
+      <!--mat-error *ngIf="!messageModel.edgePrivateDatabase">Please enter the database name </mat-error-->
     </mat-form-field>
 
     <mat-form-field style='width: 100%'>
@@ -632,8 +632,7 @@
        value="{{messageModel.edgePrivateTable}}" required>
       <mat-hint align="end">Alpha-numeric characters only</mat-hint>
       <mat-error align="end" *ngIf="!messageModel.edgePrivateTable">Required</mat-error>
-      <mat-error *ngIf="!messageModel.edgePrivateTable">Please enter the table name
-      </mat-error>
+      <mat-error *ngIf="!messageModel.edgePrivateTable">Please enter the table name</mat-error>
     </mat-form-field>
 
     <!--hr-->
@@ -727,7 +726,7 @@
     </mat-dialog-actions>
   </mat-dialog-content>
 </div>
-
+<!--NEW- END-------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
 
 <!-- ngIf to render the dialog only when data.mailType is resize -->
@@ -1096,6 +1095,7 @@
     </p-fileUpload>
   </div>
 </div>
+
 
 <div *ngIf="mailType == 'Details for export request'">
   <h3>Details for Approval Form</h3>

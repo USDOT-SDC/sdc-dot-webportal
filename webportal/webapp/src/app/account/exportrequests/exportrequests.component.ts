@@ -125,7 +125,7 @@ export class ExportRequestsComponent implements OnInit {
                         'RequestReviewStatus': item['RequestReviewStatus'],
                         'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
                         'UserEmail': item['UserEmail'],
-                        'TeamName': item['TeamName'],                                                      //TO DO: CHECK  USER STACKS TABLE TO CONFIRM WHAT TEAM NAME VS TEAM BUCKET LOOKS LIKE
+                        'TeamName': item['TeamName'],                                                      //TO DO:  This doesnt appear to be used anywhere
                         'ReqReceivedDate': item['ReqReceivedDate']
                         }
                     );
@@ -193,7 +193,7 @@ export class ExportRequestsComponent implements OnInit {
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
                 });
 //NEW----------------------------------------------------------------------------------------------------------------------------------------------------
-                   this.exportTableRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
+                this.exportTableRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
                 });
 //NEW-END----------------------------------------------------------------------------------------------------------------------------------------------              
@@ -291,7 +291,6 @@ export class ExportRequestsComponent implements OnInit {
         reqBody['S3Key'] = targetObj['S3Key'];
         reqBody['TeamBucket'] = targetObj['TeamBucket'];
         reqBody['userEmail'] = targetObj['UserEmail'];
-        //reqBody['TableName'] = targObj['TableName'];    //OR DOES TABLENAME GO INTO s3KEY and this should be changed to REQUESTTYPE??
 
         this.gatewayService.post("export/requests/updatefilestatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
