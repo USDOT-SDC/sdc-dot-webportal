@@ -138,23 +138,27 @@ export class ExportRequestsComponent implements OnInit {
                     let justifyExport = "";
                     if('justifyExport' in item['ApprovalForm']) {
                         justifyExport = item['ApprovalForm']['justifyExport'];
-                            }
+                            } 
+                    let teamName = "";                                                  //NEW:  fyi, privateDatabase == team_slug
+                    if('privateDatabase' in item['ApprovalForm']) {
+                        teamName= item['ApprovalForm']['privateDatabase'];
+                            }                         
                     this.exportTableRequests.push({
                             'userFullName' : item['RequestedBy'],                                              
                             'justification' :  justifyExport,
-                            'team' : item['TeamBucket'],                                                                             //TODO: Fix this -- this should not be team bucket... we need to get the Team Slug passed here... 
+                            'team' : teamName,                                                       //NEW     
                             'dataset' : item['Dataset-DataProvider-Datatype'], 
-                            'table': item['TableName'],                                                                                 //NEW
+                            'table': item['TableName'],                                             //NEW
                             'details' : item['ApprovalForm'],
                             // 'reviewFile' : item['S3Key'],
                             'S3KeyHash' : item['S3KeyHash'],
                             'RequestedBy_Epoch':item['RequestedBy_Epoch'],
                             'S3Key' : item['S3Key'],
-                            'TeamBucket' : item['TeamBucket'],
+                            // 'TeamBucket' : item['TeamBucket'],
                             'RequestReviewStatus': item['RequestReviewStatus'],
                             'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
                             'UserEmail': item['UserEmail'],
-                            'TeamName': item['TeamName'],
+                            //'TeamName': item['TeamName'],
                             'ReqReceivedDate': item['ReqReceivedDate']
                             }
                         );

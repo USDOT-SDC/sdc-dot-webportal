@@ -859,12 +859,12 @@ export class DialogBoxComponent implements OnInit {
 
         const approvalForm = {};
 
-        if (this.exportRequestType === 'Table' &&  this.edgePrivateDatabase)
+        if (this.exportRequestType === 'Table' &&  this.edgePrivateDatabase){
             approvalForm["privateDatabase"] = this.edgePrivateDatabase;                     //NEW
-
-        if (this.exportRequestType === 'Table' &&  this.edgePrivateTable)
+        }    
+        if (this.exportRequestType === 'Table' &&  this.edgePrivateTable){
             approvalForm["privateTable"] = this.edgePrivateTable;                                   //NEW
-
+        }
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
         }

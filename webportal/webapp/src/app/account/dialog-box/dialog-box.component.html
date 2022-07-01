@@ -620,6 +620,7 @@
     <p><b>Please enter the name of the table to be exported to the public Edge database.</b></p>
 
     <mat-form-field style='width: 100%'>
+      <!--input matInput placeholder="Your Database:"  [(ngModel)]="messageModel.edgePrivateDatabase"  value="{{messageModel.edgePrivateDatabase}}"-->
       <input matInput placeholder="Your Database:" value="edgePrivateDatabase" [ngModel]="messageModel.edgePrivateDatabase"
         [readonly]="!editable">  <!--required-->
       <!--mat-hint align="end">Alpha-numeric characters only</mat-hint-->
@@ -662,8 +663,7 @@
     </mat-form-field>
 
     <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
-      <mat-select class="exportSelect" placeholder='Sub-Dataset/Data Type' [(ngModel)]="messageModel.subDataSet"
-        (selectionChange)="chkTrustedStatus($event)" required>
+      <mat-select class="exportSelect" placeholder='Sub-Dataset/Data Type' [(ngModel)]="messageModel.subDataSet" required>
         <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value">
           {{ subDataSet.viewValue }}
         </mat-option>
@@ -1133,11 +1133,11 @@
   <hr>
   <mat-form-field style='width: 100%'>
     <input matInput placeholder="Database Name"      
-      [value]="approvalForm.edgePrivateDatabase">
+      [value]="approvalForm.privateDatabase">
   </mat-form-field>
   <mat-form-field style='width: 100%'>
     <input matInput placeholder="TableName"
-      [value]="approvalForm.edgePrivateTable">
+      [value]="approvalForm.privateTable">
   </mat-form-field>
    <!--Removed Name or short description of your derived dataset" and "Detailed description of the derived dataset"-->
   <mat-form-field style='width: 100%'>
