@@ -1,4 +1,4 @@
-from chalice import Chalice, Response
+glufrom chalice import Chalice, Response
 import boto3
 import json, ast
 import logging
@@ -717,23 +717,26 @@ def createTableExportRequests():
             availableDatasets = get_datasets()['datasets']['Items']
             logging.info("Available datasets:" + str(availableDatasets))
 
-            # fakeListOfPOC = ['gautam.naidu.ctr@dot.gov', 'c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
+            fakeListOfPOC = ['gautam.naidu.ctr@dot.gov', 'c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
 
             glue_client = boto3.client('glue')
-            glueJobName = f"data_export_populate_schema"
-            response = glue_client.start_job_run(
-                JobName = glueJobName,
-                Arguments = {
-                    '--S3KeyHash': table_key_hash,
-                    '--RequestedByEpoch': userID + "_" + str(timemills),
-                    '--databaseName': database_name,
-                    '--tableName': table_name,
-                    '--internalSchema': source_db_schema,
-                    # '--listOfPOC': ','.join(fakeListOfPOC), #For Debugging
-                    '--listOfPOC': ','.join(listOfPOC),
-                    '--userID': userID,
-                    '--userEmail': user_email
-                })
+            glueWorkflowName = f"New-Table-Export-Request"
+            glue_schemaPopulate_workflow = glue_client.start_workflow_run(Name=glueWorkflowName)
+            update_schemaPopulate_workflow = glue_client.put_workflow_run_properties(
+                Name = glueWorkflowName,
+                RunId = glue_schemaPopulate_workflow['RunId'],
+                RunProperties = {
+                    'S3KeyHash': table_key_hash,
+                    'RequestedByEpoch': userID + "_" + str(timemills),
+                    'databaseName': database_name,
+                    'tableName': table_name,
+                    'internalSchema': source_db_schema,
+                    'listOfPOC': ','.join(listOfPOC),
+                    # 'listOfPOC': ','.join(fakeListOfPOC),
+                    'userID': userID,
+                    'userEmail': user_email
+                }
+            )
 
     except BaseException as be:
         logging.exception("Error: Failed to process export request" + str(be))
@@ -759,23 +762,6 @@ def updatefilestatus():
         requestedBy_Epoch=params['key2']
         datainfo = params['datainfo']
         userEmail = params['userEmail']
-
-
-        # download = 'false'
-        # export = 'true'
-        # publish = 'false'
-        # metadata = {'download': download, 'export': export, 'publish': publish}
-
-        # if status == "Approved":
-        #     download = 'true'
-        #     publish = 'true'
-        #     export = 'false'
-        #     metadata = {'download': download, 'export': export, 'publish': publish}
-        # elif status == "TrustedApproved":
-        #     metadata = {'download': download, 'export': export, 'publish': publish , datainfo : 'true'}
-
-        # logging.info(metadata)
-        # logging.info(params)
 
         exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
         exportFileRequestTable.update_item(
