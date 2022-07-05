@@ -1,4 +1,4 @@
-from chalice import Chalice, Response
+glufrom chalice import Chalice, Response
 import boto3
 import json, ast
 import logging
@@ -13,6 +13,7 @@ from boto3.dynamodb.conditions import Attr, Key
 from chalice import CORSConfig
 import time
 import os
+
 
 cors_config = CORSConfig(
     allow_origin='*',
@@ -140,6 +141,8 @@ def get_user_info():
     # Convert unicode to ascii
     try:
         user_info['stacks']=ast.literal_eval(json.dumps(response_table['Item']['stacks']))
+        user_info['team_slug']=response_table['Item']['teamName']
+        
     except KeyError as ke:
         logging.exception("Error: Could not fetch the item for user: " + user_info['username'])
         raise NotFoundError("Unknown role '%s'" % (user_info['userinfo']))
@@ -579,7 +582,7 @@ def getSubmittedRequests():
 
     useremail = params['userEmail']
     userdatasets = []
-    response = {"exportRequests": [], "trustedRequests": [], "autoExportRequests": []}
+    response = {"exportRequests": {"tableRequests":[], "s3Requests":[]}, "trustedRequests": [], "autoExportRequests": []}
     try:
         combinedExportWorkflow = get_combined_export_workflow()
 
@@ -601,7 +604,16 @@ def getSubmittedRequests():
                 IndexName='DataInfo-ReqReceivedtimestamp-index',
                 KeyConditionExpression=Key('Dataset-DataProvider-Datatype').eq(userdataset))
             if exportFileRequestResponse['Items']:
-                response['exportRequests'].append(exportFileRequestResponse['Items'])
+                for entry in exportFileRequestResponse['Items']:
+                    type = entry['RequestType'] if 'RequestType' in entry.keys() else None
+                    if type:
+                        if type.lower() == 'table':
+                            response['exportRequests']['tableRequests'].append(entry)
+                        else:
+                            response['exportRequests']['s3Requests'].append(entry)
+                    else:
+                        response['exportRequests']['s3Requests'].append(entry)
+                    
 
             # Trusted User Request query
             trustedRequestResponse = trustedRequestTable.query(
@@ -636,6 +648,106 @@ def getSubmittedRequests():
                     headers={'Content-Type': 'application/json'})
 
 
+@app.route('/exportTable', methods=['POST'], authorizer=authorizer, cors=cors_config)
+def createTableExportRequests():
+    paramsQuery = app.current_request.query_params
+    paramsString = paramsQuery['message']
+    logger.setLevel("INFO")
+    logging.info("Received request {}".format(paramsString))
+    params = json.loads(paramsString)
+    bypassExportFileRequestTable = False
+
+    try:
+        selctedDataSet=params['selectedDataInfo']['selectedDataSet']
+        selectedDataProvider=params['selectedDataInfo']['selectedDataProvider']
+        selectedDatatype=params['selectedDataInfo']['selectedDatatype']
+        combinedDataInfo=selctedDataSet + "-" + selectedDataProvider + "-" + selectedDatatype
+        userID=params['UserID']
+        team_name = get_user_details_from_username(userID)
+
+        id_token = app.current_request.headers['authorization']
+        info_dict=get_user_details(id_token)
+        user_email=info_dict['email']
+
+        combinedExportWorkflow = get_combined_export_workflow()
+
+        trustedWorkflowStatus = \
+            combinedExportWorkflow[selctedDataSet][selectedDataProvider]['datatypes'][selectedDatatype]['Trusted']['WorkflowStatus']
+
+        nonTrustedWorkflowStatus = \
+            combinedExportWorkflow[selctedDataSet][selectedDataProvider]['datatypes'][selectedDatatype]['NonTrusted']['WorkflowStatus']
+
+        listOfPOC=combinedExportWorkflow[selctedDataSet][selectedDataProvider]['ListOfPOC']
+        dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+        acceptableUse = 'Decline'
+
+        if 'acceptableUse' in params and params['acceptableUse']:
+            acceptableUse = params['acceptableUse']
+
+            source_db_schema = 'internal' #TODO Retrieve this from SSM Param Store
+            target_db_schema = 'edge'#TODO Retrieve this from SSM Param Store
+            database_name = params['DatabaseName']
+            table_name = params['TableName']
+            
+            exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
+            table_key_hash = database_name +'.'+source_db_schema+'.'+table_name
+            timemills = int(time.time())
+            response = exportFileRequestTable.put_item(
+                Item={
+                    'S3KeyHash': table_key_hash,
+                    'S3Key': table_key_hash,
+                    'Dataset-DataProvider-Datatype': combinedDataInfo,
+                    'ApprovalForm': params['ApprovalForm'],
+                    'RequestReviewStatus': 'Submitted',
+                    'RequestedBy_Epoch': userID + "_" + str(timemills),
+                    'RequestedBy': userID,
+                    'TeamBucket': '',
+                    'ReqReceivedTimestamp': timemills,
+                    'UserEmail': user_email,
+                    'ReqReceivedDate': datetime.datetime.now().strftime('%Y-%m-%d'),
+                    'TableName': table_name,
+                    'SourceDatabaseSchema': source_db_schema,
+                    'TargetDatabaseSchema': target_db_schema,
+                    'RequestType': 'Table',
+                    'DatabaseName': database_name,
+                    'ListOfPOC': listOfPOC,
+                    'TableSchema': '' #Gets populated in glue job execution below.
+                }
+            )
+            availableDatasets = get_datasets()['datasets']['Items']
+            logging.info("Available datasets:" + str(availableDatasets))
+
+            fakeListOfPOC = ['gautam.naidu.ctr@dot.gov', 'c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
+
+            glue_client = boto3.client('glue')
+            glueWorkflowName = f"New-Table-Export-Request"
+            glue_schemaPopulate_workflow = glue_client.start_workflow_run(Name=glueWorkflowName)
+            update_schemaPopulate_workflow = glue_client.put_workflow_run_properties(
+                Name = glueWorkflowName,
+                RunId = glue_schemaPopulate_workflow['RunId'],
+                RunProperties = {
+                    'S3KeyHash': table_key_hash,
+                    'RequestedByEpoch': userID + "_" + str(timemills),
+                    'databaseName': database_name,
+                    'tableName': table_name,
+                    'internalSchema': source_db_schema,
+                    'listOfPOC': ','.join(listOfPOC),
+                    # 'listOfPOC': ','.join(fakeListOfPOC),
+                    'userID': userID,
+                    'userEmail': user_email
+                }
+            )
+
+    except BaseException as be:
+        logging.exception("Error: Failed to process export request" + str(be))
+        raise ChaliceViewError("Failed to process export request")
+
+    return Response(body=response,
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+
+
+
 @app.route('/export/requests/updatefilestatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def updatefilestatus():
     paramsQuery = app.current_request.query_params
@@ -651,23 +763,6 @@ def updatefilestatus():
         datainfo = params['datainfo']
         userEmail = params['userEmail']
 
-
-        download = 'false'
-        export = 'true'
-        publish = 'false'
-        metadata = {'download': download, 'export': export, 'publish': publish}
-
-        if status == "Approved":
-            download = 'true'
-            publish = 'true'
-            export = 'false'
-            metadata = {'download': download, 'export': export, 'publish': publish}
-        elif status == "TrustedApproved":
-            metadata = {'download': download, 'export': export, 'publish': publish , datainfo : 'true'}
-
-        logging.info(metadata)
-        logging.info(params)
-
         exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
         exportFileRequestTable.update_item(
                             Key={
@@ -680,16 +775,37 @@ def updatefilestatus():
                             },
                             ReturnValues="UPDATED_NEW"
                         )
-        s3 = boto3.resource('s3')
-        s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
-        #s3_object.metadata.update(metadata)
-        s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
-                            Metadata=metadata,
-                            MetadataDirective='REPLACE')
+        emailContent = ''
+        if 'TeamBucket' in params.keys():
+            download = 'false'
+            export = 'true'
+            publish = 'false'
+            metadata = {'download': download, 'export': export, 'publish': publish}
+
+            if status == "Approved":
+                download = 'true'
+                publish = 'true'
+                export = 'false'
+                metadata = {'download': download, 'export': export, 'publish': publish}
+            elif status == "TrustedApproved":
+                metadata = {'download': download, 'export': export, 'publish': publish , datainfo : 'true'}
+
+            logging.info(metadata)
+            logging.info(params)
+
+            s3 = boto3.resource('s3')
+            s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
+            #s3_object.metadata.update(metadata)
+            s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
+                                Metadata=metadata,
+                                MetadataDirective='REPLACE')
+            emailContent = "<br/>The Status of the Export Request made by you for the file <b>" + params['S3Key'] + "</b> has been changed to <b>" + params['status'] + "</b>"
+        if 'TableName' in params.keys():
+            emailContent = "<br/>The Status of the Table Export Request made by you for the table <b>" + params['TableName'] + "</b> has been changed to <b>" + params['status'] + "</b>"
+
         # Send notification to the analyst if his request is approved or rejected
         listOfPOC = []
         listOfPOC.append(userEmail)
-        emailContent = "<br/>The Status of the Export Request made by you for the file <b>" + params['S3Key'] + "</b> has been changed to <b>" + params['status'] + "</b>"
         send_notification(listOfPOC, emailContent)
 
     except BaseException as be:
@@ -1215,7 +1331,7 @@ def ssm_ec2_instance_linux(instance_id):
     sudo mount /dev/xvdb  /data1/
     cat /etc/fstab | grep data1
     if [ $? -ne 0 ]; then
-    echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
+    echo "/dev/xvdb       /data1/   ext4    defaults,nofail  0   0" >> /etc/fstab
     fi
     """
     ]  },MaxErrors='20' )
