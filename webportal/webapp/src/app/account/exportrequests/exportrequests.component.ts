@@ -19,13 +19,13 @@ export class ExportRequestsComponent implements OnInit {
         public dialog: MatDialog) { }
 
     exportFileRequests = [];
-    exportTableRequests = [];                //NEW-------------------------------------------------------------------------------------------
+    exportTableRequests = [];
     trustedRequests = [];
     autoExportRequests = [];
     metadata = {};
     user: any;
     cols: any = [];
-    colsExportTable: any = [];                 //NEW-------------------------------------------------------------------------------------------
+    colsExportTable: any = [];
     colsTrusted: any = [];
     colsAutoExport: any = [];
     userEmail: string;
@@ -34,7 +34,7 @@ export class ExportRequestsComponent implements OnInit {
     userBucketName: string;
 
     ngOnInit() {
-        this.userEmail = sessionStorage.getItem('email');                   //Reminder: this is data owner/steward information
+        this.userEmail = sessionStorage.getItem('email');                   //Reminder: this is data steward user information
         console.log(this.userEmail);
         this.userName = sessionStorage.getItem('username');
         console.log(this.userName);
@@ -53,20 +53,18 @@ export class ExportRequestsComponent implements OnInit {
             { field: 'details', header: 'Details' },
             { field: 'exportFileForReview', header: 'Export File for Review' }
         ];
-        //NEW--------------------------------------------------------------------------------------------------------------------------------------       
-        this.colsExportTable = [                                                             //TO DO: Compare and fix to work with actual response variables
-            { field: 'Date', header: 'Date' },                                               //Q; is it possible to add email to user fullname column instead?
-            { field: 'userFullName', header: 'User' },                                 // this may need to be updated to be a concatenation of user first and lastname dynamo db cols
+   
+        this.colsExportTable = [
+            { field: 'Date', header: 'Date' },
+            { field: 'userFullName', header: 'User' },
             { field: 'userEmail', header: 'Email' },
             { field: 'description', header: 'Justification' },
             { field: 'team', header: 'Team' },
             { field: 'dataset', header: 'Dataset' },
-            { field: 'database.schema.tablename', header: 'Table' },        //Q: What does data owner need to see here?
-            { field: 'approval', header: 'Approval' },                                 // TO DO: update the related function to trigger new glue job
+            { field: 'database.schema.tablename', header: 'Table' },
+            { field: 'approval', header: 'Approval' },
             { field: 'details', header: 'Details' },                                        //Q: Do we really need this if same info is loaded elsewhere in the table already? -- do we even actually create this???
-            //{ field: 'top10Rows', header: 'Top 10 Rows for Review'}       //NEW -- this will use new function that copies top 10 rows to S3 bucket
         ];
-        //NEW-END--------------------------------------------------------------------------------------------------------------------------------
 
         this.colsTrusted = [
             { field: 'userFullName', header: 'User' },
@@ -83,9 +81,9 @@ export class ExportRequestsComponent implements OnInit {
         ];
     }
 
-    getExportFileRequests() {                                      //TO DO: this should probably be renamed
+    getExportFileRequests() {
         this.exportFileRequests = [];
-        this.exportTableRequests = [];                          //NEW-------------------------------------------------------------------------------
+        this.exportTableRequests = [];
         this.trustedRequests = [];
         this.autoExportRequests = [];
         //this.exportFileRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'description' : 'This is derived Dataset', 'team' : 'team1 bucket', 'dataset' : 'Waze-Waze-alert', 'details' : 'Details'  ,'reviewFile' : 'reviewFileOrLink'});
@@ -125,30 +123,29 @@ export class ExportRequestsComponent implements OnInit {
                         'RequestReviewStatus': item['RequestReviewStatus'],
                         'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
                         'UserEmail': item['UserEmail'],
-                        'TeamName': item['TeamName'],                                                      //TO DO:  This doesnt appear to be used anywhere
+                        'TeamName': item['TeamName'],                                                      //This doesnt appear to be used anywhere
                         'ReqReceivedDate': item['ReqReceivedDate']
                     }
                     );
                     // } 
                 }
 
-                //NEW----------------------------------------------------------------------------------------------------------------------------------------------
                 for (let item of response['exportRequests']['tableRequests']) {
                     //  for(let item of items) {
                     let justifyExport = "";
                     if ('justifyExport' in item['ApprovalForm']) {
                         justifyExport = item['ApprovalForm']['justifyExport'];
                     }
-                    let teamName = "";                                                  //NEW:  fyi, privateDatabase == team_slug
-                    if ('privateDatabase' in item['ApprovalForm']) {
+                    let teamName = "";
+                    if ('privateDatabase' in item['ApprovalForm']) {                                                    // privateDatabase assigned from team_slug
                         teamName = item['ApprovalForm']['privateDatabase'];
                     }
                     this.exportTableRequests.push({
                         'userFullName': item['RequestedBy'],
                         'justification': justifyExport,
-                        'team': teamName,                                                       //NEW     
+                        'team': teamName,
                         'dataset': item['Dataset-DataProvider-Datatype'],
-                        'table': item['TableName'],                                             //NEW
+                        'table': item['TableName'],
                         'details': item['ApprovalForm'],
                         // 'reviewFile' : item['S3Key'],
                         'S3KeyHash': item['S3KeyHash'],
@@ -164,8 +161,6 @@ export class ExportRequestsComponent implements OnInit {
                     );
                     //  } 
                 }
-                //NEW-END----------------------------------------------------------------------------------------------------------------------------------------------           
-
 
                 for (let items of response['trustedRequests']) {
                     for (let item of items) {
@@ -200,11 +195,9 @@ export class ExportRequestsComponent implements OnInit {
                 this.exportFileRequests.sort(function (reqReceivedTimestamp1, reqReceivedTimestamp2) {
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ? 1 : -1;
                 });
-                //NEW----------------------------------------------------------------------------------------------------------------------------------------------------
                 this.exportTableRequests.sort(function (reqReceivedTimestamp1, reqReceivedTimestamp2) {
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ? 1 : -1;
                 });
-                //NEW-END----------------------------------------------------------------------------------------------------------------------------------------------              
                 this.trustedRequests.sort(function (reqReceivedTimestamp1, reqReceivedTimestamp2) {
                     return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ? 1 : -1;
                 });
@@ -246,7 +239,6 @@ export class ExportRequestsComponent implements OnInit {
         });
     }
 
-    //NEW----------------------------------------------------------------------------------------------------------------------------------------------
     renderTableApprovalForm(approvalForm) {
         console.log(approvalForm.details);
         this.detailsOnclick = 1;
@@ -260,7 +252,6 @@ export class ExportRequestsComponent implements OnInit {
             console.log('The dialog was closed');
         });
     }
-    //NEW-END----------------------------------------------------------------------------------------------------------------------------------------------
 
     copyFileToTeamBucket(exportFileForReview) {
         var team_bucket = exportFileForReview.TeamBucket;
@@ -309,9 +300,6 @@ export class ExportRequestsComponent implements OnInit {
     }
 
 
-    //NEW-------------------------------------------------------------------------------------------------------------- 
-    //  //The New Lambda will trigger glue job to move table AND needs to update file status in dynamo db table so that table can re-render to reflect updated status
-
     submitTableApproval(status, targetObj) {
         let reqBody = {};
         reqBody['status'] = status;
@@ -330,6 +318,7 @@ export class ExportRequestsComponent implements OnInit {
         );
     }
 
+
     submitTrustedApproval(status, key1, key2, trustedRequest) {
         let reqBody = {};
         reqBody['status'] = status;
@@ -344,6 +333,7 @@ export class ExportRequestsComponent implements OnInit {
             }
         );
     }
+
 
     submitAutoExportApproval(status, key1, key2, autoExportRequest) {
         let reqBody = {};

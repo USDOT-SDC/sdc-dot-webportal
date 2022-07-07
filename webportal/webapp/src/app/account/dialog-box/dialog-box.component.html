@@ -600,16 +600,10 @@
 </div>
 
 
- <!--NEW--------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 <!--Request Export Table to Edge DB Dialogbox-->
 <div *ngIf="mailType == 'Request Table Export'">
   <h3>Request to Export Table to Edge Database</h3>
   <mat-dialog-content style="height: 100%;">
-    <!--<hr>-->
-    <!-- TO DO: CLEAN UP WORDING HERE-->
-    <!-- Q:Does data owner require any additional information regarding extra datasets used?-->
-    <!-- Q: Maybe this should be multi-tabbed Do we need additional approval form fields?-->
-    <!--<p><b>Please provide the information requested below, which is required to facilitate the review, approval and processing of your table publication request.</b>-->
     <br/>
     <p style="color:grey;">Please provide information relevant to your table request, as requested in the form fields below.  
     These details will faciliate the processing of your request and will be shared with the Data Steward to help them review your request and provide their decision. </p>
@@ -635,9 +629,6 @@
       <mat-error align="end" *ngIf="!messageModel.edgePrivateTable">Required</mat-error>
       <mat-error *ngIf="!messageModel.edgePrivateTable">Please enter the table name</mat-error>
     </mat-form-field>
-
-    <!--hr-->
-    <!--<p><b>The additional information, requested below, will be shared with the Data Provider to help them review your request and provide their decision. </b>-->
      
     <div style="line-height:200%;">
       <br/>
@@ -726,7 +717,6 @@
     </mat-dialog-actions>
   </mat-dialog-content>
 </div>
-<!--NEW- END-------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
 
 <!-- ngIf to render the dialog only when data.mailType is resize -->

@@ -18,8 +18,8 @@ export class DialogBoxComponent implements OnInit {
     // protected options: RequestOptions;
     fileName: string;
     mailType: string;
-    requestType: string;
-    exportRequestType: string;                                   //NEW --existing requestType variable is used to call "request to upload data to s3 bucket" vs. other dialogs are called via mailType
+    requestType: string;                                                //requestType variable is param for "request to upload data to s3 bucket" vs. other dialogs have  mailType
+    exportRequestType: string;
     userBucketName: string;
     // selectedFiles: FileList;
     selectedFiles: any[] = [];
@@ -65,8 +65,8 @@ export class DialogBoxComponent implements OnInit {
     detailedDerivedDataset: string;
     derivedDataSetName: string;
     trustedAcceptableUseDisabled: boolean;
-    edgePrivateDatabase: string;                             //NEW 
-    edgePrivateTable: string;                                    //NEW
+    edgePrivateDatabase: string;
+    edgePrivateTable: string;
     uploadNotice = false;
     resizeFilterFormSubmitted = false;
     diskSizeChange = true;
@@ -164,8 +164,8 @@ export class DialogBoxComponent implements OnInit {
         autoderiveddataset: '',
         autoreason: '',
         trustedUserJustification: '',
-        edgePrivateDatabase: '',                      //NEW
-        edgePrivateTable: '',                             //NEW
+        edgePrivateDatabase: '',
+        edgePrivateTable: '',
     };
 
     resize = {
@@ -183,12 +183,11 @@ export class DialogBoxComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
-        this.messageModel.bucketName = data.bucketName;   //Constructor is supposed to only declare, not do work...should this be in ngOnInit?
+        this.messageModel.bucketName = data.bucketName;
         this.mailType = data.mailType;
         this.datasetName = data.datasetName;
         this.messageModel.fileFolderName = data.datasetName;
         this.requestType = data.requestType;
-        //this.exportRequestType = '';                                                              //NEW
         this.userBucketName = data.userBucketName;
         this.datasettype = data.datasettype;
         this.trustedRequest = 'No';
@@ -197,8 +196,8 @@ export class DialogBoxComponent implements OnInit {
         this.autoderiveddataset = '';
         this.autoreason = '';
         this.trustedUserJustification = '';
-        this.edgePrivateDatabase = '';                                                      //NEW -- part of approval form -- RESPONSE returns 'PrivateDatabase' item nested within approval form
-        this.edgePrivateTable = '';                                                              //NEW -- part of approval form?
+        this.edgePrivateDatabase = '';
+        this.edgePrivateTable = '';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -216,12 +215,12 @@ export class DialogBoxComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('constructor this.edgePrivateDatabase:' + this.edgePrivateDatabase);    //NEW
+        console.log('constructor this.edgePrivateDatabase:' + this.edgePrivateDatabase);
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
-        this.edgePrivateDatabase = sessionStorage.getItem('teamSlug');                       //NEW 
-        this.messageModel.edgePrivateDatabase = this.edgePrivateDatabase;             //NEW
-        console.log('edgePrivateDatabase:' + this.edgePrivateDatabase);                      //NEW 
+        this.edgePrivateDatabase = sessionStorage.getItem('teamSlug');
+        this.messageModel.edgePrivateDatabase = this.edgePrivateDatabase;
+        console.log('edgePrivateDatabase:' + this.edgePrivateDatabase);
         (this.mailType === 'reSize Request') && this.setDisableCurrentConfigurations();
         const trustedStatus = sessionStorage.getItem('userTrustedStatus');
         this.userTrustedStatus = JSON.parse(trustedStatus);
@@ -820,7 +819,6 @@ export class DialogBoxComponent implements OnInit {
         this.submitRequest();
     }
 
-// NEW
     onPublishTableRequest() {
         this.exportRequestType = 'Table';
         this.acceptableUse = 'Accept';
@@ -841,8 +839,8 @@ export class DialogBoxComponent implements OnInit {
         this.autoderiveddataset = this.messageModel.autoderiveddataset;
         this.autoreason = this.messageModel.autoreason;
         this.trustedUserJustification = this.messageModel.trustedUserJustification;
-        this.edgePrivateDatabase = this.messageModel.edgePrivateDatabase;                     //NEW:
-        this.edgePrivateTable = this.messageModel.edgePrivateTable;                                  //NEW:
+        this.edgePrivateDatabase = this.messageModel.edgePrivateDatabase;
+        this.edgePrivateTable = this.messageModel.edgePrivateTable;
 
         console.log('this.userBucketName:' + this.userBucketName);
         console.log('this.selectedDataSet:' + this.selectedDataSet);
@@ -850,9 +848,9 @@ export class DialogBoxComponent implements OnInit {
         console.log('this.autoreason:' + this.autoreason);
         console.log('this.trustedUserJustification:' + this.trustedUserJustification);
         console.log('this.trustedRequest:' + this.trustedRequest);
-        console.log('this.privateDatabase:' + this.edgePrivateDatabase);                      //NEW:
-        console.log('this.privateTable:' + this.edgePrivateTable);                                   //NEW:
-        console.log('this.exportRequestType:' + this.exportRequestType);                    //NEW:
+        console.log('this.privateDatabase:' + this.edgePrivateDatabase);
+        console.log('this.privateTable:' + this.edgePrivateTable);
+        console.log('this.exportRequestType:' + this.exportRequestType);
 
 
 
@@ -860,10 +858,10 @@ export class DialogBoxComponent implements OnInit {
         const approvalForm = {};
 
         if (this.exportRequestType === 'Table' &&  this.edgePrivateDatabase){
-            approvalForm["privateDatabase"] = this.edgePrivateDatabase;                     //NEW
+            approvalForm["privateDatabase"] = this.edgePrivateDatabase;
         }    
         if (this.exportRequestType === 'Table' &&  this.edgePrivateTable){
-            approvalForm["privateTable"] = this.edgePrivateTable;                                   //NEW
+            approvalForm["privateTable"] = this.edgePrivateTable;
         }
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
@@ -908,9 +906,8 @@ export class DialogBoxComponent implements OnInit {
         reqBody['UserID'] = this.userName;
         reqBody['selectedDataInfo'] = { 'selectedDataSet': this.selectedDataSet, 'selectedDataProvider': this.selectedDataProvider, 'selectedDatatype': this.selectedDatatype };
         reqBody['acceptableUse'] = this.acceptableUse;
-        //reqBody['DatabaseName'] = this.edgeDBName;                               //NEW
-        reqBody['DatabaseName'] = this.edgePrivateDatabase;                      //NEW
-        reqBody['TableName'] = this.edgePrivateTable;                                   //NEW
+        reqBody['DatabaseName'] = this.edgePrivateDatabase;
+        reqBody['TableName'] = this.edgePrivateTable;
         /*if(this.trustedRequest === "Yes" && (this.acceptableUse === "No" || this.acceptableUse == "")) {
             //alert("Usage policy to continue"); // Ribbon...
             this.snackBar.open('Acceptable use policy should be accepted to request trusted status', 'close', {

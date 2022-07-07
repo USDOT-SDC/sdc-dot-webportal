@@ -54,18 +54,15 @@
           <hr />
           </mat-expansion-panel>
 
-<!--NEW--------------------------------------------------------------------------------------------------------------------------------------------->
          <!-- Table Requests-->
           <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                Export Table Requests
               </mat-panel-title>
-            </mat-expansion-panel-header>
- <!--TODO: Name RequestType -- Confirm where Trusted Request Items come from -- see Trusted Status Table Load below -- do similar here-->           
+            </mat-expansion-panel-header>        
             <div *ngIf="!exportTableRequests">No table export requests</div>
             <span style="color:grey">This section displays the list of tables requested for export to the Edge DB</span><hr>
-            <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
             <p-table #dt [columns]="colsExportTable" [value]="exportTableRequests" [paginator]="true" [rows]="10" [totalRecords]="exportTableRequests.length"  dataKey="filename">
               <ng-template pTemplate="header" let-columns>
                   <tr>
@@ -84,7 +81,6 @@
                       <td>{{exportTableRequest.team}}</td>
                       <td>{{exportTableRequest.dataset}}</td>
                       <td><div style="word-break:break-all;">{{exportTableRequest.table}}</div></td>
-                        <!-- <td><div style="word-break:break-all;">{{exportFileRequest.reviewFile}}</div></td> -->   
                         <td>
                             <div *ngIf="exportTableRequest.RequestReviewStatus == 'Submitted'">
                                 <i class="material-icons iconFont" (click)="submitTableApproval('Approved',exportTableRequest)" >done</i>
