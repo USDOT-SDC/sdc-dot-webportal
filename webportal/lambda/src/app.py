@@ -686,8 +686,8 @@ def createTableExportRequests():
 
             source_db_schema = 'internal' #TODO Retrieve this from SSM Param Store
             target_db_schema = 'edge'#TODO Retrieve this from SSM Param Store
-            database_name = params['DatabaseName']
-            table_name = params['TableName']
+            database_name = str(params['DatabaseName']).replace('-','_').replace('.','_')
+            table_name = str(params['TableName']).replace('-','_').replace('.','_')
             
             exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
             table_key_hash = database_name +'.'+source_db_schema+'.'+table_name
