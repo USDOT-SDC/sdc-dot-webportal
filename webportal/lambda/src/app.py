@@ -1,4 +1,4 @@
-glufrom chalice import Chalice, Response
+from chalice import Chalice, Response
 import boto3
 import json, ast
 import logging
