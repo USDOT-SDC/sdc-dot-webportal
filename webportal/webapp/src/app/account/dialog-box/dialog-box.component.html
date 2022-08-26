@@ -70,8 +70,8 @@
 </div>
 
 
-<!--SDC Datasets Access Request Dialogbox-->
-<div *ngIf="mailType == 'Access Request Mail' && datasetName == 'CVP'">
+<!--SDC Datasets Access Request Dialogbox-CVP Dataset->
+<!-- <div *ngIf="mailType == 'Access Request Mail' && datasetName == 'CVP'">
   <h4>SDC Data Access Request Form</h4>
   <hr>
   <mat-dialog-content>
@@ -137,7 +137,7 @@
     <button class="btn btn-primary dotBtn" [disabled]="!agreed" (click)="sendMail()">SEND REQUEST</button>&nbsp;
     <button class="btn btn-primary dotBtn" (click)="onNoClick()">CANCEL</button>
   </mat-dialog-actions>
-</div>
+</div> -->
 
 
 <!--Publish Dataset / Algorithm Request Dialogbox-->
@@ -311,13 +311,13 @@
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput title="e.g. CVP, Waze, ARDS, etc." placeholder="Anchor dataset of interest or data provider"
+          <input matInput title="e.g. Waze, ARDS, etc." placeholder="Anchor dataset of interest or data provider"
             [value]="selectedDataProvider" required>
           <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error>
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput title="e.g. Speed, BSM, Alerts, Jams, Railroad, etc."
+          <input matInput title="e.g. Alerts, Jams, Railroad, etc."
             placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype" required>
           <mat-error align="end" *ngIf="!messageModel.datatype">Required</mat-error>
         </mat-form-field>
@@ -335,7 +335,7 @@
         </mat-form-field> -->
         <mat-form-field style='width: 100%'>
           <input matInput
-            title="e.g. Used in CVP dashboard, Used for presentation at SDC Quarterly Executive Briefing, etc."
+            title="e.g. Used in visualization dashboard, Used for presentation at SDC Quarterly Executive Briefing, etc."
             placeholder="Justification of Export" [(ngModel)]="messageModel.justifyExport"
             value="{{messageModel.justifyExport}}" required>
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
@@ -394,13 +394,13 @@
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput title="e.g. CVP, Waze, ARDS, etc." placeholder="Anchor dataset of interest or data provider"
+          <input matInput title="e.g. Waze, ARDS, etc." placeholder="Anchor dataset of interest or data provider"
             [value]="selectedDataProvider" required>
           <!-- <mat-error align="end" *ngIf="!messageModel.dataprovider">Required</mat-error> -->
         </mat-form-field>
 
         <mat-form-field style='width: 100%'>
-          <input matInput title="e.g. Speed, BSM, Alerts, Jams, Railroad, etc."
+          <input matInput title="e.g. Alerts, Jams, Railroad, etc."
             placeholder="Specific sub-datasets or data types used" [value]="selectedDatatype">
         </mat-form-field>
 
