@@ -136,6 +136,7 @@ locals {
     "Environment" = "${data.aws_ssm_parameter.environment.value}"
     "Owner"       = "SDC support team"
     "aws-chalice" = "version=1.13.0:stage=ecs-dev:app=webportal"
+    # "aws-chalice" = "version=1.13.0:stage=ecs-${data.aws_ssm_parameter.environment.value}:app=webportal"
   }
 
   global_tags = {
