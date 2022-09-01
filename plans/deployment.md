@@ -1,14 +1,15 @@
 # Deployment Plan
 
-[v2.13.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.13.0)
+[v2.14.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.14.0)
 
 
 ### Pre-Deployment - General Tasks:
 1. Merge open PR into master.
-2. Reset the 2.13.0 tag in the remote repo, deleting from (development) branch and adding to main.
+2. Reset the 2.14.0 tag in the remote repo, deleting from (development) branch and adding to main.
 3. On  PROD webportal, ensure a minimum of 10 files are available for data export so they’re available for export as part of post-release testing.
-4. On PROD webportal,  capture some screenshots of DataSets page (Datasets panel) and each of the Data Export Request dialog tabs (filled) for post release testing reference.
+4. On PROD webportal, capture a screenshot of  SDC Datasets panel with CVP dataset selected and Data Dictionary panel with CVP info populated.
 5. On PROD webportal, ensure there is at least one ACME dataset for which Trusted Status is already approved and  that there are one or more ACME datasets which hold non-Trusted Status.
+6. Create a back-up of the CVP item/entry found in the Dynamo DB table prod-Available-Datasets.
 
 
 ### Pre-Deployment - Ready the Build Environment:
@@ -24,12 +25,12 @@
    
    
 2. Make a backup of the current webportal files
-   1. Within build machine, create a 'backup-20220428' directory and run the following:
+   1. Within build machine, create a 'backup-20220901' directory and run the following:
      `aws s3 cp s3://prod-webportal-hosting-004118380849 html/ --recursive`
    
       
-### Deployment Plan for v2.13.0:
-1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 2.13.0
+### Deployment Plan for v2.14.0:
+1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 2.14.0
 
 
 2. Navigate to the webportal\webapp folder, within the repo directory, and run `ecs_prod_deploy.sh`.
@@ -39,3 +40,9 @@
 
 
 3. Verify the web portal s3 bucket now lists data from the previous date of deployment. 
+
+
+4. In AWS Dynamo DB console, navigate to the prod-Available-Datasets table.
+   - There should be 5 items in the table, corresponding to WAZE, CVP, OSS4ITS, FRA-ARDS and Acme datasets.
+   - Select the CVP dataset item/row and then delete the item.
+   - Confirm there are now 4 items/rows remaining for WAZE OSS4ITS, FRA-ARDS and Acme datasets.

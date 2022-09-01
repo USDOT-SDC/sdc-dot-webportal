@@ -1,12 +1,12 @@
 # Test Plan
 
-[v2.12.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.12.0)
+[v2.14.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.14.0)
 
 ### Objectives:
 The test objectives are to verify the functionality of the feature improvements defined in the CRB, as well as to ensure there's been no negative impact on the, otherwise, normal functioning of the web portal within the production environment
 
 ### In Scope:
-1. Manual functional system testing of the web portal - with focus on the Data Export Form and restricted to character set found on standard US QWERTY keyboard.
+1. Manual functional system testing of the web portal.
 2. Manual regression testing of the SDC web portal.
 
 ### Test Plan:
@@ -14,38 +14,38 @@ The test objectives are to verify the functionality of the feature improvements 
 
 
 2.  On the DATASETS page:
-   - verify that the new "Request Trusted User Status" button appears below the datasets table and that it opens the corresponding dialog.
+   - Verify that the SDC Datasets panel does not reflect a row for the CVP dataset.
+   - Only WAZE, OSS4ITS, FRA-ARDS, and ACME remain.
+   - Click through each row of the remaining datasets and ensure the corresponding data dictionary/description populates (in panel below the  SDC algorithms panel).
 
 
-3.  Within the opened REQUEST TRUSTED USER STATUS modal:
-   - Verify that the Trusted Status Request will not submit with an ACME dataset which has pre-existing Trusted Status and that snackbar with error message opens when attempting to do so.
-   - Verify that the Trusted Status Request submits as expected for non-trusted ACME dataset.
-   - Verify that email confirmation is delivered.
-   - Verify on the EXPORT REQUESTS page, that the submitted request appears in the Trusted Requests table with correct data populated there.
-   - Approve or reject the request and confirm.
-   - Verify that approval or rejection email confirmation is delivered.
+3.  Open the REQUEST TRUSTED USER STATUS modal:
+   - Verify that CVP is no longer an option in the "For Which Project/Dataset would you like to become a Trusted User?" dropdown.
+      - Confirm that WAZE, OSS4ITS, FRA-ARDS, and ACME remain as options.
 
 
-4.  On the DATASETS page, open a REQUEST TO EXPORT DATA modal, and select any ACME dataset:
-   - Verify that the Trusted Status tab does not appear when selecting either trusted and non-trusted datasets.
-   - Verify that Acceptable Use Policy now appears at bottom of the Approval Form tab for non-Trusted dataset with required Accept or  Decline radio button choices.
-   - Verify that Acceptable Use Policy now appears at bottom of the Approval Form tab for Trusted dataset without any radio buttons.
-   - Submit data export request for 'non-trusted' ACME dataset and ensure correct info loads to the Export Requests table on the EXPORT REQUESTS page. 
-   - Verify the details form will render.
-   - Verify that email confirmation is received for the data export request.
-   - Repeat the last 3 steps to submit an export request for a 'trusted' ACME dataset - and verify that the request loads to the Export Requests table (on the EXPORT REQUESTS page) as already approved.
+4.  On the DATASETS page, open a REQUEST TO EXPORT DATA modal:
+   - Verify that CVP is no longer an option under the "For Which Project/Dataset would you like to become a Trusted User?" dropdown.
+      - Confirm that WAZE, OSS4ITS, FRA-ARDS, and ACME remain as options.
+   - Select any ACME dataset and click 'Next' button to open the Approval Form tab.
+   - Verify that any CVP dataset references have been removed from all form field hints on this tab, specificallly:
+      - Hint for 'Anchor Dataset of interest or data provider' field is now: "e.g. Waze, ARDS, etc."
+      - Hint for 'Specific sub-datasets or data types used' field is now: "e.g. Alerts, Jams, Railroad, etc."
+      - Hint for 'Justification' field is now: "e.g. Used in visualization dashboard, Used for presentation at SDC Quarterly Executive Briefing, etc."
 
 
 5. Verify that login redirects, data upload, data export, and data export approval functions are working.
    
 
-6. Perform regression testing:
-   1. Validate if you were able to access the portal.
+6. Perform regression testing (following the UAT template):
+   1. Validate you're able to access the portal.
    2. Validate portal login is working.
    3. Validate Import/Export/Approval functionality.
-   4. Validate launching of workstations. 
-   5. Validate start/stop of workstations.
-   6. Validate functionality of all the tabs in portal.
+   4. Validate Trusted Request functionality.
+   5. Validate launching of workstations. 
+   6. Validate start/stop of workstations.
+   7. Validate functionality of all the tabs in portal.
+   
      
 ### Deliverables:
 Test results will be documented within the CRB.
