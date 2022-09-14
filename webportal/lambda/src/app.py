@@ -686,8 +686,8 @@ def createTableExportRequests():
 
             source_db_schema = 'internal' #TODO Retrieve this from SSM Param Store
             target_db_schema = 'edge'#TODO Retrieve this from SSM Param Store
-            database_name = str(params['DatabaseName']).replace('-','_').replace('.','_')
-            table_name = str(params['TableName']).replace('-','_').replace('.','_')
+            database_name = str(params['DatabaseName'])
+            table_name = str(params['TableName'])
             
             exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
             table_key_hash = database_name +'.'+source_db_schema+'.'+table_name
@@ -731,12 +731,27 @@ def createTableExportRequests():
                     'databaseName': database_name,
                     'tableName': table_name,
                     'internalSchema': source_db_schema,
-                    'listOfPOC': ','.join(listOfPOC),
-                    # 'listOfPOC': ','.join(fakeListOfPOC),
+                    # 'listOfPOC': ','.join(listOfPOC),
+                    'listOfPOC': ','.join(fakeListOfPOC),
                     'userID': userID,
                     'userEmail': user_email
                 }
             )
+
+            # glueJobName = f"data_export_populate_schema"
+            # response = glue_client.start_job_run(
+            #     JobName = glueJobName,
+            #     Arguments = {
+            #         '--S3KeyHash': table_key_hash,
+            #         '--RequestedByEpoch': userID + "_" + str(timemills),
+            #         '--databaseName': database_name,
+            #         '--tableName': table_name,
+            #         '--internalSchema': source_db_schema,
+            #         # '--listOfPOC': ','.join(fakeListOfPOC), #For Debugging
+            #         '--listOfPOC': ','.join(listOfPOC),
+            #         '--userID': userID,
+            #         '--userEmail': user_email
+            #     })
 
     except BaseException as be:
         logging.exception("Error: Failed to process export request" + str(be))
@@ -747,6 +762,34 @@ def createTableExportRequests():
                     headers={'Content-Type': 'text/plain'})
 
 
+def scan_db(table, scan_kwargs=None):
+    """
+    Overview:
+        Get all records of the dynamodb table where the FilterExpression holds true
+        
+    Function Details:
+        :param: scan_kwargs: dict: Used to pass filter conditions, know more about kwargs- geeksforgeeks.org/args-kwargs-python/
+        :param: table: string: Dynamodb table name
+        :return: records: dict: List of DynamoDB records returned.
+    """
+    if scan_kwargs is None:
+        scan_kwargs = {}
+    table = dynamodb_client.Table(table)
+
+    complete = False
+    records = []
+    while not complete:
+        try:
+            response = table.scan(**scan_kwargs)
+        except botocore.exceptions.ClientError as error:
+            raise Exception('Error quering DB: {}'.format(error))
+
+        records.extend(response.get('Items', []))
+        next_key = response.get('LastEvaluatedKey')
+        scan_kwargs['ExclusiveStartKey'] = next_key
+
+        complete = True if next_key is None else False
+    return records
 
 @app.route('/export/requests/updatefilestatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def updatefilestatus():
@@ -762,19 +805,39 @@ def updatefilestatus():
         requestedBy_Epoch=params['key2']
         datainfo = params['datainfo']
         userEmail = params['userEmail']
-
         exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
+
+        kwargs = {
+        'FilterExpression': Attr('RequestType').eq('Table') & Attr('RequestReviewStatus').eq('Approved') & Attr('S3KeyHash').eq(s3KeyHash) # Filter Expression for DynamoDB Scan. Get entries where status = 'approved'
+        }
+        table_requests = scan_db('dev-RequestExportTable', kwargs)
+        for request in table_requests:
+            exportFileRequestTable.update_item(
+                Key={
+                    'S3KeyHash': request['S3KeyHash'],
+                    'RequestedBy_Epoch': request['RequestedBy_Epoch']
+                },
+                UpdateExpression="set RequestReviewStatus = :val",
+                ExpressionAttributeValues = {
+                    ':val': 'Rejected'
+                },
+                ReturnValues="UPDATED_NEW"
+            )
+        
+        # exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
         exportFileRequestTable.update_item(
-                            Key={
-                                'S3KeyHash': s3KeyHash,
-                                'RequestedBy_Epoch': requestedBy_Epoch
-                            },
-                            UpdateExpression="set RequestReviewStatus = :val",
-                            ExpressionAttributeValues = {
-                                ':val': status
-                            },
-                            ReturnValues="UPDATED_NEW"
-                        )
+            Key={
+                'S3KeyHash': s3KeyHash,
+                'RequestedBy_Epoch': requestedBy_Epoch
+            },
+            UpdateExpression="set RequestReviewStatus = :val",
+            ExpressionAttributeValues = {
+                ':val': status
+            },
+            ReturnValues="UPDATED_NEW"
+        )
+        
+                
         emailContent = ''
         if 'TeamBucket' in params.keys():
             download = 'false'
