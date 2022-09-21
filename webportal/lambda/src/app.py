@@ -633,6 +633,7 @@ def getSubmittedRequests():
             logging.info("Dataset Prefix: " + datasetprefix)
 
             # Auto-Export Request query
+            # This will become  unused  with impending removal of CVP-WYDOT as an available dataset
             autoExportRequestResponse = autoExportRequestTable.scan(
                 FilterExpression=Attr('Dataset-DataProvider-Datatype').begins_with('CVP-WYDOT'))
             if autoExportRequestResponse['Items']:

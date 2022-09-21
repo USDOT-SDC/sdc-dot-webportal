@@ -32,13 +32,15 @@ The test objectives are to verify the functionality of the feature improvements 
 4. Verify that login redirects, data upload, data export, and data export approval functions are working.
    
 
-5. Perform regression testing:
-   1. Validate if you were able to access the portal.
+6. Perform regression testing (following the UAT template):
+   1. Validate you're able to access the portal.
    2. Validate portal login is working.
    3. Validate Import/Export/Approval functionality.
-   4. Validate launching of workstations. 
-   5. Validate start/stop of workstations.
-   6. Validate functionality of all the tabs in portal.
+   4. Validate Trusted Request functionality.
+   5. Validate launching of workstations. 
+   6. Validate start/stop of workstations.
+   7. Validate functionality of all the tabs in portal.
+   
      
 ### Deliverables:
 Test results will be documented within the CRB.
