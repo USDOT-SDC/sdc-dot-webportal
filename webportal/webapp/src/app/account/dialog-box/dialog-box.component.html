@@ -369,7 +369,7 @@
         <mat-dialog-actions>
           <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
           <button class="btn btn-primary dotBtn request-exportSubmitBtn"
-            [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport"  
+            [disabled]="!messageModel.derivedDatasetname ||  !messageModel.detailedderiveddataset ||  !messageModel.datasources  ||  !messageModel.justifyExport  || !acceptableUse"  
             (click)="submitRequest()">SUBMIT
           </button>
           <button class="btn btn-primary dotBtn request-exportPreviousBtn"
@@ -709,9 +709,9 @@
     <mat-dialog-actions>
       <button class="btn btn-primary dotBtn request-exportCancelBtn" (click)="onNoClick()">CANCEL</button>
       <span>
-        <button class="btn btn-primary dotBtn request-exportSubmitBtn"
+        <button type = 'button' class="btn btn-primary dotBtn request-exportSubmitBtn"
           [disabled]= "!messageModel.edgePrivateTable || !messageModel.edgePrivateDatabase || !messageModel.datasettype || !messageModel.dataProviderName || !messageModel.subDataSet || !messageModel.justifyExport || !acceptableUse"
-          (click)="onPublishTableRequest()">SUBMIT
+          (click)="onPublishTableRequest($event)">{{ edgeTableRequestButtonLabel }}
         </button>
       </span>
     </mat-dialog-actions>

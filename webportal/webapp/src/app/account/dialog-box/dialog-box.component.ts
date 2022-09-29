@@ -67,6 +67,7 @@ export class DialogBoxComponent implements OnInit {
     trustedAcceptableUseDisabled: boolean;
     edgePrivateDatabase: string;
     edgePrivateTable: string;
+    edgeTableRequestButtonLabel: string;
     uploadNotice = false;
     resizeFilterFormSubmitted = false;
     diskSizeChange = true;
@@ -198,6 +199,7 @@ export class DialogBoxComponent implements OnInit {
         this.trustedUserJustification = '';
         this.edgePrivateDatabase = '';
         this.edgePrivateTable = '';
+        this.edgeTableRequestButtonLabel = 'SUBMIT';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -820,7 +822,9 @@ export class DialogBoxComponent implements OnInit {
         this.submitRequest();
     }
 
-    onPublishTableRequest() {
+    onPublishTableRequest($event: MouseEvent) {
+        ($event.target as HTMLButtonElement).disabled = true;
+        this.edgeTableRequestButtonLabel = 'SUBMITTING...';
         this.exportRequestType = 'Table';
         this.acceptableUse = 'Accept';
         this.submitRequest();
