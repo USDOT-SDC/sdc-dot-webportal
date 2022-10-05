@@ -721,7 +721,8 @@ def createTableExportRequests():
             fakeListOfPOC = ['gautam.naidu.ctr@dot.gov', 'c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
 
             glue_client = boto3.client('glue')
-            glueWorkflowName = f"New-Table-Export-Request"
+            # glueWorkflowName = f"New-Table-Export-Request"
+            glueWorkflowName = f"Populate_Schema_Export_Request"
             glue_schemaPopulate_workflow = glue_client.start_workflow_run(Name=glueWorkflowName)
             update_schemaPopulate_workflow = glue_client.put_workflow_run_properties(
                 Name = glueWorkflowName,
@@ -738,7 +739,7 @@ def createTableExportRequests():
                     'userEmail': user_email
                 }
             )
-
+            
             # glueJobName = f"data_export_populate_schema"
             # response = glue_client.start_job_run(
             #     JobName = glueJobName,
