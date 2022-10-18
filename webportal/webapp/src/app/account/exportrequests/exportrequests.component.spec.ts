@@ -251,23 +251,26 @@ describe('ExportRequestsComponent', () => {
     expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
   });
   
-  it('should call copyFileToTeamBucket and call api gateway service export file for review', () => {
-      sessionStorage.setItem('team_bucket_name', 'dot-sdc-software');
-      component.userName = 'sdemo';
-      let exportFileForReview = {'TeamBucket' : 'dev-dot-sdc-raw-submissions-911061262852-us-east-1', 'S3Key' : 's3key', 'TeamName' : 'SDC Team'};
-      component.copyFileToTeamBucket(exportFileForReview); 
-      expect(mockObjectMap['mockApiGatewayService'].post).toHaveBeenCalled();
-      expect(mockObjectMap['mockMatSnackBar'].open).toHaveBeenCalled();  
-  }); 
+  
+  // it('should call copyFileToTeamBucket and call api gateway service export file for review', () => {
+  //     sessionStorage.setItem('team_bucket_name', 'dot-sdc-software');
+  //     component.userName = 'sdemo';
+  //     let exportFileForReview = {'TeamBucket' : 'dev-dot-sdc-raw-submissions-911061262852-us-east-1', 'S3Key' : 's3key', 'TeamName' : 'SDC Team'};
+  //     component.copyFileToTeamBucket(exportFileForReview); 
+  //     expect(mockObjectMap['mockApiGatewayService'].post).toHaveBeenCalled();
+  //     expect(mockObjectMap['mockMatSnackBar'].open).toHaveBeenCalled();  
+  // }); 
 
-  it('should call requestDownload and call api gateway service getDownloadUrl', () => {
+  //it('should call requestDownload and call api gateway service getDownloadUrl', () => {
+  it('should call requestDownload2 and call api gateway service getDownloadUrl', () => {  
     let exportFileForReview = {'TeamBucket' : 'dev-dot-sdc-raw-submissions-911061262852-us-east-1', 'S3Key' : 's3key', 'TeamName' : 'SDC Team'};
-    component.requestDownload(exportFileForReview); 
+    //component.requestDownload(exportFileForReview); 
+    component.requestDownload2(exportFileForReview); 
     expect(mockObjectMap['mockApiGatewayService'].getDownloadUrl).toHaveBeenCalled();
   });  
   
  
-   it('should call api gateway service updatefilestatus', () => {
+  it('should call api gateway service updatefilestatus', () => {
     let status = "status";
     let targetObj = {'TeamBucket' : 'dev-dot-sdc-raw-submissions-911061262852-us-east-1', 'dataset' : 'WAZE', 'RequestedBy_Epoch' : 'Cheryl Rousseau', 'UserEmail' : 'crousseau@acrotron.com', 'S3Key' : 's3key', 'S3KeyHash' : 's3keyhash','TeamName' : 'SDC Team'};
     component.submitApproval(status, targetObj); 

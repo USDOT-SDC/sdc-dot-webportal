@@ -107,7 +107,7 @@ export class ExportRequestsComponent implements OnInit {
                             'RequestReviewStatus': item['RequestReviewStatus'],
                             'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
                             'UserEmail': item['UserEmail'],
-                            'TeamName': item['TeamName'],
+                            'TeamName': item['TeamName'],                               // NOT AN ATTRIBUTE  IN  exportFileRequestTable
                             'ReqReceivedDate': item['ReqReceivedDate']
                             }
                         );
@@ -183,31 +183,44 @@ export class ExportRequestsComponent implements OnInit {
         });
     }
 
-    copyFileToTeamBucket(exportFileForReview) {
-        var team_bucket = exportFileForReview.TeamBucket;
-        var s3Key = exportFileForReview.S3Key;
+    /*copyFileToTeamBucket(exportFileForReview) {
+        var team_bucket = exportFileForReview.TeamBucket;            //teambucket from exportFileRequests array    
+        var s3Key = exportFileForReview.S3Key;        
         let export_details = {};
         this.userBucketName = sessionStorage.getItem('team_bucket_name');
         export_details["provider_team_bucket"] = this.userBucketName;
         export_details["team_bucket"] = team_bucket;
         export_details["s3Key"] = s3Key;
         export_details["userName"] = this.userName;
-        export_details["teamName"] = exportFileForReview.TeamName;
+        export_details["teamName"] = exportFileForReview.TeamName;              //teamName from exportFileRequests Array -- does not exist!!        
         this.gatewayService.post("export/requests/exportFileforReview?message=" + encodeURI(JSON.stringify(export_details))).subscribe(
             (response: any) => {
-                this.snackBar.open("File is exported for the data provider for review under the export_reviews folder for the team "+ export_details["teamName"], 'close', {
+                // this.snackBar.open("File is exported for the data provider for review under the export_reviews folder for the team "+ export_details["teamName"], 'close', {
+                 this.snackBar.open("File is exported for the data provider for review under the export_reviews folder", 'close', {                                  
                     duration: 12000,
                 });
             }
         );
     }
-    
+     */
+
+    requestDownload2(exportFileRequest) {
+        console.log('requestDownload called');
+        this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile + '&username=' + exportFileRequest.userFullName).subscribe(
+            (response: any) => {
+            window.open(response);
+        });
+        console.log('requestDownload  ends')
+    }
+
+/*
     requestDownload(exportFileRequest) {
         this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
             (response: any) => {
             window.open(response);
         });
     }
+*/
 
     submitApproval(status,targetObj) {
         let reqBody = {};

@@ -377,6 +377,7 @@ def get_user_details_from_username(username):
         table = dynamodb_client.Table(TABLENAME_USER_STACKS)  
         response_table = table.get_item(Key={'username': username })
         team_name = response_table['Item']['teamName']
+        logging.info("team_name: " + team_name)
     except BaseException as be:
         logging.exception("Error: Failed to get the team name for the user" + str(be))
         raise ChaliceViewError("Failed to get the team name for the user")
@@ -714,16 +715,20 @@ def exportFileforReview():
         provider_team_bucket = params['provider_team_bucket']
         team_bucket=params['team_bucket']
         s3Key=params['s3Key']
-        team_name = params['teamName']
+        #team_name = params['teamName']         ## Key Error on Team Name - this isnt passed in view function params
         fileName = s3Key.split('/')[-1]
         s3 = boto3.resource('s3')
         copy_source = {
             'Bucket': params['team_bucket'],
             'Key': params['s3Key']
         }
-        bucket = s3.Bucket(provider_team_bucket)
-        review_path_for_provider = params['userName'] + "/" + "export_reviews/" + team_name + "/" + fileName
-        bucket.copy(copy_source, review_path_for_provider)
+        targ_bucket = s3.Bucket(provider_team_bucket)
+       # review_path_for_provider = params['userName'] + "/" + "export_reviews/" + team_name + "/" + fileName
+        review_path_for_provider = params['userName'] + "/" + "export_reviews/" + fileName
+        logging.info("copy_source: "+ copy_source)
+        logging.info("target bucket: " + targ_bucket)
+        logging.info("review_path_for_provider: " + review_path_for_provider)
+        bucket.copy(copy_source, review_path_for_provider)   
 
     except BaseException as be:
         logging.exception("Error: Failed to export file for review" + str(be))

@@ -26,10 +26,12 @@
                       <td>{{exportFileRequest.ReqReceivedDate}}</td>
                       <td>{{exportFileRequest.userFullName}}</td>
                       <td>{{exportFileRequest.description}}</td>
-                      <td>{{exportFileRequest.team}}</td>
+                      <!--<td>{{exportFileRequest.team}}</td>-->
+                      <td><div style="word-break:break-word;">{{exportFileRequest.team}}</div></td>                      
                       <td>{{exportFileRequest.dataset}}</td>
                       <!-- <td><a style="cursor:pointer;word-break:break-all;" (click)="requestDownload(exportFileRequest)">{{exportFileRequest.reviewFile}}</a></td> -->
-                      <td><div style="word-break:break-all;">{{exportFileRequest.reviewFile}}</div></td>   
+                      <!--<td><div style="word-break:break-all;">{{exportFileRequest.reviewFile}}</div></td>-->                                               
+                      <td><div style="word-break:break-word;">{{exportFileRequest.reviewFile}}</div></td>
                         <td>
                             <div *ngIf="exportFileRequest.RequestReviewStatus == 'Submitted'"><i class="material-icons iconFont" (click)="submitApproval('Approved',exportFileRequest)" >done</i><i class="material-icons iconFont" (click)="submitApproval('Rejected',exportFileRequest)" >close</i></div>                           
                             
@@ -46,7 +48,8 @@
                             <i class="material-icons iconFont" (click)="renderApprovalForm(exportFileRequest)">insert_drive_file</i>
                         </td>
                         <td>
-                            <i class="material-icons iconFont" (click)="copyFileToTeamBucket(exportFileRequest)">file_copy</i>
+                            <!--<i class="material-icons iconFont" (click)="copyFileToTeamBucket(exportFileRequest)">file_copy</i>-->
+                            <i class="material-icons iconFont" (click)="requestDownload2(exportFileRequest)">file_copy</i>                            
                         </td>
                   </tr>
               </ng-template>
