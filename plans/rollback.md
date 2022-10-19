@@ -1,12 +1,12 @@
 # Rollback Plan
 
-[v2.14.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.14.0)
+[v2.15.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.15.0)
 
 
 ### If rollback is required after deployment:
 
 1. Restore web portal files from backup:
-   - `aws s3 cp backup-20220901/ s3://prod-webportal-hosting-004118380849 --recursive`
+   - `aws s3 cp backup-20221021/ s3://prod-webportal-hosting-004118380849 --recursive`
 
 
 2. Refresh assets on nginx proxies, using the following command:
