@@ -18,21 +18,24 @@ The test objectives are to verify the functionality of the feature improvements 
 
 
 3. On the DATASETS page:
-   - Create a file export request for ACME data, using the twoGBtestfile.txt.  Proceed to the Export REQUESTS page, confirm the corresponding file export request appears there, and then click on the file download icon.  
+   - Create a file export request for ACME data, using the oneGBtestfile.txt.  Proceed to the Export REQUESTS page, confirm the corresponding file export request appears there, and then click on the file download icon.  
    - Confirm the file downloads successfully.
-   - Repeat test with 1GB, and 2KB sized files.
+   - Repeat test with 75MB, and 2MB sized files.
 
 
-4.  In coordination with WAZE Data Stewards:
-   - Create a 2nd file export request, using the WAZE dataset and a smaller sized (~2KB) test file. 
+4. Confirm the 1GB or 75MB file downloads successfully using, Chrome, Firefox, and Edge Browsers
+
+
+5.  In coordination with WAZE Data Stewards:
+   - Create a 2nd file export request, using the WAZE dataset and a smaller sized (~2MB) test file. 
    - Confirm the WAZE DataSteward can download the file to their local client.
-   - If this works, move
 
 
-5. Verify that login redirects, data upload, data export, and data export approval functions are working.
+
+6. Verify that login redirects, data upload, data export, and data export approval functions are working.
    
 
-6. Perform regression testing (following the UAT template):
+7. Perform regression testing (following the UAT template):
    1. Validate you're able to access the portal.
    2. Validate portal login is working.
    3. Validate Import/Export/Approval functionality.
