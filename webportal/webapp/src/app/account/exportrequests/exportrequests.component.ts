@@ -204,13 +204,13 @@ export class ExportRequestsComponent implements OnInit {
     }
      */
 
-    requestDownload2(exportFileRequest) {
-        console.log('requestDownload called');
+    requestDownloadForReview(exportFileRequest) {
+        console.log('requestDownloadForReview called');
         this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile + '&username=' + exportFileRequest.userFullName).subscribe(
             (response: any) => {
             window.open(response);
         });
-        console.log('requestDownload  ends')
+        console.log('requestDownloadForReview  ends')
     }
 
 /*

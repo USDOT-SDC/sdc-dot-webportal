@@ -262,10 +262,10 @@ describe('ExportRequestsComponent', () => {
   // }); 
 
   //it('should call requestDownload and call api gateway service getDownloadUrl', () => {
-  it('should call requestDownload2 and call api gateway service getDownloadUrl', () => {  
+  it('should call requestDownloadForReview and call api gateway service getDownloadUrl', () => {  
     let exportFileForReview = {'TeamBucket' : 'dev-dot-sdc-raw-submissions-911061262852-us-east-1', 'S3Key' : 's3key', 'TeamName' : 'SDC Team'};
     //component.requestDownload(exportFileForReview); 
-    component.requestDownload2(exportFileForReview); 
+    component.requestDownloadForReview(exportFileForReview); 
     expect(mockObjectMap['mockApiGatewayService'].getDownloadUrl).toHaveBeenCalled();
   });  
   
