@@ -45,7 +45,7 @@ export class ExportRequestsComponent implements OnInit {
           { field: 'description', header: 'Description' },
           { field: 'team', header: 'Team' },
           { field: 'dataset', header: 'Dataset' },
-          { field: 'reviewFile', header: 'FileName' },
+          { field: 'reviewFile', header: 'File Name' },
           { field: 'approval', header: 'Approval' },
           { field: 'details', header: 'Details' },
           { field: 'exportFileForReview', header: 'Download File for Review'}
@@ -184,7 +184,7 @@ export class ExportRequestsComponent implements OnInit {
     }
 
     /* 
-    // - Not Used - Export file for Review column no longer triggers file copy to s3 Bucket, as of SDC-5698
+    // - Not Used - Functionality of 'Export File for Review' changed to file download, as of SDC-5698
     copyFileToTeamBucket(exportFileForReview) {
         var team_bucket = exportFileForReview.TeamBucket;            //TeamBucket from exportFileRequests array    
         var s3Key = exportFileForReview.S3Key;        
@@ -207,7 +207,7 @@ export class ExportRequestsComponent implements OnInit {
     */
 
     /*  
-    // - Not Used - The file name column of Export Requests Table is no longer a clickable download link
+    // - Not Used - This is leftover from when 'reviewFile'' data was formatted as a download hyperlink
     requestDownload(exportFileRequest) {
         this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
             (response: any) => {
