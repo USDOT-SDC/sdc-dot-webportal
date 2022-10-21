@@ -45,10 +45,10 @@ export class ExportRequestsComponent implements OnInit {
           { field: 'description', header: 'Description' },
           { field: 'team', header: 'Team' },
           { field: 'dataset', header: 'Dataset' },
-          { field: 'reviewFile', header: 'Review File' },
+          { field: 'reviewFile', header: 'FileName' },
           { field: 'approval', header: 'Approval' },
           { field: 'details', header: 'Details' },
-          { field: 'exportFileForReview', header: 'Export File for Review'}
+          { field: 'exportFileForReview', header: 'Download File for Review'}
         ];
 
         this.colsTrusted = [
@@ -183,16 +183,18 @@ export class ExportRequestsComponent implements OnInit {
         });
     }
 
-    /*copyFileToTeamBucket(exportFileForReview) {
-        var team_bucket = exportFileForReview.TeamBucket;            //teambucket from exportFileRequests array    
+    /* 
+    // - Not Used - Export file for Review column no longer triggers file copy to s3 Bucket, as of SDC-5698
+    copyFileToTeamBucket(exportFileForReview) {
+        var team_bucket = exportFileForReview.TeamBucket;            //TeamBucket from exportFileRequests array    
         var s3Key = exportFileForReview.S3Key;        
         let export_details = {};
         this.userBucketName = sessionStorage.getItem('team_bucket_name');
-        export_details["provider_team_bucket"] = this.userBucketName;
+        export_details["provider_team_bucket"] = this.userBucketName;     //team bucket for the data steward/ export requests page user
         export_details["team_bucket"] = team_bucket;
         export_details["s3Key"] = s3Key;
         export_details["userName"] = this.userName;
-        export_details["teamName"] = exportFileForReview.TeamName;              //teamName from exportFileRequests Array -- does not exist!!        
+        //export_details["teamName"] = exportFileForReview.TeamName;              //teamName from exportFileRequests array -- not provided, not a col in RequestExportTable    
         this.gatewayService.post("export/requests/exportFileforReview?message=" + encodeURI(JSON.stringify(export_details))).subscribe(
             (response: any) => {
                 // this.snackBar.open("File is exported for the data provider for review under the export_reviews folder for the team "+ export_details["teamName"], 'close', {
@@ -202,7 +204,17 @@ export class ExportRequestsComponent implements OnInit {
             }
         );
     }
-     */
+    */
+
+    /*  
+    // - Not Used - The file name column of Export Requests Table is no longer a clickable download link
+    requestDownload(exportFileRequest) {
+        this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
+            (response: any) => {
+            window.open(response);
+        });
+    }
+    */
 
     requestDownloadForReview(exportFileRequest) {
         console.log('requestDownloadForReview called');
@@ -212,15 +224,6 @@ export class ExportRequestsComponent implements OnInit {
         });
         console.log('requestDownloadForReview  ends')
     }
-
-/*
-    requestDownload(exportFileRequest) {
-        this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
-            (response: any) => {
-            window.open(response);
-        });
-    }
-*/
 
     submitApproval(status,targetObj) {
         let reqBody = {};

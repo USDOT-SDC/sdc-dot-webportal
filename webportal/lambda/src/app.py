@@ -703,40 +703,45 @@ def updatefilestatus():
                     headers={'Content-Type': 'application/json'})
 
 
-@app.route('/export/requests/exportFileforReview', methods=['POST'], authorizer=authorizer, cors=cors_config)
-def exportFileforReview():
-    paramsQuery = app.current_request.query_params
-    paramsString = paramsQuery['message']
-    logger.setLevel("INFO")
-    logging.info("Received request {}".format(paramsString))
-    params = json.loads(paramsString)
-    response = {}
-    try:
-        provider_team_bucket = params['provider_team_bucket']
-        team_bucket=params['team_bucket']
-        s3Key=params['s3Key']
-        #team_name = params['teamName']         ## Key Error on Team Name - this isnt passed in view function params
-        fileName = s3Key.split('/')[-1]
-        s3 = boto3.resource('s3')
-        copy_source = {
-            'Bucket': params['team_bucket'],
-            'Key': params['s3Key']
-        }
-        targ_bucket = s3.Bucket(provider_team_bucket)
-       # review_path_for_provider = params['userName'] + "/" + "export_reviews/" + team_name + "/" + fileName
-        review_path_for_provider = params['userName'] + "/" + "export_reviews/" + fileName
-        logging.info("copy_source: "+ copy_source)
-        logging.info("target bucket: " + targ_bucket)
-        logging.info("review_path_for_provider: " + review_path_for_provider)
-        bucket.copy(copy_source, review_path_for_provider)   
+'''
+NOTES RE: @app.route('/export/requests/exportFileforReview':
+## SDC-5611 - commented-out  'team_name' references - it's not provided in request message & caused key error/feature failure
+## SDC-5698 - commented-out entire view function - it's no longer called by exportrequests.component.ts
+'''
+# @app.route('/export/requests/exportFileforReview', methods=['POST'], authorizer=authorizer, cors=cors_config)
+# def exportFileforReview():
+#     paramsQuery = app.current_request.query_params
+#     paramsString = paramsQuery['message']
+#     logger.setLevel("INFO")
+#     logging.info("Received request {}".format(paramsString))
+#     params = json.loads(paramsString)
+#     response = {}
+#     try:
+#         provider_team_bucket = params['provider_team_bucket']
+#         team_bucket=params['team_bucket']
+#         s3Key=params['s3Key']
+#         # team_name = params['teamName']
+#         fileName = s3Key.split('/')[-1]
+#         s3 = boto3.resource('s3')
+#         copy_source = {
+#             'Bucket': params['team_bucket'],
+#             'Key': params['s3Key']
+#         }
+#         bucket = s3.Bucket(provider_team_bucket)
+#        # review_path_for_provider = params['userName'] + "/" + "export_reviews/" + team_name + "/" + fileName 
+#         review_path_for_provider = params['userName'] + "/" + "export_reviews/" + fileName
+#         logging.info("copy_source: "+ copy_source)
+#         logging.info("target bucket: " + bucket)
+#         logging.info("review_path_for_provider: " + review_path_for_provider)
+#         bucket.copy(copy_source, review_path_for_provider)   
 
-    except BaseException as be:
-        logging.exception("Error: Failed to export file for review" + str(be))
-        raise ChaliceViewError("Failed to export file for review")
+#     except BaseException as be:
+#         logging.exception("Error: Failed to export file for review" + str(be))
+#         raise ChaliceViewError("Failed to export file for review")
 
-    return Response(body=response,
-                    status_code=200,
-                    headers={'Content-Type': 'application/json'})
+#     return Response(body=response,
+#                     status_code=200,
+#                     headers={'Content-Type': 'application/json'})
 
 
 @app.route('/export/requests/updatetrustedtatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
