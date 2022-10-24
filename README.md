@@ -47,6 +47,10 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**October 21, 2022. SDC sdc-dot-webportal Release 2.15.0**
+### What's New in Release 2.15.0
+* The 'Export File for Review' feature has been modified so that files can be downloaded for review outside of an SDC workstation.
+
 **September 1, 2022. SDC sdc-dot-webportal Release 2.14.0**
 ### What's New in Release 2.14.0
 * References to CVP data have been expunged from the Web Portal UI.

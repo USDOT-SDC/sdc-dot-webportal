@@ -1,6 +1,6 @@
 # Test Plan
 
-[v2.14.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.14.0)
+[v2.15.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.15.0)
 
 ### Objectives:
 The test objectives are to verify the functionality of the feature improvements defined in the CRB, as well as to ensure there's been no negative impact on the, otherwise, normal functioning of the web portal within the production environment
@@ -13,31 +13,29 @@ The test objectives are to verify the functionality of the feature improvements 
 1. Verify the web portal s3 bucket has data from the date of deployment.
 
 
-2.  On the DATASETS page:
-   - Verify that the SDC Datasets panel does not reflect a row for the CVP dataset.
-   - Only WAZE, OSS4ITS, FRA-ARDS, and ACME remain.
-   - Click through each row of the remaining datasets and ensure the corresponding data dictionary/description populates (in panel below the  SDC algorithms panel).
+2.  On the EXPORT REQUESTS page:
+   - Under the 'Export File for Review' column confirm the file copy icons changed to cloud download icons.
 
 
-3.  Open the REQUEST TRUSTED USER STATUS modal:
-   - Verify that CVP is no longer an option in the "For Which Project/Dataset would you like to become a Trusted User?" dropdown.
-      - Confirm that WAZE, OSS4ITS, FRA-ARDS, and ACME remain as options.
+3. On the DATASETS page:
+   - Create a file export request for ACME data, using the oneGBtestfile.txt.  Proceed to the Export REQUESTS page, confirm the corresponding file export request appears there, and then click on the file download icon.  
+   - Confirm the file downloads successfully.
+   - Repeat test with 75MB, and 2MB sized files.
 
 
-4.  On the DATASETS page, open a REQUEST TO EXPORT DATA modal:
-   - Verify that CVP is no longer an option under the "For Which Project/Dataset would you like to become a Trusted User?" dropdown.
-      - Confirm that WAZE, OSS4ITS, FRA-ARDS, and ACME remain as options.
-   - Select any ACME dataset and click 'Next' button to open the Approval Form tab.
-   - Verify that any CVP dataset references have been removed from all form field hints on this tab, specificallly:
-      - Hint for 'Anchor Dataset of interest or data provider' field is now: "e.g. Waze, ARDS, etc."
-      - Hint for 'Specific sub-datasets or data types used' field is now: "e.g. Alerts, Jams, Railroad, etc."
-      - Hint for 'Justification' field is now: "e.g. Used in visualization dashboard, Used for presentation at SDC Quarterly Executive Briefing, etc."
+4. Confirm the 1GB or 75MB file downloads successfully using, Chrome, Firefox, and Edge Browsers
 
 
-5. Verify that login redirects, data upload, data export, and data export approval functions are working.
+5.  In coordination with WAZE Data Stewards:
+   - Create a 2nd file export request, using the WAZE dataset and a smaller sized (~2MB) test file. 
+   - Confirm the WAZE DataSteward can download the file to their local client.
+
+
+
+6. Verify that login redirects, data upload, data export, and data export approval functions are working.
    
 
-6. Perform regression testing (following the UAT template):
+7. Perform regression testing (following the UAT template):
    1. Validate you're able to access the portal.
    2. Validate portal login is working.
    3. Validate Import/Export/Approval functionality.
