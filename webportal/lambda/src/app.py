@@ -734,8 +734,8 @@ def createTableExportRequests():
                     'databaseName': database_name,
                     'tableName': table_name,
                     'internalSchema': source_db_schema,
-                    # 'listOfPOC': ','.join(listOfPOC),
-                    'listOfPOC': ','.join(fakeListOfPOC),
+                    'listOfPOC': ','.join(listOfPOC),
+                    #'listOfPOC': ','.join(fakeListOfPOC),
                     'userID': userID,
                     'userEmail': user_email
                 }
@@ -813,7 +813,7 @@ def updatefilestatus():
         kwargs = {
         'FilterExpression': Attr('RequestType').eq('Table') & Attr('RequestReviewStatus').eq('Approved') & Attr('S3KeyHash').eq(s3KeyHash) # Filter Expression for DynamoDB Scan. Get entries where status = 'approved'
         }
-        table_requests = scan_db('dev-RequestExportTable', kwargs)
+        table_requests = scan_db(TABLENAME_EXPORT_FILE_REQUEST, kwargs)
         for request in table_requests:
             exportFileRequestTable.update_item(
                 Key={
@@ -1756,3 +1756,4 @@ def get_health():
     return Response(body=json.dumps({"isHealthy": True, "source": "webportal-api"}),
                     status_code=200,
                     headers={'Content-Type': 'application/json'})
+
