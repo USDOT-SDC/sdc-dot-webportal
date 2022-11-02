@@ -7,6 +7,7 @@ data "archive_file" "lambda_zip" {
 resource "aws_lambda_function" "webportal_lambda" {
     filename = "zip/lambda.zip"
     function_name = "webportal-ecs-${local.environment}"
+    source_code_hash = filebase64sha256("zip/lambda.zip")
     role = aws_iam_role.webportal_lambda_role.arn
     handler = "app.app"
     timeout = 60
