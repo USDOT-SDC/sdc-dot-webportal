@@ -14,5 +14,6 @@ echo "Refreshing assets on proxies..."
 aws ssm send-command --region us-east-1 \
   --document-name prod-nginx-asset-update \
   --parameters staticAssetsBucket="prod-webportal-hosting-004118380849" \
-  --targets "Key=tag:Name,Values=prod-nginx-web-proxy" \
+  --targets "Key=tag:Role,Values=nginx proxy" \
   --comment "Deploying sdc-dot-webportal to prod at $(date) and refreshing assets"
+
