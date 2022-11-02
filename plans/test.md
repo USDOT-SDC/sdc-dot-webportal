@@ -1,12 +1,12 @@
 # Test Plan
 
-[v2.14.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.14.0)
+[v2.16.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.16.0)
 
 ### Objectives:
 The test objectives are to verify the functionality of the feature improvements defined in the CRB, as well as to ensure there's been no negative impact on the, otherwise, normal functioning of the web portal within the production environment
 
 ### In Scope:
-1. Manual functional system testing of the web portal - with focus on the new Table Export Request button/form on the Datasets page and the new Table Export Requests table on the Export Requests page.
+1. Manual functional system testing of the web portal - with focus on the new 'Table Export Request' button/form on the Datasets page and the new 'Table Export Requests' table on the Export Requests page.
 2. Manual regression testing of the SDC web portal.
 
 ### Test Plan:
@@ -14,17 +14,17 @@ The test objectives are to verify the functionality of the feature improvements 
 
 
 2.  On the DATASETS page:
-   - verify that the new "My Edge Database Panel" appears below the existing "My Datasets/Algorithm panel.
-   - verity that the new "Request Table Export to Edge DB" button appears within the new panel and it opens the corresponding dialog.
+   - verify that the new 'My Edge Database Panel' appears below the existing 'My Datasets/Algorithm' panel.
+   - verity that the new 'Request Table Export to Edge DB' button appears within the new panel and it opens the corresponding dialog.
 
 
-3.  Within the opened Request Table Export to Edge DB modal:
+3.  Within the opened 'Request Table Export to Edge DB' modal:
    - Verify the team name 'sdc-support' is pre-loaded to the 'My Database' form field and cannot be edited.
    - Verify that the 'Submit' button does not activate unless all required fields have a response 
-   - Verify that a table request submits for a 'trusted' ACME  dataset and that snackbar with error message opens when attempting to do so.
-   - Verify the same for a 'non-trusted; ACME dataset.
+   - Verify that a table request submits for a 'trusted' ACME  dataset and that the snackbar with error message opens when attempting to do so.
+   - Verify the same for a 'non-trusted' ACME dataset.
    - Verify that email confirmation is delivered to POC's successfully.
-   - Verify on the EXPORT REQUESTS page, that the submitted requests appear in the new "Table Export Requests' table with correct data populated there.
+   - Verify on the EXPORT REQUESTS page, that the submitted requests appear in the new 'Table Export Requests' table with correct data populated there.
    - Approve or reject the request and confirm.
    - Verify that approval or rejection email confirmation is delivered.
 
