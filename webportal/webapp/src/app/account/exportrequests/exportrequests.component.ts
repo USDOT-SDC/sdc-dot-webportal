@@ -48,10 +48,10 @@ export class ExportRequestsComponent implements OnInit {
             { field: 'description', header: 'Description' },
             { field: 'team', header: 'Team' },
             { field: 'dataset', header: 'Dataset' },
-            { field: 'reviewFile', header: 'Review File' },
+            { field: 'reviewFile', header: 'File Name' },
             { field: 'approval', header: 'Approval' },
             { field: 'details', header: 'Details' },
-            { field: 'exportFileForReview', header: 'Export File for Review' }
+            { field: 'exportFileForReview', header: 'Download File for Review' }
         ];
    
         this.colsExportTable = [
@@ -123,7 +123,7 @@ export class ExportRequestsComponent implements OnInit {
                         'RequestReviewStatus': item['RequestReviewStatus'],
                         'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
                         'UserEmail': item['UserEmail'],
-                        'TeamName': item['TeamName'],                                                      //This doesnt appear to be used anywhere
+                        'TeamName': item['TeamName'],                              // NOT AN ATTRIBUTE  IN  exportFileRequestTable
                         'ReqReceivedDate': item['ReqReceivedDate']
                     }
                     );
@@ -253,31 +253,46 @@ export class ExportRequestsComponent implements OnInit {
         });
     }
 
+    /* 
+    // - Not Used - Functionality of 'Export File for Review' changed to file download, as of SDC-5698
     copyFileToTeamBucket(exportFileForReview) {
-        var team_bucket = exportFileForReview.TeamBucket;
-        var s3Key = exportFileForReview.S3Key;
+        var team_bucket = exportFileForReview.TeamBucket;            //TeamBucket from exportFileRequests array    
+        var s3Key = exportFileForReview.S3Key;        
         let export_details = {};
         this.userBucketName = sessionStorage.getItem('team_bucket_name');
-        export_details["provider_team_bucket"] = this.userBucketName;
+        export_details["provider_team_bucket"] = this.userBucketName;     //team bucket for the data steward/ export requests page user
         export_details["team_bucket"] = team_bucket;
         export_details["s3Key"] = s3Key;
         export_details["userName"] = this.userName;
-        export_details["teamName"] = exportFileForReview.TeamName;
+        //export_details["teamName"] = exportFileForReview.TeamName;              //teamName from exportFileRequests array -- not provided, not a col in RequestExportTable    
         this.gatewayService.post("export/requests/exportFileforReview?message=" + encodeURI(JSON.stringify(export_details))).subscribe(
             (response: any) => {
-                this.snackBar.open("File is exported for the data provider for review under the export_reviews folder for the team " + export_details["teamName"], 'close', {
+                // this.snackBar.open("File is exported for the data provider for review under the export_reviews folder for the team "+ export_details["teamName"], 'close', {
+                 this.snackBar.open("File is exported for the data provider for review under the export_reviews folder", 'close', {                                  
                     duration: 12000,
                 });
             }
         );
     }
+    */
 
-
+    /*  
+    // - Not Used - This is leftover from when 'reviewFile'' data was formatted as a download hyperlink
     requestDownload(exportFileRequest) {
         this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
             (response: any) => {
-                window.open(response);
-            });
+            window.open(response);
+        });
+    }
+    */
+
+    requestDownloadForReview(exportFileRequest) {
+        console.log('requestDownloadForReview called');
+        this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile + '&username=' + exportFileRequest.userFullName).subscribe(
+            (response: any) => {
+            window.open(response);
+        });
+        console.log('requestDownloadForReview  ends')
     }
 
 
