@@ -1,3 +1,7 @@
+data "aws_iam_policy" "AWSGlueServiceRole" {
+  arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
+
 data "archive_file" "lambda_zip" {
     type        = "zip"
     source_dir  = "../src"
@@ -48,6 +52,11 @@ resource "aws_iam_role_policy" "webportal_lambda_policy" {
     name = "webportal-ecs-${local.environment}-api_handler"
     role = aws_iam_role.webportal_lambda_role.id
     policy = file("webportal_lambda_policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "webportal_lambda_role_policy_attachment" {
+  role       = aws_iam_role.webportal_lambda_role.name
+  policy_arn = data.aws_iam_policy.AWSGlueServiceRole.arn
 }
 
 
