@@ -1,41 +1,38 @@
 # Test Plan
 
-[v2.15.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.15.0)
+[v2.16.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.16.0)
 
 ### Objectives:
 The test objectives are to verify the functionality of the feature improvements defined in the CRB, as well as to ensure there's been no negative impact on the, otherwise, normal functioning of the web portal within the production environment
 
 ### In Scope:
-1. Manual functional system testing of the web portal.
+1. Manual functional system testing of the web portal - with focus on the new 'Table Export Request' button/form on the Datasets page and the new 'Table Export Requests' table on the Export Requests page.
 2. Manual regression testing of the SDC web portal.
 
 ### Test Plan:
 1. Verify the web portal s3 bucket has data from the date of deployment.
 
 
-2.  On the EXPORT REQUESTS page:
-   - Under the 'Export File for Review' column confirm the file copy icons changed to cloud download icons.
+2.  On the DATASETS page:
+   - verify that the new 'My Edge Database Panel' appears below the existing 'My Datasets/Algorithm' panel.
+   - verity that the new 'Request Table Export to Edge DB' button appears within the new panel and it opens the corresponding dialog.
 
 
-3. On the DATASETS page:
-   - Create a file export request for ACME data, using the oneGBtestfile.txt.  Proceed to the Export REQUESTS page, confirm the corresponding file export request appears there, and then click on the file download icon.  
-   - Confirm the file downloads successfully.
-   - Repeat test with 75MB, and 2MB sized files.
+3.  Within the opened 'Request Table Export to Edge DB' modal:
+   - Verify the team name 'sdc-support' is pre-loaded to the 'My Database' form field and cannot be edited.
+   - Verify that the 'Submit' button does not activate unless all required fields have a response 
+   - Verify that a table request submits for a 'trusted' ACME  dataset and that the snackbar with error message opens when attempting to do so.
+   - Verify the same for a 'non-trusted' ACME dataset.
+   - Verify that email confirmation is delivered to POC's successfully.
+   - Verify on the EXPORT REQUESTS page, that the submitted requests appear in the new 'Table Export Requests' table with correct data populated there.
+   - Approve or reject the request and confirm.
+   - Verify that approval or rejection email confirmation is delivered.
 
 
-4. Confirm the 1GB or 75MB file downloads successfully using, Chrome, Firefox, and Edge Browsers
-
-
-5.  In coordination with WAZE Data Stewards:
-   - Create a 2nd file export request, using the WAZE dataset and a smaller sized (~2MB) test file. 
-   - Confirm the WAZE DataSteward can download the file to their local client.
-
-
-
-6. Verify that login redirects, data upload, data export, and data export approval functions are working.
+4. Verify that login redirects, data upload, data export, and data export approval functions are working.
    
 
-7. Perform regression testing (following the UAT template):
+6. Perform regression testing (following the UAT template):
    1. Validate you're able to access the portal.
    2. Validate portal login is working.
    3. Validate Import/Export/Approval functionality.

@@ -57,6 +57,55 @@
           <hr />
           </mat-expansion-panel>
 
+         <!-- Table Requests-->
+          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+               Export Table Requests
+              </mat-panel-title>
+            </mat-expansion-panel-header>        
+            <div *ngIf="!exportTableRequests">No table export requests</div>
+            <span style="color:grey">This section displays the list of tables requested for export to the Edge DB</span><hr>
+            <p-table #dt [columns]="colsExportTable" [value]="exportTableRequests" [paginator]="true" [rows]="10" [totalRecords]="exportTableRequests.length"  dataKey="filename">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                          {{col.header}} <br/>
+                          <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-exportTableRequest let-columns="columns">
+                  <tr>
+                      <td>{{exportTableRequest.ReqReceivedDate}}</td>
+                      <td>{{exportTableRequest.userFullName}}</td>
+                      <td><div style="word-break:break-all;">{{exportTableRequest.UserEmail}}</div></td>
+                      <td>{{exportTableRequest.justification}}</td> 
+                      <td>{{exportTableRequest.team}}</td>
+                      <td>{{exportTableRequest.dataset}}</td>
+                      <td><div style="word-break:break-all;">{{exportTableRequest.table}}</div></td>
+                        <td>
+                            <div *ngIf="exportTableRequest.RequestReviewStatus == 'Submitted'">
+                                <i class="material-icons iconFont" (click)="submitTableApproval('Approved',exportTableRequest)" >done</i>
+                                <i class="material-icons iconFont" (click)="submitTableApproval('Rejected',exportTableRequest)" >close</i>
+                            </div>                                                     
+                            <div *ngIf="exportTableRequest.RequestReviewStatus == 'Approved'">
+                                    <p-message severity="success" text="{{exportTableRequest.RequestReviewStatus}}"></p-message> 
+                            </div> 
+                            <div *ngIf="exportTableRequest.RequestReviewStatus == 'Rejected'">
+                                        <p-message severity="error" text="{{exportTableRequest.RequestReviewStatus}}"></p-message> 
+                            </div>
+                        </td>
+                        <td>
+                            <i class="material-icons iconFont" (click)="renderTableApprovalForm(exportTableRequest)">insert_drive_file</i>
+                        </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          <hr />
+          </mat-expansion-panel>
+
+
          <!-- Trust Requests-->
          <mat-expansion-panel style="margin-top: 40px;" [expanded]="true">
           <mat-expansion-panel-header>

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';                     //child to parent data sharing via ViewChild 
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
@@ -18,7 +18,8 @@ export class DialogBoxComponent implements OnInit {
     // protected options: RequestOptions;
     fileName: string;
     mailType: string;
-    requestType: string;
+    requestType: string;                                                //requestType variable is param for "request to upload data to s3 bucket" vs. other dialogs have  mailType
+    exportRequestType: string;
     userBucketName: string;
     // selectedFiles: FileList;
     selectedFiles: any[] = [];
@@ -64,6 +65,9 @@ export class DialogBoxComponent implements OnInit {
     detailedDerivedDataset: string;
     derivedDataSetName: string;
     trustedAcceptableUseDisabled: boolean;
+    edgePrivateDatabase: string;
+    edgePrivateTable: string;
+    edgeTableRequestButtonLabel: string;
     uploadNotice = false;
     resizeFilterFormSubmitted = false;
     diskSizeChange = true;
@@ -160,7 +164,9 @@ export class DialogBoxComponent implements OnInit {
         datatype: '',
         autoderiveddataset: '',
         autoreason: '',
-        trustedUserJustification: ''
+        trustedUserJustification: '',
+        edgePrivateDatabase: '',
+        edgePrivateTable: '',
     };
 
     resize = {
@@ -191,6 +197,9 @@ export class DialogBoxComponent implements OnInit {
         this.autoderiveddataset = '';
         this.autoreason = '';
         this.trustedUserJustification = '';
+        this.edgePrivateDatabase = '';
+        this.edgePrivateTable = '';
+        this.edgeTableRequestButtonLabel = 'SUBMIT';
         this.acceptableUse = '';
         this.trustedAcceptableUseDisabled = false;
         this.approvalForm = data.approvalForm;
@@ -208,8 +217,12 @@ export class DialogBoxComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('constructor this.edgePrivateDatabase:' + this.edgePrivateDatabase);
         this.userEmail = sessionStorage.getItem('email');
         this.userName = sessionStorage.getItem('username');
+        this.edgePrivateDatabase = sessionStorage.getItem('teamSlug');
+        this.messageModel.edgePrivateDatabase = this.edgePrivateDatabase;
+        console.log('edgePrivateDatabase:' + this.edgePrivateDatabase);
         (this.mailType === 'reSize Request') && this.setDisableCurrentConfigurations();
         const trustedStatus = sessionStorage.getItem('userTrustedStatus');
         this.userTrustedStatus = JSON.parse(trustedStatus);
@@ -809,6 +822,14 @@ export class DialogBoxComponent implements OnInit {
         this.submitRequest();
     }
 
+    onPublishTableRequest($event: MouseEvent) {
+        ($event.target as HTMLButtonElement).disabled = true;
+        this.edgeTableRequestButtonLabel = 'SUBMITTING...';
+        this.exportRequestType = 'Table';
+        this.acceptableUse = 'Accept';
+        this.submitRequest();
+    }
+
     submitRequest() {
         // alert(this.trustedAcceptableUse);
         this.selectedDataSet = this.messageModel.datasettype;
@@ -823,6 +844,8 @@ export class DialogBoxComponent implements OnInit {
         this.autoderiveddataset = this.messageModel.autoderiveddataset;
         this.autoreason = this.messageModel.autoreason;
         this.trustedUserJustification = this.messageModel.trustedUserJustification;
+        this.edgePrivateDatabase = this.messageModel.edgePrivateDatabase;
+        this.edgePrivateTable = this.messageModel.edgePrivateTable;
 
         console.log('this.userBucketName:' + this.userBucketName);
         console.log('this.selectedDataSet:' + this.selectedDataSet);
@@ -830,9 +853,21 @@ export class DialogBoxComponent implements OnInit {
         console.log('this.autoreason:' + this.autoreason);
         console.log('this.trustedUserJustification:' + this.trustedUserJustification);
         console.log('this.trustedRequest:' + this.trustedRequest);
+        console.log('this.privateDatabase:' + this.edgePrivateDatabase);
+        console.log('this.privateTable:' + this.edgePrivateTable);
+        console.log('this.exportRequestType:' + this.exportRequestType);
+
+
+
 
         const approvalForm = {};
 
+        if (this.exportRequestType === 'Table' &&  this.edgePrivateDatabase){
+            approvalForm["privateDatabase"] = this.edgePrivateDatabase;
+        }    
+        if (this.exportRequestType === 'Table' &&  this.edgePrivateTable){
+            approvalForm["privateTable"] = this.edgePrivateTable;
+        }
         if (this.selectedDataSet) {
             approvalForm['datasetName'] = this.selectedDataSet;
         }
@@ -870,12 +905,14 @@ export class DialogBoxComponent implements OnInit {
         reqBody['RequestReviewedBy'] = null;
         reqBody['ReqReviewTimestamp'] = null;
         reqBody['S3Key'] = this.messageModel.fileFolderName;
-        reqBody['TeamBucket'] = this.userBucketName; // check this
+        reqBody['TeamBucket'] = this.userBucketName;
         reqBody['RequestID'] = null;
         reqBody['ApprovalForm'] = approvalForm;
         reqBody['UserID'] = this.userName;
         reqBody['selectedDataInfo'] = { 'selectedDataSet': this.selectedDataSet, 'selectedDataProvider': this.selectedDataProvider, 'selectedDatatype': this.selectedDatatype };
         reqBody['acceptableUse'] = this.acceptableUse;
+        reqBody['DatabaseName'] = this.edgePrivateDatabase;
+        reqBody['TableName'] = this.edgePrivateTable;
         /*if(this.trustedRequest === "Yes" && (this.acceptableUse === "No" || this.acceptableUse == "")) {
             //alert("Usage policy to continue"); // Ribbon...
             this.snackBar.open('Acceptable use policy should be accepted to request trusted status', 'close', {
@@ -883,38 +920,51 @@ export class DialogBoxComponent implements OnInit {
             });
         } else { */
 
-        if (this.trustedRequest === 'Yes') {
-            // Submit API gateway request
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted', 'trustedRequestReason': this.trustedUserJustification };
-        }
-
-        // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
-        if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
-            console.log('Declined acceptable usage policy');
-            reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted', 'trustedRequestReason': this.trustedUserJustification };
-            reqBody['RequestReviewStatus'] = 'Rejected';
-        }
-
-        if (this.trustedRequest === 'No' && this.acceptableUse === 'Decline') {
-            console.log('Declined acceptable usage policy');
-            reqBody['RequestReviewStatus'] = 'Rejected';
-        }
-
-        if (this.autoExportRequest === 'Yes') {
-            // Submit API gateway request
-            reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
-        }
-
-        this.gatewayService.sendExportRequest('export?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
-            (response: any) => {
-                this.snackBar.open('Your request has been sent successfully', 'close', {
-                    duration: 2000,
-                });
-                this.onNoClick();
-                console.log('Request Sent Successfully');
+        if (this.exportRequestType === 'Table') {
+            this.gatewayService.sendExportRequest('exportTable?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
+                (response: any) => {
+                    this.snackBar.open('Your request has been sent successfully', 'close', {
+                        duration: 2000,
+                    });
+                    this.onNoClick();
+                    console.log('Request Sent Successfully');
+                }
+            );
+        }        
+        else {
+            if (this.trustedRequest === 'Yes') {
+                // Submit API gateway request
+                reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Submitted', 'trustedRequestReason': this.trustedUserJustification };
             }
-        );
-    }
+
+            // ***If the acceptable policy is Decline and the user has asked for trusted status: we should ignore the entry and not even store in dynamodb
+            if (this.trustedRequest === 'Yes' && this.acceptableUse === 'Decline') {
+                console.log('Declined acceptable usage policy');
+                reqBody['trustedRequest'] = { 'trustedRequestStatus': 'Untrusted', 'trustedRequestReason': this.trustedUserJustification };
+                reqBody['RequestReviewStatus'] = 'Rejected';
+            }
+
+            if (this.trustedRequest === 'No' && this.acceptableUse === 'Decline') {
+                console.log('Declined acceptable usage policy');
+                reqBody['RequestReviewStatus'] = 'Rejected';
+            }
+
+            if (this.autoExportRequest === 'Yes') {
+                reqBody['autoExportRequest'] = { 'autoExportRequestStatus': 'Submitted', 'autoExportRequestDataset': this.autoderiveddataset, 'autoExportRequestReason': this.autoreason };
+            }
+
+            this.gatewayService.sendExportRequest('export?message=' + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
+                (response: any) => {
+                    this.snackBar.open('Your request has been sent successfully', 'close', {
+                        duration: 2000,
+                    });
+                    this.onNoClick();
+                    console.log('Request Sent Successfully');
+                }
+            );
+        }    
+     }
+
 
     //TODO verify whether this is still called
     onTrustedRequestGrpChange(selectedVal: any) {

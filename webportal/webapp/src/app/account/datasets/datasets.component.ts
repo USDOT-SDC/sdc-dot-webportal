@@ -81,6 +81,7 @@ export class DatasetsComponent implements OnInit {
             (response: any) => {
                 sessionStorage.setItem('username', response.username);
                 sessionStorage.setItem('email', response.email);
+                sessionStorage.setItem('teamSlug', response.team_slug);                         // team_slug from user stacks table is used as both Team Name and Edge database name 
                 sessionStorage.setItem('stacks', JSON.stringify(response.stacks));
                 sessionStorage.setItem('datasets', JSON.stringify(response.datasets));
                 sessionStorage.setItem('roles', response.role);
@@ -195,8 +196,24 @@ export class DatasetsComponent implements OnInit {
             this.getMyDatasetsList();
         });
     }
-
     
+    requestTableExport(/*BucketName,*/ mailType) {
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            panelClass: 'custom-export-dialog',
+            width: '65vw',
+            height: '75vh',
+            disableClose: true,
+            data: { /*userBucketName: this.userBucketName,*/ mailType: mailType }
+            });
+
+        dialogRef.afterClosed().subscribe(result => {
+                console.log('The Table Export request dialog was closed');
+            //this.myDatasets = [];
+            //this.getMyDatasetsList();                                                                     
+        });
+    }   
+
+
     requestTrustedStatus(/*BucketName,*/ mailType) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             panelClass: 'custom-export-dialog',
@@ -213,7 +230,6 @@ export class DatasetsComponent implements OnInit {
         });
     }
 
- 
     uploadFilesToS3(requestType) {
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '500px',

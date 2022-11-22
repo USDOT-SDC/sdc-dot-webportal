@@ -17,13 +17,15 @@ export class ExportRequestsComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService,
         public snackBar: MatSnackBar,
         public dialog: MatDialog) { }
-     
+
     exportFileRequests = [];
+    exportTableRequests = [];
     trustedRequests = [];
     autoExportRequests = [];
     metadata = {};
     user: any;
     cols: any = [];
+    colsExportTable: any = [];
     colsTrusted: any = [];
     colsAutoExport: any = [];
     userEmail: string;
@@ -32,23 +34,36 @@ export class ExportRequestsComponent implements OnInit {
     userBucketName: string;
 
     ngOnInit() {
-        this.userEmail = sessionStorage.getItem('email');
+        this.userEmail = sessionStorage.getItem('email');                   //Reminder: this is data steward user information
         console.log(this.userEmail);
         this.userName = sessionStorage.getItem('username');
         console.log(this.userName);
 
         this.getExportFileRequests();
-        
+
+
         this.cols = [
-          { field: 'Date', header: 'Date' },
-          { field: 'userFullName', header: 'User' },
-          { field: 'description', header: 'Description' },
-          { field: 'team', header: 'Team' },
-          { field: 'dataset', header: 'Dataset' },
-          { field: 'reviewFile', header: 'File Name' },
-          { field: 'approval', header: 'Approval' },
-          { field: 'details', header: 'Details' },
-          { field: 'exportFileForReview', header: 'Download File for Review'}
+            { field: 'Date', header: 'Date' },
+            { field: 'userFullName', header: 'User' },
+            { field: 'description', header: 'Description' },
+            { field: 'team', header: 'Team' },
+            { field: 'dataset', header: 'Dataset' },
+            { field: 'reviewFile', header: 'File Name' },
+            { field: 'approval', header: 'Approval' },
+            { field: 'details', header: 'Details' },
+            { field: 'exportFileForReview', header: 'Download File for Review' }
+        ];
+   
+        this.colsExportTable = [
+            { field: 'Date', header: 'Date' },
+            { field: 'userFullName', header: 'User' },
+            { field: 'userEmail', header: 'Email' },
+            { field: 'description', header: 'Justification' },
+            { field: 'team', header: 'Team' },
+            { field: 'dataset', header: 'Dataset' },
+            { field: 'database.schema.tablename', header: 'Table' },
+            { field: 'approval', header: 'Approval' },
+            { field: 'details', header: 'Details' },                                        //Q: Do we really need this if same info is loaded elsewhere in the table already? -- do we even actually create this???
         ];
 
         this.colsTrusted = [
@@ -56,18 +71,19 @@ export class ExportRequestsComponent implements OnInit {
             { field: 'dataset', header: 'Dataset' },
             { field: 'justification', header: 'Justification' },
             { field: 'approval', header: 'Approval' }
-          ]
+        ];
 
         this.colsAutoExport = [
             { field: 'userFullName', header: 'User' },
             { field: 'dataset', header: 'Dataset' },
             { field: 'justification', header: 'Justification' },
             { field: 'approval', header: 'Approval' }
-        ]
+        ];
     }
 
     getExportFileRequests() {
         this.exportFileRequests = [];
+        this.exportTableRequests = [];
         this.trustedRequests = [];
         this.autoExportRequests = [];
         //this.exportFileRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'description' : 'This is derived Dataset', 'team' : 'team1 bucket', 'dataset' : 'Waze-Waze-alert', 'details' : 'Details'  ,'reviewFile' : 'reviewFileOrLink'});
@@ -87,66 +103,106 @@ export class ExportRequestsComponent implements OnInit {
 
         this.gatewayService.post("export/requests?message=" + encodeURIComponent(JSON.stringify(reqBody))).subscribe(
             (response: any) => {
-                for(let items of response['exportRequests']) {
-                    for(let item of items) {
-                        let justifyExport = "";
-                        if('justifyExport' in item['ApprovalForm']) {
-                            justifyExport = item['ApprovalForm']['justifyExport'];
-                             }
-                        this.exportFileRequests.push({
-                            'userFullName' : item['RequestedBy'], 
-                            'description' : justifyExport, 
-                            'team' : item['TeamBucket'], 
-                            'dataset' : item['Dataset-DataProvider-Datatype'], 
-                            'details' : item['ApprovalForm'],
-                            'reviewFile' : item['S3Key'],
-                            'S3KeyHash' : item['S3KeyHash'],
-                            'RequestedBy_Epoch':item['RequestedBy_Epoch'],
-                            'S3Key' : item['S3Key'],
-                            'TeamBucket' : item['TeamBucket'],
-                            'RequestReviewStatus': item['RequestReviewStatus'],
-                            'ReqReceivedTimestamp' : item['ReqReceivedTimestamp'],
-                            'UserEmail': item['UserEmail'],
-                            'TeamName': item['TeamName'],                               // NOT AN ATTRIBUTE  IN  exportFileRequestTable
-                            'ReqReceivedDate': item['ReqReceivedDate']
-                            }
-                        );
-                    } 
-                }  
-                       
-                for(let items of response['trustedRequests']) {
-                    for(let item of items) {
-                         console.log(item);
-                         this.trustedRequests.push({'userFullName' : item['UserID'],
-                                                    'dataset' : item['Dataset-DataProvider-Datatype'],
-                                                    'TrustedStatus' : item['TrustedStatus'],
-                                                    'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
-                                                    'UserEmail': item['UserEmail'],
-                                                    'justification':item['TrustedJustification'] });
-                    } 
+                for (let item of response['exportRequests']['s3Requests']) {
+                    // for(let item of items) {
+                    let justifyExport = "";
+                    if ('justifyExport' in item['ApprovalForm']) {
+                        justifyExport = item['ApprovalForm']['justifyExport'];
+                    }
+                    this.exportFileRequests.push({
+                        'userFullName': item['RequestedBy'],
+                        'description': justifyExport,
+                        'team': item['TeamBucket'],
+                        'dataset': item['Dataset-DataProvider-Datatype'],
+                        'details': item['ApprovalForm'],
+                        'reviewFile': item['S3Key'],
+                        'S3KeyHash': item['S3KeyHash'],
+                        'RequestedBy_Epoch': item['RequestedBy_Epoch'],
+                        'S3Key': item['S3Key'],
+                        'TeamBucket': item['TeamBucket'],
+                        'RequestReviewStatus': item['RequestReviewStatus'],
+                        'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
+                        'UserEmail': item['UserEmail'],
+                        'TeamName': item['TeamName'],                              // NOT AN ATTRIBUTE  IN  exportFileRequestTable
+                        'ReqReceivedDate': item['ReqReceivedDate']
+                    }
+                    );
+                    // } 
                 }
 
-                for(let items of response['autoExportRequests']) {
-                    for(let item of items) {
-                        //console.log(item);
-                        this.autoExportRequests.push({'userFullName' : item['UserID'],
-                            'dataset' : item['Dataset-DataProvider-Datatype'],
-                            'AutoExportStatus' : item['AutoExportStatus'],
+                for (let item of response['exportRequests']['tableRequests']) {
+                    //  for(let item of items) {
+                    let justifyExport = "";
+                    if ('justifyExport' in item['ApprovalForm']) {
+                        justifyExport = item['ApprovalForm']['justifyExport'];
+                    }
+                    let teamName = "";
+                    if ('privateDatabase' in item['ApprovalForm']) {                                                    // privateDatabase assigned from team_slug
+                        teamName = item['ApprovalForm']['privateDatabase'];
+                    }
+                    this.exportTableRequests.push({
+                        'userFullName': item['RequestedBy'],
+                        'justification': justifyExport,
+                        'team': teamName,
+                        'dataset': item['Dataset-DataProvider-Datatype'],
+                        'table': item['TableName'],
+                        'details': item['ApprovalForm'],
+                        // 'reviewFile' : item['S3Key'],
+                        'S3KeyHash': item['S3KeyHash'],
+                        'RequestedBy_Epoch': item['RequestedBy_Epoch'],
+                        'S3Key': item['S3Key'],
+                        // 'TeamBucket' : item['TeamBucket'],
+                        'RequestReviewStatus': item['RequestReviewStatus'],
+                        'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
+                        'UserEmail': item['UserEmail'],
+                        //'TeamName': item['TeamName'],
+                        'ReqReceivedDate': item['ReqReceivedDate']
+                    }
+                    );
+                    //  } 
+                }
+
+                for (let items of response['trustedRequests']) {
+                    for (let item of items) {
+                        console.log(item);
+                        this.trustedRequests.push({
+                            'userFullName': item['UserID'],
+                            'dataset': item['Dataset-DataProvider-Datatype'],
+                            'TrustedStatus': item['TrustedStatus'],
                             'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
                             'UserEmail': item['UserEmail'],
-                            'justification': item['Justification']});
+                            'justification': item['TrustedJustification']
+                        });
+                    }
+                }
+
+                for (let items of response['autoExportRequests']) {
+                    for (let item of items) {
+                        //console.log(item);
+                        this.autoExportRequests.push({
+                            'userFullName': item['UserID'],
+                            'dataset': item['Dataset-DataProvider-Datatype'],
+                            'AutoExportStatus': item['AutoExportStatus'],
+                            'ReqReceivedTimestamp': item['ReqReceivedTimestamp'],
+                            'UserEmail': item['UserEmail'],
+                            'justification': item['Justification']
+                        });
                     }
                 }
 
                 console.log('Request Sent Successfully');
-                this.exportFileRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
-                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
+
+                this.exportFileRequests.sort(function (reqReceivedTimestamp1, reqReceivedTimestamp2) {
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ? 1 : -1;
                 });
-                this.trustedRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
-                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
+                this.exportTableRequests.sort(function (reqReceivedTimestamp1, reqReceivedTimestamp2) {
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ? 1 : -1;
                 });
-                this.autoExportRequests.sort(function(reqReceivedTimestamp1, reqReceivedTimestamp2){
-                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ?1:-1;
+                this.trustedRequests.sort(function (reqReceivedTimestamp1, reqReceivedTimestamp2) {
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ? 1 : -1;
+                });
+                this.autoExportRequests.sort(function (reqReceivedTimestamp1, reqReceivedTimestamp2) {
+                    return reqReceivedTimestamp1.ReqReceivedTimestamp < reqReceivedTimestamp2.ReqReceivedTimestamp ? 1 : -1;
                 });
             }
         );
@@ -168,14 +224,28 @@ export class ExportRequestsComponent implements OnInit {
             }
         );*/
     }
-    
+
     renderApprovalForm(approvalForm) {
         console.log(approvalForm.details);
         this.detailsOnclick = 1;
         const dialogRef = this.dialog.open(DialogBoxComponent, {
             width: '700px',
             height: '640px',
-            data: { mailType: 'Details for export request', approvalForm: approvalForm.details}
+            data: { mailType: 'Details for export request', approvalForm: approvalForm.details }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+
+    renderTableApprovalForm(approvalForm) {
+        console.log(approvalForm.details);
+        this.detailsOnclick = 1;
+        const dialogRef = this.dialog.open(DialogBoxComponent, {
+            width: '700px',
+            height: '640px',
+            data: { mailType: 'Details for Edge Table Publication Request', approvalForm: approvalForm.details }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -225,7 +295,8 @@ export class ExportRequestsComponent implements OnInit {
         console.log('requestDownloadForReview  ends')
     }
 
-    submitApproval(status,targetObj) {
+
+    submitApproval(status, targetObj) {
         let reqBody = {};
         reqBody['status'] = status;
         reqBody['key1'] = targetObj['S3KeyHash'];
@@ -242,8 +313,28 @@ export class ExportRequestsComponent implements OnInit {
             }
         );
     }
-    
-    submitTrustedApproval(status,key1,key2,trustedRequest) {
+
+
+    submitTableApproval(status, targetObj) {
+        let reqBody = {};
+        reqBody['status'] = status;
+        reqBody['key1'] = targetObj['S3KeyHash'];
+        reqBody['key2'] = targetObj['RequestedBy_Epoch'];
+        reqBody['datainfo'] = targetObj['dataset'];
+        reqBody['S3Key'] = targetObj['S3Key'];
+        reqBody['TableName'] = targetObj['table'];
+        reqBody['userEmail'] = targetObj['UserEmail'];
+
+        this.gatewayService.post("export/requests/updatefilestatus?message=" + encodeURI(JSON.stringify(reqBody))).subscribe(
+            (response: any) => {
+                this.getExportFileRequests();
+                console.log('Request Sent Successfully');
+            }
+        );
+    }
+
+
+    submitTrustedApproval(status, key1, key2, trustedRequest) {
         let reqBody = {};
         reqBody['status'] = status;
         reqBody['key1'] = key1;
@@ -258,7 +349,8 @@ export class ExportRequestsComponent implements OnInit {
         );
     }
 
-    submitAutoExportApproval(status,key1,key2,autoExportRequest) {
+
+    submitAutoExportApproval(status, key1, key2, autoExportRequest) {
         let reqBody = {};
         reqBody['status'] = status;
         reqBody['key1'] = key1;
@@ -272,7 +364,7 @@ export class ExportRequestsComponent implements OnInit {
             }
         );
     }
-     
+
     /* Cheryl - commenting out, this method is not being used anywhere
     getMetadataForS3Objects(filename: string): any {
         var resp;

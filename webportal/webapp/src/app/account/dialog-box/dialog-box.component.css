@@ -37,6 +37,13 @@ mat_tab_style{
     float: right;
     margin-left: 7px;
 }
+
+/*
+.request-exportSubmitBtn:disabled:hover{
+    cursor: wait;
+}
+*/
+
 /* FileUpload */
 .ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget, .ui-fileupload-choose.ui-button .ui-state-default {
       background-color: #0275d8;
