@@ -18,6 +18,7 @@ class mockMatDialog {
 
 let dialog: mockMatDialog;
 
+// // These response formats appear to be unused
 // let RESPONSE1 = {
 //   'username': 'testuser',
 //   'email': 'testuser@gmail.com',
@@ -315,7 +316,7 @@ describe('ExportRequestsComponent', () => {
     .compileComponents();
   }));
 
- 
+
   beforeEach(() => {
     let store = {};
     const mockSessionStorage = {
@@ -361,7 +362,7 @@ describe('ExportRequestsComponent', () => {
     expect(mockObjectMap['mockApiGatewayService'].post).toHaveBeenCalled(); 
   });
 
-  
+
   it('should open and close renderApprovalForm dialog box', () => {
     let approvalForm = {'s3Requests':[{ 'ApprovalForm': {'justifyExport' : 'justifyExport'}}] || []};
     component.renderApprovalForm(approvalForm);
@@ -369,7 +370,7 @@ describe('ExportRequestsComponent', () => {
     expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
   });
   
-  
+  // // this is no longer called since files are made available for review using presigned URL
   // it('should call copyFileToTeamBucket and call api gateway service export file for review', () => {
   //     sessionStorage.setItem('team_bucket_name', 'dot-sdc-software');
   //     component.userName = 'sdemo';
@@ -387,7 +388,7 @@ describe('ExportRequestsComponent', () => {
     expect(mockObjectMap['mockApiGatewayService'].getDownloadUrl).toHaveBeenCalled();
   });  
   
- 
+
   it('should call api gateway service updatefilestatus (s3 export)', () => {
     let status = "status";
     let targetObj = {'TeamBucket' : 'dev-dot-sdc-raw-submissions-911061262852-us-east-1', 'dataset' : 'WAZE', 'RequestedBy_Epoch' : 'Cheryl Rousseau', 'UserEmail' : 'crousseau@acrotron.com', 'S3Key' : 's3key', 'S3KeyHash' : 's3keyhash','TeamName' : 'SDC Team'};
