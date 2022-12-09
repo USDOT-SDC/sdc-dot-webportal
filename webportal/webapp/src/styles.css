@@ -58,8 +58,16 @@ html {
     padding-top: 5%;
 }
 
+.padding-top-xxs {
+    padding-top: 3%;
+}
+
 .pull-margin-40{
     margin-left: -40px;
+}
+
+.push-margin-40{
+    margin-left: 40px;
 }
 .push-top-40 {
     margin-top: 80px;
@@ -111,7 +119,7 @@ font-size: 16px;
 font-size: 16px;
 }
 
-.custom-export-dialog .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label. {
+.custom-export-dialog .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
 transform: translateY(-1.28125em) scale(.90) perspective(100px) translateZ(0.001px);
 width: 133.33333%;
 }
@@ -126,4 +134,9 @@ width: 133.33333%;
 
 .existing-trust-snackbar {
     white-space: pre-wrap
+}
+
+.outside {
+    list-style-position: outside;
+    list-style-type: disc;
 }

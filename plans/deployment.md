@@ -1,12 +1,13 @@
 # Deployment Plan
 
-[v2.16.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.16.0)
+[v2.17.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.17.0)
 
 
 ### Pre-Deployment - General Tasks:
 1. Merge open PR into master.
-2. Reset the 2.16.0 tag in the remote repo, deleting from (development) branch and adding to main.
+2. Reset the 2.17.0 tag in the remote repo, deleting from (development) branch and adding to main.
 3. On  PROD webportal, ensure a minimum of 5 files are available for data export so they’re available for export as part of post-release testing.
+4. Grab screenshots of pre-deploy FAQ content.
 
 
 ### Pre-Deployment - Ready the Build Environment:
@@ -27,7 +28,7 @@
    
       
 ### Deployment Plan for v2.16.0:
-1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 2.16.0
+1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 2.17.0
 
 
 2. Navigate to the webportal\webapp folder, within the repo directory, and run `ecs_prod_deploy.sh`.

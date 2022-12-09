@@ -5,3 +5,15 @@
     color: rgb(52, 73, 95);
     padding: 40px;
 }
+
+  #img-highlight {
+    border: 1px solid #E3E3E2;
+    margin-bottom: 1em;
+    padding: 0.24em;
+}
+
+a.linkFont {
+    font-size: 17px;
+    color:  #337ab7;
+text-decoration: underline;
+}

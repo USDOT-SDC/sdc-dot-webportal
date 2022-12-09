@@ -47,6 +47,11 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+**December 9, 2022. SDC sdc-dot-webportal Release 2.17.0**
+### What's New in Release 2.17.0
+* Helpful Links section has been added to the FAQ page.
+* FAQ answers have been updated.
+
 **November 3, 2022. SDC sdc-dot-webportal Release 2.16.0**
 ### What's New in Release 2.16.0
 * Users can now request approval for their tables to be exported the the public Edge DB.

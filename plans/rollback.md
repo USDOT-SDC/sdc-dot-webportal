@@ -1,6 +1,6 @@
 # Rollback Plan
 
-[v2.16.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.16.0)
+[v2.17.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/2.17.0)
 
 
 ### If rollback is required after deployment:
@@ -20,10 +20,10 @@
 3. Verify the website is running.
 
 
-4. On the DATASETS page verify that no "My Edge Database"panel/ no "Request Table Export to Edge DB" button appears below the "My Datasets/Algorithm" panel
+4. On the FAQ page verify that no "Helpful LInks"  section appears above the FAQ section.
 
 
-5. On the EXPORT REQUESTS page, ensure that no 'Table Export Requests' table appears between the 'File Export' and 'Trusted Requests' tables.
+5. Also verify pre-deploy FAQ images and content exist.
 
 
 6. Verify that login redirects, data upload, data export(for both trusted and non-trusted datasets), and data export approval functions are working.
