@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RoutingModule } from './app.routes';
-import { HttpModule } from '@angular/http';
+//import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
@@ -26,7 +26,7 @@ import { CognitoService } from '../services/cognito.service';
 import { ApiGatewayService } from '../services/apigateway.service';
 import { WorkstationComponent } from './account/workstation/workstation.component';
 import { RegisterComponent } from './main/register/register.component';
-import { ToastyModule } from 'ng2-toasty';
+//import { ToastyModule } from 'ng2-toasty';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
@@ -72,7 +72,7 @@ import { LoaderInterceptor } from './account/services/loader.interceptor';
     RouterModule.forRoot([]),
     RoutingModule,
     FormsModule,
-    HttpModule,
+    //HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -104,11 +104,12 @@ import { LoaderInterceptor } from './account/services/loader.interceptor';
     MatDatepickerModule,
     MatNativeDateModule,
     MarkdownModule.forRoot(),
-    ToastyModule.forRoot(),
+    //ToastyModule.forRoot(),
     //DataTableModule
   ],
   //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
-  exports: [BrowserModule, ToastyModule, RouterModule ],
+  //exports: [BrowserModule, ToastyModule, RouterModule ],
+  exports: [BrowserModule, RouterModule ],
   providers: [
     //{provide: APP_BASE_HREF, useValue: '/'},
     CognitoService,

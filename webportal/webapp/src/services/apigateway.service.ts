@@ -1,12 +1,12 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+//import { Http, Response, Headers, RequestOptions } from '@angular/http';
+//import { Observable } from 'rxjs/Observable';
 import { CognitoService } from './cognito.service';
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/catch'
-import 'rxjs/add/observable/throw';
 import { environment } from '../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 
 @Injectable()
 export class ApiGatewayService {
@@ -20,7 +20,7 @@ export class ApiGatewayService {
     name = "ApiGatewayService";
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private cognitoService: CognitoService) {
         this.extractData = this.getExtractDataFunction();
         this.handleError = this.getHandleErrorFunction();
@@ -59,14 +59,14 @@ export class ApiGatewayService {
             }
             error.statusText = message;
             error.message = message;
-            return Observable.throw(error);
+            return observableThrowError(error);
         };
     }
 
     // Set required headers on the request
     setRequestHeaders() {
         let authToken = this.cognitoService.getIdToken();
-        const headers = new Headers({
+        const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': " " + authToken,
             'Access-Control-Allow-Origin': '*'
@@ -86,72 +86,72 @@ export class ApiGatewayService {
     // HTTP GET method invocation
     get(url: string) {
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     sendRequestMail(url: string) {
         this.setRequestHeaders();
-        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     getUserInfo(url: string) {
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     post(url: string){
         this.setRequestHeaders();
-        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     getPresignedUrl(url: string){
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     getDownloadUrl(url: string){
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     getMetadataOfS3Object(url: string){
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     sendExportRequest(url: string) {
         this.setRequestHeaders();
         console.log("sending request 2 " + ApiGatewayService._API_ENDPOINT + url ) 
-        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
-        .map(this.extractData)
-        .catch(this.handleError);
+        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options).pipe(
+        map(this.extractData),
+        catchError(this.handleError),);
     }
 
     getDesiredInstanceTypesAndCosts(url: string){
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 
     modifyUserWorkstation(url: string){
         this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options).pipe(
+            map(this.extractData),
+            catchError(this.handleError),);
     }
 }

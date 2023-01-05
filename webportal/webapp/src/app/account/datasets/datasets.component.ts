@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { MatSnackBar } from '@angular/material';
@@ -264,11 +266,11 @@ export class DatasetsComponent implements OnInit {
     getMetadataForS3Objects(filename: string): any{
         var resp;
         console.log('getMetadataForS3Objects called');
-        return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
+        return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).pipe(map(
             (response: any) => {
                 resp=response;
                 return resp;
-        });     
+        }));     
     }
 
     parseQueryString(queryString: string): Map<string, string> {

@@ -1,7 +1,10 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
+//import { Observable } from 'rxjs';
+
 import { environment } from '../../../../environments/environment';
 import { CognitoService } from '../../../../services/cognito.service';
 
@@ -24,10 +27,10 @@ export class LoginSyncService {
   }
 
   userAccountsLinked(): Observable<any> {
-    return this.http.get(this.accountLinkedUrl, this.httpOptions)
-      .map((response) => {
+    return this.http.get(this.accountLinkedUrl, this.httpOptions).pipe(
+      map((response) => {
         return response;
-      }).catch(this.handleError);
+      }),catchError(this.handleError),);
   }
 
   linkAccounts(username: string, password: string): Observable<any> {
@@ -36,10 +39,10 @@ export class LoginSyncService {
       'password': password
     };
 
-    return this.http.post(this.linkAccountUrl, payload, this.httpOptions)
-      .map((response) => {
+    return this.http.post(this.linkAccountUrl, payload, this.httpOptions).pipe(
+      map((response) => {
         return response;
-      }).catch(this.handleError);
+      }),catchError(this.handleError),);
   }
 
   resetTemporaryPassword(username: string, currentPassword: string, newPassword: string, newPasswordConfirmation: string): Observable<any> {
@@ -50,10 +53,10 @@ export class LoginSyncService {
       'newPasswordConfirmation': newPasswordConfirmation
     };
 
-    return this.http.post(this.resetTemporaryPasswordUrl, payload, this.httpOptions)
-      .map((response) => {
+    return this.http.post(this.resetTemporaryPasswordUrl, payload, this.httpOptions).pipe(
+      map((response) => {
         return response;
-      }).catch(this.handleError);
+      }),catchError(this.handleError),);
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -62,6 +65,6 @@ export class LoginSyncService {
     const userErrorMessage = (error.error) ? error.error['userErrorMessage'] : 'Sorry, something went wrong. Please try again later';
 
     console.log(devErrorMsg);
-    return Observable.throw({ userErrorMessage: userErrorMessage, body: error.error});
+    return observableThrowError({ userErrorMessage: userErrorMessage, body: error.error});
   }
 }

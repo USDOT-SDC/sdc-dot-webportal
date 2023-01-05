@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiGatewayService} from '../../../services/apigateway.service';
-import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
+//import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
 import {MatSnackBar} from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { CognitoService } from '../../../services/cognito.service';
