@@ -12,10 +12,10 @@
 mat_tab_style{
     height: 451px;
 }
-/deep/ .mat-tab-body-content {
+::ng-deep .mat-tab-body-content {
     overflow: hidden !important;
 }
-/deep/ .mat-dialog-content {
+::ng-deep .mat-dialog-content {
     max-height: 200vh !important;
 }
 .mat-dialog-actions {
@@ -147,6 +147,6 @@ mat_tab_style{
     height: 140px;
 }
 
-/deep/ .ui-chkbox {
+::ng-deep .ui-chkbox {
 vertical-align: top;
 }

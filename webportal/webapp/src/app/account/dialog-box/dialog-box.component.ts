@@ -1,8 +1,15 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';                     //child to parent data sharing via ViewChild 
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
-import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
-import { CheckboxModule } from 'primeng/primeng';
+//import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
+import { MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+//import {MatTooltipModule} from '@angular/material/tooltip'
+import { MatSnackBar } from '@angular/material/snack-bar';
+//import { MatRadioModule } from '@angular/material/radio';
+//import { MatCheckboxModule } from '@angular/material/checkbox';
+//import { MatTabsModule } from '@angular/material/tabs';
+//import { MatDatepicker }  from '@angular/material/datepicker'; 
+//import { CheckboxModule } from 'primeng/primeng';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
@@ -86,7 +93,7 @@ export class DialogBoxComponent implements OnInit {
     // TODO
     scheduleUpTime = false;
     additionalDiskSpace = '';
-    @ViewChild('fileUpload') fileUpload: FileUpload;
+    @ViewChild('fileUpload', {static: false}) fileUpload: FileUpload;
 
     dataTypes = [
         { value: 'dataset', viewValue: 'Dataset' },

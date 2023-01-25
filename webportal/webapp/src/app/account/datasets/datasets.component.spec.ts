@@ -2,7 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatasetsComponent } from './datasets.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogModule, MatSnackBar, MatDialog} from '@angular/material';
+//import { MatDialogModule, MatSnackBar, MatDialog} from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { Routes } from '@angular/router';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { of } from 'rxjs/observable/of';

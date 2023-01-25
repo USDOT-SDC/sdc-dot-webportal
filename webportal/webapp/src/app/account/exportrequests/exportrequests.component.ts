@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { MatSnackBar } from '@angular/material';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+//import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
+
+
 import { SelectionModel } from '@angular/cdk/collections'
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { DataSource } from '@angular/cdk/table';

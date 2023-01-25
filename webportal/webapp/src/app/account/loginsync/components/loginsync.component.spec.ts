@@ -7,7 +7,7 @@ import { WindowToken } from '../../../../factories/window.factory';
 import { CognitoService } from '../../../../services/cognito.service';
 import { Observable } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 
 describe('LoginsyncComponent', () => {
     let component: LoginSyncComponent;

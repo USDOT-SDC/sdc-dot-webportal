@@ -7,8 +7,25 @@ import { RoutingModule } from './app.routes';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserXhr } from '@angular/http';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
-import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
+//import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
+//import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTabsModule } from '@angular/material/tabs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';  
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';     //MatOption is  imported from MatSelectModule not MatOptionModule
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
@@ -32,11 +49,11 @@ import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 import { MarkdownModule } from 'ngx-md';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
-import {PanelModule, SharedModule} from 'primeng/primeng';
-import {RadioButtonModule} from 'primeng/primeng';
+import { PanelModule, SharedModule} from 'primeng/primeng';
+import { RadioButtonModule} from 'primeng/primeng';
 import { CheckboxModule } from 'primeng/primeng';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
-import {MessageModule} from 'primeng/message';
+import { MessageModule } from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
 import { AlertComponent } from './account/components/alert/alert.component';
 import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
@@ -88,7 +105,7 @@ import { LoaderInterceptor } from './account/services/loader.interceptor';
     MatFormFieldModule,
     MatDialogModule,
     MatSelectModule,
-    MatOptionModule,
+    //MatOptionModule,
     MatRadioModule,
     MatCheckboxModule,
     MatTabsModule,
