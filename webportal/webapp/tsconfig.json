@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "importHelpers": false,
+    "module": "esnext",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,

@@ -93,7 +93,7 @@ export class DialogBoxComponent implements OnInit {
     // TODO
     scheduleUpTime = false;
     additionalDiskSpace = '';
-    @ViewChild('fileUpload', {static: false}) fileUpload: FileUpload;
+    @ViewChild('fileUpload') fileUpload: FileUpload;
 
     dataTypes = [
         { value: 'dataset', viewValue: 'Dataset' },

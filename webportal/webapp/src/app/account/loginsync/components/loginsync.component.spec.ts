@@ -6,6 +6,7 @@ import { LoginSyncService } from '../services/loginsyncservice.service';
 import { WindowToken } from '../../../../factories/window.factory';
 import { CognitoService } from '../../../../services/cognito.service';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
 
@@ -43,7 +44,8 @@ describe('LoginsyncComponent', () => {
     });
 
     it('redirects to DoT AD if the link type is DoT AD', () => {
-        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+        //spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(of({ signInType: 'dot_active_directory_user' }));
 
         fixture.debugElement.query(By.css('form')).triggerEventHandler('submit', null);
         fixture.detectChanges();
@@ -52,7 +54,8 @@ describe('LoginsyncComponent', () => {
       });
 
     it('redirects to Login.gov if the link type is login.gov', () => {
-        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+        //spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(of({ signInType: 'login_gov_user' }));
 
         fixture.debugElement.query(By.css('#signin_form')).triggerEventHandler('submit', null);
         fixture.detectChanges();
@@ -110,7 +113,8 @@ describe('LoginsyncComponent', () => {
         });
 
         it('redirects the user to login.gov', () => {
-            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+            //spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(of({ signInType: 'login_gov_user' }));
             component.newPassword = 'Lets-Switch-To-React';
             component.newPasswordConfirmation = 'Lets-Switch-To-React';
 
@@ -121,7 +125,8 @@ describe('LoginsyncComponent', () => {
         });
 
         it('redirects the user to dot ad', () => {
-            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+            //spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(of({ signInType: 'dot_active_directory_user' }));
             component.newPassword = 'Lets-Switch-To-React';
             component.newPasswordConfirmation = 'Lets-Switch-To-React';
 
