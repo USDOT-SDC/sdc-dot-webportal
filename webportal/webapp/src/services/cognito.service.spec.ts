@@ -12,7 +12,8 @@ describe('CognitoService', () => {
                 { provide: WindowToken, useValue: MockWindow }
             ]
         }).compileComponents();
-        classUnderTest = TestBed.get(CognitoService);
+        //classUnderTest = TestBed.get(CognitoService);
+        classUnderTest = TestBed.inject(CognitoService);
     });
 
     it('should be created', () => {

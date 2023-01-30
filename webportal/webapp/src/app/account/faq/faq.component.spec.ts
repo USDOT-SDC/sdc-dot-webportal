@@ -72,7 +72,9 @@ describe('FaqComponent', () => {
   }));
 
   it('should test navigationEnd', () => {
-    TestBed.get(Router)
+  //TestBed.get(Router)
+    TestBed.inject(Router)  
+
       .navigate(['/home'])
         .then(() => {         
           console.log(location);

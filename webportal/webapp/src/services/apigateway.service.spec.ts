@@ -34,8 +34,10 @@ describe('ApiGatewayService', () => {
     });
 
     // We inject our service (which imports the HttpClient) and the Test Controller
-    httpTestingController = TestBed.get(HttpTestingController);
-    service = TestBed.get(ApiGatewayService);
+   // httpTestingController = TestBed.get(HttpTestingController);
+   // service = TestBed.get(ApiGatewayService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(ApiGatewayService);
    
   });
 

@@ -31,8 +31,10 @@ describe('LoginsyncComponent', () => {
 
     beforeEach(() => {
         fixture = TestBed.createComponent(LoginSyncComponent);
-        mockLoginSyncService = TestBed.get(LoginSyncService);
-        mockWindow = TestBed.get(WindowToken);
+        //mockLoginSyncService = TestBed.get(LoginSyncService);
+        //mockWindow = TestBed.get(WindowToken);
+        mockLoginSyncService = TestBed.inject(LoginSyncService);
+        mockWindow = TestBed.inject(WindowToken);
         component = fixture.componentInstance;
         component.username = 'the_username';
         component.password = 'the_password';

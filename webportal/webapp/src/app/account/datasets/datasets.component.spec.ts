@@ -142,7 +142,8 @@ describe('DatasetsComponent', () => {
     fixture = TestBed.createComponent(DatasetsComponent);
     component = fixture.componentInstance;    
     //dialog = TestBed.get(MatDialog);
-    dialogSpy = spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    //dialogSpy = spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
     fixture.detectChanges();
   });
 

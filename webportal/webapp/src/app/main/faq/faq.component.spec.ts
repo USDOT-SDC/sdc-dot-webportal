@@ -51,7 +51,8 @@ describe('HomeFaqComponent', () => {
   }));
 
   it('should test navigationEnd', () => {
-    TestBed.get(Router)
+    //TestBed.get(Router)
+    TestBed.inject(Router)    
       .navigate(['/home'])
         .then(() => {         
           console.log("##### Test Location ", location);
@@ -68,7 +69,8 @@ describe('HomeFaqComponent', () => {
     //     val: 'home/test?debug#fragment'
     // }
     //let tree = jasmine.createSpyObj('tree', ['fragment']);
-    TestBed.get(Router)
+    //TestBed.get(Router)
+    TestBed.inject(Router)
       .navigate(['/home'])
         .then(() => {         
           console.log("##### Test Location ", location);
