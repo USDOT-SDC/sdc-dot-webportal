@@ -3,6 +3,7 @@ import { CognitoService } from '../../../../services/cognito.service';
 import { Router } from '@angular/router';
 import { WindowToken } from '../../../../factories/window.factory';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { Injector } from '@angular/core';
 import { LoginSyncService } from '../services/loginsyncservice.service';
 
@@ -60,7 +61,8 @@ describe('LoginSyncGuard', () => {
     });
 
     it('should return true for a user logged in with ADFS creds', () => {
-        spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(Observable.of({ accountLinked: true }));
+        //spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(Observable.of({ accountLinked: true }));
+        spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(of({ accountLinked: true }));
         spyOn(mockRouter, 'navigate');
 
         result = <Observable<boolean>> classUnderTest.canActivate();
@@ -72,7 +74,8 @@ describe('LoginSyncGuard', () => {
     });
 
     it('should return false for a user logged in with Login.gov creds', () => {
-        spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(Observable.of({ accountLinked: false }));
+        //spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(Observable.of({ accountLinked: false }));
+        spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(of({ accountLinked: false }));
         spyOn(mockRouter, 'navigate');
 
         result = <Observable<boolean>> classUnderTest.canActivate();
@@ -85,7 +88,8 @@ describe('LoginSyncGuard', () => {
 
     it('should redirect to Login.gov if the user has been migrated', () => {
         spyOn(mockCognitoService, 'buildLoginGovRedirectUrl').and.returnValue('some_url');
-        spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(Observable.of({ accountLinked: false, migratedLegacyUser: true }));
+        //spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(Observable.of({ accountLinked: false, migratedLegacyUser: true }));
+        spyOn(mockLoginSyncService, 'userAccountsLinked').and.returnValue(of({ accountLinked: false, migratedLegacyUser: true }));
         spyOn(mockRouter, 'navigate');
 
         result = <Observable<boolean>> classUnderTest.canActivate();
