@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WorkstationComponent } from './workstation.component';
 import { ApiGatewayService } from '../../../services/apigateway.service';
@@ -35,7 +35,7 @@ describe('WorkstationComponent', () => {
      'data': "dictionary"
   }
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     let mockMatSnackBar = {
       open: jasmine.createSpy('open')

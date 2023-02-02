@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DialogBoxComponent } from './dialog-box.component';
 //import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
@@ -82,7 +82,7 @@ describe('DialogBoxComponent', () => {
     close: () => { }
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     let mockMatDialogRef = {
       close: jasmine.createSpy('close')

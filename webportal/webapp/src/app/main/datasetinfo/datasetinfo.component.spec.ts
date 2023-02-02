@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatasetinfoComponent } from './datasetinfo.component';
 //import { MatButtonModule, MatMenuModule, MatCardModule, MatToolbarModule, MatIconModule, MatTableModule, MatExpansionModule, MatSnackBarModule, MatInputModule, MatFormFieldModule, MatDialogModule, MatSelectModule, MatOptionModule, MatRadioModule, MatCheckboxModule } from '@angular/material';
@@ -21,7 +21,7 @@ describe('DatasetinfoComponent', () => {
   let component: DatasetinfoComponent;
   let fixture: ComponentFixture<DatasetinfoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         MatButtonModule,
@@ -59,7 +59,7 @@ describe('DatasetinfoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create the app', async(() => {
+  it('should create the app', waitForAsync(() => {
     const fixture = TestBed.createComponent(DatasetinfoComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();

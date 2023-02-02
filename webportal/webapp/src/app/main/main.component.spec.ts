@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MainComponent } from './main.component';
 import { NavigationEnd, Router, Routes } from '@angular/router';
@@ -20,7 +20,7 @@ describe('MainComponent', () => {
     { path: '**', redirectTo: 'home' }
   ];
 
-  beforeEach(async(() => {    
+  beforeEach(waitForAsync(() => {    
     let mockCognitoAPIService = {
       login: jasmine.createSpy('login')
     }

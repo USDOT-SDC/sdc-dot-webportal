@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExportRequestsComponent } from './exportrequests.component';
 import { of } from 'rxjs/observable/of';
@@ -306,7 +306,7 @@ describe('ExportRequestsComponent', () => {
      let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
      dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
    
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ MatDialogModule ],
       schemas: [ NO_ERRORS_SCHEMA],

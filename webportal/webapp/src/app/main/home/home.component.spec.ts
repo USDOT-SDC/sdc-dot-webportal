@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ describe('HomeComponent', () => {
   
   let mockObjectMap = {};
      
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let mockCognitoAPIService = {
       onLoad: jasmine.createSpy('onLoad'),
       isUserSessionActive: jasmine.createSpy('isUserSessionActive'),

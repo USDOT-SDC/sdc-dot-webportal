@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { HomeFaqComponent } from './faq.component';
 import { Routes, Router, UrlTree } from '@angular/router';
@@ -17,7 +17,7 @@ describe('HomeFaqComponent', () => {
   let fixture: ComponentFixture<HomeFaqComponent>;  
   let tree;
 
-  beforeEach(async(() => {    
+  beforeEach(waitForAsync(() => {    
 
     TestBed.configureTestingModule({
       imports: [
@@ -44,7 +44,7 @@ describe('HomeFaqComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create the app', async(() => {
+  it('should create the app', waitForAsync(() => {
     const fixture = TestBed.createComponent(HomeFaqComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input } from '@angular/core';
 import { LoginSyncComponent } from './loginsync.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ describe('LoginsyncComponent', () => {
     let mockLoginSyncService: MockLoginSyncService;
     let mockWindow;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             imports: [FormsModule, ReactiveFormsModule, MatCardModule],
             declarations: [ LoginSyncComponent, MockLoaderComponent, MockAlertComponent ],

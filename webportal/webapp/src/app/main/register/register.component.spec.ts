@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +10,7 @@ describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let mockCognitoAPIService = {
       login: jasmine.createSpy('login')
     }

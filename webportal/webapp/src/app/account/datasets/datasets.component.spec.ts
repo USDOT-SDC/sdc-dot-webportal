@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatasetsComponent } from './datasets.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -78,7 +78,7 @@ describe('DatasetsComponent', () => {
   let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
   dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     let mockMatSnackBar = {
       open: jasmine.createSpy('open')
     };

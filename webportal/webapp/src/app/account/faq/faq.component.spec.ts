@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FaqComponent } from './faq.component';
 //import { MatButtonModule, MatMenuModule, MatCardModule, MatToolbarModule, MatIconModule, MatTableModule, MatExpansionModule, MatSnackBarModule, MatInputModule, MatFormFieldModule, MatDialogModule, MatSelectModule, MatOptionModule, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
@@ -43,7 +43,7 @@ describe('FaqComponent', () => {
   let component: FaqComponent;
   let fixture: ComponentFixture<FaqComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes(routes),
@@ -65,7 +65,7 @@ describe('FaqComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create the app', async(() => {
+  it('should create the app', waitForAsync(() => {
     const fixture = TestBed.createComponent(FaqComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();

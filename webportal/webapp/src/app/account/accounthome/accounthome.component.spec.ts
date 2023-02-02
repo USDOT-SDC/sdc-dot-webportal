@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountHomeComponent } from './accounthome.component';
 import { MatCardModule } from '@angular/material/card';
@@ -21,7 +21,7 @@ describe('MyAccountComponent', () => {
   let component: AccountHomeComponent;
   let fixture: ComponentFixture<AccountHomeComponent>;  
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     
     TestBed.configureTestingModule({      
       imports: [        
