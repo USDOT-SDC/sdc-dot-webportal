@@ -139,6 +139,7 @@ import { LoaderInterceptor } from './account/services/loader.interceptor';
         //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
         // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
     ],
+   //entryComponents: [DialogBoxComponent],    //this was removed by angular v13 migration.... added back as comment pending research for now
     bootstrap: [AppComponent]
 })
 export class AppModule { }
