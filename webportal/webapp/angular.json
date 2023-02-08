@@ -238,7 +238,6 @@
       }
     }
   },
-  "defaultProject": "angular.io-example",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
