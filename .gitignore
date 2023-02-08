@@ -22,6 +22,7 @@ webportal/webapp/package-lock.json
 webportal/webapp/.vscode/*
 
 # misc
+webportal/webapp/.angular
 webportal/webapp/.sass-cache
 webportal/webapp/connect.lock
 webportal/webapp/coverage
