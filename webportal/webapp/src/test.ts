@@ -14,7 +14,6 @@ import {
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
 declare const __karma__: any;
-declare const require: any;
 
 // Prevent Karma from running prematurely.
 __karma__.loaded = function () {};
@@ -26,9 +25,8 @@ getTestBed().initTestEnvironment(
     teardown: { destroyAfterEach: false }
 }
 );
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
+
+//TEMP COMMENT - Migration to 15 removed  lines to find tests and load modules -- previously lines 29 - 32
+
 // Finally, start Karma to run the tests.
 __karma__.start();
