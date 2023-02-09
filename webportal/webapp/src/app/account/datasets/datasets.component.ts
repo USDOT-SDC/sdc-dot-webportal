@@ -2,8 +2,8 @@
 import {map} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import * as $ from 'jquery';
 

@@ -4,7 +4,7 @@ import { WorkstationComponent } from './workstation.component';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
 //import { MatSnackBar } from '@angular/material';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { APP_BASE_HREF } from '@angular/common';
 import { of } from 'rxjs/observable/of';
 import { NO_ERRORS_SCHEMA } from '@angular/core';

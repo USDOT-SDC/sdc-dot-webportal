@@ -4,8 +4,8 @@ import { ExportRequestsComponent } from './exportrequests.component';
 import { of } from 'rxjs/observable/of';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 //import { MatDialogModule, MatSnackBar, MatDialog } from '@angular/material';
-import { MatDialogModule,  MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacyDialogModule as MatDialogModule,  MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 let RESULT = {'message': 'dialog box closed'};

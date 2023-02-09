@@ -8,7 +8,7 @@ import { CognitoService } from '../../../../services/cognito.service';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { MatCardModule } from '@angular/material/card';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 
 describe('LoginsyncComponent', () => {
     let component: LoginSyncComponent;

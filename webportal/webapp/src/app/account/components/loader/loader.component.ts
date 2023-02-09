@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { Subject } from 'rxjs';
 import { LoaderService } from '../../services/loader.service';
 
