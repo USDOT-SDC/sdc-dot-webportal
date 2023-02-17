@@ -184,7 +184,7 @@
         <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 500px">
             <mat-card-title> {{selectedsdcDataset.Name}} {{selectedsdcDataset.Type}}</mat-card-title><hr>
             <mat-card-content style="max-height: 400px;overflow: scroll">
-                <markdown [data]="dictionary"></markdown>
+                <markdown [data]="dictionary" (ready)="onReady()"></markdown>
             </mat-card-content>
         </mat-card>
 
