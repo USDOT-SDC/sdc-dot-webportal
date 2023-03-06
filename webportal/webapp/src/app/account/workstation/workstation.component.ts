@@ -44,7 +44,7 @@ export class WorkstationComponent implements OnInit {
                     this.allow_resize = Boolean(stack.allow_resize);
                     const config = {};
                     stack['current_configuration'].split(',').forEach(element => {
-                        // tslint:disable-next-line:radix
+                        // eslint-disable-next-line radix
                         config[element.split(':')[0]] = Number(element.split(':')[1]);
                     });
                     this.transformedConfigurations.push(config);
@@ -111,7 +111,7 @@ export class WorkstationComponent implements OnInit {
       this.selectedStack = stack.stack_name;
       if (this.selectedStack === 'Programming_Stack_1'){
         const fleetName = stack.fleet_name;
-        // tslint:disable-next-line:max-line-length
+        // eslint-disable-next-line max-len
         this.gatewayService.post('streamingurl?stack_name=' + this.selectedStack + '&fleet_name=' + fleetName + '&username=' + sessionStorage.getItem('username')).subscribe(
             (response: any) => {
                 this.streamingUrl = response;

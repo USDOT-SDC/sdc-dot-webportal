@@ -80,7 +80,7 @@ export class DialogBoxComponent implements OnInit {
     diskSizeChange = true;
     cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
     memoryOptions = [2, 3.75, 4, 5.25, 7.5, 8, 10.5, 15, 15.25, 16, 21, 30, 30.5, 32, 42, 61, 64, 72, 96, 128, 144, 160, 192, 256, 384, 768];
-    // tslint:disable-next-line:max-line-length
+    // eslint-disable-next-line max-len
     additionalDiskSizeOptions = [2, 3.75, 4, 5.25, 7.5, 8, 10.5, 15, 15.25, 16, 21, 30, 30.5, 32, 42, 61, 64, 72, 96, 128, 144, 160, 192, 256, 384, 768];
     operatingSystem: string;
     defaultInstanceType: string;
@@ -187,7 +187,7 @@ export class DialogBoxComponent implements OnInit {
     states = {};
     volumeCount = '';
 
-    // tslint:disable-next-line:max-line-length
+    // eslint-disable-next-line max-len
     constructor(private gatewayService: ApiGatewayService, private router: Router, private location: Location, private http: HttpClient, public snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<DialogBoxComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -266,15 +266,15 @@ export class DialogBoxComponent implements OnInit {
     shouldAllowManageVolume() {
         // Disable add disk space feature if user has already did 2 or more increase disk-space requests in last 1 hour.
         if (localStorage.getItem('volumeCountLastModified')) {
-            // tslint:disable-next-line:max-line-length
-            // tslint:disable-next-line:radix
+            // eslint-disable-next-line max-len
+            // eslint-disable-next-line radix
             this.volumeCount = localStorage.getItem('volumeCount') ? (parseInt(localStorage.getItem('volumeCount')) + 0).toString() : '0';
-            // tslint:disable-next-line:radix
+            // eslint-disable-next-line radix
             const currentDate = Date.parse(new Date().toString());
-            // tslint:disable-next-line:radix
+            // eslint-disable-next-line radix
             const lastUpdatTime = Date.parse(localStorage.getItem('volumeCountLastModified'));
             if (((currentDate - lastUpdatTime) / (1000) / (60) / (60)) < 1) {
-                // tslint:disable-next-line:radix
+                // eslint-disable-next-line radix
                 if (parseInt(this.volumeCount) >= 2) {
                     this.blockVolumeManage = true;
                 }
@@ -596,7 +596,7 @@ export class DialogBoxComponent implements OnInit {
         }
 
         if (this.resizeAddDiskOnly) {
-            // tslint:disable-next-line:radix
+            // eslint-disable-next-line radix
             this.volumeCount = (parseInt(this.volumeCount) + 1).toString();
             localStorage.setItem('volumeCount', this.volumeCount);
             localStorage.setItem('volumeCountLastModified', new Date().toString());
@@ -650,7 +650,7 @@ export class DialogBoxComponent implements OnInit {
     setDisableCurrentConfigurations() {
         // "CPUs:2,Memory(GiB):4".split(",")[0].split(":")[1]
         this.currentConfiguration.split(',').forEach(i => {
-            // tslint:disable-next-line:radix
+            // eslint-disable-next-line radix
             this.currentConfigurations.push(Number(i.split(':')[1]));
         });
     }
@@ -673,7 +673,7 @@ export class DialogBoxComponent implements OnInit {
     }
 
     getScheduleUptimeTooltip() {
-        // tslint:disable-next-line:max-line-length
+        // eslint-disable-next-line max-len
         const uptimeRequests = this.schedulesOnInstance.filter(e => e['uptime_instnace_id'] === this.instanceId);
         return uptimeRequests.length > 0 ? ` Schedule Uptime is already requested on this instance from ${uptimeRequests[0]['uptime_schedule_from_date']} to ${uptimeRequests[0]['uptime_schedule_to_date']}` : '';
     }
@@ -685,7 +685,7 @@ export class DialogBoxComponent implements OnInit {
         this.requestedInstanceType = undefined;
         this.selectedCpu = this.resize.cpu;
         this.selectedMemory = this.resize.memory;
-        // tslint:disable-next-line:max-line-length
+        // eslint-disable-next-line max-len
         this.gatewayService.getDesiredInstanceTypesAndCosts('get_desired_instance_types?cpu=' + this.selectedCpu + '&memory=' + this.selectedMemory + '&os=' + this.operatingSystem).subscribe(
             (response: any) => {
                 console.log(response);
