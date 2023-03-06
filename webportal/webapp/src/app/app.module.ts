@@ -6,7 +6,7 @@ import { RoutingModule } from './app.routes';
 //import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserXhr } from '@angular/http';
+//import { BrowserXhr } from '@angular/http';
 //import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
 //import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
@@ -140,7 +140,7 @@ import { LoaderInterceptor } from './account/services/loader.interceptor';
         //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
         // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
     ],
-   //entryComponents: [DialogBoxComponent],    //this was removed by angular v13 migration.... added back as comment pending research for now
+   //entryComponents: [DialogBoxComponent],    //TO DO: this was removed by ng update during angular v13 migration.... added back as a comment & is pending research
     bootstrap: [AppComponent]
 })
 export class AppModule { }
