@@ -2,9 +2,9 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';           
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileUpload } from 'primeng/fileupload';
 //import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
-import { MatLegacyDialogRef as MatDialogRef , MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
 //import {MatTooltipModule} from '@angular/material/tooltip'
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 //import { MatRadioModule } from '@angular/material/radio';
 //import { MatCheckboxModule } from '@angular/material/checkbox';
 //import { MatTabsModule } from '@angular/material/tabs';

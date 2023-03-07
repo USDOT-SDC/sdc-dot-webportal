@@ -9,24 +9,24 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //import { BrowserXhr } from '@angular/http';
 //import { MatButtonModule, MatCheckboxModule, MatCardModule, MatMenuModule, MatTooltipModule, MatToolbarModule, MatIconModule, MatRadioModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
 //import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
-import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
-import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from '@angular/material/legacy-progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';  
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';  
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';     //MatOption is  imported from MatSelectModule not MatOptionModule
-import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';     //MatOption is  imported from MatSelectModule not MatOptionModule
+import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -44,15 +44,16 @@ import { ApiGatewayService } from '../services/apigateway.service';
 import { WorkstationComponent } from './account/workstation/workstation.component';
 import { RegisterComponent } from './main/register/register.component';
 //import { ToastyModule } from 'ng2-toasty';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogBoxComponent } from './account/dialog-box/dialog-box.component';
 //import { MarkdownModule } from 'ngx-md';
 import { MarkdownModule } from 'ngx-markdown';
 import { FaqComponent } from './account/faq/faq.component';
 import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
-import { PanelModule, SharedModule} from 'primeng/primeng';
-import { RadioButtonModule} from 'primeng/primeng';
-import { CheckboxModule } from 'primeng/primeng';
+import { PanelModule } from 'primeng/panel';
+import { SharedModule } from 'primeng/api';
+import { RadioButtonModule } from 'primeng/radiobutton'
+import { CheckboxModule } from 'primeng/checkbox';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import { MessageModule } from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
@@ -63,6 +64,8 @@ import { LoginSyncService } from './account/loginsync/services/loginsyncservice.
 import { LoaderComponent } from './account/components/loader/loader.component';
 import { LoaderService } from './account/services/loader.service';
 import { LoaderInterceptor } from './account/services/loader.interceptor';
+import { ButtonModule } from 'primeng/button';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @NgModule({
     declarations: [
@@ -87,45 +90,68 @@ import { LoaderInterceptor } from './account/services/loader.interceptor';
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot([]),
-        RoutingModule,
+        RouterModule,
+        NgModule,
         FormsModule,
-        //HttpModule,
+        RoutingModule,
         HttpClientModule,
         BrowserAnimationsModule,
         MatButtonModule,
-        MatMenuModule,
+        MatCheckboxModule,
         MatCardModule,
+        MatMenuModule,
+        MatTooltipModule,
         MatToolbarModule,
         MatIconModule,
-        MatTableModule,
-        MatExpansionModule,
-        MatSnackBarModule,
-        MatInputModule,
-        MatTooltipModule,
-        MatFormFieldModule,
-        MatDialogModule,
-        MatSelectModule,
-        //MatOptionModule,
         MatRadioModule,
-        MatCheckboxModule,
         MatTabsModule,
         MatProgressSpinnerModule,
+        MatExpansionModule,
+        MatExpansionPanel,
+        MatDialogModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatTableModule,
         CdkTableModule,
         TableModule,
         FileUploadModule,
-        SharedModule,
+        AppComponent,
+        MainComponent,
+        HomeComponent,
+        AboutComponent,
+        HomeFaqComponent,
+        AccountComponent,
+        DatasetsComponent,
+        AccountHomeComponent,
+        CognitoService,
+        ApiGatewayService,
+        WorkstationComponent,
+        RegisterComponent,
+        MatSnackBarModule,
+        DialogBoxComponent,
+        MarkdownModule,
+        FaqComponent,
+        DatasetinfoComponent,
         PanelModule,
+        SharedModule,
         RadioButtonModule,
         CheckboxModule,
+        ExportRequestsComponent,
         MessageModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MarkdownModule.forRoot(),
-        //ToastyModule.forRoot(),
-        //DataTableModule
+        LoginSyncComponent,
+        AlertComponent,
+        TogglePasswordDirective,
+        LoginSyncGuard,
+        LoginSyncService,
+        LoaderComponent,
+        LoaderService,
+        LoaderInterceptor,
+        ButtonModule
     ],
-    //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
+    schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
     //exports: [BrowserModule, ToastyModule, RouterModule ],
     exports: [BrowserModule, RouterModule],
     providers: [
