@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CognitoService } from '../../services/cognito.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']

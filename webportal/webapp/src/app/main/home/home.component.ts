@@ -1,8 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { CognitoService } from '../../../services/cognito.service';
+import { LoaderComponent } from '../../account/components/loader/loader.component';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatCardModule, LoaderComponent, RouterModule, ButtonModule],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']

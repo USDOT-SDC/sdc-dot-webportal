@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CognitoService } from '../../services/cognito.service';
 import { ApiGatewayService } from '../../services/apigateway.service';
 import * as $ from 'jquery';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']

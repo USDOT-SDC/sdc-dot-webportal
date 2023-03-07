@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, ROUTES } from '@angular/router';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RoutingModule } from './app.routes';
 //import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -58,7 +57,7 @@ import { ExportRequestsComponent } from './account/exportrequests/exportrequests
 import { MessageModule } from 'primeng/message';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
 import { AlertComponent } from './account/components/alert/alert.component';
-import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
+//import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
 import { LoginSyncService } from './account/loginsync/services/loginsyncservice.service';
 import { LoaderComponent } from './account/components/loader/loader.component';
@@ -69,14 +68,13 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 
 @NgModule({
     declarations: [
-        AppComponent,
         MainComponent,
         HomeComponent,
         AboutComponent,
         AccountComponent,
-        AccountHomeComponent,
+        //AccountHomeComponent,
         DatasetsComponent,
-        ExportRequestsComponent,
+        //ExportRequestsComponent,
         WorkstationComponent,
         RegisterComponent,
         DialogBoxComponent,
@@ -84,16 +82,16 @@ import { MatExpansionPanel } from '@angular/material/expansion';
         HomeFaqComponent,
         DatasetinfoComponent,
         LoginSyncComponent,
-        AlertComponent,
-        TogglePasswordDirective,
-        LoaderComponent
+        //AlertComponent,
+        //TogglePasswordDirective,
+        //LoaderComponent
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot([]),
+        //RouterModule,
         NgModule,
         FormsModule,
-        RoutingModule,
+        //RoutingModule,
         HttpClientModule,
         BrowserAnimationsModule,
         MatButtonModule,
@@ -107,7 +105,6 @@ import { MatExpansionPanel } from '@angular/material/expansion';
         MatTabsModule,
         MatProgressSpinnerModule,
         MatExpansionModule,
-        MatExpansionPanel,
         MatDialogModule,
         MatInputModule,
         MatDatepickerModule,
@@ -142,31 +139,31 @@ import { MatExpansionPanel } from '@angular/material/expansion';
         ExportRequestsComponent,
         MessageModule,
         LoginSyncComponent,
-        AlertComponent,
-        TogglePasswordDirective,
+        //AlertComponent,
+        //TogglePasswordDirective,
         LoginSyncGuard,
         LoginSyncService,
-        LoaderComponent,
+        //LoaderComponent,
         LoaderService,
         LoaderInterceptor,
         ButtonModule
     ],
-    schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
+    //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
     //exports: [BrowserModule, ToastyModule, RouterModule ],
-    exports: [BrowserModule, RouterModule],
-    providers: [
-        //{provide: APP_BASE_HREF, useValue: '/'},
-        CognitoService,
-        ApiGatewayService,
-        LoginSyncService,
-        LoginSyncGuard,
-        LoaderService,
-        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
-        { provide: WindowToken, useFactory: windowProvider },
-        //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
-        // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
-    ],
-    entryComponents: [DialogBoxComponent],    //TO DO: this was removed by ng update during angular v13 migration.... added back as a comment & is pending research
+    //exports: [BrowserModule],
+    // providers: [
+    //     //{provide: APP_BASE_HREF, useValue: '/'},
+    //     CognitoService,
+    //     ApiGatewayService,
+    //     LoginSyncService,
+    //     LoginSyncGuard,
+    //     LoaderService,
+    //     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    //     { provide: WindowToken, useFactory: windowProvider },
+    //     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
+    //     // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
+    // ],
+    //entryComponents: [DialogBoxComponent],    //TO DO: this was removed by ng update during angular v13 migration.... added back as a comment & is pending research
     bootstrap: [AppComponent]
 })
 export class AppModule { }

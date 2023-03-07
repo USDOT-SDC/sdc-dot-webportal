@@ -2,12 +2,19 @@
 import {map} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import * as $ from 'jquery';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { CommonModule } from '@angular/common';
+import { TableModule } from 'primeng/table';
+import { RouterModule } from '@angular/router';
 
 @Component({
+    standalone: true,
+    imports: [MatCardModule, MatExpansionModule, CommonModule, TableModule, RouterModule],
     selector: 'app-datasets',
     templateUrl: './datasets.component.html',
     styleUrls: ['./datasets.component.css']

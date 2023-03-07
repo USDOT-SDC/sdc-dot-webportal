@@ -3,15 +3,20 @@ import { ApiGatewayService } from '../../../services/apigateway.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
+//import { MatCard } from '@angular/material/card';
 import { SelectionModel } from '@angular/cdk/collections'
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { DataSource } from '@angular/cdk/table';
 import { TableModule } from 'primeng/table';
 import * as $ from 'jquery';
+import { CommonModule } from '@angular/common';
 
 @Component({
+    standalone: true,
+    imports: [MatCardModule, MatExpansionModule, TableModule, CommonModule],
     selector: 'app-exportrequests',
     templateUrl: './exportrequests.component.html',
     styleUrls: ['./exportrequests.component.css']

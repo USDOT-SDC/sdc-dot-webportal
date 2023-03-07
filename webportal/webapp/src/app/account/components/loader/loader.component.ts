@@ -1,9 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject } from 'rxjs';
 import { LoaderService } from '../../services/loader.service';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatProgressSpinnerModule],
   selector: 'app-loader',
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.css']

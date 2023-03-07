@@ -1,7 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import {NavigationEnd, Router, ActivatedRoute} from '@angular/router';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatCardModule],
   selector: 'app-faq',
   templateUrl: './faq.component.html',
   styleUrls: ['./faq.component.css']

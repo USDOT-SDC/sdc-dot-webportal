@@ -3,8 +3,13 @@ import { LoginSyncService } from '../services/loginsyncservice.service';
 import { environment } from '../../../../environments/environment';
 import { CognitoService } from '../../../../services/cognito.service';
 import { WindowToken } from '../../../../factories/window.factory';
+import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../../components/loader/loader.component';
+import { AlertComponent } from '../../components/alert/alert.component';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, LoaderComponent, AlertComponent],
   selector: 'app-loginsync',
   templateUrl: './loginsync.component.html',
   styleUrls: ['./loginsync.component.css']

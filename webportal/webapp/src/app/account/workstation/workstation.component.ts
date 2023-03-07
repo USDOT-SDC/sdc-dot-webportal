@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiGatewayService} from '../../../services/apigateway.service';
 //import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 //import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef , MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import { MatDialog, MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { CognitoService } from '../../../services/cognito.service';
 import { environment } from '../../../environments/environment';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { Bool } from 'aws-sdk/clients/inspector';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatCardModule],
   selector: 'app-workstation',
   templateUrl: './workstation.component.html',
   styleUrls: ['./workstation.component.css']
