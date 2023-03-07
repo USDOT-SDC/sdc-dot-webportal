@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ROUTES } from '@angular/router';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RoutingModule } from './app.routes';
@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //import { MatExpansionModule, MatDialogModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatSelectModule, MatOptionModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -90,7 +90,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
     ],
     imports: [
         BrowserModule,
-        RouterModule,
+        RouterModule.forRoot([]),
         NgModule,
         FormsModule,
         RoutingModule,
@@ -166,7 +166,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
         //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
         // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
     ],
-   //entryComponents: [DialogBoxComponent],    //TO DO: this was removed by ng update during angular v13 migration.... added back as a comment & is pending research
+    entryComponents: [DialogBoxComponent],    //TO DO: this was removed by ng update during angular v13 migration.... added back as a comment & is pending research
     bootstrap: [AppComponent]
 })
 export class AppModule { }

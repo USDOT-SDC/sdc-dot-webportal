@@ -15,13 +15,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';     //MatOption is  imported from MatSelectModule not MatOptionModule
+import { MatOptionModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
-
-
-
-
 import { APP_BASE_HREF } from '@angular/common';
 
 describe('AppComponent', () => {
@@ -42,7 +39,7 @@ describe('AppComponent', () => {
         MatFormFieldModule,
         MatDialogModule,
         MatSelectModule,
-        //MatOptionModule,
+        MatOptionModule,
         MatRadioModule,
         MatCheckboxModule,
         MatTabsModule,],
