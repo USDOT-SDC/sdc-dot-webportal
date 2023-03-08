@@ -4,7 +4,7 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 
 @import "~primeicons/primeicons.css";
-@import "~primeng/resources/themes/lara-light-blue/theme.css";
+@import "~primeng/resources/themes/rhea/theme.css";
 @import "~primeng/resources/primeng.min.css";
 
 body { padding-top: 70px; }
@@ -14,21 +14,21 @@ html {
 }
 
 .navbar-default {
-    background: rgb(21, 35, 80) !important;
-    color: #f8f8f8 !important;
-    box-shadow: 0 7px 10px #777777ba;
+    background: #f8f8f8 /*rgb(21, 35, 80)*/ !important;
+    color: #232222 !important;
+    /*box-shadow: 0 7px 10px #777777ba;*/
 }
 .navbar-default .navbar-nav > li > a {
-    color: #f8f8f8 !important;
+    color: #232222 !important;
     padding-top:19px;
     padding-bottom:19px;
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-    color: #f8f8f8 !important;
-    border-bottom: solid 2px #f8f8f8;
-    background-color: rgb(21, 35, 80) !important;
+    color: #232222!important;
+    border-bottom: solid 2px #232222;
+    background-color: #f8f8f8 /*rgb(21, 35, 80)*/ !important;
     font-weight: 700 !important;
 }
 .container {
@@ -46,7 +46,7 @@ html {
     text-align: center;
     color: white;
     height: 160px;
-    box-shadow: 0 -5px 10px #777777ba;
+    /*box-shadow: 0 -5px 10px #777777ba;*/
 }
 
 .footerLogo {

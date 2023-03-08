@@ -5,10 +5,12 @@ import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CognitoService } from '../../../services/cognito.service';
 import { LoaderComponent } from '../../account/components/loader/loader.component';
+import {CardModule} from 'primeng/card';
+import {SplitButtonModule} from 'primeng/splitbutton';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatCardModule, LoaderComponent, RouterModule, ButtonModule],
+  imports: [CommonModule, MatCardModule, LoaderComponent, RouterModule, ButtonModule, CardModule, SplitButtonModule],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
@@ -35,15 +37,22 @@ export class HomeComponent implements OnInit {
     return window.location.href;
   }
 
+  // items: [{}, {}];
+
   ngOnInit() {
     if (this.getCurrentURL().indexOf('access_token') !== -1) {
       this.cognitoService.onLoad();
       this.router.navigate(['account']);
     }
     this.cognitoService.isUserSessionActive(this);
+  //   this.items = [
+  //     {label: 'About', icon: 'pi pi-refresh', url: "['/datasetinfo']"},
+  //     {label: 'Datasets', icon: 'pi pi-refresh', url: "['/datasetinfo']"}
+  // ];
   }
 
-  isLoggedIn(message: string, loggedIn: boolean) {
+  isLoggedIn(message:
+     string, loggedIn: boolean) {
     if (loggedIn) {
       console.log('The user is authenticated: ' + loggedIn);
       this.router.navigate(['account']);
@@ -51,5 +60,4 @@ export class HomeComponent implements OnInit {
         console.log('User not authenticated: ' + loggedIn);
     }
   }
-
 }
