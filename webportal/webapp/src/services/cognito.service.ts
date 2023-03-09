@@ -6,7 +6,7 @@ import {
     CognitoUserAttribute,
     CognitoUserPool
 } from "amazon-cognito-identity-js";
-//import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth";
+import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth";
 import * as AWS from "aws-sdk";
 import * as awsservice from "aws-sdk/lib/service";
 import * as CognitoIdentity from "aws-sdk/clients/cognitoidentity";
