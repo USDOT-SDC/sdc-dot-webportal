@@ -21,15 +21,6 @@ export class HomeComponent implements OnInit {
   constructor(
     private cognitoService: CognitoService,
     private router: Router) {
-       //router.events.subscribe(event => {
-       //    if (event instanceof NavigationEnd) {
-       //        const tree = router.parseUrl(router.url);
-       //        if (tree.fragment) {
-       //            const element = document.querySelector("#" + tree.fragment);
-       //            if (element) { element.scrollIntoView(); }
-       //        }
-       //    }
-       //});
   }
 
  
@@ -37,18 +28,12 @@ export class HomeComponent implements OnInit {
     return window.location.href;
   }
 
-  // items: [{}, {}];
-
   ngOnInit() {
     if (this.getCurrentURL().indexOf('access_token') !== -1) {
       this.cognitoService.onLoad();
       this.router.navigate(['account']);
     }
     this.cognitoService.isUserSessionActive(this);
-  //   this.items = [
-  //     {label: 'About', icon: 'pi pi-refresh', url: "['/datasetinfo']"},
-  //     {label: 'Datasets', icon: 'pi pi-refresh', url: "['/datasetinfo']"}
-  // ];
   }
 
   isLoggedIn(message:
