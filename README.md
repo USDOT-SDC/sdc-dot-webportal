@@ -354,10 +354,10 @@ chmod u+x sdc-add-metadata-to-s3-object.sh
 
 2. Install NPM:-
     * sudo npm install -g npm
-    * Install Angular CLI `sudo npm install -g @angular/cli@1.7.4`
-    * Install TSLint `sudo npm install -g tslint typescript`
+    * Install Angular CLI `sudo npm install -g @angular/cli@latest`
+    * Install TSLint `sudo npm install -g eslint typescript`
     * Install Protractor for e2e testing `sudo npm install -g protractor`
-    * `sudo npm i -g typings`
+    * `sudo npm i -g types`
     * Install Node modules library `npm i`
     * Reset the package.json file from head via git. `git checkout HEAD -- package.json`
     * Enable legacy peer dependency behavior via `npm i --legacy-peer-deps`
