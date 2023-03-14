@@ -23,7 +23,7 @@ export class MainComponent implements OnInit{
         });
     }
   userLogin() {
-    this.cognitoService.login(false);
+    this.cognitoService.login();
   }
 
 }
