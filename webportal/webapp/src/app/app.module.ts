@@ -151,18 +151,18 @@ import { MatExpansionPanel } from '@angular/material/expansion';
     //schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
     //exports: [BrowserModule, ToastyModule, RouterModule ],
     //exports: [BrowserModule],
-    // providers: [
-    //     //{provide: APP_BASE_HREF, useValue: '/'},
-    //     CognitoService,
-    //     ApiGatewayService,
-    //     LoginSyncService,
-    //     LoginSyncGuard,
-    //     LoaderService,
-    //     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
-    //     { provide: WindowToken, useFactory: windowProvider },
-    //     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
-    //     // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
-    // ],
+    providers: [
+        {provide: APP_BASE_HREF, useValue: '/'},
+        CognitoService,
+        ApiGatewayService,
+        LoginSyncService,
+        LoginSyncGuard,
+        LoaderService,
+        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+        { provide: WindowToken, useFactory: windowProvider },
+        // { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
+        // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
+    ],
     //entryComponents: [DialogBoxComponent],    //TO DO: this was removed by ng update during angular v13 migration.... added back as a comment & is pending research
     bootstrap: [AppComponent]
 })

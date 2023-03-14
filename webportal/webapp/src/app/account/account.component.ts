@@ -22,6 +22,7 @@ export class AccountComponent implements OnInit {
   isDataProvider: any;
 
   ngOnInit() {
+    console.log('Welcome to your account page')
     this.getUserInfo();
   }
 

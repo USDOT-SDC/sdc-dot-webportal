@@ -29,8 +29,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('index of code is: ' + this.getCurrentURL().indexOf('code'))
     if (this.getCurrentURL().indexOf('code') !== -1) {
       // this.cognitoService.onLoad();
+      console.log('navigate to account: ' + this.router.navigate(['account'])[Symbol.toString()])
       this.router.navigate(['account']);
     }
     this.cognitoService.isUserSessionActive(this);

@@ -108,7 +108,7 @@ export class CognitoService {
             console.log('signing in...')
             await Auth.federatedSignIn({ customProvider: CognitoService._IDENTITY_PROVIDER });
             const user = Auth.currentAuthenticatedUser()
-            console.log('signed in as ' + user)
+            console.log('signed in as ' + user[Symbol.toString()])
         } catch (error) {
             console.log('error signing in', error);
         }
