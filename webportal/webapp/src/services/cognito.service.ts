@@ -123,6 +123,12 @@ export class CognitoService {
         //     //userAuth.getSession();
     }
 
+
+    // Immediately after login
+    onLoad() {
+        this.login(true)
+    }
+    
     // authData() {
     //     return {
     //         ClientId : CognitoService._CLIENT_ID,
