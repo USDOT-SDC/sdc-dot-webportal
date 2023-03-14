@@ -29,8 +29,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.getCurrentURL().indexOf('access_token') !== -1) {
-      this.cognitoService.onLoad();
+    if (this.getCurrentURL().indexOf('code') !== -1) {
+      // this.cognitoService.onLoad();
       this.router.navigate(['account']);
     }
     this.cognitoService.isUserSessionActive(this);
@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
       console.log('The user is authenticated: ' + loggedIn);
       this.router.navigate(['account']);
     } else {
-        console.log('User not authenticated: ' + loggedIn);
+        console.log('User not authenticated. Logged in: ' + loggedIn);
     }
   }
 }

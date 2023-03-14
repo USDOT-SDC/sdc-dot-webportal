@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   }
   userLogin() {
     if (this.email.toLowerCase().endsWith('@dot.gov')) {                
-      this.cognitoService.login(false); // Route to ADFS login
+      this.cognitoService.login(); // Route to ADFS login
     } else {
       window.location.href = this.cognitoService.buildLoginGovRedirectUrl();
     }

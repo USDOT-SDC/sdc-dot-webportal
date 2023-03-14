@@ -60,8 +60,8 @@ Amplify.configure({
         oauth: {
             domain: environment.APP_DOMAIN + ".auth." + environment.REGION + ".amazoncognito.com",
             scope: ['email', 'profile','openid' ],
-            redirectSignIn: '/index.html',
-            redirectSignOut: '/index.html',
+            redirectSignIn: window.location.origin + '/index.html',
+            redirectSignOut: window.location.origin + '/index.html',
             responseType: 'code' // or 'token', note that REFRESH token will only be generated when the responseType is code
         }
     }
@@ -102,10 +102,13 @@ export class CognitoService {
     };
 
     // Authenticate the user & login
-    login(isLoggedIn: boolean) {
+    async login() {
         //var userAuth = new CognitoAuth(this.authData())
         try {
-            const user = Auth.federatedSignIn({ customProvider: CognitoService._IDENTITY_PROVIDER });
+            console.log('signing in...')
+            await Auth.federatedSignIn({ customProvider: CognitoService._IDENTITY_PROVIDER });
+            const user = Auth.currentAuthenticatedUser()
+            console.log('signed in as ' + user)
         } catch (error) {
             console.log('error signing in', error);
         }
@@ -125,9 +128,9 @@ export class CognitoService {
 
 
     // Immediately after login
-    onLoad() {
-        this.login(true)
-    }
+    // onLoad() {
+    //     this.login(true)
+    // }
     
     // authData() {
     //     return {
