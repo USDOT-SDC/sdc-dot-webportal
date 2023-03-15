@@ -210,6 +210,7 @@ export class CognitoService {
 
     // Method to fetch the cognito ID token
     async getIdToken() {
+        console.log('Getting idToken')
         var cognitoUser = Auth.currentUserCredentials()
         //var cognitoUser = this.getCurrentUser();
         var idToken = ''
@@ -221,6 +222,7 @@ export class CognitoService {
             //     }
                 //console.log('session validity: ' + session.isValid());
                 idToken = (await cognitoUser).sessionToken
+                console.log('idToken: ' + idToken)
             // };
         } else {
             console.log("NO TOKEN - Retrieving new session.");

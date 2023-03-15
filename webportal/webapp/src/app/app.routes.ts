@@ -39,3 +39,4 @@ export const APP_Routes: Routes = [
         ],
     }
 ];
+export const RoutingModule = RouterModule.forRoot(APP_Routes)
