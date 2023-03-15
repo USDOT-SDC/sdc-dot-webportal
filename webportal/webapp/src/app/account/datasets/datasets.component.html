@@ -11,7 +11,7 @@
           </mat-expansion-panel-header>
           <div *ngIf="!myDatasets">No Data Available</div>
           <span style="color:grey">This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They
-            are not available to anyone else unless you publish the dataset. <a [routerLink]="['/account/faq']" fragment="datasetPublish">Learn more </a> on how to upload your
+            are not available to anyone else unless you publish the dataset. <a routerLink="/account/faq" fragment="datasetPublish">Learn more </a> on how to upload your
             datasets / algorithms and publish them for other users.
           </span><hr>
           <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>
@@ -97,7 +97,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <span style="color: grey">These are datasets that are available within SDC platform that are published / enabled by SDC team or
-            published by other users. Access to these datasets are available upon request. <a [routerLink]="['/account/faq']" fragment="sdcDataset">Learn more </a> about the
+            published by other users. Access to these datasets are available upon request. <a routerLink="/account/faq" fragment="sdcDataset">Learn more </a> about the
             different types of datasets and how to request access to these datasets.
           </span><hr>
           <table class="table">
@@ -147,7 +147,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <span style="color: grey">These are algorithms that are available within SDC platform that are published / enabled by SDC team or
-            published by other users. Access to these algorithms are available upon request. <a [routerLink]="['/account/faq']" fragment="sdcDataset">Learn more </a> about the
+            published by other users. Access to these algorithms are available upon request. <a routerLink="/account/faq" fragment="sdcDataset">Learn more </a> about the
             different types of algorithms and how to request access to these algorithms.
           </span><hr>
           <table class="table">
