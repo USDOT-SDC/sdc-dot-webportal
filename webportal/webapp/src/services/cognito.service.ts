@@ -6,12 +6,13 @@ import {
     CognitoUserAttribute,
     CognitoUserPool
 } from "amazon-cognito-identity-js";
-//import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth";
+import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth";
 import * as AWS from "aws-sdk";
 import * as awsservice from "aws-sdk/lib/service";
 import * as CognitoIdentity from "aws-sdk/clients/cognitoidentity";
 import { environment } from '../environments/environment';
 import { WindowToken } from '../factories/window.factory';
+
 
 
 export interface CognitoCallback {
@@ -44,8 +45,27 @@ export class CognitoService {
         ClientId: CognitoService._CLIENT_ID
     };
 
+
+
+
+    config = {
+        identityPool: process.env.REACT_APP_COGNITO_IDENTITY_POOL,
+        userPool: {
+          UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
+          ClientId: process.env.REACT_APP_COGNITO_CLIENT_ID
+        }
+      }
+      
+      // Gets a User Pool instance
+      getUserPool1 = () => new CognitoUserPool(this.config.userPool)
+
     // Authenticate the user & login
     login(isLoggedIn: boolean) {
+        getCognitoUser = user => {
+            const pool = this.getUserPool1()
+            return pool.getCurrentUser()
+        }
+
         var userAuth = new CognitoAuth(this.authData())
         userAuth.userhandler = {
             onSuccess: function(result) {
@@ -53,11 +73,21 @@ export class CognitoService {
             onFailure: function(err) {
             }
         };
+        
         if (isLoggedIn) {
             var currentUrl = window.location.href;
             userAuth.parseCognitoWebResponse(currentUrl);
         } else
             userAuth.getSession();
+    }
+
+
+
+    userData() {
+        return {
+            Username: CognitoService._CLIENT_ID,
+            Pool: CognitoService._USER_POOL_ID,
+        };
     }
 
     authData() {
