@@ -1,4 +1,4 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { enableProdMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -33,6 +33,7 @@ bootstrapApplication(AppComponent, {providers: [
   { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
   { provide: WindowToken, useFactory: windowProvider },
   //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
+  provideHttpClient(withInterceptorsFromDi()),
   // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
   provideRouter(APP_Routes)
 ]})

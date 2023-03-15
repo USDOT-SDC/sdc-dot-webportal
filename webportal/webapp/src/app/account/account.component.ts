@@ -10,7 +10,17 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, RouterModule],
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css']
+  styleUrls: ['./account.component.css'],
+  providers: [
+    CognitoService,
+    ApiGatewayService,
+    // LoginSyncService,
+    // LoginSyncGuard,
+    // LoaderService,
+    // LoaderInterceptor,
+    // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    // { provide: WindowToken, useFactory: windowProvider }
+],
 })
 export class AccountComponent implements OnInit {
 

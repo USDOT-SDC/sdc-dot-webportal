@@ -62,7 +62,7 @@ Amplify.configure({
             scope: ['email', 'profile','openid' ],
             redirectSignIn: window.location.origin + '/index.html',
             redirectSignOut: window.location.origin + '/index.html',
-            responseType: 'code' // or 'token', note that REFRESH token will only be generated when the responseType is code
+            responseType: 'token' // or 'token', note that REFRESH token will only be generated when the responseType is code
         }
     }
 });
@@ -108,7 +108,7 @@ export class CognitoService {
             console.log('signing in...')
             await Auth.federatedSignIn({ customProvider: CognitoService._IDENTITY_PROVIDER });
             const user = Auth.currentAuthenticatedUser()
-            console.log('signed in as ' + user[Symbol.toString()])
+            console.log('signed in as (\"symbol\" doesn\'t work)', user[Symbol.toString()])
         } catch (error) {
             console.log('error signing in', error);
         }
@@ -156,7 +156,7 @@ export class CognitoService {
         var currentSession = Auth.currentSession()
 
         console.log("UserLoginService: Session is " + currentSession);
-        callback.isLoggedIn("is logged in", true);
+        callback.isLoggedIn("is logged in", false);
 
         // if (currentUser != null) {
         //     currentUser.getSession(function (err, session) {

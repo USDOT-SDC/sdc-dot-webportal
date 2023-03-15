@@ -17,7 +17,17 @@ import { RouterModule } from '@angular/router';
     imports: [MatCardModule, MatExpansionModule, CommonModule, TableModule, RouterModule],
     selector: 'app-datasets',
     templateUrl: './datasets.component.html',
-    styleUrls: ['./datasets.component.css']
+    styleUrls: ['./datasets.component.css'],
+    providers: [
+        // CognitoService,
+        ApiGatewayService,
+        // LoginSyncService,
+        // LoginSyncGuard,
+        // LoaderService,
+        // LoaderInterceptor,
+        // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+        // { provide: WindowToken, useFactory: windowProvider }
+    ],
 })
 
 export class DatasetsComponent implements OnInit {

@@ -8,7 +8,9 @@ import { CognitoService } from './cognito.service';
 import { environment } from '../environments/environment';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 export class ApiGatewayService {
 
     // protected options: RequestOptions;

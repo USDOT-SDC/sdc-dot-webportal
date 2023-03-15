@@ -8,7 +8,9 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { environment } from '../../../../environments/environment';
 import { CognitoService } from '../../../../services/cognito.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LoginSyncService {
   httpOptions = {};
   baseUrl = `${window.location.origin}/${environment.ACCOUNT_LINK_URL}`

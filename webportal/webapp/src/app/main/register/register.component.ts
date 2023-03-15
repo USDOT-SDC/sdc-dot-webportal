@@ -10,7 +10,17 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, MatCardModule, FormsModule],
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
+  providers: [
+    CognitoService,
+    // ApiGatewayService,
+    // LoginSyncService,
+    // LoginSyncGuard,
+    // LoaderService,
+    // LoaderInterceptor,
+    // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    // { provide: WindowToken, useFactory: windowProvider }
+],
 })
 export class RegisterComponent implements OnInit {
   email: string;

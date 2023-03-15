@@ -10,7 +10,9 @@ import { CognitoService } from '../../../../services/cognito.service';
 import { WindowToken } from '../../../../factories/window.factory';
 //import { of } from 'rxjs/observable/of';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LoginSyncGuard implements CanActivate {
   constructor(private loginSyncService: LoginSyncService, private router: Router, private cognitoService: CognitoService,
               @Inject(WindowToken) private window: Window) { }

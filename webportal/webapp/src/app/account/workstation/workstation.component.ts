@@ -18,7 +18,17 @@ import { MatCardModule } from '@angular/material/card';
   imports: [CommonModule, MatCardModule],
   selector: 'app-workstation',
   templateUrl: './workstation.component.html',
-  styleUrls: ['./workstation.component.css']
+  styleUrls: ['./workstation.component.css'],
+  providers: [
+    CognitoService,
+    ApiGatewayService,
+    // LoginSyncService,
+    // LoginSyncGuard,
+    // LoaderService,
+    // LoaderInterceptor,
+    // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    // { provide: WindowToken, useFactory: windowProvider }
+],
 })
 export class WorkstationComponent implements OnInit {
     selectedStack: string;

@@ -13,7 +13,17 @@ import {SplitButtonModule} from 'primeng/splitbutton';
   imports: [CommonModule, MatCardModule, LoaderComponent, RouterModule, ButtonModule, CardModule, SplitButtonModule],
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers: [
+    CognitoService,
+    // ApiGatewayService,
+    // LoginSyncService,
+    // LoginSyncGuard,
+    // LoaderService,
+    // LoaderInterceptor,
+    // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    // { provide: WindowToken, useFactory: windowProvider }
+],
 })
 
 export class HomeComponent implements OnInit {
@@ -29,8 +39,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('index of code is: ' + this.getCurrentURL().indexOf('code'))
-    if (this.getCurrentURL().indexOf('code') !== -1) {
+    console.log('index of token is: ' + this.getCurrentURL().indexOf('token'))
+    if (this.getCurrentURL().indexOf('token') !== -1) {
       // this.cognitoService.onLoad();
       console.log('navigate to account: ' + this.router.navigate(['account'])[Symbol.toString()])
       this.router.navigate(['account']);
