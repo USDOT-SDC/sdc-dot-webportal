@@ -51,8 +51,7 @@ export class HomeComponent implements OnInit {
   // ];
   }
 
-  isLoggedIn(message:
-     string, loggedIn: boolean) {
+  isLoggedIn(message: string, loggedIn: boolean) {
     if (loggedIn) {
       console.log('The user is authenticated: ' + loggedIn);
       this.router.navigate(['account']);
