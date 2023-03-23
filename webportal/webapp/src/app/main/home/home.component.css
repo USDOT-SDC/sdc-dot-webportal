@@ -16,3 +16,13 @@
 .cardTitle {
     margin-top: -15px !important;
 }
+.pcard{
+    display: flex;
+    align-items: stretch;
+}
+.pcardBtn {
+    justify-content: center;
+    position: absolute !important;
+    bottom: 20px !important;
+    left: 35% !important;
+}

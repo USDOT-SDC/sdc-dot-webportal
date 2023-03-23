@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
   userLogin() {
-    if (this.email.toLowerCase().endsWith('@dot.gov')) {                
+    if (this.email.toLowerCase().endsWith('@dot.gov')) {
       this.cognitoService.login(false); // Route to ADFS login
     } else {
       window.location.href = this.cognitoService.buildLoginGovRedirectUrl();
