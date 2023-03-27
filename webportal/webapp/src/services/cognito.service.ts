@@ -224,6 +224,21 @@ export class CognitoService {
   // Method to fetch the cognito ID token
   async getIdToken() {
     console.log("Getting idToken");
+
+    // Auth.currentSession().then((res) => {
+    //   var accessToken = res.getAccessToken();
+    //   var jwt = accessToken.getJwtToken();
+
+    //   //You can print them to see the full objects
+    //   console.log(`myAccessToken: ${JSON.stringify(accessToken)}`);
+    //   console.log(`myJwt: ${jwt}`);
+    //   //return accessToken;
+    // });
+
+    var session = await Auth.currentSession();
+    var id = session.getAccessToken().getJwtToken();
+    console.log("JWT TOKEN ==", id);
+    return id;
     var cognitoUser = Auth.currentAuthenticatedUser();
     //var cognitoUser = this.getCurrentUser();
     var idToken = "";
