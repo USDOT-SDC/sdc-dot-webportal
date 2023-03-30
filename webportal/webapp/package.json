@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^15.1.4",
     "@angular/router": "^15.1.4",
     "@aws-amplify/auth": "^5.1.13",
+    "@aws-amplify/ui-angular": "^3.2.10",
     "@types/node": "^12.11.1",
     "amazon-cognito-auth-js": "^1.1.0",
     "amazon-cognito-identity-js": "^1.21.0",

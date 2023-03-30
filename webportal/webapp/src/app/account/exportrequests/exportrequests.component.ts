@@ -19,7 +19,17 @@ import { CommonModule } from '@angular/common';
     imports: [MatCardModule, MatExpansionModule, TableModule, CommonModule],
     selector: 'app-exportrequests',
     templateUrl: './exportrequests.component.html',
-    styleUrls: ['./exportrequests.component.css']
+    styleUrls: ['./exportrequests.component.css'],
+    providers: [
+        // CognitoService,
+        ApiGatewayService,
+        // LoginSyncService,
+        // LoginSyncGuard,
+        // LoaderService,
+        // LoaderInterceptor,
+        // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+        // { provide: WindowToken, useFactory: windowProvider }
+    ],
 })
 export class ExportRequestsComponent implements OnInit {
     constructor(private gatewayService: ApiGatewayService,
