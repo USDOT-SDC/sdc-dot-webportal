@@ -153,7 +153,9 @@ export class WorkstationComponent implements OnInit {
           }
         });
     } else {
-      const authToken = this.cognitoService.getIdToken();
+      //const authToken = this.cognitoService.getIdToken();
+      let authToken1 = this.cognitoService.getIdToken();
+      var authToken = authToken1.toString();
       console.log("ID Token after hitting workstation ==", authToken);
       this.streamingUrl =
         `${window.location.origin}/guacamole/?authToken=` + authToken;

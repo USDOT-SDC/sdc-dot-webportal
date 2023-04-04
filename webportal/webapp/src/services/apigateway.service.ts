@@ -84,17 +84,32 @@ export class ApiGatewayService {
     } */
 
   // Set required headers on the request - updated for HttpClient Module
+  // constructHttpOptions(restype: string = "json") {
+  //   let authToken = this.cognitoService.getIdToken();
+  //   const httpOptions = {
+  //     headers: new HttpHeaders({
+  //       "Content-Type": "application/json",
+  //       Authorization: " " + authToken,
+  //       "Access-Control-Allow-Origin": "*",
+  //     }),
+  //     responsetype: restype,
+  //   };
+  //   console.log("HTTPOPTIONS ==", httpOptions);
+  //   return httpOptions;
+  // }
+  // Set required headers on the request - updated for HttpClient Module
   constructHttpOptions(restype: string = "json") {
-    let authToken = this.cognitoService.getIdToken();
-    const httpOptions = {
+    let authToken1 = this.cognitoService.getIdToken();
+    var authToken = authToken1.toString();
+    console.log("authToken ==", authToken);
+    const httpOptions: Object = {
       headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: " " + authToken,
-        "Access-Control-Allow-Origin": "*",
+        'Content-Type': 'application/json',
+        'Authorization': " " + authToken,
+        'Access-Control-Allow-Origin': '*'
       }),
-      responsetype: restype,
+      responseType: restype,
     };
-    console.log("HTTPOPTIONS ==", httpOptions);
     return httpOptions;
   }
 
@@ -135,14 +150,14 @@ export class ApiGatewayService {
   }
 
   getPresignedUrl(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    const httpOptions = this.constructHttpOptions('text');
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getDownloadUrl(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    const httpOptions = this.constructHttpOptions('text');
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
       .pipe(map(this.extractData), catchError(this.handleError));

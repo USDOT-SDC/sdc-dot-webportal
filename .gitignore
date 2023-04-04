@@ -29,7 +29,7 @@ webportal/webapp/coverage
 webportal/webapp/libpeerconnection.log
 webportal/webapp/npm-debug.log
 testem.log
-/typings
+#/typings
 
 # e2e
 webportal/webapp/e2e/*.js

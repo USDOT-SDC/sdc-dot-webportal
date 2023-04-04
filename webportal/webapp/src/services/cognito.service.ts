@@ -14,6 +14,7 @@ import { environment } from "../environments/environment";
 import { WindowToken } from "../factories/window.factory";
 // import { Auth } from '@aws-amplify/auth';
 import { Amplify, Auth } from "aws-amplify";
+import { access } from "fs";
 
 Amplify.configure({
   Auth: {
@@ -110,11 +111,29 @@ export class CognitoService {
     }
   }
 
-  // Method to fetch the cognito ID token
-  async getIdToken() {
+  async getIdPromise() {
+    var user = await Auth.currentAuthenticatedUser();
     var session = await Auth.currentSession();
+    //var accessToken = session.getAccessToken();
+    //console.log("accessToken ==", accessToken);
     var id = session.getAccessToken().getJwtToken();
     return id;
+  }
+
+  // Method to fetch the cognito ID token
+  getIdToken() {
+    var id;
+    var id_P = this.getIdPromise().then((value) => {
+      console.log(value); //log the returned value
+      return value; // returning the value from a then function returns a new promise, so the spell function also returns a promise which you can handle similarly
+    });
+    id = function log(id_P) {
+      console.log(id_P);
+      return id_P;
+    };
+    // console.log("JWT ==", id);
+
+    return id_P;
   }
 
   buildDoTADRedirectUrl(): string {
