@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
-import { MatDialog, MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
@@ -16,13 +16,16 @@ import { CommonModule } from '@angular/common';
 
 @Component({
     standalone: true,
-    imports: [MatCardModule, MatExpansionModule, TableModule, CommonModule],
+    imports: [MatCardModule, MatExpansionModule, TableModule, CommonModule, MatDialogModule],
     selector: 'app-exportrequests',
     templateUrl: './exportrequests.component.html',
     styleUrls: ['./exportrequests.component.css'],
     providers: [
         // CognitoService,
-        ApiGatewayService,
+        //ApiGatewayService,
+        MatDialog,
+        //MatSnackBar,
+        //MatDialogModule,
         // LoginSyncService,
         // LoginSyncGuard,
         // LoaderService,

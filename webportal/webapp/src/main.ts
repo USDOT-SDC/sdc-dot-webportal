@@ -17,9 +17,10 @@ import { AppModule } from "./app/app.module";
 import { APP_Routes } from "./app/app.routes";
 import { environment } from "./environments/environment";
 import { windowProvider, WindowToken } from "./factories/window.factory";
-import { ApiGatewayService } from "./services/apigateway.service";
+import { ApiGatewayService, AuthInterceptor } from "./services/apigateway.service";
 import { CognitoService } from "./services/cognito.service";
 import { provideAnimations } from "@angular/platform-browser/animations";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 if (environment.production) {
   enableProdMode();
@@ -35,9 +36,11 @@ bootstrapApplication(AppComponent, {
     ApiGatewayService,
     LoginSyncService,
     LoginSyncGuard,
+    MatSnackBar,
     LoaderService,
     provideAnimations(),
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: WindowToken, useFactory: windowProvider },
     //{ provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     provideHttpClient(withInterceptorsFromDi()),

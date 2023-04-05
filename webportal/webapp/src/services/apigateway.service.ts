@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, Observable } from "rxjs";
+import { throwError as observableThrowError, Observable, from } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 // import { Http, Response, Headers, RequestOptions } from '@angular/http';
@@ -6,6 +6,36 @@ import { Injectable } from "@angular/core";
 import { CognitoService } from "./cognito.service";
 import { environment } from "../environments/environment";
 import { HttpClient, HttpHeaders, HttpRequest } from "@angular/common/http";
+//import { Injectable } from '@angular/core';
+import {
+  HttpEvent, HttpInterceptor, HttpHandler
+} from '@angular/common/http';
+//import { Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+//import { AuthService } from './auth.service';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(private cognitoService: CognitoService) { }
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return from(this.cognitoService.getIdToken()).pipe(
+      tap(token => console.log("TOKEN ==", token)), // side effect to set token property on auth service
+      switchMap(token => { // use transformation operator that maps to an Observable<T>
+        const newRequest = request.clone({
+          setHeaders: {
+            'Content-Type': 'application/json',
+            Authorization: ` ${token}`,
+            'Access-Control-Allow-Origin': '*',
+          }
+        });
+        return next.handle(newRequest);
+      })
+    );
+  }
+}
+
+
 
 @Injectable({
   providedIn: "root",
@@ -99,8 +129,8 @@ export class ApiGatewayService {
   // }
   // Set required headers on the request - updated for HttpClient Module
   constructHttpOptions(restype: string = "json") {
-    let authToken1 = this.cognitoService.getIdToken();
-    var authToken = authToken1.toString();
+    let authToken = from(this.cognitoService.getIdToken());
+    //var authToken = authToken1.toString();
     console.log("authToken ==", authToken);
     const httpOptions: Object = {
       headers: new HttpHeaders({
@@ -110,15 +140,16 @@ export class ApiGatewayService {
       }),
       responseType: restype,
     };
+    console.log("TYPE OF authToken ==", typeof authToken)
     return httpOptions;
   }
 
   // HTTP GET method invocation
   get(url: string) {
     // this.setRequestHeaders();
-    const httpOptions = this.constructHttpOptions();
+    //const httpOptions = this.constructHttpOptions();
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
+      .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(
         // return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
         // TO DO: do we still need map?
@@ -128,67 +159,68 @@ export class ApiGatewayService {
   }
 
   sendRequestMail(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    //const httpOptions = this.constructHttpOptions();
     return this.http
-      .post(ApiGatewayService._API_ENDPOINT + url, "", httpOptions)
+      .post(ApiGatewayService._API_ENDPOINT + url, "")
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getUserInfo(url: string) {
-    const httpOptions = this.constructHttpOptions();
-    console.log("HTTPOPTIONS after return ==", httpOptions);
+    //const httpOptions = this.constructHttpOptions();
+    //console.log("HTTPOPTIONS after return ==", httpOptions);
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
+      .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   post(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    //const httpOptions = this.constructHttpOptions();
     return this.http
-      .post(ApiGatewayService._API_ENDPOINT + url, "", httpOptions)
+      .post(ApiGatewayService._API_ENDPOINT + url, "", {responseType: 'json'})
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getPresignedUrl(url: string) {
-    const httpOptions = this.constructHttpOptions('text');
+    //const httpOptions = this.constructHttpOptions('text');
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
+
+      .get(ApiGatewayService._API_ENDPOINT + url, {responseType: 'text'})
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getDownloadUrl(url: string) {
-    const httpOptions = this.constructHttpOptions('text');
+    //const httpOptions = this.constructHttpOptions('text');
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
+      .get(ApiGatewayService._API_ENDPOINT + url, {responseType: 'text'})
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getMetadataOfS3Object(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    //const httpOptions = this.constructHttpOptions();
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
+      .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   sendExportRequest(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    //const httpOptions = this.constructHttpOptions();
     console.log("sending request 2 " + ApiGatewayService._API_ENDPOINT + url);
     return this.http
-      .post(ApiGatewayService._API_ENDPOINT + url, "", httpOptions)
+      .post(ApiGatewayService._API_ENDPOINT + url, "")
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getDesiredInstanceTypesAndCosts(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    //const httpOptions = this.constructHttpOptions();
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
+      .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   modifyUserWorkstation(url: string) {
-    const httpOptions = this.constructHttpOptions();
+    //const httpOptions = this.constructHttpOptions();
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, httpOptions)
+      .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 }

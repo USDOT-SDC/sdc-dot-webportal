@@ -13,9 +13,37 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
+import { DialogModule } from '@angular/cdk/dialog';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+    standalone: true,
+    imports: [
+        CommonModule,
+        DialogModule,
+        MatRadioModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatExpansionModule,
+        MatDatepickerModule,
+        MatCardModule,
+        MatTooltipModule,
+        FormsModule,
+      ],
     selector: 'app-dialog-box',
     templateUrl: './dialog-box.component.html',
     styleUrls: ['./dialog-box.component.css']

@@ -32,9 +32,9 @@ import { RouterModule } from "@angular/router";
   //animations: ["@bodyExpansion.done"],
   providers: [
     // CognitoService,
-    ApiGatewayService,
-    MatSnackBar,
-    MatDialogModule,
+   // ApiGatewayService,
+    //MatSnackBar,
+   // MatDialogModule,
     MatDialog,
     // LoginSyncService,
     // LoginSyncGuard,

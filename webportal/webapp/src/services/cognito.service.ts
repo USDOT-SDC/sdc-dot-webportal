@@ -111,29 +111,14 @@ export class CognitoService {
     }
   }
 
-  async getIdPromise() {
-    var user = await Auth.currentAuthenticatedUser();
+
+  // Method to fetch the cognito ID token
+  async getIdToken() {
     var session = await Auth.currentSession();
     //var accessToken = session.getAccessToken();
     //console.log("accessToken ==", accessToken);
-    var id = session.getAccessToken().getJwtToken();
+    var id = session.getIdToken().getJwtToken();
     return id;
-  }
-
-  // Method to fetch the cognito ID token
-  getIdToken() {
-    var id;
-    var id_P = this.getIdPromise().then((value) => {
-      console.log(value); //log the returned value
-      return value; // returning the value from a then function returns a new promise, so the spell function also returns a promise which you can handle similarly
-    });
-    id = function log(id_P) {
-      console.log(id_P);
-      return id_P;
-    };
-    // console.log("JWT ==", id);
-
-    return id_P;
   }
 
   buildDoTADRedirectUrl(): string {
