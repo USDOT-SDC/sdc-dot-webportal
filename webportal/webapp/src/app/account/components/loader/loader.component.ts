@@ -9,7 +9,17 @@ import { LoaderService } from '../../services/loader.service';
   imports: [CommonModule, MatProgressSpinnerModule],
   selector: 'app-loader',
   templateUrl: './loader.component.html',
-  styleUrls: ['./loader.component.css']
+  styleUrls: ['./loader.component.css'],
+  providers: [
+    // CognitoService,
+    // ApiGatewayService,
+    // LoginSyncService,
+    // LoginSyncGuard,
+    LoaderService,
+    // LoaderInterceptor,
+    // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    // { provide: WindowToken, useFactory: windowProvider }
+],
 })
 export class LoaderComponent implements OnInit {
   color = 'primary';
