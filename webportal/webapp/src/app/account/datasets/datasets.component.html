@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-card>
+  <mat-card appearance="outlined">
    <div class="row">
       <div class="col-md-12">
         <!--My Datasets table-->
@@ -27,9 +27,10 @@
                     <th style="width: 2.25em">
                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                     </th>
-                    <th *ngFor="let col of columns" [ngClass]="{smallWidth: col.header != 'Filename'}">
+                    <th *ngFor="let col of columns" pSortableColumn="Filename" [ngClass]="{smallWidth: col.header != 'Filename'}">
                         {{col.header}} <br/>
                         <input size="40" *ngIf="col.header == 'Filename'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <p-sortIcon field="Filename"></p-sortIcon>
                     </th>
                 </tr>
             </ng-template>
@@ -181,7 +182,7 @@
         </mat-expansion-panel>
 
         <!--data dictionary card-->
-        <mat-card *ngIf="showDictionary" style="margin-top: 25px;max-height: 500px">
+        <mat-card appearance="outlined" *ngIf="showDictionary" style="margin-top: 25px;max-height: 500px">
             <mat-card-title> {{selectedsdcDataset.Name}} {{selectedsdcDataset.Type}}</mat-card-title><hr>
             <mat-card-content style="max-height: 400px;overflow: scroll">
                 <markdown [data]="dictionary" (ready)="onReady()"></markdown>
