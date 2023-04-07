@@ -22,8 +22,8 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { APP_BASE_HREF } from "@angular/common";
 
 describe("AppComponent", () => {
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async() => {
+    await TestBed.configureTestingModule({
       imports: [
         RouterModule.forRoot([]),
         //BrowserAnimationsModule,
@@ -47,7 +47,7 @@ describe("AppComponent", () => {
       declarations: [AppComponent],
       providers: [{ provide: APP_BASE_HREF, useValue: "/" }],
     }).compileComponents();
-  }));
+  });
 
   it("should create the app", waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);

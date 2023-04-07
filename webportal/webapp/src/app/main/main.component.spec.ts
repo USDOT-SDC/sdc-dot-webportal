@@ -20,7 +20,7 @@ describe('MainComponent', () => {
     { path: '**', redirectTo: 'home' }
   ];
 
-  beforeEach(waitForAsync(() => {    
+  beforeEach(async() => {    
     let mockCognitoAPIService = {
       login: jasmine.createSpy('login')
     }
@@ -30,7 +30,7 @@ describe('MainComponent', () => {
     });
     
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes(routes),
       ],      
@@ -42,7 +42,7 @@ describe('MainComponent', () => {
       schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainComponent);
