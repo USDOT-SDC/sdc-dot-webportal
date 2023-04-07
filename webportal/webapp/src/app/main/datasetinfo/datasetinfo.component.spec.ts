@@ -21,8 +21,8 @@ describe('DatasetinfoComponent', () => {
   let component: DatasetinfoComponent;
   let fixture: ComponentFixture<DatasetinfoComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async() => {
+    await TestBed.configureTestingModule({
       imports: [
         MatButtonModule,
         MatMenuModule,
@@ -42,7 +42,7 @@ describe('DatasetinfoComponent', () => {
       declarations: [ DatasetinfoComponent ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetinfoComponent);

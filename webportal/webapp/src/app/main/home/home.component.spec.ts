@@ -1,4 +1,4 @@
-import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ describe('HomeComponent', () => {
   
   let mockObjectMap = {};
      
-  beforeEach(waitForAsync(() => {
+  beforeEach(async() => {
     let mockCognitoAPIService = {
       onLoad: jasmine.createSpy('onLoad'),
       isUserSessionActive: jasmine.createSpy('isUserSessionActive'),
@@ -25,7 +25,7 @@ describe('HomeComponent', () => {
       router
     });
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [ HomeComponent ],
       providers: [
         { provide: CognitoService, useValue: mockCognitoAPIService },
@@ -33,7 +33,7 @@ describe('HomeComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeComponent);

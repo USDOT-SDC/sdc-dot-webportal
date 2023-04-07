@@ -1,4 +1,4 @@
-import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AboutComponent } from './about.component';
 //import { MatButtonModule, MatMenuModule, MatCardModule, MatToolbarModule, MatIconModule, MatTableModule, MatExpansionModule, MatSnackBarModule, MatInputModule, MatFormFieldModule, MatDialogModule, MatSelectModule, MatOptionModule, MatRadioModule, MatCheckboxModule } from '@angular/material';
@@ -21,8 +21,8 @@ describe('AboutComponent', () => {
   let component: AboutComponent;
   let fixture: ComponentFixture<AboutComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async() => {
+    await TestBed.configureTestingModule({
       imports: [
         MatButtonModule,
         MatMenuModule,
@@ -42,7 +42,7 @@ describe('AboutComponent', () => {
       declarations: [ AboutComponent ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AboutComponent);

@@ -1,4 +1,4 @@
-import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatasetsComponent } from './datasets.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -78,7 +78,7 @@ describe('DatasetsComponent', () => {
   let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
   dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async() => {
     let mockMatSnackBar = {
       open: jasmine.createSpy('open')
     };
@@ -98,7 +98,7 @@ describe('DatasetsComponent', () => {
       mockApiGatewayService
     });
    
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes(routes),
         MatDialogModule
@@ -115,7 +115,7 @@ describe('DatasetsComponent', () => {
         schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     let store = {};

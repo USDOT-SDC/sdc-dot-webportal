@@ -1,4 +1,4 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountHomeComponent } from './accounthome.component';
 import { MatCardModule } from '@angular/material/card';
@@ -21,9 +21,9 @@ describe('MyAccountComponent', () => {
   let component: AccountHomeComponent;
   let fixture: ComponentFixture<AccountHomeComponent>;  
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async() => {
     
-    TestBed.configureTestingModule({      
+    await TestBed.configureTestingModule({      
       imports: [        
         RouterTestingModule,
         MatCardModule
@@ -48,7 +48,7 @@ describe('MyAccountComponent', () => {
         ]  
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AccountHomeComponent);
