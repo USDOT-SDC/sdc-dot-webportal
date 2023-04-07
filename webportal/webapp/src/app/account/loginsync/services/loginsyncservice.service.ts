@@ -5,11 +5,41 @@ import {
   HttpClient,
   HttpHeaders,
   HttpErrorResponse,
+  HttpInterceptor,
+  HttpHandler,
+  HttpEvent,
+  HttpRequest,
 } from "@angular/common/http";
-//import { Observable } from 'rxjs';
+import { from } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 
 import { environment } from "../../../../environments/environment";
 import { CognitoService } from "../../../../services/cognito.service";
+
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(private cognitoService: CognitoService) { }
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return from(this.cognitoService.getIdToken()).pipe(
+      tap(token => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
+      switchMap(token => { // use transformation operator that maps to an Observable<T>
+        const newRequest = request.clone({
+          setHeaders: {
+            'Content-Type': 'application/json',
+            Authorization: ` ${token}`,
+            'Access-Control-Allow-Origin': '*',
+          }
+        });
+        return next.handle(newRequest);
+      })
+    );
+  }
+}
+
+
+
 
 @Injectable({
   providedIn: "root",
@@ -24,20 +54,22 @@ export class LoginSyncService {
   constructor(
     private http: HttpClient,
     private cognitoService: CognitoService
-  ) {
-    let authToken1 = this.cognitoService.getIdToken();
-    var authToken = authToken1.toString();
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: " " + authToken,
-        "Access-Control-Allow-Origin": "*",
-      }),
-    };
-  }
+  ) {}
+  
+  // {
+  //   let authToken1 = this.cognitoService.getIdToken();
+  //   var authToken = authToken1.toString();
+  //   this.httpOptions = {
+  //     headers: new HttpHeaders({
+  //       "Content-Type": "application/json",
+  //       Authorization: " " + authToken,
+  //       "Access-Control-Allow-Origin": "*",
+  //     }),
+  //   };
+  // }
 
   userAccountsLinked(): Observable<any> {
-    return this.http.get(this.accountLinkedUrl, this.httpOptions).pipe(
+    return this.http.get(this.accountLinkedUrl).pipe(
       map((response) => {
         return response;
       }),
@@ -51,7 +83,7 @@ export class LoginSyncService {
       password: password,
     };
 
-    return this.http.post(this.linkAccountUrl, payload, this.httpOptions).pipe(
+    return this.http.post(this.linkAccountUrl, payload).pipe(
       map((response) => {
         return response;
       }),
@@ -73,7 +105,7 @@ export class LoginSyncService {
     };
 
     return this.http
-      .post(this.resetTemporaryPasswordUrl, payload, this.httpOptions)
+      .post(this.resetTemporaryPasswordUrl, payload)
       .pipe(
         map((response) => {
           return response;

@@ -128,21 +128,21 @@ export class ApiGatewayService {
   //   return httpOptions;
   // }
   // Set required headers on the request - updated for HttpClient Module
-  constructHttpOptions(restype: string = "json") {
-    let authToken = from(this.cognitoService.getIdToken());
-    //var authToken = authToken1.toString();
-    console.log("authToken ==", authToken);
-    const httpOptions: Object = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': " " + authToken,
-        'Access-Control-Allow-Origin': '*'
-      }),
-      responseType: restype,
-    };
-    console.log("TYPE OF authToken ==", typeof authToken)
-    return httpOptions;
-  }
+  // constructHttpOptions(restype: string = "json") {
+  //   let authToken = from(this.cognitoService.getIdToken());
+  //   //var authToken = authToken1.toString();
+  //   console.log("authToken ==", authToken);
+  //   const httpOptions: Object = {
+  //     headers: new HttpHeaders({
+  //       'Content-Type': 'application/json',
+  //       'Authorization': " " + authToken,
+  //       'Access-Control-Allow-Origin': '*'
+  //     }),
+  //     responseType: restype,
+  //   };
+  //   console.log("TYPE OF authToken ==", typeof authToken)
+  //   return httpOptions;
+  // }
 
   // HTTP GET method invocation
   get(url: string) {
