@@ -6,19 +6,20 @@
     /*width: 30%;*/
     font-size: 11px;
 }
-.mat-dialog-container {
+.mat-mdc-dialog-container {
     border: solid 2px #0b264db8 !important;
 }
 mat_tab_style{
     height: 451px;
 }
+/*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
 ::ng-deep .mat-tab-body-content {
     overflow: hidden !important;
 }
-::ng-deep .mat-dialog-content {
+::ng-deep .mat-mdc-dialog-content {
     max-height: 200vh !important;
 }
-.mat-dialog-actions {
+.mat-mdc-dialog-actions {
     display: block !important;
 }
 .request-exportCancelBtn {

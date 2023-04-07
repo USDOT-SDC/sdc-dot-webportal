@@ -26,6 +26,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+
 
 @Component({
     standalone: true,
@@ -43,6 +46,8 @@ import { FormsModule } from '@angular/forms';
         MatCardModule,
         MatTooltipModule,
         FormsModule,
+        CardModule,
+        ButtonModule
       ],
     selector: 'app-dialog-box',
     templateUrl: './dialog-box.component.html',
