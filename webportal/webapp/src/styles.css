@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~prismjs/themes/prism.css';
 @import '~bootstrap/dist/css/bootstrap.css';
 
@@ -116,24 +116,26 @@ html {
     cursor: pointer;
   }
 
-.custom-export-dialog .mat-form-field {
+.custom-export-dialog .mat-mdc-form-field {
 font-size: 16px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 .custom-export-dialog .mat-tab-label {
 font-size: 16px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .custom-export-dialog .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
 transform: translateY(-1.28125em) scale(.90) perspective(100px) translateZ(0.001px);
 width: 133.33333%;
 }
 
-.custom-export-dialog .mat-hint {
+.custom-export-dialog .mat-mdc-form-field-hint {
      color: lightgray;
 }
 
-.custom-export-dialog .mat-dialog-content {
+.custom-export-dialog .mat-mdc-dialog-content {
     overflow-y: hidden;
 }
 

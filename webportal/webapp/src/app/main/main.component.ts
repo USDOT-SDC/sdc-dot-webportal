@@ -8,7 +8,17 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, RouterModule],
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  styleUrls: ['./main.component.css'],
+  providers: [
+    CognitoService,
+    // ApiGatewayService,
+    // LoginSyncService,
+    // LoginSyncGuard,
+    // LoaderService,
+    // LoaderInterceptor,
+    // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    // { provide: WindowToken, useFactory: windowProvider }
+],
 })
 export class MainComponent implements OnInit{
 
@@ -23,7 +33,7 @@ export class MainComponent implements OnInit{
         });
     }
   userLogin() {
-    this.cognitoService.login(false);
+    this.cognitoService.login();
   }
 
 }
