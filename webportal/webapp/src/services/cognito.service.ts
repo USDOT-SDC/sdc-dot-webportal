@@ -23,6 +23,7 @@ Amplify.configure({
 
     // OPTIONAL - Amazon Cognito User Pool ID
     userPoolId: environment.USER_POOL_ID,
+    IdentityProvider : environment.IDENTITY_PROVIDER,
 
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
     userPoolWebClientId: environment.CLIENT_ID,
