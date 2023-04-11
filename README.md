@@ -356,7 +356,6 @@ chmod u+x sdc-add-metadata-to-s3-object.sh
     * sudo npm install -g npm
     * Install Angular CLI `sudo npm install -g @angular/cli@latest`
     * Install TSLint `sudo npm install -g eslint typescript`
-    * Install Protractor for e2e testing `sudo npm install -g protractor`
     * `sudo npm i -g types`
     * Install Node modules library `npm i`
     * Reset the package.json file from head via git. `git checkout HEAD -- package.json`

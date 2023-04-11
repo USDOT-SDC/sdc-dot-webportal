@@ -11,7 +11,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 //import { MatDatepicker }  from '@angular/material/datepicker'; 
 //import { CheckboxModule } from 'primeng/primeng';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { element } from 'protractor';
 import { Router } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { DialogModule } from '@angular/cdk/dialog';
