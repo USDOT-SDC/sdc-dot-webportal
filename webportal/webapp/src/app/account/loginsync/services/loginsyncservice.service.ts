@@ -10,27 +10,31 @@ import {
   HttpEvent,
   HttpRequest,
 } from "@angular/common/http";
-import { from } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { from } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 
 import { environment } from "../../../../environments/environment";
 import { CognitoService } from "../../../../services/cognito.service";
 
-
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private cognitoService: CognitoService) { }
+  constructor(private cognitoService: CognitoService) {}
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     return from(this.cognitoService.getIdToken()).pipe(
-      tap(token => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
-      switchMap(token => { // use transformation operator that maps to an Observable<T>
+      tap((token) => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
+      switchMap((token) => {
+        // use transformation operator that maps to an Observable<T>
         const newRequest = request.clone({
+          withCredentials: true,
           setHeaders: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: ` ${token}`,
-            'Access-Control-Allow-Origin': '*',
-          }
+            "Access-Control-Allow-Origin": "*",
+          },
         });
         return next.handle(newRequest);
       })
@@ -38,14 +42,11 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 }
 
-
-
-
 @Injectable({
   providedIn: "root",
 })
 export class LoginSyncService {
-  httpOptions = {};
+  //httpOptions = {};
   baseUrl = `${window.location.origin}/${environment.ACCOUNT_LINK_URL}`;
   linkAccountUrl = `${this.baseUrl}/${environment.LINK_ACCOUNT_PATH}`;
   accountLinkedUrl = `${this.baseUrl}/${environment.ACCOUNT_LINKED_PATH}`;
@@ -55,7 +56,7 @@ export class LoginSyncService {
     private http: HttpClient,
     private cognitoService: CognitoService
   ) {}
-  
+
   // {
   //   let authToken1 = this.cognitoService.getIdToken();
   //   var authToken = authToken1.toString();
@@ -69,8 +70,10 @@ export class LoginSyncService {
   // }
 
   userAccountsLinked(): Observable<any> {
+    console.log("userAccountsLinked");
     return this.http.get(this.accountLinkedUrl).pipe(
       map((response) => {
+        console.log("RESPONSE in userAccountsLinked ==", response);
         return response;
       }),
       catchError(this.handleError)
@@ -82,9 +85,10 @@ export class LoginSyncService {
       username: username,
       password: password,
     };
-
+    console.log("linkAccounts Payload ==", payload);
     return this.http.post(this.linkAccountUrl, payload).pipe(
       map((response) => {
+        console.log("RESPONSE ==", response);
         return response;
       }),
       catchError(this.handleError)
@@ -104,14 +108,12 @@ export class LoginSyncService {
       newPasswordConfirmation: newPasswordConfirmation,
     };
 
-    return this.http
-      .post(this.resetTemporaryPasswordUrl, payload)
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError(this.handleError)
-      );
+    return this.http.post(this.resetTemporaryPasswordUrl, payload).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError(this.handleError)
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

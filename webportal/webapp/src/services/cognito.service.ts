@@ -20,7 +20,6 @@ Amplify.configure({
   Auth: {
     // REQUIRED - Amazon Cognito Region
     region: environment.REGION,
-
     // OPTIONAL - Amazon Cognito User Pool ID
     userPoolId: environment.USER_POOL_ID,
     IdentityProvider : environment.IDENTITY_PROVIDER,

@@ -43,7 +43,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log("index of token is: " + this.getCurrentURL().indexOf("token"));
     if (this.getCurrentURL().indexOf("token") !== -1) {
-      // this.cognitoService.onLoad();
       console.log("navigating to account");
       this.router.navigate(["account"]);
     }

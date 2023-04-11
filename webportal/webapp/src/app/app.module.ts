@@ -163,6 +163,7 @@ import { MatExpansionPanel } from "@angular/material/expansion";
     ApiGatewayService,
     LoginSyncService,
     LoginSyncGuard,
+    HttpClientModule,
     LoaderService,
     LoaderInterceptor,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },

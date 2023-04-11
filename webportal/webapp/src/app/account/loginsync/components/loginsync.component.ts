@@ -27,13 +27,16 @@ export class LoginSyncComponent implements OnInit {
   constructor(private loginSyncService: LoginSyncService, private cognitoService: CognitoService,  @Inject(WindowToken) private window: Window) { }
 
   ngOnInit() {
+    console.log("WE\'RE IN LOGINSYNC");
   }
 
   onSubmitLinkAccount() {
+    console.log("onSubmitLinkAccount called");
     this.loginSyncService
         .linkAccounts(this.username, this.password)
         .subscribe(
           result => {
+            console.log("RESULT ==", result);
             this.redirectUser(result);
           },
           error => {
@@ -65,6 +68,7 @@ export class LoginSyncComponent implements OnInit {
   redirectUser(result) {
     const dotUser = 'dot_active_directory_user';
     this.window.location.href = result.signInType === dotUser ? this.cognitoService.buildDoTADRedirectUrl() : this.cognitoService.buildLoginGovRedirectUrl();
+    console.log("THIS WINDOW HERE == ", this.window.location.href);
   }
 
   isValidPassword() {
