@@ -1,33 +1,36 @@
 import { throwError as observableThrowError, Observable, from } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { Injectable } from "@angular/core";
-// import { Http, Response, Headers, RequestOptions } from '@angular/http';
+//import { RequestOptions } from "@angular/http";
 // import { Observable } from 'rxjs/Observable';
 import { CognitoService } from "./cognito.service";
 import { environment } from "../environments/environment";
 import { HttpClient, HttpHeaders, HttpRequest } from "@angular/common/http";
 //import { Injectable } from '@angular/core';
-import {
-  HttpEvent, HttpInterceptor, HttpHandler
-} from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler } from "@angular/common/http";
 //import { Observable } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from "rxjs/operators";
 //import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private cognitoService: CognitoService) { }
+  constructor(private cognitoService: CognitoService) {}
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     return from(this.cognitoService.getIdToken()).pipe(
-      tap(token => console.log("TOKEN ==", token)), // side effect to set token property on auth service
-      switchMap(token => { // use transformation operator that maps to an Observable<T>
+      tap((token) => console.log("TOKEN IN API GATEWAY ==", token)), // side effect to set token property on auth service
+      switchMap((token) => {
+        // use transformation operator that maps to an Observable<T>
         const newRequest = request.clone({
+          withCredentials: true,
           setHeaders: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: ` ${token}`,
-            'Access-Control-Allow-Origin': '*',
-          }
+            "Access-Control-Allow-Origin": "*",
+          },
         });
         return next.handle(newRequest);
       })
@@ -35,13 +38,11 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 }
 
-
-
 @Injectable({
   providedIn: "root",
 })
 export class ApiGatewayService {
-  // protected options: RequestOptions;
+  //protected options: RequestOptions;
   private static _API_ENDPOINT = `${window.location.origin}/${environment.API_ENDPOINT}`;
 
   apiResponse: any;
@@ -148,14 +149,12 @@ export class ApiGatewayService {
   get(url: string) {
     // this.setRequestHeaders();
     //const httpOptions = this.constructHttpOptions();
-    return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url)
-      .pipe(
-        // return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-        // TO DO: do we still need map?
-        map(this.extractData),
-        catchError(this.handleError)
-      );
+    return this.http.get(ApiGatewayService._API_ENDPOINT + url).pipe(
+      // return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
+      // TO DO: do we still need map?
+      map(this.extractData),
+      catchError(this.handleError)
+    );
   }
 
   sendRequestMail(url: string) {
@@ -167,16 +166,16 @@ export class ApiGatewayService {
 
   getUserInfo(url: string) {
     //const httpOptions = this.constructHttpOptions();
-    //console.log("HTTPOPTIONS after return ==", httpOptions);
+    //console.log("User Info ==", this.http.get(ApiGatewayService._API_ENDPOINT + url).pipe(map(this.extractData), catchError(this.handleError)));
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url)
+      .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "json" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   post(url: string) {
     //const httpOptions = this.constructHttpOptions();
     return this.http
-      .post(ApiGatewayService._API_ENDPOINT + url, "", {responseType: 'json'})
+      .post(ApiGatewayService._API_ENDPOINT + url, "", { responseType: "json" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
@@ -184,14 +183,14 @@ export class ApiGatewayService {
     //const httpOptions = this.constructHttpOptions('text');
     return this.http
 
-      .get(ApiGatewayService._API_ENDPOINT + url, {responseType: 'text'})
+      .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "text" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getDownloadUrl(url: string) {
     //const httpOptions = this.constructHttpOptions('text');
     return this.http
-      .get(ApiGatewayService._API_ENDPOINT + url, {responseType: 'text'})
+      .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "text" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 

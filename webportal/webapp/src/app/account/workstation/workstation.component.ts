@@ -130,7 +130,7 @@ export class WorkstationComponent implements OnInit {
       });
   }
 
-  launchWorkstation(stack: any) {
+  async launchWorkstation(stack: any) {
     this.selectedStack = stack.stack_name;
     if (this.selectedStack === "Programming_Stack_1") {
       const fleetName = stack.fleet_name;
@@ -154,8 +154,15 @@ export class WorkstationComponent implements OnInit {
         });
     } else {
       //const authToken = this.cognitoService.getIdToken();
-      let authToken1 = this.cognitoService.getIdToken();
-      var authToken = authToken1.toString();
+
+      const authToken = await this.cognitoService.getIdToken();
+      // a.then(
+      //   (response) => (
+      //     console.log("response to launching workstation== ", response),
+      //     (authToken = response.toString())
+      //   )
+      // );
+      //var authToken = authToken1.toString();
       console.log("ID Token after hitting workstation ==", authToken);
       this.streamingUrl =
         `${window.location.origin}/guacamole/?authToken=` + authToken;

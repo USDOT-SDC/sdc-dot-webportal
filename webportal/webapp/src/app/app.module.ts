@@ -44,7 +44,10 @@ import { AccountComponent } from "./account/account.component";
 import { DatasetsComponent } from "./account/datasets/datasets.component";
 import { AccountHomeComponent } from "./account/accounthome/accounthome.component";
 import { CognitoService } from "../services/cognito.service";
-import { ApiGatewayService } from "../services/apigateway.service";
+import {
+  ApiGatewayService,
+  AuthInterceptor,
+} from "../services/apigateway.service";
 import { WorkstationComponent } from "./account/workstation/workstation.component";
 import { RegisterComponent } from "./main/register/register.component";
 //import { ToastyModule } from 'ng2-toasty';
@@ -64,7 +67,10 @@ import { LoginSyncComponent } from "./account/loginsync/components/loginsync.com
 import { AlertComponent } from "./account/components/alert/alert.component";
 //import { TogglePasswordDirective } from './account/loginsync/directives/togglepassword.directive';
 import { LoginSyncGuard } from "./account/loginsync/guards/loginsync.guard";
-import { LoginSyncService } from "./account/loginsync/services/loginsyncservice.service";
+import {
+  LoginSyncService,
+  AuthInterceptorLogin,
+} from "./account/loginsync/services/loginsyncservice.service";
 import { LoaderComponent } from "./account/components/loader/loader.component";
 import { LoaderService } from "./account/services/loader.service";
 import { LoaderInterceptor } from "./account/services/loader.interceptor";
@@ -163,9 +169,13 @@ import { MatExpansionPanel } from "@angular/material/expansion";
     ApiGatewayService,
     LoginSyncService,
     LoginSyncGuard,
+    HttpClientModule,
     LoaderService,
     LoaderInterceptor,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorLogin, multi: true },
+
     { provide: WindowToken, useFactory: windowProvider },
     // { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
