@@ -11,6 +11,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { CommonModule } from "@angular/common";
 import { TableModule } from "primeng/table";
 import { RouterModule } from "@angular/router";
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from "primeng/inputtext";
 //import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 //import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -21,6 +23,8 @@ import { RouterModule } from "@angular/router";
     MatExpansionModule,
     CommonModule,
     TableModule,
+    ButtonModule,
+    InputTextModule,
     RouterModule,
     //BrowserAnimationsModule,
     MatDialogModule,

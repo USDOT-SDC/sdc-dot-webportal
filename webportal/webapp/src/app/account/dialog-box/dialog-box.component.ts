@@ -1,15 +1,15 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';                     //child to parent data sharing via ViewChild 
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
-import { FileUpload } from 'primeng/fileupload';
+import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 //import { MAT_DIALOG_DATA, MatDialogRef, MatTooltipModule, MatSnackBar, MatDatepicker, MatRadioModule, MatCheckboxModule, MatTabsModule } from '@angular/material';
-import { MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //import {MatTooltipModule} from '@angular/material/tooltip'
 import { MatSnackBar } from '@angular/material/snack-bar';
-//import { MatRadioModule } from '@angular/material/radio';
+//import { MatRadioModule } , from '@angular/material/radio';
 //import { MatCheckboxModule } from '@angular/material/checkbox';
 //import { MatTabsModule } from '@angular/material/tabs';
 //import { MatDatepicker }  from '@angular/material/datepicker'; 
-//import { CheckboxModule } from 'primeng/primeng';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
@@ -35,10 +35,12 @@ import { ButtonModule } from 'primeng/button';
     imports: [
         CommonModule,
         DialogModule,
+        MatDialogModule,
         MatRadioModule,
         MatInputModule,
         MatFormFieldModule,
         MatCheckboxModule,
+        CheckboxModule,
         MatSelectModule,
         MatTabsModule,
         MatExpansionModule,
@@ -47,7 +49,8 @@ import { ButtonModule } from 'primeng/button';
         MatTooltipModule,
         FormsModule,
         CardModule,
-        ButtonModule
+        ButtonModule,
+        FileUploadModule
       ],
     selector: 'app-dialog-box',
     templateUrl: './dialog-box.component.html',

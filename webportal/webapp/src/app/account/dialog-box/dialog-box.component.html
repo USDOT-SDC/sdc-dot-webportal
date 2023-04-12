@@ -514,7 +514,7 @@
 <!--Request Trusted User Status Dialogbox-->
 <div *ngIf="mailType == 'Request Trusted Status Mail'">
   <h3>Request Trusted User Status</h3>
-  <mat-dialog-content style="height: 100%;">
+  <mat-dialog-content style="height: 100%">
     <hr>
     <p><b>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining
         Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests - and
@@ -527,7 +527,7 @@
     <label style="float:right"> * All fields are mandatory </label>
     <hr>
 
-    <mat-form-field style='width: 100%'>
+    <mat-form-field style="width:100%">
       <mat-select class="exportSelect" placeholder='For which Project/Dataset would you like to become a Trusted User?'
         [(ngModel)]="messageModel.datasettype" (selectionChange)="setDataProviders($event)" required>
         <mat-option *ngFor="let dataSetType of dataSetTypes" [value]="dataSetType.value">
@@ -537,7 +537,7 @@
       <mat-error *ngIf="!messageModel.datasettype">Please select Dataset name</mat-error>
     </mat-form-field>
 
-    <mat-form-field style='width: 100%' *ngIf="dataProviderNames.length > 0">
+    <mat-form-field style="width:100%" *ngIf="dataProviderNames.length > 0">
       <mat-select class="exportSelect" placeholder='Data Provider' [(ngModel)]="messageModel.dataProviderName"
         (selectionChange)="setSubDatasets($event)" required>
         <mat-option *ngFor="let dataProviderName of dataProviderNames" [value]="dataProviderName.value">
@@ -547,7 +547,7 @@
       <mat-error *ngIf="!messageModel.dataProviderName">Please select Data Provider Name</mat-error>
     </mat-form-field>
 
-    <mat-form-field style='width: 100%' *ngIf="subDataSets.length > 0">
+    <mat-form-field style="width:100%" *ngIf="subDataSets.length > 0">
       <mat-select class="exportSelect" placeholder='Sub-Dataset/Data Type' [(ngModel)]="messageModel.subDataSet"
         (selectionChange)="chkTrustedStatus($event)" required>
         <mat-option *ngFor="let subDataSet of subDataSets" [value]="subDataSet.value">
@@ -559,7 +559,7 @@
     <br>
 
     <div>
-      <mat-form-field style='width: 100%'>
+      <mat-form-field style="width:100%">
         <input matInput placeholder="Justification for Request?" [(ngModel)]="messageModel.trustedUserJustification"
           value="{{messageModel.trustedUserJustification}}" required>
         <mat-hint align="end">Alpha-numeric characters only</mat-hint>
