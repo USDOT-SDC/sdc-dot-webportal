@@ -17,7 +17,7 @@ import { environment } from "../../../../environments/environment";
 import { CognitoService } from "../../../../services/cognito.service";
 
 @Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export class AuthInterceptorLogin implements HttpInterceptor {
   constructor(private cognitoService: CognitoService) {}
 
   intercept(
