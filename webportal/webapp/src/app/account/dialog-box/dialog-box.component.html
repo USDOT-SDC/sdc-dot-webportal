@@ -1,6 +1,6 @@
 <!--SDC Datasets Access Request Dialogbox-->
 <div *ngIf="mailType == 'Access Request Mail' && datasetName != 'CVP'">
-  <h4>SDC Data Access Request Form</h4>
+  <h4 mat-dialog-title>SDC Data Access Request Form</h4>
   <hr>
   <mat-dialog-content>
     <p>Please fill out the following information to obtain access to the data set.</p>
@@ -142,7 +142,7 @@
 
 <!--Publish Dataset / Algorithm Request Dialogbox-->
 <div *ngIf="mailType == 'Dataset publish Mail'">
-  <h4>Publish Dataset / Algorithm Request</h4>
+  <h4 mat-dialog-title>Publish Dataset / Algorithm Request</h4>
   <hr>
   <mat-dialog-content>
 
@@ -226,7 +226,7 @@
 
 <!--Request Export Dataset Dialogbox-->
 <div *ngIf="mailType == 'Dataset export Mail'">
-  <h3>Request to Export Data</h3>
+  <h3 mat-dialog-title>Request to Export Data</h3>
   <hr>
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndexChange($event)">
     <mat-tab label="Select Project" #tab1>
@@ -513,7 +513,7 @@
 
 <!--Request Trusted User Status Dialogbox-->
 <div *ngIf="mailType == 'Request Trusted Status Mail'">
-  <h3>Request Trusted User Status</h3>
+  <h3 mat-dialog-title>Request Trusted User Status</h3>
   <mat-dialog-content style="height: 100%">
     <hr>
     <p><b>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining
@@ -602,7 +602,7 @@
 
 <!--Request Export Table to Edge DB Dialogbox-->
 <div *ngIf="mailType == 'Request Table Export'">
-  <h3>Request to Export Table to Edge Database</h3>
+  <h3 mat-dialog-title>Request to Export Table to Edge Database</h3>
   <mat-dialog-content style="height: 100%;">
     <br/>
     <p style="color:grey;">Please provide information relevant to your table request, as requested in the form fields below.  
