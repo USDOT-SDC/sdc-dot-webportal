@@ -21,7 +21,7 @@
           <p> Files that are uploaded from the web portal will be saved in the folder - <b>{{ userName }}</b><b>/uploaded_files</b></p>
           <p> Files that you would like to export out of the system must be uploaded to the folder - <b>export_requests</b></p>
           <span style="color:grey">Any file type can be downloaded.</span>
-          <p-table #dt [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rowsPerPageOptions]="[10, 25, 50]" [totalRecords]="myDatasets.length"  dataKey="filename" [globalFilterFields]="['filename']">
+          <p-table #dt [value]="myDatasets" [(selection)]="selectedFiles" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [totalRecords]="myDatasets.length"  dataKey="filename" [globalFilterFields]="['filename']">
             <ng-template pTemplate="caption">
               <div class="flex">
                   <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
