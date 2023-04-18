@@ -11,8 +11,9 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { CommonModule } from "@angular/common";
 import { TableModule } from "primeng/table";
 import { RouterModule } from "@angular/router";
-import { ButtonModule } from 'primeng/button';
+import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
+import { FormsModule } from "@angular/forms";
 //import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 //import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -25,6 +26,7 @@ import { InputTextModule } from "primeng/inputtext";
     TableModule,
     ButtonModule,
     InputTextModule,
+    FormsModule,
     RouterModule,
     //BrowserAnimationsModule,
     MatDialogModule,
@@ -36,9 +38,9 @@ import { InputTextModule } from "primeng/inputtext";
   //animations: ["@bodyExpansion.done"],
   providers: [
     // CognitoService,
-   // ApiGatewayService,
+    // ApiGatewayService,
     //MatSnackBar,
-   // MatDialogModule,
+    // MatDialogModule,
     MatDialog,
     // LoginSyncService,
     // LoginSyncGuard,
