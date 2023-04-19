@@ -1,7 +1,7 @@
 import { map } from "rxjs/operators";
 import { Component, OnInit } from "@angular/core";
 import { ApiGatewayService } from "../../../services/apigateway.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 import * as $ from "jquery";
@@ -14,6 +14,31 @@ import { RouterModule } from "@angular/router";
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { FormsModule } from "@angular/forms";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule, MatHint } from "@angular/material/form-field";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatSelectModule } from "@angular/material/select";
+import { MatTabsModule } from "@angular/material/tabs";
+
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatTooltipModule } from "@angular/material/tooltip";
+
+import { MatIconModule } from "@angular/material/icon";
+import {
+  MatCommonModule,
+  MatLineModule,
+  MatNativeDateModule,
+} from "@angular/material/core";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatSortModule } from "@angular/material/sort";
+
+import { MatButtonModule } from "@angular/material/button";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTableModule } from "@angular/material/table";
+import { CdkTableModule } from "@angular/cdk/table";
+import { FileUploadModule } from "primeng/fileupload";
 //import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 //import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -28,6 +53,25 @@ import { FormsModule } from "@angular/forms";
     InputTextModule,
     FormsModule,
     RouterModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatRadioModule,
+    MatTabsModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    CdkTableModule,
+    FileUploadModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatTableModule,
+    MatSnackBarModule,
     //BrowserAnimationsModule,
     MatDialogModule,
     //NoopAnimationsModule,
