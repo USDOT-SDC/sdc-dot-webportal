@@ -8,7 +8,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
-
+import { AccordionModule } from "primeng/accordion";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 
 //import { MatCard } from '@angular/material/card';
@@ -52,14 +52,21 @@ import { CheckboxModule } from "primeng/checkbox";
 import { CardModule } from "primeng/card";
 import { ButtonModule } from "primeng/button";
 import { FileUploadModule } from "primeng/fileupload";
+import { TagModule } from "primeng/tag";
+
+import { RequestReviewStatusSeverityPipe } from "./request-review-status.pipe";
+import { PanelModule } from "primeng/panel";
 @Component({
   standalone: true,
   imports: [
     MatCardModule,
+    TagModule,
     MatExpansionModule,
     TableModule,
     CommonModule,
+    RequestReviewStatusSeverityPipe,
     MatDialogModule,
+    AccordionModule,
     FormsModule,
     CdkTableModule,
     CommonModule,
@@ -68,6 +75,7 @@ import { FileUploadModule } from "primeng/fileupload";
     MatButtonModule,
     MatCheckboxModule,
     MatCardModule,
+    PanelModule,
     MatMenuModule,
     MatTooltipModule,
     MatToolbarModule,
