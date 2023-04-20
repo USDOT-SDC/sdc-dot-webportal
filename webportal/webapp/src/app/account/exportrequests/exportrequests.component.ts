@@ -56,6 +56,8 @@ import { TagModule } from "primeng/tag";
 
 import { RequestReviewStatusSeverityPipe } from "./request-review-status.pipe";
 import { PanelModule } from "primeng/panel";
+import { ExportRequestsPanelComponent } from "./export-requests-panel.component";
+
 @Component({
   standalone: true,
   imports: [
@@ -97,6 +99,8 @@ import { PanelModule } from "primeng/panel";
     CardModule,
     ButtonModule,
     FileUploadModule,
+
+    ExportRequestsPanelComponent,
   ],
   selector: "app-exportrequests",
   templateUrl: "./exportrequests.component.html",
@@ -146,26 +150,26 @@ export class ExportRequestsComponent implements OnInit {
     this.getExportFileRequests();
 
     this.cols = [
-      { field: "Date", header: "Date" },
+      { field: "ReqReceivedDate", header: "Date" },
       { field: "userFullName", header: "User" },
       { field: "description", header: "Description" },
       { field: "team", header: "Team" },
       { field: "dataset", header: "Dataset" },
       { field: "reviewFile", header: "File Name" },
-      { field: "approval", header: "Approval" },
+      { field: "RequestReviewStatus", header: "Approval" },
       { field: "details", header: "Details" },
       { field: "exportFileForReview", header: "Download File for Review" },
     ];
 
     this.colsExportTable = [
-      { field: "Date", header: "Date" },
+      { field: "ReqReceivedDate", header: "Date" },
       { field: "userFullName", header: "User" },
-      { field: "userEmail", header: "Email" },
-      { field: "description", header: "Justification" },
+      { field: "UserEmail", header: "Email" },
+      { field: "justification", header: "Justification" },
       { field: "team", header: "Team" },
       { field: "dataset", header: "Dataset" },
-      { field: "database.schema.tablename", header: "Table" },
-      { field: "approval", header: "Approval" },
+      { field: "table", header: "Table" },
+      { field: "RequestReviewStatus", header: "Approval" },
       { field: "details", header: "Details" }, //Q: Do we really need this if same info is loaded elsewhere in the table already? -- do we even actually create this???
     ];
 
@@ -173,14 +177,14 @@ export class ExportRequestsComponent implements OnInit {
       { field: "userFullName", header: "User" },
       { field: "dataset", header: "Dataset" },
       { field: "justification", header: "Justification" },
-      { field: "approval", header: "Approval" },
+      { field: "TrustedStatus", header: "Approval" },
     ];
 
     this.colsAutoExport = [
       { field: "userFullName", header: "User" },
       { field: "dataset", header: "Dataset" },
       { field: "justification", header: "Justification" },
-      { field: "approval", header: "Approval" },
+      { field: "AutoExportStatus", header: "Approval" },
     ];
   }
 

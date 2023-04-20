@@ -4,12 +4,15 @@ import { Pipe, PipeTransform } from "@angular/core";
 export class RequestReviewStatusSeverityPipe implements PipeTransform {
   transform(value: string): string {
     switch (value) {
-      case "Rejected":
-        return "danger";
-      case "Approved":
-        return "success";
+      case 'Approved':
+      case 'Trusted':
+        return 'success';
+      case 'Rejected':
+      case 'Untrusted':
+      case 'Denied':
+        return 'danger';
       default:
-        return "primary";
+        return 'primary';
     }
   }
 }

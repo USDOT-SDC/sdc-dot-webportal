@@ -3,409 +3,79 @@
     <div class="row">
       <div class="col-md-12">
         <!-- Export Requests-->
-        <p-panel
-          style="margin-top: 40px"
-          [toggleable]="true"
+        <app-export-requests-panel
           header="Export File Requests"
-        >
-          <div *ngIf="!exportFileRequests">No export file requests</div>
-          <span class="text-600"
-            >This section displays the list of export requests</span
-          >
-          <hr />
-          <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
-          <p-table
-            #dt
-            [columns]="cols"
-            [value]="exportFileRequests"
-            [paginator]="true"
-            [rows]="10"
-            [totalRecords]="exportFileRequests.length"
-            dataKey="filename"
-          >
-            <ng-template pTemplate="header" let-columns>
-              <tr>
-                <th *ngFor="let col of columns">
-                  {{ col.header }} <br />
-                  <input
-                    size="40"
-                    *ngIf="col.header == 'Filename'"
-                    pInputText
-                    type="text"
-                    (input)="
-                      dt.filter($event.target.value, col.field, 'contains')
-                    "
-                  />
-                </th>
-              </tr>
-            </ng-template>
-            <ng-template
-              pTemplate="body"
-              let-exportFileRequest
-              let-columns="columns"
-            >
-              <tr>
-                <td>{{ exportFileRequest.ReqReceivedDate }}</td>
-                <td>{{ exportFileRequest.userFullName }}</td>
-                <td>{{ exportFileRequest.description }}</td>
-                <td>{{ exportFileRequest.team }}</td>
-                <td>{{ exportFileRequest.dataset }}</td>
-                <!-- <td><a style="cursor:pointer;word-break:break-all;" (click)="requestDownload(exportFileRequest)">{{exportFileRequest.reviewFile}}</a></td> -->
-                <!--<td><div style="word-break:break-all;">{{exportFileRequest.reviewFile}}</div></td>-->
-                <td>{{ exportFileRequest.reviewFile }}</td>
-                <td>
-                  <div
-                    *ngIf="exportFileRequest.RequestReviewStatus == 'Submitted'"
-                  >
-                    <p-button
-                      icon="pi pi-check"
-                      styleClass="p-button-rounded p-button-text"
-                      (onClick)="submitApproval('Approved', exportFileRequest)"
-                    ></p-button>
-                    <p-button
-                      icon="pi pi-times"
-                      styleClass="p-button-rounded p-button-danger p-button-text"
-                      (onClick)="submitApproval('Rejected', exportFileRequest)"
-                    ></p-button>
-                  </div>
-
-                  <div
-                    *ngIf="
-                      exportFileRequest.RequestReviewStatus !== 'Submitted'
-                    "
-                  >
-                    <p-tag
-                      [severity]="
-                        exportFileRequest.RequestReviewStatus
-                          | requestReviewStatusSeverity
-                      "
-                      [value]="exportFileRequest.RequestReviewStatus"
-                    ></p-tag>
-                  </div>
-                  <!--<button class="btn btn-primary dotBtn"  (click)="submitApproval('Approved',exportFileRequest)">Approve</button><button class="btn btn-primary dotBtn"  (click)="submitApproval('Rejected',exportFileRequest)">Reject</button></td>-->
-                </td>
-
-                <td>
-                  <p-button
-                    icon="pi pi-file"
-                    styleClass="p-button-rounded p-button-text"
-                    (onClick)="renderApprovalForm(exportFileRequest)"
-                  ></p-button>
-                </td>
-                <td>
-                  <p-button
-                    icon="pi pi-cloud-download"
-                    styleClass="p-button-rounded p-button-text"
-                    (onClick)="requestDownloadForReview(exportFileRequest)"
-                  ></p-button>
-                  <!--<i class="material-icons iconFont" (click)="copyFileToTeamBucket(exportFileRequest)">file_copy</i>-->
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-          <hr />
-        </p-panel>
+          [requests]="exportFileRequests"
+          [columns]="cols"
+          dataKey="filename"
+          statusField="RequestReviewStatus"
+          (onApprove)="submitApproval('Approved', $event)"
+          (onReject)="submitApproval('Rejected', $event)"
+          (onDetails)="renderApprovalForm($event)"
+          (onDownload)="requestDownloadForReview($event)"
+        ></app-export-requests-panel>
 
         <!-- Table Requests-->
-        <mat-expansion-panel style="margin-top: 40px" [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Export Table Requests </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div *ngIf="!exportTableRequests">No table export requests</div>
-          <span style="color: grey"
-            >This section displays the list of tables requested for export to
-            the Edge DB</span
-          >
-          <hr />
-          <p-table
-            #dt
-            [columns]="colsExportTable"
-            [value]="exportTableRequests"
-            [paginator]="true"
-            [rows]="10"
-            [totalRecords]="exportTableRequests.length"
-            dataKey="filename"
-          >
-            <ng-template pTemplate="header" let-columns>
-              <tr>
-                <th
-                  *ngFor="let col of columns"
-                  [ngClass]="{ smallWidth: col.header != 'Filename' }"
-                >
-                  {{ col.header }} <br />
-                  <input
-                    size="40"
-                    *ngIf="col.header == 'Filename'"
-                    pInputText
-                    type="text"
-                    (input)="
-                      dt.filter($event.target.value, col.field, 'contains')
-                    "
-                  />
-                </th>
-              </tr>
-            </ng-template>
-            <ng-template
-              pTemplate="body"
-              let-exportTableRequest
-              let-columns="columns"
-            >
-              <tr>
-                <td>{{ exportTableRequest.ReqReceivedDate }}</td>
-                <td>{{ exportTableRequest.userFullName }}</td>
-                <td>
-                  <div style="word-break: break-all">
-                    {{ exportTableRequest.UserEmail }}
-                  </div>
-                </td>
-                <td>{{ exportTableRequest.justification }}</td>
-                <td>{{ exportTableRequest.team }}</td>
-                <td>{{ exportTableRequest.dataset }}</td>
-                <td>
-                  <div style="word-break: break-all">
-                    {{ exportTableRequest.table }}
-                  </div>
-                </td>
-                <td>
-                  <div
-                    *ngIf="
-                      exportTableRequest.RequestReviewStatus == 'Submitted'
-                    "
-                  >
-                    <i
-                      class="material-icons iconFont"
-                      (click)="
-                        submitTableApproval('Approved', exportTableRequest)
-                      "
-                      >done</i
-                    >
-                    <i
-                      class="material-icons iconFont"
-                      (click)="
-                        submitTableApproval('Rejected', exportTableRequest)
-                      "
-                      >close</i
-                    >
-                  </div>
-                  <div
-                    *ngIf="exportTableRequest.RequestReviewStatus == 'Approved'"
-                  >
-                    <p-message
-                      severity="success"
-                      text="{{ exportTableRequest.RequestReviewStatus }}"
-                    ></p-message>
-                  </div>
-                  <div
-                    *ngIf="exportTableRequest.RequestReviewStatus == 'Rejected'"
-                  >
-                    <p-message
-                      severity="error"
-                      text="{{ exportTableRequest.RequestReviewStatus }}"
-                    ></p-message>
-                  </div>
-                </td>
-                <td>
-                  <i
-                    class="material-icons iconFont"
-                    (click)="renderTableApprovalForm(exportTableRequest)"
-                    >insert_drive_file</i
-                  >
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-          <hr />
-        </mat-expansion-panel>
+        <app-export-requests-panel
+          header="Export Table Requests"
+          [requests]="exportTableRequests"
+          [columns]="colsExportTable"
+          dataKey="filename"
+          statusField="RequestReviewStatus"
+          (onApprove)="submitTableApproval('Approved', $event)"
+          (onReject)="submitTableApproval('Rejected', $event)"
+          (onDetails)="renderTableApprovalForm($event)"
+        ></app-export-requests-panel>
 
         <!-- Trust Requests-->
-        <mat-expansion-panel style="margin-top: 40px" [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Trusted Requests </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div *ngIf="!trustedRequests">No Trusted Requests</div>
-          <span style="color: grey"
-            >This section displays the list of Trusted Requests</span
-          >
-          <hr />
-          <!-- <div><button class="btn btn-primary dotBtn" (click)="uploadFilesToS3('Upload Files To S3')">Upload Files</button></div>-->
-          <p-table
-            #dt
-            [columns]="colsTrusted"
-            [value]="trustedRequests"
-            [paginator]="true"
-            [rows]="10"
-            [totalRecords]="trustedRequests.length"
-            dataKey="filename"
-          >
-            <ng-template pTemplate="header" let-columns>
-              <tr>
-                <th
-                  *ngFor="let col of columns"
-                  [ngClass]="{ smallWidth: col.header != 'Filename' }"
-                >
-                  {{ col.header }} <br />
-                  <input
-                    size="40"
-                    *ngIf="col.header == 'Filename'"
-                    pInputText
-                    type="text"
-                    (input)="
-                      dt.filter($event.target.value, col.field, 'contains')
-                    "
-                  />
-                </th>
-              </tr>
-            </ng-template>
-            <ng-template
-              pTemplate="body"
-              let-trustedRequest
-              let-columns="columns"
-            >
-              <tr>
-                <td>{{ trustedRequest.userFullName }}</td>
-                <td>{{ trustedRequest.dataset }}</td>
-                <td>{{ trustedRequest.justification }}</td>
-                <td>
-                  <div *ngIf="trustedRequest.TrustedStatus == 'Submitted'">
-                    <i
-                      class="material-icons iconFont"
-                      (click)="
-                        submitTrustedApproval(
-                          'Trusted',
-                          trustedRequest.userFullName,
-                          trustedRequest.dataset,
-                          trustedRequest
-                        )
-                      "
-                      >done</i
-                    >
-                    <i
-                      class="material-icons iconFont"
-                      (click)="
-                        submitTrustedApproval(
-                          'Untrusted',
-                          trustedRequest.userFullName,
-                          trustedRequest.dataset,
-                          trustedRequest
-                        )
-                      "
-                      >close</i
-                    >
-                  </div>
-                  <div *ngIf="trustedRequest.TrustedStatus == 'Trusted'">
-                    <p-message
-                      severity="success"
-                      text="{{ trustedRequest.TrustedStatus }}"
-                    ></p-message>
-                  </div>
-                  <div *ngIf="trustedRequest.TrustedStatus == 'Untrusted'">
-                    <p-message
-                      severity="error"
-                      text="{{ trustedRequest.TrustedStatus }}"
-                    ></p-message>
-                  </div>
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-          <hr />
-        </mat-expansion-panel>
+        <app-export-requests-panel
+          header="Trusted Requests"
+          [requests]="trustedRequests"
+          [columns]="colsTrusted"
+          dataKey="filename"
+          statusField="TrustedStatus"
+          (onApprove)="
+            submitTrustedApproval(
+              'Trusted',
+              $event.userFullName,
+              $event.dataset,
+              $event
+            )
+          "
+          (onReject)="
+            submitTrustedApproval(
+              'Untrusted',
+              $event.userFullName,
+              $event.dataset,
+              $event
+            )
+          "
+        ></app-export-requests-panel>
 
         <!-- Auto-Export Requests-->
-        <mat-expansion-panel style="margin-top: 40px" [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Auto-Export Requests </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div *ngIf="!autoExportRequests">No Auto-Export Requests</div>
-          <span style="color: grey"
-            >This section displays the list of Auto-Export Requests</span
-          >
-          <hr />
-          <p-table
-            #dt
-            [columns]="colsAutoExport"
-            [value]="autoExportRequests"
-            [paginator]="true"
-            [rows]="10"
-            [totalRecords]="autoExportRequests.length"
-            dataKey="filename"
-          >
-            <ng-template pTemplate="header" let-columns>
-              <tr>
-                <th
-                  id="autoRequests"
-                  *ngFor="let col of columns"
-                  [ngClass]="{ smallWidth: col.header != 'Filename' }"
-                >
-                  {{ col.header }} <br />
-                  <input
-                    size="40"
-                    *ngIf="col.header == 'Filename'"
-                    pInputText
-                    type="text"
-                    (input)="
-                      dt.filter($event.target.value, col.field, 'contains')
-                    "
-                  />
-                </th>
-              </tr>
-            </ng-template>
-            <ng-template
-              pTemplate="body"
-              let-autoExportRequest
-              let-columns="columns"
-            >
-              <tr>
-                <td>{{ autoExportRequest.userFullName }}</td>
-                <td>{{ autoExportRequest.dataset }}</td>
-                <td>{{ autoExportRequest.justification }}</td>
-                <td>
-                  <div
-                    *ngIf="autoExportRequest.AutoExportStatus == 'Submitted'"
-                  >
-                    <em
-                      class="material-icons iconFont"
-                      (click)="
-                        submitAutoExportApproval(
-                          'Approved',
-                          autoExportRequest.userFullName,
-                          autoExportRequest.dataset,
-                          autoExportRequest
-                        )
-                      "
-                      >done</em
-                    >
-                    <em
-                      class="material-icons iconFont"
-                      (click)="
-                        submitAutoExportApproval(
-                          'Denied',
-                          autoExportRequest.userFullName,
-                          autoExportRequest.dataset,
-                          autoExportRequest
-                        )
-                      "
-                      >close</em
-                    >
-                  </div>
-                  <div *ngIf="autoExportRequest.AutoExportStatus == 'Approved'">
-                    <p-message
-                      severity="success"
-                      text="{{ autoExportRequest.AutoExportStatus }}"
-                    ></p-message>
-                  </div>
-                  <div *ngIf="autoExportRequest.AutoExportStatus == 'Denied'">
-                    <p-message
-                      severity="error"
-                      text="{{ autoExportRequest.AutoExportStatus }}"
-                    ></p-message>
-                  </div>
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-          <hr />
-        </mat-expansion-panel>
+        <app-export-requests-panel
+          header="Auto-Export Requests"
+          [requests]="autoExportRequests"
+          [columns]="colsAutoExport"
+          dataKey="filename"
+          statusField="AutoExportStatus"
+          (onApprove)="
+            submitAutoExportApproval(
+              'Approved',
+              $event.userFullName,
+              $event.dataset,
+              $event
+            )
+          "
+          (onReject)="
+            submitAutoExportApproval(
+              'Denied',
+              $event.userFullName,
+              $event.dataset,
+              $event
+            )
+          "
+        ></app-export-requests-panel>
       </div>
     </div>
   </p-card>
