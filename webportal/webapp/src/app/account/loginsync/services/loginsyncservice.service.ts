@@ -24,22 +24,26 @@ export class AuthInterceptorLogin implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return from(this.cognitoService.getIdToken()).pipe(
-      tap((token) => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
-      switchMap((token) => {
-        // use transformation operator that maps to an Observable<T>
-        const newRequest = request.clone({
-          withCredentials: true,
-          setHeaders: {
-            "Content-Type": "application/json",
-            Authorization: ` ${token}`,
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        return next.handle(newRequest);
-      })
-    );
-  }
+    if (request.url.startsWith('https://s3.amazonaws.com/')) {
+      return next.handle(request);}
+    else {
+      return from(this.cognitoService.getIdToken()).pipe(
+        tap((token) => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
+        switchMap((token) => {
+          // use transformation operator that maps to an Observable<T>
+          const newRequest = request.clone({
+            withCredentials: true,
+            setHeaders: {
+              "Content-Type": "application/json",
+              Authorization: ` ${token}`,
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          return next.handle(newRequest);
+        })
+      );
+    }
+  }   
 }
 
 @Injectable({
