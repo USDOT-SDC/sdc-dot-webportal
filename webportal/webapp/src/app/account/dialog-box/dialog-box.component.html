@@ -872,13 +872,20 @@
       <mat-dialog-actions>
         <button
           class="btn btn-primary dotBtn request-exportCancelBtn"
+          iconPos="right"
           (click)="onNoClick()"
         >
           CANCEL
         </button>
       </mat-dialog-actions>
       <div>
-        <button
+        <p-button
+          label="Submit"
+          [loading]="loading"
+          (click)="submitRequest()"
+        ></p-button>
+        <!--
+        <p-button
           class="btn btn-primary dotBtn request-exportSubmitBtn"
           [disabled]="
             (!messageModel.autoderiveddataset || !messageModel.autoreason) &&
@@ -887,8 +894,8 @@
           (click)="submitRequest()"
         >
           SUBMIT
-        </button>
-      </div>
+        </p-button>
+      --></div>
       <mat-dialog-actions>
         <button
           class="btn btn-primary dotBtn request-exportPreviousBtn"
