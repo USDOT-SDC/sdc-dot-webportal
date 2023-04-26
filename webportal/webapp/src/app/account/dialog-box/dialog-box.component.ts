@@ -28,7 +28,7 @@ import { CommonModule, Location } from "@angular/common";
 import { DialogModule } from "@angular/cdk/dialog";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatInputModule } from "@angular/material/input";
-import { MatFormFieldModule, MatHint } from "@angular/material/form-field";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -57,12 +57,14 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { CdkTableModule } from "@angular/cdk/table";
 import { TableModule } from "primeng/table";
 import { PanelModule } from "primeng/panel";
+import { RadioButtonModule } from "primeng/radiobutton";
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
     CdkTableModule,
+    RadioButtonModule,
     TableModule,
     FileUploadModule,
     InputTextModule,

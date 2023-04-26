@@ -141,6 +141,7 @@ export class DatasetsComponent implements OnInit {
     });
     this.getMyDatasetsList();
     console.log("My Datasets length = " + this.myDatasets.length);
+    console.log("Datasets ==", this.myDatasets);
 
     this.cols = [
       { field: "filename", header: "Filename" },
