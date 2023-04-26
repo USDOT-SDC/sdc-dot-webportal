@@ -881,11 +881,15 @@
       <div>
         <p-button
           label="Submit"
-          [loading]="loading"
+          styleClass="btn btn-primary dotBtn request-exportSubmitBtn"
+          [disabled]="
+            (!messageModel.autoderiveddataset || !messageModel.autoreason) &&
+            autoExportRequestSelected
+          "
           (click)="submitRequest()"
         ></p-button>
         <!--
-        <p-button
+        <button
           class="btn btn-primary dotBtn request-exportSubmitBtn"
           [disabled]="
             (!messageModel.autoderiveddataset || !messageModel.autoreason) &&
@@ -894,8 +898,9 @@
           (click)="submitRequest()"
         >
           SUBMIT
-        </p-button>
-      --></div>
+        </button>
+        -->
+      </div>
       <mat-dialog-actions>
         <button
           class="btn btn-primary dotBtn request-exportPreviousBtn"
