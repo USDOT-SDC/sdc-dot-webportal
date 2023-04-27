@@ -28,7 +28,7 @@ import { CommonModule, Location } from "@angular/common";
 import { DialogModule } from "@angular/cdk/dialog";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatInputModule } from "@angular/material/input";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatFormFieldModule, MatHint } from "@angular/material/form-field";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -73,7 +73,6 @@ import { RadioButtonModule } from "primeng/radiobutton";
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatTooltipModule,
     MatToolbarModule,
     MatIconModule,
     MatRadioModule,
