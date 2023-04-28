@@ -1297,14 +1297,16 @@
   </mat-dialog-content>
 </div>
 
+<!-- Manage Workstation -->
 <!-- ngIf to render the dialog only when data.mailType is resize -->
 <div *ngIf="mailType === 'reSize Request'">
-  <h3>{{ getTabHeading() }}</h3>
+  <h3  mat-dialog-title>{{ getTabHeading() }}</h3>
   <hr />
   <mat-tab-group
     [selectedIndex]="selectedIndex"
     (selectedIndexChange)="selectedIndexChange($event)"
   >
+  <!--TAB1 - manage workstation-->
     <mat-tab label="Manage Workstation" #tab1>
       <mat-dialog-content style="height: 100%">
         <hr />
@@ -1319,7 +1321,7 @@
         <div class="manage-selection-container">
           <div class="resize-filter-start-workspace">
             <mat-checkbox [(ngModel)]="resizeWorkSpaceOnly"></mat-checkbox>
-            <p style="padding-left: 10px">
+            <p style="padding: 10px 0 0 10px">
               <b> Resize Workstation </b>
             </p>
             <span
@@ -1330,7 +1332,7 @@
             </span>
           </div>
           <div>
-            <p style="margin-left: 30px">
+            <p style="margin-left: 50px; padding-bottom: 10 px;  font-size: 85%;">
               <b>
                 <i>Please shut down your workstation before resizing.</i>
               </b>
@@ -1357,9 +1359,7 @@
               [matTooltipPosition]="'above'"
               matTooltip="{{ getScheduleUptimeTooltip() }}"
             ></mat-checkbox>
-            <p style="padding-left: 10px">
-              <b> Schedule Workstation UpTime </b>
-            </p>
+            <p style="padding: 10px 0 0 10px"><b> Schedule Workstation UpTime </b></p>
             <span
               [matTooltipPosition]="'above'"
               matTooltip="Schedule your workstation to keep it running during SDC daily instance shutdown process"
@@ -1380,6 +1380,7 @@
         </div>
       </mat-dialog-content>
     </mat-tab>
+    <!--TAB2 - RESIZE WORKSTATION-->
     <mat-tab
       *ngIf="resizeWorkSpaceOnly"
       label="Resize Workstation"
@@ -1392,16 +1393,13 @@
           <b>
             Your current workstation configuration is
             {{ (currentConfigurations || [""])[0] }} CPU and
-            {{ (currentConfigurations || ["", ""])[1] }} GB RAM
+            {{ (currentConfigurations || ["", ""])[1] }} GB RAM.
           </b>
         </p>
         <div>
-          <b
-            >Please choose the appropriate instance type by selecting the
-            desired CPU and RAM<span
-              [matTooltipPosition]="'above'"
-              matTooltip="Schedule and resize your default workstation with extra CPU and Memory"
-            >
+          <b>
+            Please submit your desired CPU and RAM to retrieve available instance type(s).
+            <span [matTooltipPosition]="'above'"  matTooltip="Schedule and resize your default workstation with extra CPU and Memory">
               <i class="material-icons"> info </i>
             </span>
             For pricing related details
@@ -1412,10 +1410,10 @@
             >.</b
           >
           <p>
+            <br>
             <i
               >Note: Make sure your work is saved and your workstation is
-              stopped before requesting a resize.</i
-            >
+              stopped before requesting a resize.</i>
           </p>
         </div>
         <hr />
@@ -1484,7 +1482,7 @@
 
             <div class="resize-filter-start-workspace">
               <mat-checkbox [(ngModel)]="startAfterResize"></mat-checkbox>
-              <p style="padding-left: 10px">
+              <p style="padding: 10px 0 0 10px">
                 <b>
                   Please start my workstation after resizing to the new
                   configuration
@@ -1572,6 +1570,7 @@
         </div>
       </mat-dialog-content>
     </mat-tab>
+    <!--TAB5 - SCHEDULE UPTIME-->
     <mat-tab
       *ngIf="scheduleUpTime"
       label="Schedule Workstation UpTime"
@@ -1650,6 +1649,7 @@
         </div>
       </mat-dialog-content>
     </mat-tab>
+    <!--TAB3 - DISK SPACE - WILL NOT DISPLAY SINCE [resizeAddDiskOnly] CHECKBOX IS Styled display none & ManageBoth is never true-->
     <mat-tab
       *ngIf="resizeAddDiskOnly || ManageBoth"
       label="Disk Space"
@@ -1704,6 +1704,7 @@
         </div>
       </mat-dialog-content>
     </mat-tab>
+    <!--TAB 4 - SCHEDULE DATE -->
     <mat-tab
       *ngIf="resizeAddDiskOnly || resizeWorkSpaceOnly || ManageBoth"
       label="Schedule Date"
@@ -1814,6 +1815,7 @@
   </mat-tab-group>
 </div>
 
+<!-- Upload Files to S3 -->
 <div *ngIf="requestType == 'Upload Files To S3'">
   <p-card header="Upload files to SDC platform">
     <div *ngIf="!uploadNotice">

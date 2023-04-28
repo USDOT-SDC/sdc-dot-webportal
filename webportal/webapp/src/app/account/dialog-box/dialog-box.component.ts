@@ -640,6 +640,7 @@ export class DialogBoxComponent implements OnInit {
   }
 
   handleResizeWorkNext(e) {
+    console.log('HandleResizeWorkNext Called - this.selectedIndex == ', this.selectedIndex);
     /*
 
         ****Logic to navigate if need not hide tabs but disable based on manage selection****
@@ -675,6 +676,7 @@ export class DialogBoxComponent implements OnInit {
     }
     console.log("handle resize next ");
     this.selectedIndexChange(this.selectedIndex + 1);
+    console.log('this.selectedIndex: ', this.selectedIndex);
   }
 
   handlePricingSelection(instanceFamilyIndex, pricingGroupsIndex) {
