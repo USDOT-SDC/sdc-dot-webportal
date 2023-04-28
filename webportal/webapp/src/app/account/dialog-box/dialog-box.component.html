@@ -1,7 +1,7 @@
 <!--SDC Datasets Access Request Dialogbox-->
 <div *ngIf="mailType == 'Access Request Mail' && datasetName != 'CVP'">
   <h4 mat-dialog-title>SDC Data Access Request Form</h4>
-  <hr />
+  <hr>
   <mat-dialog-content>
     <p>
       Please fill out the following information to obtain access to the data
@@ -82,7 +82,7 @@
         <strong>sdc-support@dot.gov</strong>
       </p>
     </div>
-    <hr />
+    <hr>
     <h5 style="font-size: 16px; padding-top: 10px">
       Geographic Extent of Access
     </h5>
@@ -102,7 +102,7 @@
     <p style="margin-top: -15px; color: #a09e9e; font-size: 12px">
       use commas when requesting multiple states (e.g. KN, VI)
     </p>
-    <hr />
+    <hr>
     <mat-checkbox
       [(ngModel)]="agreed"
       [disabled]="
@@ -124,7 +124,7 @@
       account for the site and associated data in those accounts.
     </p>
   </mat-dialog-content>
-  <hr />
+  <hr>
   <mat-dialog-actions>
     <button
       class="btn btn-primary dotBtn"
@@ -209,7 +209,7 @@
 <!--Publish Dataset / Algorithm Request Dialogbox-->
 <div *ngIf="mailType == 'Dataset publish Mail'">
   <h4 mat-dialog-title>Publish Dataset / Algorithm Request</h4>
-  <hr />
+  <hr>
   <mat-dialog-content>
     <mat-form-field style="width: 100%">
       <mat-select placeholder="Type" [(ngModel)]="messageModel.type">
@@ -328,7 +328,7 @@
       >
     </mat-form-field>
   </mat-dialog-content>
-  <hr />
+  <hr>
   <mat-dialog-actions>
     <span *ngIf="messageModel.type == 'dataset'">
       <button
@@ -370,14 +370,14 @@
 <!--Request Export Dataset Dialogbox-->
 <div *ngIf="mailType == 'Dataset export Mail'">
   <h3 mat-dialog-title>Request to Export Data</h3>
-  <hr />
+  <hr>
   <mat-tab-group
     [selectedIndex]="selectedIndex"
     (selectedIndexChange)="selectedIndexChange($event)"
   >
     <mat-tab label="Select Project" #tab1>
       <mat-dialog-content style="height: 100%">
-        <hr />
+        <hr>
         <p>
           <b
             >Please select the Project, Data Provider, and the primary
@@ -456,7 +456,7 @@
             >Please select Sub DataSet Type
           </mat-error>
         </mat-form-field>
-        <hr />
+        <hr>
         <mat-dialog-actions>
           <button
             class="btn btn-primary dotBtn request-exportCancelBtn"
@@ -479,22 +479,22 @@
           >&nbsp;
         </mat-dialog-actions>
       </mat-dialog-content>
-      <hr />
+      <hr>
     </mat-tab>
 
     <mat-tab label="Approval Form" #tab2 [disabled]="selectedIndex == 0">
-      <br />
-      <p>
-        <b
-          >Please provide additional information pertaining to your request for
-          exporting data, by filling out the fields below. These details will be
-          shared with the Data Provider to help them review your request and
-          provide their decision.</b
-        >
-      </p>
-      <br />
-      <label style="float: right"> * All fields are mandatory </label>
-      <hr />
+      <mat-dialog-content>
+        <hr>
+        <br />
+        <p><b>
+            Please provide additional information pertaining to your request for
+            exporting data, by filling out the fields below. These details will be
+            shared with the Data Provider to help them review your request and
+            provide their decision.</b></p>
+        <br />
+        <label style="float: right"> * All fields are mandatory </label>
+        <hr>
+      </mat-dialog-content>
       <!-- Approval Form - Non-Trusted Status -->
       <mat-dialog-content *ngIf="!trustedStatus">
         <mat-form-field style="width: 100%">
@@ -588,7 +588,7 @@
           >
         </mat-form-field>
 
-        <hr />
+        <hr>
         <br />
         <p-panel header="Acceptable Use Policy">
           <div
@@ -631,7 +631,7 @@
           </div>
         </div>
 
-        <hr />
+        <hr>
         <mat-dialog-actions>
           <button
             class="btn btn-primary dotBtn request-exportCancelBtn"
@@ -725,7 +725,7 @@
           <mat-hint align="end">Alpha-numeric characters only</mat-hint>
         </mat-form-field> -->
 
-        <hr />
+        <hr>
         <p-panel header="Acceptable Use Policy">
           <div
             class="panel-div"
@@ -745,7 +745,7 @@
         </p-panel>
         <br />
 
-        <hr />
+        <hr>
         <mat-dialog-actions>
           <button
             class="btn btn-primary dotBtn request-exportCancelBtn"
@@ -777,7 +777,8 @@
       [disabled]="selectedIndex != 2"
       *ngIf="trustedStatus"
     >
-      <hr />
+      <mat-dialog-content>    
+      <hr>
       <p>
         <b
           >Auto-Export is a feature that allows data analysts to export their
@@ -791,6 +792,8 @@
         >
       </p>
       <br />
+      </mat-dialog-content>
+
       <mat-dialog-content *ngIf="!trustedStatus">
         <br />
         <p>
@@ -876,7 +879,6 @@
         >
           CANCEL
         </button>
-      </mat-dialog-actions>
       <div>
         <button
           class="btn btn-primary dotBtn request-exportSubmitBtn"
@@ -889,7 +891,6 @@
           SUBMIT
         </button>
       </div>
-      <mat-dialog-actions>
         <button
           class="btn btn-primary dotBtn request-exportPreviousBtn"
           (click)="onPreviousBtnClick()"
@@ -905,7 +906,7 @@
 <div *ngIf="mailType == 'Request Trusted Status Mail'">
   <h3 mat-dialog-title>Request Trusted User Status</h3>
   <mat-dialog-content style="height: 100%">
-    <hr />
+    <hr>
     <p>
       <b
         >Trusted Status is a mechanism to help speed the turnaround of future,
@@ -923,7 +924,7 @@
     </p>
     <br />
     <label style="float: right"> * All fields are mandatory </label>
-    <hr />
+    <hr>
 
     <mat-form-field style="width: 100%">
       <mat-select
@@ -1005,7 +1006,7 @@
       </mat-form-field>
     </div>
     <br />
-    <hr />
+    <hr>
 
     <p-panel header="Acceptable Use Policy">
       <div
@@ -1037,7 +1038,7 @@
         </div>
       </div>
     </div>
-    <hr />
+    <hr>
     <mat-dialog-actions>
       <button
         class="btn btn-primary dotBtn request-exportCancelBtn"
@@ -1078,7 +1079,7 @@
     </p>
     <!--br/-->
     <label style="float: right"> * All fields are mandatory </label>
-    <hr />
+    <hr>
     <br />
     <p>
       <b
@@ -1235,7 +1236,7 @@
     <div style="line-height: 100%">
       <br />
     </div>
-    <hr />
+    <hr>
 
     <p-panel header="Acceptable Use Policy">
       <div
@@ -1267,7 +1268,7 @@
         </div>
       </div>
     </div>
-    <hr />
+    <hr>
     <mat-dialog-actions>
       <button
         class="btn btn-primary dotBtn request-exportCancelBtn"
@@ -1301,7 +1302,7 @@
 <!-- ngIf to render the dialog only when data.mailType is resize -->
 <div *ngIf="mailType === 'reSize Request'">
   <h3  mat-dialog-title>{{ getTabHeading() }}</h3>
-  <hr />
+  <hr>
   <mat-tab-group
     [selectedIndex]="selectedIndex"
     (selectedIndexChange)="selectedIndexChange($event)"
@@ -1309,14 +1310,14 @@
   <!--TAB1 - manage workstation-->
     <mat-tab label="Manage Workstation" #tab1>
       <mat-dialog-content style="height: 100%">
-        <hr />
+        <hr>
         <p>
           <b>
             Please select from the below option(s) which are currently available for managing
             your workstation. The corresponding workflow will then activate.
           </b>
         </p>
-        <hr />
+        <hr>
         <div class="manage-selection-container">
           <div class="resize-filter-start-workspace">
             <mat-checkbox [(ngModel)]="resizeWorkSpaceOnly"></mat-checkbox>
@@ -1387,7 +1388,7 @@
       [disabled]="selectedIndex == 0 || !resizeWorkSpaceOnly"
     >
       <mat-dialog-content style="height: 100%">
-        <hr />
+        <hr>
         <p>
           <b>
             Your current workstation configuration is
@@ -1415,7 +1416,7 @@
               stopped before requesting a resize.</i>
           </p>
         </div>
-        <hr />
+        <hr>
         <div class="resize-form-container">
           <div class="resize-filters-section">
             <div>
@@ -1577,7 +1578,7 @@
       [disabled]="selectedIndex == 0 || selectedIndex == 1 || !scheduleUpTime"
     >
       <mat-dialog-content style="height: 100%">
-        <hr />
+        <hr>
         <p>
           <b
             ><span
@@ -1594,7 +1595,7 @@
             request is completed.</b
           >
         </p>
-        <hr />
+        <hr>
         <p>
           <b> Schedule Workstation UpTime </b>
         </p>
@@ -1660,7 +1661,7 @@
       "
     >
       <mat-dialog-content style="height: 100%">
-        <hr />
+        <hr>
         <p>
           <b
             >Please specify additional disk space that should be added to the
@@ -1673,7 +1674,7 @@
             <i class="material-icons"> info </i>
           </span>
         </p>
-        <hr />
+        <hr>
         <p>
           <b> Selected Desired Diskspace </b>
         </p>
@@ -1711,7 +1712,7 @@
       [disabled]="selectedIndex != 3"
     >
       <mat-dialog-content>
-        <hr />
+        <hr>
         <p>
           <b
             >Please select the schedule between what dates you would want the
@@ -1720,7 +1721,7 @@
           >
         </p>
 
-        <hr />
+        <hr>
         <div *ngIf="!(!resizeWorkSpaceOnly && !ManageBoth)">
           <p>
             <b> Workspace resize schedule </b>
@@ -1757,7 +1758,7 @@
             </mat-form-field>
             <div style="width: 10%"></div>
           </div>
-          <hr />
+          <hr>
         </div>
         <div *ngIf="!(!resizeAddDiskOnly && !ManageBoth)">
           <p>
@@ -1925,7 +1926,7 @@
 
 <!--<div *ngIf="mailType == 'Details for export request'">
   <h3>Details for Approval Form</h3>
-  <hr />
+  <hr>
   <mat-form-field style="width: 100%">
     <input
       matInput
@@ -2034,7 +2035,7 @@
 <!--
 <div *ngIf="mailType == 'Details for Edge Table Publication Request'">
   <h3>Details for (Table) Approval Form</h3>
-  <hr />
+  <hr>
   <mat-form-field style="width: 80%">
     <input
       matInput
