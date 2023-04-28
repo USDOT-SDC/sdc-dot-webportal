@@ -1312,9 +1312,8 @@
         <hr />
         <p>
           <b>
-            Please select one or multiple options below for managing your
-            workstation. The appropriate workflow will be displayed based on the
-            selection.
+            Please select from the below option(s) which are currently available for managing
+            your workstation. The corresponding workflow will then activate.
           </b>
         </p>
         <hr />
@@ -1353,7 +1352,7 @@
               <i class="material-icons"> info </i>
             </span>
           </div>
-          <div class="resize-filter-start-workspace">
+          <div  style="display: none" class="resize-filter-start-workspace">
             <mat-checkbox
               [(ngModel)]="scheduleUpTime"
               [matTooltipPosition]="'above'"
