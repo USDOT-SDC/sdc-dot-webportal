@@ -140,8 +140,6 @@ export class DatasetsComponent implements OnInit {
       }
     });
     this.getMyDatasetsList();
-    console.log("My Datasets length = " + this.myDatasets.length);
-    console.log("Datasets ==", this.myDatasets);
 
     this.cols = [
       { field: "filename", header: "Filename" },
@@ -156,7 +154,6 @@ export class DatasetsComponent implements OnInit {
   }
 
   getUserInfo() {
-    console.log("getUserInfo called");
     this.gatewayService.getUserInfo("user").subscribe((response: any) => {
       sessionStorage.setItem("username", response.username);
       sessionStorage.setItem("email", response.email);
@@ -212,8 +209,6 @@ export class DatasetsComponent implements OnInit {
               let trusted = false;
               // check if user is trusted for a dataset
               for (var dt in this.userTrustedStatus) {
-                //console.log(dt);
-                //console.log()
                 if (dt in metadata) {
                   this.myDatasets.push({
                     filename: x,

@@ -193,17 +193,7 @@ export class ExportRequestsComponent implements OnInit {
     this.exportTableRequests = [];
     this.trustedRequests = [];
     this.autoExportRequests = [];
-    //this.exportFileRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'description' : 'This is derived Dataset', 'team' : 'team1 bucket', 'dataset' : 'Waze-Waze-alert', 'details' : 'Details'  ,'reviewFile' : 'reviewFileOrLink'});
-    //this.trustedRequests.push({'userFullName' : 'Srinivas Nannapaneni', 'dataset' : 'Waze-Waze-alert' });
 
-    /*this.gatewayService.post("export/requests?message=" + encodeURI(JSON.stringify({}))).subscribe(
-            (response: any) => {
-                this.snackBar.open("Your request has been sent successfully", 'close', {
-                    duration: 2000,
-                });
-                console.log('Request Sent Successfully');
-            }
-        );*/
     let reqBody = {};
     reqBody["userEmail"] = this.userEmail;
 
@@ -286,7 +276,6 @@ export class ExportRequestsComponent implements OnInit {
 
         for (let items of response["autoExportRequests"]) {
           for (let item of items) {
-            //console.log(item);
             this.autoExportRequests.push({
               userFullName: item["UserID"],
               dataset: item["Dataset-DataProvider-Datatype"],
@@ -337,23 +326,6 @@ export class ExportRequestsComponent implements OnInit {
             : -1;
         });
       });
-
-    /*this.gatewayService.get('user_data?userBucketName=' + this.userBucketName).subscribe(
-            (response: any) => {
-            for(let x of response) {
-                this.getMetadataForS3Objects(x).subscribe(
-                    metadata => {
-                        if (metadata != null){
-                            this.myDatasets.push({'filename':x, 'download': metadata["download"], 'export': metadata["export"], 'publish': metadata["publish"]});
-                        } else{
-                            this.myDatasets.push({'filename':x, 'download': null, 'export': null, 'publish': null});
-                        }
-                    }
-                );
-             }
-             console.log(this.myDatasets);
-            }
-        );*/
   }
 
   renderApprovalForm(approvalForm) {
@@ -389,39 +361,6 @@ export class ExportRequestsComponent implements OnInit {
       console.log("The dialog was closed");
     });
   }
-
-  /* 
-    // - Not Used - Functionality of 'Export File for Review' changed to file download, as of SDC-5698
-    copyFileToTeamBucket(exportFileForReview) {
-        var team_bucket = exportFileForReview.TeamBucket;            //TeamBucket from exportFileRequests array    
-        var s3Key = exportFileForReview.S3Key;        
-        let export_details = {};
-        this.userBucketName = sessionStorage.getItem('team_bucket_name');
-        export_details["provider_team_bucket"] = this.userBucketName;     //team bucket for the data steward/ export requests page user
-        export_details["team_bucket"] = team_bucket;
-        export_details["s3Key"] = s3Key;
-        export_details["userName"] = this.userName;
-        //export_details["teamName"] = exportFileForReview.TeamName;              //teamName from exportFileRequests array -- not provided, not a col in RequestExportTable    
-        this.gatewayService.post("export/requests/exportFileforReview?message=" + encodeURI(JSON.stringify(export_details))).subscribe(
-            (response: any) => {
-                // this.snackBar.open("File is exported for the data provider for review under the export_reviews folder for the team "+ export_details["teamName"], 'close', {
-                 this.snackBar.open("File is exported for the data provider for review under the export_reviews folder", 'close', {                                  
-                    duration: 12000,
-                });
-            }
-        );
-    }
-    */
-
-  /*  
-    // - Not Used - This is leftover from when 'reviewFile'' data was formatted as a download hyperlink
-    requestDownload(exportFileRequest) {
-        this.gatewayService.getDownloadUrl('download_url?bucket_name=' + exportFileRequest.team + '&file_name=' + exportFileRequest.reviewFile).subscribe(
-            (response: any) => {
-            window.open(response);
-        });
-    }
-    */
 
   requestDownloadForReview(exportFileRequest) {
     console.log("requestDownloadForReview called");
@@ -517,17 +456,6 @@ export class ExportRequestsComponent implements OnInit {
         console.log("Request Sent Successfully");
       });
   }
-
-  /* Cheryl - commenting out, this method is not being used anywhere
-    getMetadataForS3Objects(filename: string): any {
-        var resp;
-        return this.gatewayService.getMetadataOfS3Object('get_metadata_s3?bucket_name=' + this.userBucketName + '&file_name=' + filename).map(
-            (response: any) => {
-                resp=response;
-                return resp;
-        });    
-    }
-    */
 
   parseQueryString(queryString: string): Map<string, string> {
     var params = new Map<string, string>();

@@ -20,13 +20,12 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (request.url.startsWith('https://s3.amazonaws.com/')) {
-      return next.handle(request);}
-    else {
+    if (request.url.startsWith("https://s3.amazonaws.com/")) {
+      return next.handle(request);
+    } else {
       return from(this.cognitoService.getIdToken()).pipe(
         tap((token) => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
         switchMap((token) => {
-          // use transformation operator that maps to an Observable<T>
           const newRequest = request.clone({
             withCredentials: true,
             setHeaders: {
@@ -39,7 +38,7 @@ export class AuthInterceptor implements HttpInterceptor {
         })
       );
     }
-  }   
+  }
 }
 
 @Injectable({
@@ -98,88 +97,49 @@ export class ApiGatewayService {
     };
   }
 
-  /*// Set required headers on the request -- formerly used with Http Module
-    setRequestHeaders() {
-        let authToken = this.cognitoService.getIdToken();
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': " " + authToken,
-            'Access-Control-Allow-Origin': '*'
-        });
-        this.options = new RequestOptions({ headers: headers });
-    } */
-
-  // Set required headers on the request - updated for HttpClient Module - replaced by interceptor during Amplify migration
-  // constructHttpOptions(restype: string = "json") {
-  //   let authToken = this.cognitoService.getIdToken();
-  //   const httpOptions = {
-  //     headers: new HttpHeaders({
-  //       "Content-Type": "application/json",
-  //       Authorization: " " + authToken,
-  //       "Access-Control-Allow-Origin": "*",
-  //     }),
-  //     responsetype: restype,
-  //   };
-  //   return httpOptions;
-  // }
-
-
-  // HTTP GET method invocation
   get(url: string) {
-    // this.setRequestHeaders();
-    // return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-    //const httpOptions = this.constructHttpOptions();
-    return this.http.get(ApiGatewayService._API_ENDPOINT + url).pipe(
-      map(this.extractData),
-      catchError(this.handleError)
-    );
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url)
+      .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   sendRequestMail(url: string) {
-    //const httpOptions = this.constructHttpOptions();
     return this.http
       .post(ApiGatewayService._API_ENDPOINT + url, "")
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getUserInfo(url: string) {
-    //const httpOptions = this.constructHttpOptions();
-    //console.log("getUserInfo ==", this.http.get(ApiGatewayService._API_ENDPOINT + url).pipe(map(this.extractData), catchError(this.handleError)));
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "json" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   post(url: string) {
-    //const httpOptions = this.constructHttpOptions();
     return this.http
       .post(ApiGatewayService._API_ENDPOINT + url, "", { responseType: "json" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getPresignedUrl(url: string) {
-    //const httpOptions = this.constructHttpOptions('text');
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "text" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getDownloadUrl(url: string) {
-    //const httpOptions = this.constructHttpOptions('text');
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "text" })
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   getMetadataOfS3Object(url: string) {
-    //const httpOptions = this.constructHttpOptions();
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   sendExportRequest(url: string) {
-    //const httpOptions = this.constructHttpOptions();
     console.log("sending request 2 " + ApiGatewayService._API_ENDPOINT + url);
     return this.http
       .post(ApiGatewayService._API_ENDPOINT + url, "")
@@ -187,14 +147,12 @@ export class ApiGatewayService {
   }
 
   getDesiredInstanceTypesAndCosts(url: string) {
-    //const httpOptions = this.constructHttpOptions();
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
   modifyUserWorkstation(url: string) {
-    //const httpOptions = this.constructHttpOptions();
     return this.http
       .get(ApiGatewayService._API_ENDPOINT + url)
       .pipe(map(this.extractData), catchError(this.handleError));

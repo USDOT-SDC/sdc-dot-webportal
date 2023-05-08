@@ -24,7 +24,6 @@ export class LoginSyncGuard implements CanActivate {
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     return this.loginSyncService.userAccountsLinked().pipe(
       map((response) => {
-        console.log("RESPONSE ==", response);
         if (response["migratedLegacyUser"] === true) {
           this.window.location.href =
             this.cognitoService.buildLoginGovRedirectUrl();
@@ -32,12 +31,11 @@ export class LoginSyncGuard implements CanActivate {
         } else if (response["accountLinked"] === true) {
           return true; // Continue to the /accounthome page
         }
-        console.log("response['accountLinked'] ==", response["accountLinked"]);
+
         this.router.navigate(["account/loginsync"]);
         return false;
       }),
       catchError((error) => {
-        console.log("GOT AN ERROR ON canActivate()");
         const msg = error.userErrorMessage
           ? error.userErrorMessage
           : "Caught an error from the loginSyncService call but no message error message was provided";

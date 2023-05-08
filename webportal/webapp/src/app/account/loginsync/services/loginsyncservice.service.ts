@@ -24,9 +24,9 @@ export class AuthInterceptorLogin implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (request.url.startsWith('https://s3.amazonaws.com/')) {
-      return next.handle(request);}
-    else {
+    if (request.url.startsWith("https://s3.amazonaws.com/")) {
+      return next.handle(request);
+    } else {
       return from(this.cognitoService.getIdToken()).pipe(
         tap((token) => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
         switchMap((token) => {
@@ -43,7 +43,7 @@ export class AuthInterceptorLogin implements HttpInterceptor {
         })
       );
     }
-  }   
+  }
 }
 
 @Injectable({
@@ -74,10 +74,8 @@ export class LoginSyncService {
   // }
 
   userAccountsLinked(): Observable<any> {
-    console.log("userAccountsLinked");
     return this.http.get(this.accountLinkedUrl).pipe(
       map((response) => {
-        console.log("RESPONSE in userAccountsLinked ==", response);
         return response;
       }),
       catchError(this.handleError)
@@ -89,10 +87,8 @@ export class LoginSyncService {
       username: username,
       password: password,
     };
-    console.log("linkAccounts Payload ==", payload);
     return this.http.post(this.linkAccountUrl, payload).pipe(
       map((response) => {
-        console.log("RESPONSE ==", response);
         return response;
       }),
       catchError(this.handleError)

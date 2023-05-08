@@ -32,15 +32,11 @@ export class LoginSyncComponent implements OnInit {
     @Inject(WindowToken) private window: Window
   ) {}
 
-  ngOnInit() {
-    console.log("WE'RE IN LOGINSYNC");
-  }
+  ngOnInit() {}
 
   onSubmitLinkAccount() {
-    console.log("onSubmitLinkAccount called");
     this.loginSyncService.linkAccounts(this.username, this.password).subscribe(
       (result) => {
-        console.log("RESULT ==", result);
         this.redirectUser(result);
       },
       (error) => {

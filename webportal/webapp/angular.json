@@ -17,10 +17,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ],
+            "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.min.css",
@@ -29,14 +26,12 @@
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
-            "scripts": [
-              "node_modules/marked/marked.min.js"
-            ],
+            "scripts": ["node_modules/marked/marked.min.js"],
             "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
+            "buildOptimizer": true,
             "sourceMap": true,
-            "optimization": false,
+            "optimization": true,
             "namedChunks": true
           },
           "configurations": {
@@ -172,7 +167,7 @@
                 }
               ],
               "optimization": {
-                "scripts": false,
+                "scripts": true,
                 "styles": {
                   "minify": true,
                   "inlineCritical": false
@@ -259,23 +254,17 @@
               "node_modules/font-awesome/css/font-awesome.min.css",
               "node_modules/uswds/dist/css/uswds.min.css"
             ],
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ]
+            "assets": ["src/assets", "src/favicon.ico"]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
-    },
+    }
   },
   "schematics": {
     "@schematics/angular:component": {
@@ -287,9 +276,7 @@
     }
   },
   "cli": {
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ],
+    "schematicCollections": ["@angular-eslint/schematics"],
     "analytics": false
   }
 }

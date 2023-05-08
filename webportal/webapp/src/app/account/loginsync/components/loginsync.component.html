@@ -1,47 +1,122 @@
 <div class="container">
-    <app-loader></app-loader>
-    <div class="grid-row margin-top-3">
-      <div class="grid-col-4"></div>
-      <div class="grid-col-4">
-        <app-alert [showAlert]="errorMessage" [text]="errorMessage"></app-alert>
-        <form *ngIf="!changeTemporaryPassword" id="signin_form" class="usa-form signin" (ngSubmit)="onSubmitLinkAccount()">
-          <fieldset class="usa-fieldset">
-            <legend class="border-0 usa-legend">One Time Sign In</legend>
-            <label class="margin-top-4" for="username">Username</label>
-            <input class="usa-input" id="username" name="username" [(ngModel)]="username" autocapitalize="off" autocorrect="off">
-    
-            <label class="margin-top-4" for="password-sign-in">Password</label>
-            <input class="usa-input" id="password-sign-in" name="password" [(ngModel)]="password" type="password" appTogglePassword>
-            <input class="usa-button link-submit margin-top-3" type="submit" value="Sign in">
+  <app-loader></app-loader>
+  <div class="grid-row margin-top-3">
+    <div class="grid-col-4"></div>
+    <div class="grid-col-4">
+      <app-alert [showAlert]="errorMessage" [text]="errorMessage"></app-alert>
+      <form
+        *ngIf="!changeTemporaryPassword"
+        id="signin_form"
+        class="usa-form signin"
+        (ngSubmit)="onSubmitLinkAccount()"
+      >
+        <fieldset class="usa-fieldset">
+          <legend class="border-0 usa-legend">One Time Sign In</legend>
+          <label class="margin-top-4" for="username">Username</label>
+          <input
+            class="usa-input"
+            id="username"
+            name="username"
+            [(ngModel)]="username"
+            autocapitalize="off"
+            autocorrect="off"
+          />
 
-            <p class="margin-top-4 padding-top-4 border-top">Please sign in using your internal Secure Data Commons credentials. Accounts only need to be linked once.</p>
-            <p>If you do not remember your Secure Data Commons credentials, please contact the <a href = "mailto:sdc-support@dot.gov" style="text-decoration: none;">Support Team.</a></p>
-            <p>Don't have an account? <a href="https://portal.securedatacommons.com/register" target="_blank" style="text-decoration: none;" rel="noopener noreferrer">Follow the instructions</a> on the Secure Data Commons portal to create one.</p>
-          </fieldset>
-        </form>
-        <form *ngIf="changeTemporaryPassword" id="temporary_credentials_form" class="usa-form" (ngSubmit)="onSubmitChangeTemporaryPassword()">
-          <fieldset class="usa-fieldset">
-            <legend class="border-0 usa-legend">Temporary Password Reset</legend>
-            <label class="margin-top-4" for="newPassword">New Password</label>
-            <input class="usa-input" id="newPassword" name="newPassword" [(ngModel)]="newPassword" type="password" appTogglePassword>
+          <label class="margin-top-4" for="password-sign-in">Password</label>
+          <input
+            class="usa-input"
+            id="password-sign-in"
+            name="password"
+            [(ngModel)]="password"
+            type="password"
+            appTogglePassword
+          />
+          <input
+            class="usa-button link-submit margin-top-3"
+            type="submit"
+            value="Sign in"
+          />
 
-            <label class="margin-top-4" for="newPasswordConfirmation">Confirm New Password</label>
-            <input class="usa-input" id="newPasswordConfirmation" name="newPasswordConfirmation" [(ngModel)]="newPasswordConfirmation" type="password" appTogglePassword>
+          <p class="margin-top-4 padding-top-4 border-top">
+            Please sign in using your internal Secure Data Commons credentials.
+            Accounts only need to be linked once.
+          </p>
+          <p>
+            If you do not remember your Secure Data Commons credentials, please
+            contact the
+            <a href="mailto:sdc-support@dot.gov" style="text-decoration: none"
+              >Support Team.</a
+            >
+          </p>
+          <p>
+            Don't have an account?
+            <a
+              href="https://portal.securedatacommons.com/register"
+              target="_blank"
+              style="text-decoration: none"
+              rel="noopener noreferrer"
+              >Follow the instructions</a
+            >
+            on the Secure Data Commons portal to create one.
+          </p>
+        </fieldset>
+      </form>
+      <form
+        *ngIf="changeTemporaryPassword"
+        id="temporary_credentials_form"
+        class="usa-form"
+        (ngSubmit)="onSubmitChangeTemporaryPassword()"
+      >
+        <fieldset class="usa-fieldset">
+          <legend class="border-0 usa-legend">Temporary Password Reset</legend>
+          <label class="margin-top-4" for="newPassword">New Password</label>
+          <input
+            class="usa-input"
+            id="newPassword"
+            name="newPassword"
+            [(ngModel)]="newPassword"
+            type="password"
+            appTogglePassword
+          />
 
-            <input class="usa-button link-submit margin-top-3" type="submit" value="Reset Password">
+          <label class="margin-top-4" for="newPasswordConfirmation"
+            >Confirm New Password</label
+          >
+          <input
+            class="usa-input"
+            id="newPasswordConfirmation"
+            name="newPasswordConfirmation"
+            [(ngModel)]="newPasswordConfirmation"
+            type="password"
+            appTogglePassword
+          />
 
-            <p class="margin-top-4 padding-top-4 border-top">Your temporary Secure Data Commons password must be changed.</p>
-            <p>Your new password must be 7 characters long and contain at least 3 of the following:</p>
-            <ul>
-              <li>Lower case letter</li>
-              <li>Upper case letter</li>
-              <li>Special character</li>
-              <li>Number</li>
-            </ul>
-            <p>Your password may not be the same as your previous 23 passwords.</p>
-          </fieldset>
-        </form>
-      </div>
+          <input
+            class="usa-button link-submit margin-top-3"
+            type="submit"
+            value="Reset Password"
+          />
+
+          <p class="margin-top-4 padding-top-4 border-top">
+            Your temporary Secure Data Commons password must be changed.
+          </p>
+          <p>
+            Your new password must be 12 characters long, not contain the user's
+            account name or parts of the user's full name that exceed two
+            consecutive characters, and must contain at least 3 of the
+            following:
+          </p>
+          <ul>
+            <li>English uppercase characters (A through Z)</li>
+            <li>English lowercase characters (a through z)</li>
+            <li>Base 10 digits (0 through 9)</li>
+            <li>Non-alphabetic characters (for example, !, $, #, %)</li>
+          </ul>
+          <p>
+            Your password may not be the same as your previous 23 passwords.
+          </p>
+        </fieldset>
+      </form>
     </div>
+  </div>
 </div>
- 

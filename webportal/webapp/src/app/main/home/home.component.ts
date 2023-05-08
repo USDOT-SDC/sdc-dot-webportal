@@ -41,9 +41,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("index of token is: " + this.getCurrentURL().indexOf("token"));
     if (this.getCurrentURL().indexOf("token") !== -1) {
-      console.log("navigating to account");
       this.router.navigate(["account"]);
     }
     this.cognitoService.isUserSessionActive(this);
@@ -51,8 +49,6 @@ export class HomeComponent implements OnInit {
 
   isLoggedIn(message: string, loggedIn: boolean) {
     if (loggedIn) {
-      console.log("The user is authenticated: " + loggedIn);
-      console.log("Navigate to: " + this.router.navigate(["account"]));
       this.router.navigate(["account"]);
     } else {
       console.log("User not authenticated. Logged in: " + loggedIn);

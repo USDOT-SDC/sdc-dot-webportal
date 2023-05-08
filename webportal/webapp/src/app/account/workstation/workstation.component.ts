@@ -57,8 +57,6 @@ export class WorkstationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.instanceId = sessionStorage.getItem('instance-id');
-    console.log("IN WORKSTATION COMPONENT");
     this.gatewayService.getUserInfo("user").subscribe((response: any) => {
       sessionStorage.setItem("stacks", JSON.stringify(response.stacks));
       const stacksString = sessionStorage.getItem("stacks");
@@ -153,16 +151,7 @@ export class WorkstationComponent implements OnInit {
           }
         });
     } else {
-      //const authToken = this.cognitoService.getIdToken();
-
       const authToken = await this.cognitoService.getIdToken();
-      // a.then(
-      //   (response) => (
-      //     console.log("response to launching workstation== ", response),
-      //     (authToken = response.toString())
-      //   )
-      // );
-      //var authToken = authToken1.toString();
       console.log("ID Token after hitting workstation ==", authToken);
       this.streamingUrl =
         `${window.location.origin}/guacamole/?authToken=` + authToken;

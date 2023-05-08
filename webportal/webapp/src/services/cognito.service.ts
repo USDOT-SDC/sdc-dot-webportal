@@ -1,18 +1,10 @@
 import { Injectable, Inject } from "@angular/core";
-// import {
-//     AuthenticationDetails,
-//     CognitoIdentityServiceProvider,
-//     CognitoUser,
-//     CognitoUserAttribute,
-//     CognitoUserPool
-// } from "amazon-cognito-identity-js";
 import { CognitoAuth } from "amazon-cognito-auth-js/dist/amazon-cognito-auth";
 import * as AWS from "aws-sdk";
 import * as awsservice from "aws-sdk/lib/service";
 import * as CognitoIdentity from "aws-sdk/clients/cognitoidentity";
 import { environment } from "../environments/environment";
 import { WindowToken } from "../factories/window.factory";
-// import { Auth } from '@aws-amplify/auth';
 import { Amplify, Auth } from "aws-amplify";
 import { access } from "fs";
 
@@ -79,17 +71,11 @@ export class CognitoService {
 
   // Authenticate the user & login
   async login() {
-    //var userAuth = new CognitoAuth(this.authData())
     try {
-      console.log("signing in will...");
       await Auth.federatedSignIn({
         customProvider: CognitoService._IDENTITY_PROVIDER,
       });
       const user = Auth.currentAuthenticatedUser();
-      console.log(
-        'signed in as ("symbol" doesn\'t work)',
-        user[Symbol.toString()]
-      );
     } catch (error) {
       console.log("error signing in", error);
     }
@@ -114,8 +100,6 @@ export class CognitoService {
   // Method to fetch the cognito ID token
   async getIdToken() {
     var session = await Auth.currentSession();
-    //var accessToken = session.getAccessToken();
-    //console.log("accessToken ==", accessToken);
     var id = session.getIdToken().getJwtToken();
     return id;
   }
@@ -142,6 +126,4 @@ export class CognitoService {
   redirectUrl() {
     return `${this.window.location.origin}/index.html`;
   }
-
-  // TODO: Add refresh token logic
 }
