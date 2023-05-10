@@ -53,8 +53,9 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 ### What's New in Release 3.0.0
 
-- Overhaul of all deprecated packages including Cognito user authentification.
+- Overhaul of all deprecated packages including Cognito user authentication.
 - Changes to tables throughout the webportal to make them more readable.
+- Refactored to Angular v15
 
 **December 9, 2022. SDC sdc-dot-webportal Release 2.17.0**
 
