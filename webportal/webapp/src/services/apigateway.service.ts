@@ -1,157 +1,160 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { CognitoService } from './cognito.service';
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/catch'
-import 'rxjs/add/observable/throw';
-import { environment } from '../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { throwError as observableThrowError, Observable, from } from "rxjs";
+import { catchError, map } from "rxjs/operators";
+import { Injectable } from "@angular/core";
+//import { RequestOptions } from "@angular/http";
+// import { Observable } from 'rxjs/Observable';
+import { CognitoService } from "./cognito.service";
+import { environment } from "../environments/environment";
+import { HttpClient, HttpHeaders, HttpRequest } from "@angular/common/http";
+//import { Injectable } from '@angular/core';
+import { HttpEvent, HttpInterceptor, HttpHandler } from "@angular/common/http";
+//import { Observable } from 'rxjs';
+import { switchMap, tap } from "rxjs/operators";
+//import { AuthService } from './auth.service';
 
 @Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(private cognitoService: CognitoService) {}
+
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    if (request.url.startsWith("https://s3.amazonaws.com/")) {
+      return next.handle(request);
+    } else {
+      return from(this.cognitoService.getIdToken()).pipe(
+        tap((token) => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
+        switchMap((token) => {
+          const newRequest = request.clone({
+            withCredentials: true,
+            setHeaders: {
+              "Content-Type": "application/json",
+              Authorization: ` ${token}`,
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          return next.handle(newRequest);
+        })
+      );
+    }
+  }
+}
+
+@Injectable({
+  providedIn: "root",
+})
 export class ApiGatewayService {
+  //protected options: RequestOptions;
+  private static _API_ENDPOINT = `${window.location.origin}/${environment.API_ENDPOINT}`;
 
-    protected options: RequestOptions;
-    private static _API_ENDPOINT = `${window.location.origin}/${environment.API_ENDPOINT}`;
+  apiResponse: any;
+  extractData: any;
+  handleError: any;
+  name = "ApiGatewayService";
 
-    apiResponse: any;
-    extractData: any;
-    handleError: any;
-    name = "ApiGatewayService";
+  constructor(
+    private http: HttpClient,
+    private cognitoService: CognitoService
+  ) {
+    this.extractData = this.getExtractDataFunction();
+    this.handleError = this.getHandleErrorFunction();
+  }
 
-    constructor(
-        private http: Http,
-        private cognitoService: CognitoService) {
-        this.extractData = this.getExtractDataFunction();
-        this.handleError = this.getHandleErrorFunction();
-    }
+  // Extract response
+  public getExtractDataFunction() {
+    return function (res: Response) {
+      try {
+        // return res.json(); //HttpClient returns json object response by default
+        return res;
+      } catch (e) {
+        console.log("Response is not a JSON");
+        return res.text().toString();
+      }
+    };
+  }
 
-    // Extract response
-    public getExtractDataFunction() {
-        return function (res: Response) {
-            try {
-                return res.json();
-            } catch (e) {
-                console.log('Response is not a JSON');
-                return res.text().toString();
-            }
-        };
-    }
+  // Handle error
+  public getHandleErrorFunction() {
+    const _self = this;
+    return function (error: any) {
+      let message;
+      try {
+        const body = JSON.parse(error._body);
+        if (body.message) {
+          message = body.message;
+        } else if (body.error) {
+          message = body.error;
+        } else {
+          message = error._body;
+        }
+      } catch (e) {
+        message = error._body;
+      }
+      error.statusText = message;
+      error.message = message;
+      return observableThrowError(error);
+    };
+  }
 
-    // Handle error
-    public getHandleErrorFunction() {
-        let _self = this;
-        return function (error: any) {
-            let message;
-            try {
-                let body = JSON.parse(error._body);
-                if (body.message) {
-                    message = body.message;
-                }
-                else if (body.error) {
-                    message = body.error;
-                } else {
-                    message = error._body;
-                }
-            }
-            catch (e) {
-                message = error._body
-            }
-            error.statusText = message;
-            error.message = message;
-            return Observable.throw(error);
-        };
-    }
+  get(url: string) {
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url)
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    // Set required headers on the request
-    setRequestHeaders() {
-        let authToken = this.cognitoService.getIdToken();
-        const headers = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': " " + authToken,
-            'Access-Control-Allow-Origin': '*'
-        });
+  sendRequestMail(url: string) {
+    return this.http
+      .post(ApiGatewayService._API_ENDPOINT + url, "")
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-        // const httpOptions = {
-        //     headers: new HttpHeaders({
-        //         'Content-Type': 'application/json',
-        //         'Authorization': " " + authToken,
-        //         'Access-Control-Allow-Origin': '*'
-        //     })
-        //   };
-          
-        this.options = new RequestOptions({ headers: headers });
-    }
+  getUserInfo(url: string) {
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "json" })
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    // HTTP GET method invocation
-    get(url: string) {
-        this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+  post(url: string) {
+    return this.http
+      .post(ApiGatewayService._API_ENDPOINT + url, "", { responseType: "json" })
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    sendRequestMail(url: string) {
-        this.setRequestHeaders();
-        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+  getPresignedUrl(url: string) {
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "text" })
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    getUserInfo(url: string) {
-        this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+  getDownloadUrl(url: string) {
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url, { responseType: "text" })
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    post(url: string){
-        this.setRequestHeaders();
-        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+  getMetadataOfS3Object(url: string) {
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url)
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    getPresignedUrl(url: string){
-        this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+  sendExportRequest(url: string) {
+    console.log("sending request 2 " + ApiGatewayService._API_ENDPOINT + url);
+    return this.http
+      .post(ApiGatewayService._API_ENDPOINT + url, "")
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    getDownloadUrl(url: string){
-        this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+  getDesiredInstanceTypesAndCosts(url: string) {
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url)
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 
-    getMetadataOfS3Object(url: string){
-        this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
-
-    sendExportRequest(url: string) {
-        this.setRequestHeaders();
-        console.log("sending request 2 " + ApiGatewayService._API_ENDPOINT + url ) 
-        return this.http.post(ApiGatewayService._API_ENDPOINT + url, '', this.options)
-        .map(this.extractData)
-        .catch(this.handleError);
-    }
-
-    getDesiredInstanceTypesAndCosts(url: string){
-        this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
-
-    modifyUserWorkstation(url: string){
-        this.setRequestHeaders();
-        return this.http.get(ApiGatewayService._API_ENDPOINT + url, this.options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+  modifyUserWorkstation(url: string) {
+    return this.http
+      .get(ApiGatewayService._API_ENDPOINT + url)
+      .pipe(map(this.extractData), catchError(this.handleError));
+  }
 }

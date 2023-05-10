@@ -1,12 +1,12 @@
 <div class="container">
-  <mat-card>
+  <mat-card appearance="outlined">
     <div class="row row-divided">
       <div class="col-xs-6 column-one">
         <div class="sign-in-container">
           <h3>Sign in</h3>
           <div class="information-text sign-in-information-text">
-            <p>If you do not have a Department of Transportation email address, you will be redirected to Login.gov.</p>
-            <p>You will be prompted to create a Login.gov account if you do not already have one.</p>
+            <p class="textFormat">If you do not have a Department of Transportation email address, you will be redirected to Login.gov.<br>
+              You will be prompted to create a Login.gov account if you do not already have one.</p>
           </div>
           <div class="email-address-container">
             <p><strong>Email Address</strong></p>
@@ -17,39 +17,47 @@
           </div>
         </div>
       </div>
+
       <div class="vertical-divider">or</div>
+
+
       <div class="col-xs-6 column-two">
-        <h3>Sign up</h3>
-        <p class="textFormat">Please download the access request
-          form linked below, fill out the required details and send an email
-          to sdc-support@dot.gov. Once approved,
-          we will send you an email with the instructions for
-          accessing the platform.</p>
-
-        <div class="accessLink">
-          <a style="font-size:16px;" href="https://securedatacommons.atlassian.net/wiki/spaces/DESK/pages/1349484563/RT+Form+Researcher+Agreement+and+Access+Request"
-           aria-label="Open external link to form in a new tab" target="_blank" rel="noopener">
-           Access Request Form
-          </a>
-          <svg width="16px" height="16px" focusable="false" aria-label="(link is external)" viewBox="0 0 24 24" style="cursor:pointer">
-            <title>(link is external)</title>
-            <g stroke-width="2.1" stroke="#666" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="17 13.5 17 19.5 5 19.5 5 7.5 11 7.5">
-              </polyline><path d="M14,4.5 L20,4.5 L20,10.5 M20,4.5 L11,13.5"></path>
-            </g>
-          </svg>
+        <div class="sign-in-container">
+          <h3>Sign up</h3>
+          <div class="information-text sign-in-information-text">
+            <p class="textFormat">Please download the access request form linked below, fill out the required details and send an email to sdc-support@dot.gov. <br> 
+                Once approved, we will send you an email with the instructions for accessing the platform.</p>
+            <br> 
+          </div>
+          <div class="accessLink">
+            <a style="font-size:16px;" href="https://securedatacommons.atlassian.net/wiki/spaces/DESK/pages/1349484563/RT+Form+Researcher+Agreement+and+Access+Request"
+            aria-label="Open external link to form in a new tab" target="_blank" rel="noopener">
+            Access Request Form
+            </a>
+            <svg width="16px" height="16px" focusable="false" aria-label="(link is external)" viewBox="0 0 24 24" style="cursor:pointer">
+              <title>(link is external)</title>
+              <g stroke-width="2.1" stroke="#666" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 13.5 17 19.5 5 19.5 5 7.5 11 7.5">
+                </polyline><path d="M14,4.5 L20,4.5 L20,10.5 M20,4.5 L11,13.5"></path>
+              </g>
+            </svg>
+          </div>
         </div>
-
       </div>
     </div>
+    <mat-card-footer>
     <div style="width:50px;height:50px;float:left;padding-left:10px;padding-top:20px;">
       <img style="width:32px;height:32px;" src="../../../assets/images/info_icon.png" alt="Warning!">
     </div>
-    <div style="padding-top: 20px;">
-      <p class="information-text">You are accessing a U.S. Government information system. This information system, including all related equipment, networks, and network devices, is provided for U.S. Government-authorized use only. Unauthorized or improper use of this system is prohibited, and may result in civil and criminal penalties, or administrative disciplinary action. The communications and data stored or transiting this system may be, for any lawful Government purpose, monitored, recorded, and subject to audit or investigation. By using this system, you understand and consent to such terms. 
+    <div style="padding-top: 20px;padding-left:10px;padding-right:10px;">
+      <p class="information-text">You are accessing a U.S. Government information system. This information system, including all related equipment, networks, 
+        and network devices, is provided for U.S. Government-authorized use only. Unauthorized or improper use of this system is prohibited, and may result in civil and 
+        criminal penalties, or administrative disciplinary action. The communications and data stored or transiting this system may be, for any lawful Government purpose, 
+        monitored, recorded, and subject to audit or investigation. By using this system, you understand and consent to such terms. 
         For details on how we use your information, please see our <a href="https://www.transportation.gov/dot-website-privacy-policy">Privacy Policy</a>
       </p>
     </div>
+    </mat-card-footer>
   </mat-card>
 </div>
-<a id="MyLink" style="display:none"></a>
+

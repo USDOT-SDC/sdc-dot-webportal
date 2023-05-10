@@ -13,8 +13,9 @@ import { DatasetinfoComponent } from './main/datasetinfo/datasetinfo.component';
 import { ExportRequestsComponent } from './account/exportrequests/exportrequests.component';
 import { LoginSyncComponent } from './account/loginsync/components/loginsync.component';
 import { LoginSyncGuard } from './account/loginsync/guards/loginsync.guard';
+import { NgModule } from '@angular/core';
 
-const appRoutes: Routes = [
+export const APP_Routes: Routes = [
     {
         path: '', component: MainComponent, children: [
             { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -38,4 +39,4 @@ const appRoutes: Routes = [
         ],
     }
 ];
-export const RoutingModule = RouterModule.forRoot(appRoutes);
+export const RoutingModule = RouterModule.forRoot(APP_Routes)

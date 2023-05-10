@@ -1,7 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { Router, RouterModule,  } from '@angular/router';
+import { CardModule } from 'primeng/card'
+
 
 @Component({
+  standalone: true,
+  imports: [MatCardModule, RouterModule, CommonModule, CardModule],
   selector: 'app-accounthome',
   templateUrl: './accounthome.component.html',
   styleUrls: ['./accounthome.component.css']

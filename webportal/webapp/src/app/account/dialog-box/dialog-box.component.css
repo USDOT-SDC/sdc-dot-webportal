@@ -1,41 +1,41 @@
-
 .dotBtn {
-    color: #fff;
-    background-color: #2279a6 !important;
-    border-color: #288dc1 !important;
-    /*width: 30%;*/
-    font-size: 11px;
+  color: #fff;
+  background-color: #2279a6 !important;
+  border-color: #288dc1 !important;
+  /*width: 30%;*/
+  font-size: 11px;
 }
-.mat-dialog-container {
-    border: solid 2px #0b264db8 !important;
+.mat-mdc-dialog-container {
+  border: solid 2px #0b264db8 !important;
 }
-mat_tab_style{
-    height: 451px;
+mat_tab_style {
+  height: 451px;
 }
-/deep/ .mat-tab-body-content {
-    overflow: hidden !important;
+/*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+::ng-deep .mat-tab-body-content {
+  overflow: hidden !important;
 }
-/deep/ .mat-dialog-content {
-    max-height: 200vh !important;
+::ng-deep .mat-mdc-dialog-content {
+  max-height: 200vh !important;
 }
-.mat-dialog-actions {
-    display: block !important;
+.mat-mdc-dialog-actions {
+  display: block !important;
 }
 .request-exportCancelBtn {
-    float: left;
-    margin-left: 7px;
+  float: left;
+  margin-left: 7px;
 }
 .request-exportNextBtn {
-    float: right;
-    margin-left: 7px;
+  float: right;
+  margin-left: 7px;
 }
 .request-exportPreviousBtn {
-    float: right;
-    margin-right: 7px;
+  float: right;
+  margin-right: 7px;
 }
 .request-exportSubmitBtn {
-    float: right;
-    margin-left: 7px;
+  float: right;
+  margin-left: 7px;
 }
 
 /*
@@ -45,108 +45,115 @@ mat_tab_style{
 */
 
 /* FileUpload */
-.ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget, .ui-fileupload-choose.ui-button .ui-state-default {
-      background-color: #0275d8;
-      border: 1px solid #0275d8;
-      color: #ffffff;
+.ui-fileupload-choose.ui-button,
+.ui-fileupload-choose.ui-button .ui-widget,
+.ui-fileupload-choose.ui-button .ui-state-default {
+  background-color: #0275d8;
+  border: 1px solid #0275d8;
+  color: #ffffff;
 }
 
-.ui-fileupload-choose.ui-button.ui-state-hover, .ui-fileupload-choose.ui-button.ui-state-focus, .ui-fileupload-choose.ui-button.ui-state-active {
-      background-color: #025aa5;
-      border-color: #01549b;
+.ui-fileupload-choose.ui-button.ui-state-hover,
+.ui-fileupload-choose.ui-button.ui-state-focus,
+.ui-fileupload-choose.ui-button.ui-state-active {
+  background-color: #025aa5;
+  border-color: #01549b;
 }
 
-.panel-div {max-height:150px;overflow:scroll;}
+.panel-div {
+  max-height: 150px;
+  overflow: scroll;
+}
 
 .exportSelect {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .resize-form-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .resize-filters-section {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .resize-filters-form {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .resize-filter-start-workspace {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .padding-right {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .resize-filter-button-group {
-    margin-top: 40px;
-    display: flex;
-    justify-content: flex-end;
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .resize-disk-space-container {
-    position: relative;
+  position: relative;
 }
 
 .resize-disk-space-edit {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .exportSelect {
-    margin-top: 4px !important;
+  margin-top: 4px !important;
 }
 
 .resize-date-form {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .general-purpose-pricing {
-    display: flex;
-    flex-direction: column;
-    margin: 12px;
+  display: flex;
+  flex-direction: column;
+  margin: 12px;
 }
 
 .general-pricing-headers {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #7a7a7a;
-    margin-bottom: 8px;
-    color: #7a7a7a;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #7a7a7a;
+  margin-bottom: 8px;
+  color: #7a7a7a;
 }
 
 .general-purpose-body {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 8px;
 }
 
 .pricing-instance {
-    width: 17%;
+  width: 17%;
 }
 
 .manage-selection-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-around;
-    height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  height: 140px;
 }
 
-/deep/ .ui-chkbox {
-vertical-align: top;
+::ng-deep .ui-chkbox {
+  vertical-align: top;
 }

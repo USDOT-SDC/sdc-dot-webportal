@@ -1,9 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExportRequestsComponent } from './exportrequests.component';
 import { of } from 'rxjs/observable/of';
 import { ApiGatewayService } from '../../../services/apigateway.service';
-import { MatDialogModule, MatSnackBar, MatDialog } from '@angular/material';
+//import { MatDialogModule, MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialogModule,  MatDialog, MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 let RESULT = {'message': 'dialog box closed'};
@@ -304,8 +306,8 @@ describe('ExportRequestsComponent', () => {
      let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
      dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
    
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async() => {
+    await TestBed.configureTestingModule({
       imports: [ MatDialogModule ],
       schemas: [ NO_ERRORS_SCHEMA],
       declarations: [ ExportRequestsComponent ],
@@ -314,7 +316,7 @@ describe('ExportRequestsComponent', () => {
         {provide: MatSnackBar, useValue: mockMatSnackBar} ]
     })
     .compileComponents();
-  }));
+  });
 
 
   beforeEach(() => {
@@ -344,7 +346,8 @@ describe('ExportRequestsComponent', () => {
 
     fixture = TestBed.createComponent(ExportRequestsComponent);
     component = fixture.componentInstance;
-    dialogSpy = spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    //dialogSpy = spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
     fixture.detectChanges();
   });
 

@@ -2,6 +2,11 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~prismjs/themes/prism.css';
 @import '~bootstrap/dist/css/bootstrap.css';
+
+@import "~primeicons/primeicons.css";
+@import "~primeng/resources/themes/rhea/theme.css";
+@import "~primeng/resources/primeng.min.css";
+
 body { padding-top: 70px; }
 
 html {
@@ -9,21 +14,21 @@ html {
 }
 
 .navbar-default {
-    background: rgb(21, 35, 80) !important;
-    color: #f8f8f8 !important;
-    box-shadow: 0 7px 10px #777777ba;
+    background: #f8f8f8 /*rgb(21, 35, 80)*/ !important;
+    color: #232222 !important;
+    /*box-shadow: 0 7px 10px #777777ba;*/
 }
 .navbar-default .navbar-nav > li > a {
-    color: #f8f8f8 !important;
+    color: #232222 !important;
     padding-top:19px;
     padding-bottom:19px;
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-    color: #f8f8f8 !important;
-    border-bottom: solid 2px #f8f8f8;
-    background-color: rgb(21, 35, 80) !important;
+    color: #232222!important;
+    border-bottom: solid 2px #232222;
+    background-color: #f8f8f8 /*rgb(21, 35, 80)*/ !important;
     font-weight: 700 !important;
 }
 .container {
@@ -41,7 +46,7 @@ html {
     text-align: center;
     color: white;
     height: 160px;
-    box-shadow: 0 -5px 10px #777777ba;
+    /*box-shadow: 0 -5px 10px #777777ba;*/
 }
 
 .footerLogo {
@@ -111,24 +116,26 @@ html {
     cursor: pointer;
   }
 
-.custom-export-dialog .mat-form-field {
+.custom-export-dialog .mat-mdc-form-field {
 font-size: 16px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 .custom-export-dialog .mat-tab-label {
 font-size: 16px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .custom-export-dialog .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
 transform: translateY(-1.28125em) scale(.90) perspective(100px) translateZ(0.001px);
 width: 133.33333%;
 }
 
-.custom-export-dialog .mat-hint {
+.custom-export-dialog .mat-mdc-form-field-hint {
      color: lightgray;
 }
 
-.custom-export-dialog .mat-dialog-content {
+.custom-export-dialog .mat-mdc-dialog-content {
     overflow-y: hidden;
 }
 

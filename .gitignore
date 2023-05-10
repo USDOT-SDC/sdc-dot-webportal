@@ -22,13 +22,14 @@ webportal/webapp/package-lock.json
 webportal/webapp/.vscode/*
 
 # misc
+webportal/webapp/.angular
 webportal/webapp/.sass-cache
 webportal/webapp/connect.lock
 webportal/webapp/coverage
 webportal/webapp/libpeerconnection.log
 webportal/webapp/npm-debug.log
 testem.log
-/typings
+#/typings
 
 # e2e
 webportal/webapp/e2e/*.js

@@ -1,8 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatasetsComponent } from './datasets.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogModule, MatSnackBar, MatDialog} from '@angular/material';
+//import { MatDialogModule, MatSnackBar, MatDialog} from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { Routes } from '@angular/router';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { of } from 'rxjs/observable/of';
@@ -75,7 +78,7 @@ describe('DatasetsComponent', () => {
   let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
   dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
 
-  beforeEach(async(() => {
+  beforeEach(async() => {
     let mockMatSnackBar = {
       open: jasmine.createSpy('open')
     };
@@ -95,7 +98,7 @@ describe('DatasetsComponent', () => {
       mockApiGatewayService
     });
    
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes(routes),
         MatDialogModule
@@ -112,7 +115,7 @@ describe('DatasetsComponent', () => {
         schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     let store = {};
@@ -139,7 +142,8 @@ describe('DatasetsComponent', () => {
     fixture = TestBed.createComponent(DatasetsComponent);
     component = fixture.componentInstance;    
     //dialog = TestBed.get(MatDialog);
-    dialogSpy = spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    //dialogSpy = spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
     fixture.detectChanges();
   });
 

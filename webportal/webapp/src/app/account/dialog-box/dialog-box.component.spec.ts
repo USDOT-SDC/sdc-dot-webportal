@@ -1,7 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DialogBoxComponent } from './dialog-box.component';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+//import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialogModule,  MatDialogRef , MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { HttpClient, HttpResponse, HttpEventType, HttpProgressEvent } from '@angular/common/http';
@@ -79,14 +82,14 @@ describe('DialogBoxComponent', () => {
     close: () => { }
   };
 
-  beforeEach(async(() => {
+  beforeEach(async() => {
 
     let mockMatDialogRef = {
       close: jasmine.createSpy('close')
     };
 
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes),
         MatDialogModule,
         HttpClientTestingModule],
@@ -104,7 +107,7 @@ describe('DialogBoxComponent', () => {
       ]
     })
       .compileComponents();
-  }));
+  });
 
 
 

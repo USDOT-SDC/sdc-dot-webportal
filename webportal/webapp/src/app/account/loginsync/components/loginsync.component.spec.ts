@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input } from '@angular/core';
 import { LoginSyncComponent } from './loginsync.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,8 +6,9 @@ import { LoginSyncService } from '../services/loginsyncservice.service';
 import { WindowToken } from '../../../../factories/window.factory';
 import { CognitoService } from '../../../../services/cognito.service';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 
 describe('LoginsyncComponent', () => {
     let component: LoginSyncComponent;
@@ -15,8 +16,8 @@ describe('LoginsyncComponent', () => {
     let mockLoginSyncService: MockLoginSyncService;
     let mockWindow;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
+    beforeEach(async() => {
+        await TestBed.configureTestingModule({
             imports: [FormsModule, ReactiveFormsModule, MatCardModule],
             declarations: [ LoginSyncComponent, MockLoaderComponent, MockAlertComponent ],
             providers: [
@@ -26,12 +27,14 @@ describe('LoginsyncComponent', () => {
             ]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(LoginSyncComponent);
-        mockLoginSyncService = TestBed.get(LoginSyncService);
-        mockWindow = TestBed.get(WindowToken);
+        //mockLoginSyncService = TestBed.get(LoginSyncService);
+        //mockWindow = TestBed.get(WindowToken);
+        mockLoginSyncService = TestBed.inject(LoginSyncService);
+        mockWindow = TestBed.inject(WindowToken);
         component = fixture.componentInstance;
         component.username = 'the_username';
         component.password = 'the_password';
@@ -43,7 +46,8 @@ describe('LoginsyncComponent', () => {
     });
 
     it('redirects to DoT AD if the link type is DoT AD', () => {
-        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+        //spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(of({ signInType: 'dot_active_directory_user' }));
 
         fixture.debugElement.query(By.css('form')).triggerEventHandler('submit', null);
         fixture.detectChanges();
@@ -52,7 +56,8 @@ describe('LoginsyncComponent', () => {
       });
 
     it('redirects to Login.gov if the link type is login.gov', () => {
-        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+        //spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+        spyOn(mockLoginSyncService, 'linkAccounts').and.returnValue(of({ signInType: 'login_gov_user' }));
 
         fixture.debugElement.query(By.css('#signin_form')).triggerEventHandler('submit', null);
         fixture.detectChanges();
@@ -110,7 +115,8 @@ describe('LoginsyncComponent', () => {
         });
 
         it('redirects the user to login.gov', () => {
-            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+            //spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'login_gov_user' }));
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(of({ signInType: 'login_gov_user' }));
             component.newPassword = 'Lets-Switch-To-React';
             component.newPasswordConfirmation = 'Lets-Switch-To-React';
 
@@ -121,7 +127,8 @@ describe('LoginsyncComponent', () => {
         });
 
         it('redirects the user to dot ad', () => {
-            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+            //spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(Observable.of({ signInType: 'dot_active_directory_user' }));
+            spyOn(mockLoginSyncService, 'resetTemporaryPassword').and.returnValue(of({ signInType: 'dot_active_directory_user' }));
             component.newPassword = 'Lets-Switch-To-React';
             component.newPasswordConfirmation = 'Lets-Switch-To-React';
 

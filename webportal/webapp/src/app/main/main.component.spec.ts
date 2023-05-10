@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MainComponent } from './main.component';
 import { NavigationEnd, Router, Routes } from '@angular/router';
@@ -20,7 +20,7 @@ describe('MainComponent', () => {
     { path: '**', redirectTo: 'home' }
   ];
 
-  beforeEach(async(() => {    
+  beforeEach(async() => {    
     let mockCognitoAPIService = {
       login: jasmine.createSpy('login')
     }
@@ -30,7 +30,7 @@ describe('MainComponent', () => {
     });
     
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes(routes),
       ],      
@@ -42,7 +42,7 @@ describe('MainComponent', () => {
       schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainComponent);
@@ -55,7 +55,8 @@ describe('MainComponent', () => {
   });
    
   it('should test navigationEnd', () => {
-    TestBed.get(Router)
+    //TestBed.get(Router)
+    TestBed.inject(Router)
       .navigate(['/home'])
         .then(() => {
           console.log("##### Test Location ",location);

@@ -1,9 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WorkstationComponent } from './workstation.component';
 import { ApiGatewayService } from '../../../services/apigateway.service';
 import { CognitoService } from '../../../services/cognito.service';
-import { MatSnackBar } from '@angular/material';
+//import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { APP_BASE_HREF } from '@angular/common';
 import { of } from 'rxjs/observable/of';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -34,7 +35,7 @@ describe('WorkstationComponent', () => {
      'data': "dictionary"
   }
 
-  beforeEach(async(() => {
+  beforeEach(async() => {
 
     let mockMatSnackBar = {
       open: jasmine.createSpy('open')
@@ -55,7 +56,7 @@ describe('WorkstationComponent', () => {
       mockMatSnackBar,
       mockApiGatewayService
     });
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [ WorkstationComponent ],
       providers: [
         {provide: APP_BASE_HREF, useValue: '/'},
@@ -66,7 +67,7 @@ describe('WorkstationComponent', () => {
       schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     let store = {};

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 
 import { LoaderComponent } from './loader.component';
 import { LoaderService } from '../../services/loader.service';
@@ -9,15 +9,15 @@ describe('LoaderComponent', () => {
   let fixture: ComponentFixture<LoaderComponent>;
   
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async() => {
+    await TestBed.configureTestingModule({
       declarations: [ LoaderComponent ],
       providers: [LoaderService],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
 
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoaderComponent);

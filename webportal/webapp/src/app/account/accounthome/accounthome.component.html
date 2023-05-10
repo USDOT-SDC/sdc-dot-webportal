@@ -1,47 +1,80 @@
 <div class="container">
-  <mat-card>
-    <div class="infoDiv">
-      <p>Welcome to the Secure Data Commons Platform (SDC), a sandbox environment in AWS managed by U.S. Department of
-        transportation. The SDC platform provides a collaborative environment for traffic engineers, researchers, data scientists and
-        anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather,
-        crashes etc.
-      </p>
-      <p>
-        Ready to Get Started? Follow the steps below or directly jump to any of the sections that you wish to access.
-        SDC Users will have the following access in the platform:
-      </p>
-    </div>
+  <p-card>
+    <p>
+      Welcome to the Secure Data Commons Platform (SDC), a sandbox environment
+      in AWS managed by U.S. Department of transportation. The SDC platform
+      provides a collaborative environment for traffic engineers, researchers,
+      data scientists and anyone who is interested in carrying out research and
+      analysis on different datasets related to traffic, weather, crashes etc.
+    </p>
+    <p>
+      Ready to Get Started? Follow the steps below or directly jump to any of
+      the sections that you wish to access. SDC Users will have the following
+      access in the platform:
+    </p>
     <div>
-      <div class="row" style="padding-top: 50px;">
+      <div class="row" style="padding-top: 50px">
         <div class="col-md-6">
-          <mat-card style="height: 155px">
-            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/1.png"> &nbsp; Curated and published datasets</mat-card-subtitle>
-            <mat-card-content class="matContent"><a [routerLink]="['/account/datasets']">Check out</a> the list of currently available datasets (curated, published), data dictionaries owned by you and others. <a [routerLink]="['/account/faq']" fragment="sdcDataset">Learn more</a> about what curated and published datasets mean</mat-card-content>
-          </mat-card>
+          <p-card [style]="{ height: '170px' }">
+            <ng-template pTemplate="subheader"
+              ><img src="../../assets/images/drop_icon/1.png" /> &nbsp; Curated
+              and published datasets</ng-template
+            >
+            <p>
+              <a routerLink="/account/datasets">Check out</a> the list of
+              currently available datasets (curated, published), data
+              dictionaries owned by you and others.
+              <a routerLink="/account/faq" fragment="sdcDataset">Learn more</a>
+              about what curated and published datasets mean
+            </p>
+          </p-card>
         </div>
         <!--<div class="col-md-1"></div>-->
         <div class="col-md-6">
-          <mat-card style="height: 155px">
-            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/2.png"> &nbsp;Access to workstations with programming tools</mat-card-subtitle>
-            <mat-card-content class="matContent"><a [routerLink]="['/account/workstation']">Access the workstations</a> assigned to you, if you have requested as part of the registration process </mat-card-content>
-          </mat-card>
+          <p-card [style]="{ height: '170px' }">
+            <ng-template pTemplate="subheader"
+              ><img src="../../assets/images/drop_icon/2.png" /> &nbsp;Access to
+              workstations with programming tools</ng-template
+            >
+            <p>
+              <a routerLink="/account/workstation">Access the workstations</a>
+              assigned to you, if you have requested as part of the registration
+              process
+            </p>
+          </p-card>
         </div>
       </div>
-      <div class="row" style="padding-top: 50px;">
+      <div class="row" style="padding-top: 50px">
         <div class="col-md-6">
-          <mat-card style="height: 155px">
-            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/3.png"> &nbsp;Bring your own datasets / algorithms</mat-card-subtitle>
-            <mat-card-content class="matContent"><a [routerLink]="['/account/faq']" fragment="appStream">Learn more </a> about how you can bring your algorithms and code to the SDC platform</mat-card-content>
-          </mat-card>
+          <p-card [style]="{ height: '170px' }">
+            <ng-template pTemplate="subheader"
+              ><img src="../../assets/images/drop_icon/3.png" /> &nbsp;Bring
+              your own datasets / algorithms</ng-template
+            >
+            <p>
+              <a routerLink="/account/faq" fragment="appStream">Learn more </a>
+              about how you can bring your algorithms and code to the SDC
+              platform
+            </p>
+          </p-card>
         </div>
         <!--<div class="col-md-1"></div>-->
         <div class="col-md-6">
-          <mat-card style="height: 155px">
-            <mat-card-subtitle class="matTitle"><img src="../../assets/images/drop_icon/4.png"> &nbsp;Publish your datasets / algorithms</mat-card-subtitle>
-            <mat-card-content class="matContent"><a [routerLink]="['/account/faq']" fragment="datasetPublish">Learn more </a> about how you can publish your research analysis and algorithms with other researchers</mat-card-content>
-          </mat-card>
+          <p-card [style]="{ height: '170px' }">
+            <ng-template pTemplate="subheader"
+              ><img src="../../assets/images/drop_icon/4.png" /> &nbsp;Publish
+              your datasets / algorithms</ng-template
+            >
+            <p>
+              <a routerLink="/account/faq" fragment="datasetPublish"
+                >Learn more
+              </a>
+              about how you can publish your research analysis and algorithms
+              with other researchers
+            </p>
+          </p-card>
         </div>
       </div>
     </div>
-  </mat-card>
+  </p-card>
 </div>

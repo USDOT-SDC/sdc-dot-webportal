@@ -7,11 +7,17 @@
 </div>
 
 <div class="container" style="width:1278px;">
-  <mat-card>
-    <div class="row" style="width:1200px;">
-      <h3>My Workstations</h3>
-        <span>Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data</span><hr>
-      <mat-card-content style="max-height: 300px;overflow-y: scroll">
+  <mat-card appearance="outlined">
+    <!-- <div class="row" style="width:100%;"> -->
+      <!-- <h3>My Workstations</h3>
+        <span>Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data</span><hr> -->
+      <mat-card-header>
+        <mat-card-title>My Workstations</mat-card-title>
+        <mat-card-subtitle>
+          Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data.
+        </mat-card-subtitle>
+      </mat-card-header>
+        <mat-card-content style="max-height: 300px;overflow-y: scroll">
         <table class="table">
           <thead class="thead-inverse">
           <tr>
@@ -52,6 +58,6 @@
           </tbody>
         </table>
       </mat-card-content>
-    </div>
+    <!-- </div> -->
   </mat-card>
 </div>

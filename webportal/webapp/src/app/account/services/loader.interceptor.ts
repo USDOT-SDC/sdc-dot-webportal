@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from '../services/loader.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LoaderInterceptor implements HttpInterceptor {
   constructor(public loaderService: LoaderService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
