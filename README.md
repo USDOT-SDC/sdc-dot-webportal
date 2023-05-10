@@ -3,6 +3,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=usdot-jpo-sdc_sdc-dot-webportal&metric=coverage)](https://sonarcloud.io/dashboard?id=usdot-jpo-sdc_sdc-dot-webportal)
 
 # sdc-dot-webportal
+
 The Secure Data Commons is an online data warehousing and analysis platform for transportation researchers. On this portal, researchers can take advantage of pre-established programming environments to access and analyze a growing set of transportation-related data sets.
 The SDC platform provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
@@ -20,11 +21,11 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 [VI. Unit Tests](#unit-tests)
 
-[VII.  File Manifest](#file-manifest)
+[VII. File Manifest](#file-manifest)
 
-[VIII.  Development Setup](#development-setup)
+[VIII. Development Setup](#development-setup)
 
-[IX.  Release History](#release-history)
+[IX. Release History](#release-history)
 
 [X. Contact Information](#contact-information)
 
@@ -34,9 +35,9 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 [XIII. Credits and Acknowledgment](#credits-and-acknowledgement)
 
-[XIV.  CODE.GOV Registration Info](#code-gov-registration-info)
+[XIV. CODE.GOV Registration Info](#code-gov-registration-info)
 
-[XV.  Code Quality Monitor](#code-quality-monitor)
+[XV. Code Quality Monitor](#code-quality-monitor)
 
 ---
 
@@ -47,102 +48,150 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 <a name="release-notes"/>
 
 ## I. Release Notes
+
+**May 10, 2023. SDC sdc-dot-webportal Release 3.0.0**
+
+### What's New in Release 3.0.0
+
+- Overhaul of all deprecated packages including Cognito user authentification.
+- Changes to tables throughout the webportal to make them more readable.
+
 **December 9, 2022. SDC sdc-dot-webportal Release 2.17.0**
+
 ### What's New in Release 2.17.0
-* Helpful Links section has been added to the FAQ page.
-* FAQ answers have been updated.
+
+- Helpful Links section has been added to the FAQ page.
+- FAQ answers have been updated.
 
 **November 3, 2022. SDC sdc-dot-webportal Release 2.16.0**
+
 ### What's New in Release 2.16.0
-* Users can now request approval for their tables to be exported the the public Edge DB.
-* The Datasets page has been updated with a button/form to submit their requests.
-* The Export Requests page has been updated  with a new 'Export Table Requests' table.
+
+- Users can now request approval for their tables to be exported the the public Edge DB.
+- The Datasets page has been updated with a button/form to submit their requests.
+- The Export Requests page has been updated with a new 'Export Table Requests' table.
 
 **October 21, 2022. SDC sdc-dot-webportal Release 2.15.0**
+
 ### What's New in Release 2.15.0
-* The 'Export File for Review' feature has been modified so that files can be downloaded for review outside of an SDC workstation.
+
+- The 'Export File for Review' feature has been modified so that files can be downloaded for review outside of an SDC workstation.
 
 **September 1, 2022. SDC sdc-dot-webportal Release 2.14.0**
+
 ### What's New in Release 2.14.0
-* References to CVP data have been expunged from the Web Portal UI.
+
+- References to CVP data have been expunged from the Web Portal UI.
 
 **April 28, 2022. SDC sdc-dot-webportal Release 2.13.0**
+
 ### What's New in Release 2.13.0
-* The Trusted User Status Request has been moved from the Data Export Request form to a separate dialog box.
+
+- The Trusted User Status Request has been moved from the Data Export Request form to a separate dialog box.
 
 **February 04, 2022. SDC sdc-dot-webportal Release 2.12.0**
+
 ### What's New in Release 2.12.0
-* The message "Alpha-numeric characters only" has been added to user input fields in the 'Request to Export Data' form.
-* Encoding (for requests which are generated as part of data export form submission) has been changed to handle more characters.
+
+- The message "Alpha-numeric characters only" has been added to user input fields in the 'Request to Export Data' form.
+- Encoding (for requests which are generated as part of data export form submission) has been changed to handle more characters.
 
 **January 19, 2022. SDC sdc-dot-webportal Release 2.11.0**
+
 ### What's New in Release 2.11.0
-* The Sign Up link on the Register page now refers to the external page where the 'Researcher Agreement and Access Request' form is maintained.
+
+- The Sign Up link on the Register page now refers to the external page where the 'Researcher Agreement and Access Request' form is maintained.
 
 **January 13, 2022. SDC sdc-dot-webportal Release 2.10.0**
+
 ### What's New in Release 2.10.0
-* The font and dimensions of the 'Request to Export Data' form have been increased.
-* Buttons within the form have been reorganized and a Previous button has been added for improved user navigation.
-* The form will now remain open upon a background click.
+
+- The font and dimensions of the 'Request to Export Data' form have been increased.
+- Buttons within the form have been reorganized and a Previous button has been added for improved user navigation.
+- The form will now remain open upon a background click.
 
 **December 8, 2021. SDC sdc-dot-webportal Release 2.9.0**
+
 ### What's New in Release 2.9.0
-* The Request to Export Data Form has been improved with consolidated dataset description requirements on the Approval Form tab.
-* The description on the Trusted Status tab has been revised for improved clarity.
+
+- The Request to Export Data Form has been improved with consolidated dataset description requirements on the Approval Form tab.
+- The description on the Trusted Status tab has been revised for improved clarity.
 
 **November 24, 2021. SDC sdc-dot-webportal Release 2.8.1**
+
 ### What's New in Release 2.8.1
-* Bug fix for register/login redirects.
+
+- Bug fix for register/login redirects.
 
 **February 10, 2021. SDC sdc-dot-webportal Release 2.8**
+
 ### What's New in Release 2.8
-* The workstation resizing message has been updated so the user is told to stop their workstation and save their work before resize.
-* The SDC Support email address change is being deployed to the post-migration site.
-* The message about PII or CBI data is being deployed to the post-migration site. 
+
+- The workstation resizing message has been updated so the user is told to stop their workstation and save their work before resize.
+- The SDC Support email address change is being deployed to the post-migration site.
+- The message about PII or CBI data is being deployed to the post-migration site.
 
 **August 21, 2020. SDC sdc-dot-webportal Release 2.7**
+
 ### What's New in Release 2.7
-* Change SDC support email address from support@securedatacommons.com to sdc-support@dot.gov
+
+- Change SDC support email address from support@securedatacommons.com to sdc-support@dot.gov
 
 **August 7, 2020. SDC sdc-dot-webportal Release 2.6.1**
+
 ### What's New in Release 2.6.1
-* PDF for SDC Access Request Form updated to v2
-* The words "Data Definition" have been removed from the information titles for the projects
-* The workstation resizing bug has been fixed with providing ARM workstations as possible choices
-* A notification is shown before uploading data to the SDC to inform the user no PII or CBI data is allowed to be uploaded
+
+- PDF for SDC Access Request Form updated to v2
+- The words "Data Definition" have been removed from the information titles for the projects
+- The workstation resizing bug has been fixed with providing ARM workstations as possible choices
+- A notification is shown before uploading data to the SDC to inform the user no PII or CBI data is allowed to be uploaded
 
 **July 7, 2020. SDC sdc-dot-webportal Release 2.6**
+
 ### What's New in Release 2.6
-* Change URL for the Secure Data Commons Webportal from portal.securedatacommons.com to portal.sdc.dot.gov
-* Create a redirect for traffic from securedatacommons.com to sdc.dot.gov
-* Enable PIV log-in for DOT users
+
+- Change URL for the Secure Data Commons Webportal from portal.securedatacommons.com to portal.sdc.dot.gov
+- Create a redirect for traffic from securedatacommons.com to sdc.dot.gov
+- Enable PIV log-in for DOT users
 
 **April 7, 2020. SDC sdc-dot-webportal Release 2.5**
+
 ### What's New in Release 2.5
-* Add Auto-Export request option for users with trusted status in the export request pop-up window
-* Add Auto-Export request approving menu for data providers in the export requests tab
-** Includes justification provided by Data Analyst
+
+- Add Auto-Export request option for users with trusted status in the export request pop-up window
+- Add Auto-Export request approving menu for data providers in the export requests tab
+  \*\* Includes justification provided by Data Analyst
 
 **April 4, 2020. SDC sdc-dot-webportal Release 2.4.1**
+
 ### What's New in Release 2.4.1
-* Inject the Cognito user pool through the environment so all environments do not need to use the dev Cognito pool
+
+- Inject the Cognito user pool through the environment so all environments do not need to use the dev Cognito pool
 
 **January 28, 2020. SDC sdc-dot-webportal Release 2.4**
+
 ### What's New in Release 2.4
-* Change login functionality to allow users to be redirected to Login.gov
-* Add syncing screen after login from Login.gov so users can sync their Login.gov account with their SDC account
+
+- Change login functionality to allow users to be redirected to Login.gov
+- Add syncing screen after login from Login.gov so users can sync their Login.gov account with their SDC account
 
 **November 11, 2019. SDC sdc-dot-webportal Release 2.3**
+
 ### What's New in Release 2.3
-* Bug fix for export functionality
+
+- Bug fix for export functionality
 
 **November 1, 2019. SDC sdc-dot-webportal Release 2.2**
+
 ### What's New in Release 2.2
-* Provides a new feature for users to modify their workstation to a different configuration on-demand
-* Provides a new feature for users to schedule workstation uptime, so users can continue to keep their workstations running without being stopped by the nightly process
+
+- Provides a new feature for users to modify their workstation to a different configuration on-demand
+- Provides a new feature for users to schedule workstation uptime, so users can continue to keep their workstations running without being stopped by the nightly process
 
 **August 8, 2019. SDC sdc-dot-webportal Release 2.1**
+
 ### What's New in Release 2.1:
+
 - Enabled HTTP Strict Transport Security (HSTS) policy to ensure data is encrypted before it is sent, making it impossible for attackers to read or modify the data in transit to the authenticated server. HSTS protects against HTTP downgrade attacks (SSL stripping attacks) by requiring all traffic to use HTTPS, and rewrites requests that do not point to encrypted sources.
 
 <!---                           -->
@@ -228,7 +277,6 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## III. Configuration
 
-
 <!---                           -->
 <!---     Installation          -->
 <!---                           -->
@@ -237,7 +285,6 @@ Published datasets are created by researchers to disseminate their research for 
 
 ## IV. Installation
 
-
 <!---                                 -->
 <!---     Design and Architecture     -->
 <!---                                 -->
@@ -245,7 +292,6 @@ Published datasets are created by researchers to disseminate their research for 
 <a name="design-architecture"/>
 
 ## V. Design and Architecture
-
 
 <!---                           -->
 <!---     Unit Tests          -->
@@ -261,8 +307,6 @@ You can run unit tests using the following command in the project root directory
 coverage run -m pytest
 ```
 
-
-
 <!---                           -->
 <!---     File Manifest         -->
 <!---                           -->
@@ -270,7 +314,6 @@ coverage run -m pytest
 <a name="file-manifest"/>
 
 ## VII. File Manifest
-
 
 <!---                           -->
 <!---     Development Setup     -->
@@ -284,10 +327,10 @@ The following instructions describe the procedure to build and deploy the webpor
 
 ### Deploying pre-requisite infrastructure
 
-We are using terraform to create some of the base infrastructure for webportal. Here are the steps for creating the 
-infrastructure.  In order to deploy it, run:
+We are using terraform to create some of the base infrastructure for webportal. Here are the steps for creating the
+infrastructure. In order to deploy it, run:
 
-```deploy.py```
+`deploy.py`
 
 from the top directory.
 
@@ -309,15 +352,17 @@ where, `--environment` can be `ecs-dev`, `ecs-prod` and so on.
 ### Deleting the Backend
 
 If you need to delete your resources, do the following:
+
 ```sh
 # pwd: /webportal/lambda
 chalice delete --stage dev-private --profile sdc
 ```
 
-##### Deploy the metadata lambda function - 
+##### Deploy the metadata lambda function -
 
 **Step 1**: Create a script with below contents e.g(sdc-add-metadata-to-s3-object
 .sh)
+
 ```#!/bin/sh
 
 cd sdc-dot-webportal/webportal/lambda
@@ -344,65 +389,70 @@ chmod u+x sdc-add-metadata-to-s3-object.sh
 ### Installation steps for UI first-time build -
 
 ##### Goto ../webapp/ folder and run the command below -
+
 1. Install Nodejs
-    * Linux:
-        * curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-        * sudo apt-get install -y nodejs
-    * Windows:
-        * Go to [nodejs.org/en](nodejs.org/en) and download and run the installer for version 14. Under Tools for Native 
-    Modules, check the box to install the necessary tools.
+
+   - Linux:
+     - curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+     - sudo apt-get install -y nodejs
+   - Windows: \* Go to [nodejs.org/en](nodejs.org/en) and download and run the installer for version 14. Under Tools for Native
+     Modules, check the box to install the necessary tools.
 
 2. Install NPM:-
-    * sudo npm install -g npm
-    * Install Angular CLI `sudo npm install -g @angular/cli@latest`
-    * Install TSLint `sudo npm install -g eslint typescript`
-    * `sudo npm i -g types`
-    * Install Node modules library `npm i`
-    * Reset the package.json file from head via git. `git checkout HEAD -- package.json`
-    * Enable legacy peer dependency behavior via `npm i --legacy-peer-deps`
+
+   - sudo npm install -g npm
+   - Install Angular CLI `sudo npm install -g @angular/cli@latest`
+   - Install TSLint `sudo npm install -g eslint typescript`
+   - `sudo npm i -g types`
+   - Install Node modules library `npm i`
+   - Reset the package.json file from head via git. `git checkout HEAD -- package.json`
+   - Enable legacy peer dependency behavior via `npm i --legacy-peer-deps`
 
 3. Run local build
-    * cd into `webportal\webapp`
-    * run `ng build` and then `ng serve`
-    * open `http://localhost:4200`
-   
-   
+   - cd into `webportal\webapp`
+   - run `ng build` and then `ng serve`
+   - open `http://localhost:4200`
+
 ## Configuration UI changes
 
-```sh 
+```sh
 NOTE - Do not check in configuration value into project repository for the security purpose
 ```
 
 Cognito configuration
-* cd ../webapp/src/environments
-* open `environment.ts` service file
-* Add below configuration value
-    - production - Boolean value for the type of environment
-    - REGION - User pool AWS region
-    - USER_POOL_ID - User pool ID
-    - CLIENT_ID - App client ID
-    - IDENTITY_PROVIDER - User pool Identity provider name
-    - APP_DOMAIN - App domain name
-    - REDIRECT_URL - Re-direct URL for the user pool
-    - API_ENDPOINT - URL for the API endpoint
+
+- cd ../webapp/src/environments
+- open `environment.ts` service file
+- Add below configuration value
+  - production - Boolean value for the type of environment
+  - REGION - User pool AWS region
+  - USER_POOL_ID - User pool ID
+  - CLIENT_ID - App client ID
+  - IDENTITY_PROVIDER - User pool Identity provider name
+  - APP_DOMAIN - App domain name
+  - REDIRECT_URL - Re-direct URL for the user pool
+  - API_ENDPOINT - URL for the API endpoint
 
 ## Deployment steps for the application UI
 
 1. Run the command below for Development Deployment:
-   * `cd` into `webportal/webapp/`
-   * Run `./ecs_dev_deploy.sh`
+
+   - `cd` into `webportal/webapp/`
+   - Run `./ecs_dev_deploy.sh`
 
 2. Run the command below for Production Deployment:
-   * `cd` into `webportal/webapp/`
-   * Run `./ecs_prod_deploy.sh`
-    
-What these do: 
-* Builds the webportal files (the `dist` folder)
-* Moves the files into the webportal hosting s3 bucket
-* Calls the AWS Systems Manager document, `prod-nginx-asset-update`, which moves the files onto the `prod-nginx-web-proxy servers`. 
+   - `cd` into `webportal/webapp/`
+   - Run `./ecs_prod_deploy.sh`
+
+What these do:
+
+- Builds the webportal files (the `dist` folder)
+- Moves the files into the webportal hosting s3 bucket
+- Calls the AWS Systems Manager document, `prod-nginx-asset-update`, which moves the files onto the `prod-nginx-web-proxy servers`.
 
 ### Prerequisites
-* Your environment.ts file must be fully filled out with the required environment variables before you can deploy to any environment
+
+- Your environment.ts file must be fully filled out with the required environment variables before you can deploy to any environment
 
 <!---                           -->
 <!---     Release History       -->
@@ -414,7 +464,6 @@ What these do:
 
 August 8, 2019. SDC sdc-dot-webportal Release 2.1
 
-
 <!---                             -->
 <!---     Contact Information     -->
 <!---                             -->
@@ -425,7 +474,6 @@ August 8, 2019. SDC sdc-dot-webportal Release 2.1
 
 For any queries you can reach to sdc-support@dot.gov
 
-
 <!---                           -->
 <!---     Contributing          -->
 <!---                           -->
@@ -433,7 +481,6 @@ For any queries you can reach to sdc-support@dot.gov
 <a name="contributing"/>
 
 ## XI. Contributing
-
 
 <!---                           -->
 <!---     Known Bugs            -->
@@ -444,13 +491,13 @@ For any queries you can reach to sdc-support@dot.gov
 ## XII. Known Bugs
 
 If you are seeing 401s in the front-end, some of the possible issues are:
+
 - The chalice `config.json` may have a misconfigured Rest API ID or authorizer ID (check the API Gateway for correct values): https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/2734ce28a165a10078d510ac58e17b2e65cba958/webportal/lambda/.chalice/config.json#L14-L15
 - The chalice `config.json` may have a misconfigured Cognito pool or IDP: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/2734ce28a165a10078d510ac58e17b2e65cba958/webportal/lambda/.chalice/config.json#L24-L25
 - The Angular `environment.ts` may have an incorrect value for Cognito User Pool or client IDs:
   - User pool, AD Client ID, IDP name, domain: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/fe29d326ee83434ff0fc5f423c96b02062d193ef/webportal/webapp/src/environments/environment.prod-private.ts#L6-L9
   - Login.gov client ID: https://github.com/usdot-jpo-sdc/sdc-dot-webportal/blob/fe29d326ee83434ff0fc5f423c96b02062d193ef/webportal/webapp/src/environments/environment.prod-private.ts#L11
 - The app client may be misconfigured if you are getting a 401 with a `Error verifying JWT: Invalid audience` - double check that the correct app client is being used in the configuration files and that the lambdas in `sdc-dot-cognito-account-sync` are using the correct app client.
-
 
 <!---                                    -->
 <!---     Credits and Acknowledgment     -->
@@ -459,8 +506,8 @@ If you are seeing 401s in the front-end, some of the possible issues are:
 <a name="credits-and-acknowledgement"/>
 
 ## XIII. Credits and Acknowledgment
-Thank you to the Department of Transportation for funding to develop this project.
 
+Thank you to the Department of Transportation for funding to develop this project.
 
 <!---                                    -->
 <!---     CODE.GOV Registration Info     -->
@@ -469,7 +516,8 @@ Thank you to the Department of Transportation for funding to develop this projec
 <a name="code-gov-registration-info">
 
 ## XIV. CODE.GOV Registration Info
-Agency:  DOT
+
+Agency: DOT
 
 Short Description: The Secure Data Commons is an online data warehousing and analysis platform for transportation researchers.
 
@@ -490,4 +538,5 @@ Contact Name: sdc-support@dot.gov
 [![Code quality status](https://codescene.io/projects/10167/status.svg) Full analysis results at **codescene.io**.](https://codescene.io/projects/10167/jobs/latest-successful/results)
 
 ---
+
 [Back to top](#toc)
