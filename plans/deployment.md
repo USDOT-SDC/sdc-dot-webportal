@@ -8,12 +8,12 @@
 
 1. Verify/Install the Deployment Build Environment:
    1. Windows or Linux
-   2. AWS CLI [version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-   3. Node.js [14.20.1](https://nodejs.org/download/release/v14.20.1/)
+   2. AWS CLI [v2.11.2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+   3. Node.js [v14.20.1](https://nodejs.org/download/release/v14.20.1/)
       1. If installation is required, check the box to install the necessary tools, at the Tools for Native Modules step.
-   4. npm [8.19.2](https://www.npmjs.com/package/npm) (included with NodeJS/Chocolatey installation)
-   5. Python [3.9.9](https://www.python.org/downloads/release/python-399/) (included with NodeJS/Chocolatey installation)
-   6. Angular CLI [9.6.3](https://angular.io/cli) / Angular 5.2.1 (npm install)
+   4. npm [9.6.3](https://www.npmjs.com/package/npm) (included with NodeJS/Chocolatey installation)
+   5. Python [3.11.2](https://www.python.org/downloads/release/python-399/) (included with NodeJS/Chocolatey installation)
+   6. Angular CLI [15.2.4](https://angular.io/cli) / Angular 5.2.1 (npm install)
    7. For additional information on needed installs and dependencies, refer to [README.md](https://github.com/USDOT-SDC/sdc-dot-webportal#installation-steps-for-ui-first-time-build--).
 2. Make a backup of the current webportal files
    1. Within build machine, create a 'backup-<currentdate>' directory and run the following:
