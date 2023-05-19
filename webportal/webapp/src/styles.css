@@ -1,149 +1,156 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~prismjs/themes/prism.css';
-@import '~bootstrap/dist/css/bootstrap.css';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~prismjs/themes/prism.css";
+@import "~bootstrap/dist/css/bootstrap.css";
 
 @import "~primeicons/primeicons.css";
 @import "~primeng/resources/themes/rhea/theme.css";
 @import "~primeng/resources/primeng.min.css";
 
-body { padding-top: 70px; }
+body {
+  padding-top: 70px;
+}
 
 html {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .navbar-default {
-    background: #f8f8f8 /*rgb(21, 35, 80)*/ !important;
-    color: #232222 !important;
-    /*box-shadow: 0 7px 10px #777777ba;*/
+  background: #f8f8f8 /*rgb(21, 35, 80)*/ !important;
+  color: #232222 !important;
+  /*box-shadow: 0 7px 10px #777777ba;*/
 }
 .navbar-default .navbar-nav > li > a {
-    color: #232222 !important;
-    padding-top:19px;
-    padding-bottom:19px;
+  color: #232222 !important;
+  padding-top: 19px;
+  padding-bottom: 19px;
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-    color: #232222!important;
-    border-bottom: solid 2px #232222;
-    background-color: #f8f8f8 /*rgb(21, 35, 80)*/ !important;
-    font-weight: 700 !important;
+  color: #232222 !important;
+  border-bottom: solid 2px #232222;
+  background-color: rgba(203, 202, 202, 0.504) /*rgb(21, 35, 80)*/ !important;
+  font-weight: 700 !important;
 }
 .container {
-    margin-bottom: 50px;
-    margin-top: 25px;
+  margin-bottom: 50px;
+  margin-top: 25px;
 }
 .iconFont {
-    color: #337ab7;
-    margin-left: 10px;
-    cursor: pointer;
+  color: #337ab7;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 #footerInfo {
-    background-color: #2E5B7A;
-    text-align: center;
-    color: white;
-    height: 160px;
-    /*box-shadow: 0 -5px 10px #777777ba;*/
+  background-color: #2e5b7a;
+  text-align: center;
+  color: white;
+  height: 160px;
+  /*box-shadow: 0 -5px 10px #777777ba;*/
 }
 
 .footerLogo {
-    display: inline;
-    font-size: 50px;
-    text-align: center;
+  display: inline;
+  font-size: 50px;
+  text-align: center;
 }
 
 .padding-top-lg {
-    padding-top: 60px
+  padding-top: 60px;
 }
 
 .padding-top-xs {
-    padding-top: 5%;
+  padding-top: 5%;
 }
 
 .padding-top-xxs {
-    padding-top: 3%;
+  padding-top: 3%;
 }
 
-.pull-margin-40{
-    margin-left: -40px;
+.pull-margin-40 {
+  margin-left: -40px;
 }
 
-.push-margin-40{
-    margin-left: 40px;
+.push-margin-40 {
+  margin-left: 40px;
 }
 .push-top-40 {
-    margin-top: 80px;
+  margin-top: 80px;
 }
-.push-top-30{
-    margin-top: 30px;
+.push-top-30 {
+  margin-top: 30px;
 }
 .padding-top-sm {
-    padding-top: 20px;
+  padding-top: 20px;
 }
 .font-13 {
-    font-size: 13px;
+  font-size: 13px;
 }
 .width-70 {
-    width: 70%;
+  width: 70%;
 }
 .width-40 {
-    width: 40%;
+  width: 40%;
 }
 
 .logo {
-    font-weight: 700;
-    font-size: 16px;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .textAlignCenter {
-    text-align: center;
+  text-align: center;
 }
 
 .questionText {
-    font-size: 16px;
-    color: #13136b;
+  font-size: 16px;
+  color: #13136b;
 }
 
 .usa-form__note {
-    margin-top: 5px;
-    font-size: 14px;
-  }
-  
- .usa-show-password {
-    cursor: pointer;
-  }
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.usa-show-password {
+  cursor: pointer;
+}
 
 .custom-export-dialog .mat-mdc-form-field {
-font-size: 16px;
+  font-size: 16px;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 .custom-export-dialog .mat-tab-label {
-font-size: 16px;
+  font-size: 16px;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.custom-export-dialog .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-transform: translateY(-1.28125em) scale(.90) perspective(100px) translateZ(0.001px);
-width: 133.33333%;
+.custom-export-dialog
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label,
+.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.28125em) scale(0.9) perspective(100px)
+    translateZ(0.001px);
+  width: 133.33333%;
 }
 
 .custom-export-dialog .mat-mdc-form-field-hint {
-     color: lightgray;
+  color: lightgray;
 }
 
 .custom-export-dialog .mat-mdc-dialog-content {
-    overflow-y: hidden;
+  overflow-y: hidden;
 }
 
 .existing-trust-snackbar {
-    white-space: pre-wrap
+  white-space: pre-wrap;
 }
 
 .outside {
-    list-style-position: outside;
-    list-style-type: disc;
+  list-style-position: outside;
+  list-style-type: disc;
 }

@@ -4,9 +4,11 @@
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header col-md-4">
         <!--<a class="brand-name" style="width: 15%;float: left;margin: 5px 0;">-->
-          <!--<img style="margin-top: 8px;" class="img-responsive2" src="../assets/images/dot-logo-white.png" alt="Logo">-->
+        <!--<img style="margin-top: 8px;" class="img-responsive2" src="../assets/images/dot-logo-white.png" alt="Logo">-->
         <!--</a>-->
-        <div style=" float: left;width: 85%;padding: 18px 0px;margin-left: -15px">
+        <div
+          style="float: left; width: 85%; padding: 18px 0px; margin-left: -15px"
+        >
           <!--<span style="font-weight: 700;">U.S. Department of Transportation</span><br/>-->
           <span class="logo">Secure Data Commons Platform</span>
         </div>
@@ -14,29 +16,40 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="col-md-8" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right" style="font-size: 11px">
-          <li class="nav-item" routerLinkActive="active" routerLinkActiveOptions="{exact: true}">
-            <a class="nav-link"  routerLink="/account/accounthome">HOME &emsp; &nbsp;|</a>
+        <ul class="nav navbar-nav navbar-right" style="font-size: 12px">
+          <li
+            class="nav-link"
+            routerLinkActive="active"
+            routerLinkActiveOptions="{exact: true}"
+          >
+            <a class="nav-item" routerLink="/account/accounthome">HOME</a>
           </li>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/account/datasets">DATASETS &emsp; &nbsp;|</a>
+            <a class="nav-link" routerLink="/account/datasets">DATASETS</a>
           </li>
           <li class="nav-item" routerLinkActive="active" *ngIf="isDataProvider">
-            <a class="nav-link" routerLink="/account/exportrequests">EXPORT REQUESTS &emsp; &nbsp;|</a>
+            <a class="nav-link" routerLink="/account/exportrequests"
+              >EXPORT REQUESTS</a
+            >
           </li>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/account/workstation">WORKSTATIONS &emsp; &nbsp;|</a>
+            <a class="nav-link" routerLink="/account/workstation"
+              >WORKSTATIONS</a
+            >
           </li>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/account/faq">FAQ &emsp; &nbsp;|</a>
+            <a class="nav-link" routerLink="/account/faq">FAQ</a>
           </li>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" style="cursor: pointer" (click)="userLogout()">LOGOUT</a>
+            <a class="nav-link" style="cursor: pointer" (click)="userLogout()"
+              >LOGOUT</a
+            >
           </li>
-
         </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
   </nav>
   <router-outlet></router-outlet>
 
@@ -45,15 +58,58 @@
     <div class="row padding-top-lg">
       <div id="footerInfo" class="padding-top-sm">
         <!--<div class="footerLogo">-->
-          <!--<img src="../assets/images/dot-logo-white.png" alt="DOT Logo" style="margin-top: 25px;">-->
-          <!--<span style="font-weight: 700;font-size: 14px">U.S. Department of Transportation</span>-->
+        <!--<img src="../assets/images/dot-logo-white.png" alt="DOT Logo" style="margin-top: 25px;">-->
+        <!--<span style="font-weight: 700;font-size: 14px">U.S. Department of Transportation</span>-->
         <!--</div>-->
         <p class="logo">Secure Data Commons Platform</p>
-        <p class="font-13">The SDC platform was created as a prototype as part of a U.S. DOT research project under contract number DTFH6116D00052 / Task 12</p>
-        <hr style="width: 80%; margin-bottom: 15px; margin-top: 15px;">
-        <p class="font-13"><a style="color:white;" href="https://www.fhwa.dot.gov/privacy.cfm">Privacy Policy</a> | <a style="color:white;" href="https://www.fhwa.dot.gov/foia/">Freedom of Information Act (FOIA)</a> | <a style="color:white;" href="https://www.fhwa.dot.gov/accessibility/">Accessibility</a> | <a style="color:white;" href="https://www.fhwa.dot.gov/webpolicies/publishschedule.cfm">Web Policies & Notices</a> | <a style="color:white;" href="https://www.transportation.gov/civil-rights/civil-rights-awareness-enforcement/no-fear-act">No Fear Act</a> | <a style="color:white;" href="https://www.oig.dot.gov/Hotline">Report Waste, Fraud and Abuse</a> |
-          <a style="color:white;" href="https://www.transportation.gov/">U.S. DOT Home</a> | <a style="color:white;" href="https://www.usa.gov/">USA.gov</a> | <a style="color:white;" href="https://www.whitehouse.gov/">WhiteHouse.gov</a></p>
-        <p class="font-13"><a style="color:white;" href="https://www.fhwa.dot.gov/">Federal Highway Administration</a> | 1200 New Jersey Avenue, SE | Washington, DC 20590 | 202-366-4000</p>
+        <p class="font-13">
+          The SDC platform was created as a prototype as part of a U.S. DOT
+          research project under contract number DTFH6116D00052 / Task 12
+        </p>
+        <hr style="width: 80%; margin-bottom: 15px; margin-top: 15px" />
+        <p class="font-13">
+          <a style="color: white" href="https://www.fhwa.dot.gov/privacy.cfm"
+            >Privacy Policy</a
+          >
+          |
+          <a style="color: white" href="https://www.fhwa.dot.gov/foia/"
+            >Freedom of Information Act (FOIA)</a
+          >
+          |
+          <a style="color: white" href="https://www.fhwa.dot.gov/accessibility/"
+            >Accessibility</a
+          >
+          |
+          <a
+            style="color: white"
+            href="https://www.fhwa.dot.gov/webpolicies/publishschedule.cfm"
+            >Web Policies & Notices</a
+          >
+          |
+          <a
+            style="color: white"
+            href="https://www.transportation.gov/civil-rights/civil-rights-awareness-enforcement/no-fear-act"
+            >No Fear Act</a
+          >
+          |
+          <a style="color: white" href="https://www.oig.dot.gov/Hotline"
+            >Report Waste, Fraud and Abuse</a
+          >
+          |
+          <a style="color: white" href="https://www.transportation.gov/"
+            >U.S. DOT Home</a
+          >
+          | <a style="color: white" href="https://www.usa.gov/">USA.gov</a> |
+          <a style="color: white" href="https://www.whitehouse.gov/"
+            >WhiteHouse.gov</a
+          >
+        </p>
+        <p class="font-13">
+          <a style="color: white" href="https://www.fhwa.dot.gov/"
+            >Federal Highway Administration</a
+          >
+          | 1200 New Jersey Avenue, SE | Washington, DC 20590 | 202-366-4000
+        </p>
       </div>
     </div>
   </div>

@@ -28,7 +28,7 @@ export class AuthInterceptorLogin implements HttpInterceptor {
       return next.handle(request);
     } else {
       return from(this.cognitoService.getIdToken()).pipe(
-        tap((token) => console.log("TOKEN IN LOGINSYNCSERVICE ==", token)), // side effect to set token property on auth service
+        tap((token) => console.log("", token)), // side effect to set token property on auth service
         switchMap((token) => {
           // use transformation operator that maps to an Observable<T>
           const newRequest = request.clone({
