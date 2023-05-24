@@ -1,6 +1,6 @@
 # Deployment Plan
 
-[v3.0.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/3.0.0)
+[v3.0.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/3.0.1)
 
 ### Pre-Deployment - General Tasks:
 
@@ -19,9 +19,9 @@
    1. Within build machine, create a 'backup-<currentdate>' directory and run the following:
       `aws s3 cp s3://prod-webportal-hosting-004118380849  backup-<currentdate>/  --recursive`
 
-### Deployment Plan for v3.0.0:
+### Deployment Plan for v3.0.1:
 
-1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 3.0.0
+1. On the deployment machine, pull/clone the sdc-do-webportal repo at tag 3.0.1
 
 2. Navigate to the webportal\webapp folder, within the repo directory, and run `ecs_prod_deploy.sh`.
 

@@ -1,6 +1,6 @@
 # Rollback Plan
 
-[v3.0.0](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/3.0.0)
+[v3.0.1](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/3.0.1)
 
 ### If rollback is required after deployment:
 

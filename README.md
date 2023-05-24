@@ -49,6 +49,15 @@ The SDC platform provides a collaborative environment for traffic engineers, res
 
 ## I. Release Notes
 
+**May 24, 2023. SDC sdc-dot-webportal Release 3.0.1**
+
+### What's New in Release 3.0.1
+
+- Dataset descriptions now show up
+- Updated screenshots in FAQ
+- Updated deployment plan on web portal repo to include the incremental updates and versions
+- Redid titles of pages to have the selected one highlighted
+
 **May 10, 2023. SDC sdc-dot-webportal Release 3.0.0**
 
 ### What's New in Release 3.0.0
