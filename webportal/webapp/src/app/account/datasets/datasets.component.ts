@@ -39,13 +39,13 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTableModule } from "@angular/material/table";
 import { CdkTableModule } from "@angular/cdk/table";
 import { FileUploadModule } from "primeng/fileupload";
+import { MarkdownModule, MarkdownService } from "ngx-markdown";
 //import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 //import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @Component({
   standalone: true,
   imports: [
-
     MatCardModule,
     MatExpansionModule,
     CommonModule,
@@ -54,13 +54,13 @@ import { FileUploadModule } from "primeng/fileupload";
     //BrowserAnimationsModule,
     MatDialogModule,
 
-
     // MatCardModule,
     // MatExpansionModule,
-  
+
     ButtonModule,
     InputTextModule,
     FormsModule,
+    MarkdownModule,
     RouterModule,
     // MatButtonModule,
     // MatCheckboxModule,

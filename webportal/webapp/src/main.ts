@@ -3,7 +3,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
-import { enableProdMode } from "@angular/core";
+import { enableProdMode, importProvidersFrom } from "@angular/core";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 import { provideRouter } from "@angular/router";
@@ -27,6 +27,11 @@ import {
 import { CognitoService } from "./services/cognito.service";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import {
+  MarkdownComponent,
+  MarkdownModule,
+  MarkdownService,
+} from "ngx-markdown";
 
 if (environment.production) {
   enableProdMode();
@@ -53,5 +58,6 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     // { provide: BrowserXhr, useClass: NgProgressBrowserXhr }
     provideRouter(APP_Routes),
+    importProvidersFrom(MarkdownModule.forRoot()),
   ],
 });
