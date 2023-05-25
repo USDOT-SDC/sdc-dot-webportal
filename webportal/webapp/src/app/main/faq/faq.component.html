@@ -1,113 +1,246 @@
-
 <div class="container">
-    <mat-card appearance="outlined" class="info">
-        <div class="row">
-            <h3>Frequently Asked Questions</h3>
-            <mat-card-content>
+  <mat-card appearance="outlined" class="info">
+    <div class="row">
+      <h3>Frequently Asked Questions</h3>
+      <mat-card-content>
+        <div class="padding-top-xs" id="sdcInfo">
+          <ul>
+            <h4>1) What is Secure Data Commons Platform?</h4>
+            <p>
+              The Secure Data Commons is an online data warehousing and analysis
+              platform for transportation researchers. On this portal,
+              researchers can take advantage of pre-established programming
+              environments to access and analyze a growing set of
+              transportation-related data sets.
+            </p>
+            <p>
+              The SDC platform provides a collaborative environment for traffic
+              engineers, researchers, data scientists and anyone who is
+              interested in carrying out research and analysis on different
+              datasets related to traffic, weather, crashes, and others.
+            </p>
+          </ul>
+        </div>
+        <hr />
 
-                <div class="padding-top-xs" id="sdcInfo">
-                    <ul>
-                        <h4>1) What is Secure Data Commons Platform?</h4>
-                        <p>The Secure Data Commons is an online data warehousing and analysis platform for transportation researchers. On this
-                            portal, researchers can take advantage of pre-established programming environments to access
-                            and analyze a growing set of transportation-related data sets.
-                        </p>
-                        <p>
-                            The SDC platform provides a collaborative environment for traffic engineers, researchers,
-                            data scientists and anyone who is interested in carrying out research and analysis on
-                            different datasets related to traffic, weather, crashes, and others.
-                        </p>
-                    </ul>
-                </div> <hr>
-
-                <div class="padding-top-xs" id="sdcAccess">
-                    <ul>
-                        <h4>2) How can I get access to the SDC portal?</h4>
-                        <span>
-                            <li class="push-top-30">Go to https://portal.securedatacommons.com</li>
-                        </span>
-                        <span>
-                            <li class="push-top-30">Go to ‘Register/Login’  menu tab</li>
-                            <img src="../../assets/images/faq_image/SignUp-1.png" class="mx-auto d-block width-70">
-                        </span>
-                        <span>
-                            <li class="push-top-30">Download the access request form, fill out the required details, and send the form by email to sdc-support@dot.gov</li>
-                            <img src="../../assets/images/faq_image/SignUp-2.png" class="mx-auto d-block width-70">
-                        </span>
-                        <!-- <span>
+        <div class="padding-top-xs" id="sdcAccess">
+          <ul>
+            <h4>2) How can I get access to the SDC portal?</h4>
+            <span>
+              <li class="push-top-30">
+                Go to https://portal.securedatacommons.com
+              </li>
+            </span>
+            <span>
+              <li class="push-top-30">Go to ‘Register/Login’ menu tab</li>
+              <img
+                src="../../assets/images/faq_image/SignUp-1.png"
+                class="mx-auto d-block width-70"
+                id="img-highlight"
+              />
+            </span>
+            <span>
+              <li class="push-top-30">
+                Download the access request form, fill out the required details,
+                and send the form by email to sdc-support@dot.gov
+              </li>
+              <img
+                src="../../assets/images/faq_image/SignUp-2.png"
+                class="mx-auto d-block width-70"
+                id="img-highlight"
+              />
+            </span>
+            <!-- <span>
                             <li class="push-top-30">Once approved, support team will send you an email with the instructions for accessing the platform.</li>
                         </span> -->
-                    </ul>
-                </div> <hr>
-
-                <div class="padding-top-xs" id="userOnboardingProcess">
-                    <ul>
-                        <h4>3) What is the process for onboarding users to the SDC system?</h4>
-                        <p>Onboarding a user to the SDC system involves the following steps: </p>
-                        <span>
-                            <p class="push-top-30"><b>Step 1- User Request</b></p>
-                            <p>User requests access to the SDC system via submitting the required information on the access request form. User access request forms will be stored for the duration of the contract.</p>
-                            <p class="push-top-30"><b>Step 2 – Access Request Review</b></p>
-                            <p>After reviewing the request, SDC Support Team will: 
-                                <li>Create a user name and password for the user within 24 hours of the request.</li>
-                                <li>Provision a standard workstation based on the user preferences (unless unique tools are requested by the user - see Step 5 for details).</li>
-                                <li>Provision any back-end services (such as S3 buckets) needed.</li>
-                            </p>
-                            <p class="push-top-30"><b>Step 3 – Email Instructions</b></p>
-                            <p>SDC support team will send out an email to the user with the login instructions. Included with the login instructions are the following:
-                                <li>Basic instructions on getting started with the SDC (username, temporary login password, and link to the log-in page)</li>
-                                <li>Instructions for scheduling a phone/webinar walkthrough of the system.</li>
-                                <li>Contacts for troubleshooting.</li>
-                            </p>
-                            <p class="push-top-30"><b>Step 4 – Walkthrough of the System</b></p>
-                            <p>The SDC support team will offer two walkthrough meetings with the user:
-                                <li><i>Orientation -</i> An optional orientation web-meeting is available to provide a high-level overview of the SDC system. About 15-30 minutes in duration, the SDC Support Team will demonstrate the SDC system including:
-                                    <ul>
-                                        <li>How to set up workstations?</li>
-                                        <li>How to request data set access?</li>
-                                        <li>How to bring your own data and code into the SDC, using upload features and code repositories like GitHub?</li>
-                                        <li>How to publish results of the research to other users of the SDC?</li>
-                                        <li>How to use sample material and scripts in the SDC?</li>
-                                    </ul>
-                                </li>
-                                <li><i>Technical Session -</i> Once a user is familiar with the layout of the SDC system and is ready to access data, the SDC Support Team will conduct a technical session to demonstrate how the user can start analyzing the requested dataset. This technical session, about 30-60 minutes in length, will include the following: 
-                                    <ul>
-                                        <li>How to access the data that has been made available?</li>
-                                        <li>What tools/scripts are available for this dataset?</li>
-                                        <li>What additional information about the dataset is available?</li>
-                                        <li>What are the restrictions of the dataset?</li>
-                                    </ul>
-                                </li>
-                            </p>
-                            <p class="push-top-30"><b>Step 5 – Non-Standard Workstation Access</b></p>
-                            <p>If the user requires specialized tools, programming capabilities, or operating systems that are not offered by the standard SDC workstations, the SDC Support Team will investigate the following:
-                                <li>Availability of the requested tool/programming capability (open-source versus licensed).</li>
-                                <li>If open-source, what are the required dependencies for the tool and can it be installed on the SDC system?</li>
-                                <li>If licensed software, the user is responsible for providing a license. The SDC team will walk through how best to install the licensed software to the user’s workstation.</li>
-                            </p>
-                            <p>Once a determination is made on whether the user’s needs can be supported within the SDC system, the SDC support team will communicate directly with the user notifying them of the ability/inability to provide the requested workstation tools. This will occur prior to the walkthrough and immediately after the user submits the access form. Ideally, the SDC team will work with the user to determine acceptable alternatives to the user. Once an alternative has been selected, the SDC support team will provision the workstation according to the agreed-upon specifications.</p>
-                            
-                            <p class="push-top-30"><b>Step 6 – Check-in</b></p>
-                            <p>Once the walkthrough of the system is complete, the SDC Support Team will check-in with the user (via email) within a week of the technical session to ensure that their use of the SDC system is going smoothly. In the email, the user will be pointed to available resources and an email point of contact for additional needs from the SDC Support Team</p>
-                        </span>
-                    </ul>
-                </div> <hr> 
-
-                <div class="padding-top-xs" id="sdcDataset">
-                    <ul>
-                        <h4>4) What is SDC Datasets?</h4>
-                        <p>There are three types of datasets in SDC:</p>
-                        <span>
-                            <li class="push-top-30"><b>Raw datasets</b></li>
-                            <p>The data stored in its native or original format are referred to as raw datasets. These datasets could be in structured (such as databases, logs, or financial data), semi-structured (HTML, XML, RDF, CSV) and un-structured (images, PDF, Word documents). This data is unaltered and stored as-is. The data can be received through continuous streaming sources (APIs, sensors) or one-time load from external sources.</p>
-                            <li class="push-top-30"><b>Curated datasets</b></li>
-                            <p>Data curation is a process of integrating the raw data collected from various sources, annotating the data and presenting it in such a way that the value of the data is maintained over time and the data remains available for reuse and preservation. Curated datasets enable data discovery and retrieval, maintain quality, add value and provide for re-use over time, for researchers and data scientists. The curation process includes data transformations from unstructured and semi-structured formats to a structured format, deduplication of data, data obfuscation, and data cleaning, providing high-quality data for researchers to create meaningful insights.</p>
-                            <li class="push-top-30"><b>Published datasets</b></li>
-                            <p>Published datasets are created by researchers to disseminate their research for other users to verify and reuse them beyond the original purpose for which they were collected. Published datasets are a result of combining analysis on curated datasets available in SDC platform along with other datasets or algorithms that is owned/created by a researcher or data scientist.</p>
-                        </span>
-                    </ul>
-                </div> <hr>
-            </mat-card-content>
+          </ul>
         </div>
-    </mat-card>
+        <hr />
+
+        <div class="padding-top-xs" id="userOnboardingProcess">
+          <ul>
+            <h4>
+              3) What is the process for onboarding users to the SDC system?
+            </h4>
+            <p>
+              Onboarding a user to the SDC system involves the following steps:
+            </p>
+            <span>
+              <p class="push-top-30"><b>Step 1- User Request</b></p>
+              <p>
+                User requests access to the SDC system via submitting the
+                required information on the access request form. User access
+                request forms will be stored for the duration of the contract.
+              </p>
+              <p class="push-top-30"><b>Step 2 – Access Request Review</b></p>
+              <p>
+                After reviewing the request, SDC Support Team will:
+                <li>
+                  Create a user name and password for the user within 24 hours
+                  of the request.
+                </li>
+                <li>
+                  Provision a standard workstation based on the user preferences
+                  (unless unique tools are requested by the user - see Step 5
+                  for details).
+                </li>
+                <li>
+                  Provision any back-end services (such as S3 buckets) needed.
+                </li>
+              </p>
+              <p class="push-top-30"><b>Step 3 – Email Instructions</b></p>
+              <p>
+                SDC support team will send out an email to the user with the
+                login instructions. Included with the login instructions are the
+                following:
+                <li>
+                  Basic instructions on getting started with the SDC (username,
+                  temporary login password, and link to the log-in page)
+                </li>
+                <li>
+                  Instructions for scheduling a phone/webinar walkthrough of the
+                  system.
+                </li>
+                <li>Contacts for troubleshooting.</li>
+              </p>
+              <p class="push-top-30">
+                <b>Step 4 – Walkthrough of the System</b>
+              </p>
+              <p>
+                The SDC support team will offer two walkthrough meetings with
+                the user:
+                <li>
+                  <i>Orientation -</i> An optional orientation web-meeting is
+                  available to provide a high-level overview of the SDC system.
+                  About 15-30 minutes in duration, the SDC Support Team will
+                  demonstrate the SDC system including:
+                  <ul>
+                    <li>How to set up workstations?</li>
+                    <li>How to request data set access?</li>
+                    <li>
+                      How to bring your own data and code into the SDC, using
+                      upload features and code repositories like GitHub?
+                    </li>
+                    <li>
+                      How to publish results of the research to other users of
+                      the SDC?
+                    </li>
+                    <li>How to use sample material and scripts in the SDC?</li>
+                  </ul>
+                </li>
+                <li>
+                  <i>Technical Session -</i> Once a user is familiar with the
+                  layout of the SDC system and is ready to access data, the SDC
+                  Support Team will conduct a technical session to demonstrate
+                  how the user can start analyzing the requested dataset. This
+                  technical session, about 30-60 minutes in length, will include
+                  the following:
+                  <ul>
+                    <li>
+                      How to access the data that has been made available?
+                    </li>
+                    <li>What tools/scripts are available for this dataset?</li>
+                    <li>
+                      What additional information about the dataset is
+                      available?
+                    </li>
+                    <li>What are the restrictions of the dataset?</li>
+                  </ul>
+                </li>
+              </p>
+              <p class="push-top-30">
+                <b>Step 5 – Non-Standard Workstation Access</b>
+              </p>
+              <p>
+                If the user requires specialized tools, programming
+                capabilities, or operating systems that are not offered by the
+                standard SDC workstations, the SDC Support Team will investigate
+                the following:
+                <li>
+                  Availability of the requested tool/programming capability
+                  (open-source versus licensed).
+                </li>
+                <li>
+                  If open-source, what are the required dependencies for the
+                  tool and can it be installed on the SDC system?
+                </li>
+                <li>
+                  If licensed software, the user is responsible for providing a
+                  license. The SDC team will walk through how best to install
+                  the licensed software to the user’s workstation.
+                </li>
+              </p>
+              <p>
+                Once a determination is made on whether the user’s needs can be
+                supported within the SDC system, the SDC support team will
+                communicate directly with the user notifying them of the
+                ability/inability to provide the requested workstation tools.
+                This will occur prior to the walkthrough and immediately after
+                the user submits the access form. Ideally, the SDC team will
+                work with the user to determine acceptable alternatives to the
+                user. Once an alternative has been selected, the SDC support
+                team will provision the workstation according to the agreed-upon
+                specifications.
+              </p>
+
+              <p class="push-top-30"><b>Step 6 – Check-in</b></p>
+              <p>
+                Once the walkthrough of the system is complete, the SDC Support
+                Team will check-in with the user (via email) within a week of
+                the technical session to ensure that their use of the SDC system
+                is going smoothly. In the email, the user will be pointed to
+                available resources and an email point of contact for additional
+                needs from the SDC Support Team
+              </p>
+            </span>
+          </ul>
+        </div>
+        <hr />
+
+        <div class="padding-top-xs" id="sdcDataset">
+          <ul>
+            <h4>4) What is SDC Datasets?</h4>
+            <p>There are three types of datasets in SDC:</p>
+            <span>
+              <li class="push-top-30"><b>Raw datasets</b></li>
+              <p>
+                The data stored in its native or original format are referred to
+                as raw datasets. These datasets could be in structured (such as
+                databases, logs, or financial data), semi-structured (HTML, XML,
+                RDF, CSV) and un-structured (images, PDF, Word documents). This
+                data is unaltered and stored as-is. The data can be received
+                through continuous streaming sources (APIs, sensors) or one-time
+                load from external sources.
+              </p>
+              <li class="push-top-30"><b>Curated datasets</b></li>
+              <p>
+                Data curation is a process of integrating the raw data collected
+                from various sources, annotating the data and presenting it in
+                such a way that the value of the data is maintained over time
+                and the data remains available for reuse and preservation.
+                Curated datasets enable data discovery and retrieval, maintain
+                quality, add value and provide for re-use over time, for
+                researchers and data scientists. The curation process includes
+                data transformations from unstructured and semi-structured
+                formats to a structured format, deduplication of data, data
+                obfuscation, and data cleaning, providing high-quality data for
+                researchers to create meaningful insights.
+              </p>
+              <li class="push-top-30"><b>Published datasets</b></li>
+              <p>
+                Published datasets are created by researchers to disseminate
+                their research for other users to verify and reuse them beyond
+                the original purpose for which they were collected. Published
+                datasets are a result of combining analysis on curated datasets
+                available in SDC platform along with other datasets or
+                algorithms that is owned/created by a researcher or data
+                scientist.
+              </p>
+            </span>
+          </ul>
+        </div>
+        <hr />
+      </mat-card-content>
+    </div>
+  </mat-card>
 </div>
