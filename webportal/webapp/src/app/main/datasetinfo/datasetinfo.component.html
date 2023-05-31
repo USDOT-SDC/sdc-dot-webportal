@@ -61,7 +61,7 @@
 <p-dialog [(visible)]="displayDialog" [modal]="true" [style]="{width: '60%'}">
   <h3>HSIS Form</h3>
   <div class="form-container">
-    <form>
+    <form [formGroup]="form">
       <div class="form-section">
         <h3>Data Request</h3>
         <p>Please Note:</p>
@@ -92,8 +92,8 @@
         <div class="p-grid p-fluid">
           <div class="p-col-12 p-md-6">
             <div class="p-field">
-              <label for="name">Name*</label>
-              <input type="text" id="name" pInputText required>
+              <label for="address1">Name*</label>
+              <input type="text" pInputText formControlName="name" required>
             </div>
             <div class="p-field">
               <label for="address1">Address 1*</label>
