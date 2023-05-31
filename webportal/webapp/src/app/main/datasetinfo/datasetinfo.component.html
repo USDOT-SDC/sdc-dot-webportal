@@ -51,7 +51,194 @@
                     </ul>
                 </div>
             </mat-card-content>
-        </div>
+        </div>          
     </mat-card>
 </div>
+
+ 
+<button class="toggle-button" (click)="showDialog()">HSIS Form</button>
+
+<p-dialog [(visible)]="displayDialog" [modal]="true" [style]="{width: '60%'}">
+  <h3>HSIS Form</h3>
+  <div class="form-container">
+    <form>
+      <div class="form-section">
+        <h3>Data Request</h3>
+        <p>Please Note:</p>
+        <p>HSIS is designed to provide data to be used in research conducted in the general public interest, which is intended for publication in a scientific journal or other national publication. By submitting this request, the user is promising to follow these guidelines. Educators who wish to use HSIS data for instructional purposes in a road safety course should contact HSIS staff directly at Ana.Eigen@dot.gov. Users wishing to obtain data for purposes other than research or instruction should contact the States directly. HSIS staff will be pleased to provide contact names and addresses.</p>
+        <p>Before filling out the form, please review the data element tables to see which variables are available for a given state or the guidebooks for detailed descriptions and definitions.</p>
+        <p>Table Directions (please read first)</p>
+        <p>Table 1 — Data Elements for Accident, Vehicle, and Occupant Files</p>
+        <p>Table 2 — Data Elements for Roadway and Roadway-Related Files</p>
+        <p>Guidebooks:</p>
+        <ul>
+          <li>California</li>
+          <li>Charlotte, NC</li>
+          <li>Illinois</li>
+          <li>Maine</li>
+          <li>Minnesota</li>
+          <li>North Carolina</li>
+          <li>Ohio</li>
+          <li>Washington</li>
+        </ul>
+        <div class="checkbox-section">
+          <p-checkbox id="notice-checkbox" [(ngModel)]="isNoticeChecked" binary="true" required></p-checkbox>
+          <label for="notice-checkbox" class="checkbox-label">I've read the notice</label>
+        </div>
+      </div>
+      <hr>
+      <fieldset class="p-fieldset">
+        <legend>1. Please enter your name and contact information.</legend>
+        <div class="p-grid p-fluid">
+          <div class="p-col-12 p-md-6">
+            <div class="p-field">
+              <label for="name">Name*</label>
+              <input type="text" id="name" pInputText required>
+            </div>
+            <div class="p-field">
+              <label for="address1">Address 1*</label>
+              <input type="text" id="address1" pInputText required>
+            </div>
+            <div class="p-field">
+              <label for="address2">Address 2</label>
+              <input type="text" id="address2" pInputText>
+            </div>
+            <div class="p-field">
+              <label for="city">City*</label>
+              <input type="text" id="city" pInputText required>
+            </div>
+            <div class="p-field">
+              <label for="state">State*</label>
+              <input type="text" id="state" pInputText required>
+            </div>
+            <div class="p-field">
+              <label for="zipcode">Zipcode*</label>
+              <input type="text" id="zipcode" pInputText required>
+            </div>
+          </div>
+          <div class="p-col-12 p-md-6">
+            <div class="p-field">
+              <label for="phone">Phone number*</label>
+              <input type="tel" id="phone" pInputText required>
+            </div>
+            <div class="p-field">
+              <label for="fax">Fax</label>
+              <input type="tel" id="fax" pInputText>
+            </div>
+            <div class="p-field">
+              <label for="email">Email*</label>
+              <input type="email" id="email" pInputText required>
+            </div>
+            <div class="p-field">
+              <label for="confirm-email">Confirm Email*</label>
+              <input type="email" id="confirm-email" pInputText required>
+            </div>
+          </div>
+        </div>
+        <fieldset>
+          <strong>2. What is the specific research question you are addressing?*</strong>
+          <div class="p-field">
+            <textarea id="research-question" pInputTextarea rows="5" required></textarea>
+          </div>
+        </fieldset>
+      
+        <fieldset>
+          <strong>3. Funding agency for this research project:*</strong>
+          <div class="p-field">
+            <input type="text" id="funding-agency" pInputText required>
+          </div>
+        </fieldset>
+      
+        <fieldset>
+          <strong>4. How will the results of the research be used?*</strong>
+          <div class="p-field">
+            <textarea id="research-results-usage" pInputTextarea rows="5" required></textarea>
+          </div>
+        </fieldset>
+      
+        <fieldset>
+          <strong>5. When do you plan to publish the results and in which journal?*</strong>
+          <div class="p-field">
+            <textarea id="publishing-details" pInputTextarea rows="5" required></textarea>
+          </div>
+        </fieldset>
+      
+        <fieldset>
+          <strong>6. If you are a graduate student, please provide the following information:</strong>
+          <div class="p-field">
+            <label for="school">School</label>
+            <input type="text" id="school" pInputText>
+          </div>
+          <div class="p-field">
+            <strong>Faculty Advisor Information</strong>
+            <div class="p-grid p-fluid">
+              <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                  <label for="advisor-name">Name</label>
+                  <input type="text" id="advisor-name" pInputText>
+                </div>
+                <div class="p-field">
+                  <label for="advisor-address1">Address 1</label>
+                  <input type="text" id="advisor-address1" pInputText>
+                </div>
+                <div class="p-field">
+                  <label for="advisor-address2">Address 2</label>
+                  <input type="text" id="advisor-address2" pInputText>
+                </div>
+              </div>
+              <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                  <label for="advisor-city">City</label>
+                  <input type="text" id="advisor-city" pInputText>
+                </div>
+                <div class="p-field">
+                  <label for="advisor-state">State</label>
+                  <input type="text" id="advisor-state" pInputText>
+                </div>
+                <div class="p-field">
+                  <label for="advisor-zipcode">Zipcode</label>
+                  <input type="text" id="advisor-zipcode" pInputText>
+                </div>
+              </div>
+            </div>
+            <div class="p-field">
+              <label for="advisor-phone">Phone number</label>
+              <input type="tel" id="advisor-phone" pInputText>
+            </div>
+            <div class="p-field">
+              <label for="advisor-fax">Fax</label>
+              <input type="tel" id="advisor-fax" pInputText>
+            </div>
+            <div class="p-field">
+              <label for="advisor-email">Email</label>
+              <input type="email" id="advisor-email" pInputText>
+            </div>
+            <div class="p-field">
+              <label for="advisor-confirm-email">Confirm Email</label>
+              <input type="email" id="advisor-confirm-email" pInputText>
+            </div>
+          </div>
+        </fieldset>
+      
+        <fieldset>
+          <strong>7.When do you need this data or information from us? (NOTE: "ASAP" means we get to decide priority. If you provide a date, we will try to meet the deadline or will negotiate a new deadline with you depending on other work, the nature of the request, etc. Please be as realistic as possible.)*</strong>
+          <div class="p-field">
+            <label for="data-request-deadline">Deadline</label>
+            <input type="text" id="data-request-deadline" pInputText>
+          </div>
+        </fieldset>
+      
+      </fieldset>
+    
+      <!-- Rest of the form fields -->
+    
+      <div class="p-field">
+        <button type="submit" pButton label="Submit"></button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+  
+
+
 
