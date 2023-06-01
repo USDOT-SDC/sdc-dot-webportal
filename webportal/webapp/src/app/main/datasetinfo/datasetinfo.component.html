@@ -47,6 +47,17 @@
                                 <p><b>Waze provides</b> real-time, anonymous, proprietary incident and slow-down information directly from the source: drivers themselves.</p>
                             </div>
                         </div>
+                        <b><li>HSIS</li>
+                            <p>FHWA Highway Safety Information System</p></b>
+                      <div class="row">
+                          <div class="col-md-3">
+                              <img style="width: 50%" src="../../assets/images/SDC_HSIS.jpg" class="mx-auto d-block">
+                          </div>
+                          <div class="col-md-9" style="margin-left: -130px;">
+                              <p>The Federal Highway Administration (FHWA) developed the Highway Safety Information System (HSIS) to support safety research programs and provides input for program policy decisions. HSIS is a roadway-based system that provides quality data on a large number of crash, roadway, and traffic variables. The crash, roadway inventory, and traffic volume data are acquired annually from a select group of States.</p>
+                              <p><b>FHWA provides</b> this data to researchers upon request through the HSIS webpage. Educators who wish to use HSIS data for instructional purposes in a road safety course should contact HSIS staff directly at Ana.Eigen@dot.gov. For more information https://www.hsisinfo.org/index.cfm</p>
+                          </div>
+                      </div>
 
                     </ul>
                 </div>
@@ -55,13 +66,15 @@
     </mat-card>
 </div>
 
- 
 <button class="toggle-button" (click)="showDialog()">HSIS Form</button>
 <p-dialog [(visible)]="displayDialog" [modal]="true" [style]="{width: '60%'}">
   <h1>HSIS Form</h1>
   <div class="form-container">
     <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data Request</h2>
-    <form [formGroup]="form">
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+    <!--
+      <form [formGroup]="form">
+    -->
       <div class="form-section">
         <h3>Please Note:</h3>
         <p>HSIS is designed to provide data to be used in research conducted in the general public interest, which is intended for publication in a scientific journal or other national publication. By submitting this request, the user is promising to follow these guidelines. Educators who wish to use HSIS data for instructional purposes in a road safety course should contact HSIS staff directly at <a href="%20Ana.Eigen@dot.gov">Ana.Eigen@dot.gov</a>. Users wishing to obtain data for purposes other than research or instruction should contact the States directly. HSIS staff will be pleased to provide contact names and addresses.</p>
@@ -237,7 +250,10 @@
       <!-- Rest of the form fields -->
     
       <div class="p-field">
-        <button pButton type="button" label="Submit" (click)="submitForm()" [disabled]="!form.valid"></button>
+        <button pButton type="submit" (click) = hideDialog() label="Submit" [disabled]="form.invalid"></button>
+        <!--
+          <button pButton type="button" label="Submit" (click)="submitForm()" [disabled]="!form.valid"></button>
+        -->
       </div>
     </form>
   </div>

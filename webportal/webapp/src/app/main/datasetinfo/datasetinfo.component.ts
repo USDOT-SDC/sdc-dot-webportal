@@ -49,12 +49,14 @@ export class DatasetinfoComponent implements OnInit {
     });
   }
 
-
-
   
 
   showDialog() {
     this.displayDialog = true;
+  }
+
+  hideDialog() {
+    this.displayDialog = false;
   }
 
   submitForm() {
