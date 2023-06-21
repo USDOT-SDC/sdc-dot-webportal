@@ -248,8 +248,6 @@ export class DatasetsComponent implements OnInit {
             }
           });
         }
-        console.log("My Datasets: " + JSON.stringify(this.myDatasets));
-        console.log("my Datasets length = " + this.myDatasets.length);
       });
   }
 
@@ -299,19 +297,23 @@ export class DatasetsComponent implements OnInit {
   }
 
   requestMail(BucketName, mailType, datasetName) {
-    const dialogRef = this.dialog.open(DialogBoxComponent, {
-      width: "500px",
-      data: {
-        bucketName: BucketName,
-        mailType: mailType,
-        datasetName: datasetName,
-      },
-    });
+    if (datasetName == "HSIS") {
+      window.open("https://hsisinfo.org/index.cfm", "_blank").focus();
+    } else {
+      const dialogRef = this.dialog.open(DialogBoxComponent, {
+        width: "500px",
+        data: {
+          bucketName: BucketName,
+          mailType: mailType,
+          datasetName: datasetName,
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log("requestMail");
-      console.log("The dialog was closed");
-    });
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("requestMail");
+        console.log("The dialog was closed");
+      });
+    }
   }
 
   requestExport(BucketName, mailType, datasetName) {
