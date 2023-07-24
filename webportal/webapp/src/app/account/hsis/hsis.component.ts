@@ -86,12 +86,12 @@ import { TableModule } from "primeng/table";
     PanelModule,
     FileUploadModule,
   ],
-  selector: "app-datasetinfo",
+  //selector: "app-datasetinfo",
   providers: [MessageService],
-  templateUrl: "./datasetinfo.component.html",
-  styleUrls: ["./datasetinfo.component.css"],
+  templateUrl: "./hsis.component.html",
+  styleUrls: ["./hsis.component.css"],
 })
-export class DatasetinfoComponent implements OnInit {
+export class HSISComponent implements OnInit {
   constructor(private messageService: MessageService) {}
   mailType: string;
   displayDialog = false;

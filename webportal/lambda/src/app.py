@@ -495,7 +495,7 @@ def export():
                 export = 'false'
                 emailContent += "<br/>Export request has been approved to <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
             else:
-                emailContent += "<br/>Export request has been requested by <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
+                emailContent += "<br/><br>Name: Will Sharp<br>Address: 1 Main St<br>City: Rockville<br>State: MD<br>Zipcode: 20853<br>Email: william.sharp.ctr@dot.gov"
 
             exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
             hashed_object = hashlib.md5(params['S3Key'].encode())
@@ -526,6 +526,8 @@ def export():
                                 MetadataDirective='REPLACE')
 
             #send email to List of POC
+            console.log("EMAIL CONTENT CHANGED")
+            emailContent += "<br/><br>Name: Will Sharp<br>Address: 1 Main St<br>City: Rockville<br>State: MD<br>Zipcode: 20853<br>Email: william.sharp.ctr@dot.gov"
             send_notification(listOfPOC,emailContent)
 
 
@@ -537,7 +539,7 @@ def export():
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
 
-def send_notification(listOfPOC, emailContent, subject = 'Export Notification'):
+def send_notification(listOfPOC, emailContent, subject = 'HSIS Export Notification'):
     ses_client = boto3.client('ses')
     sender = RECEIVER
 
