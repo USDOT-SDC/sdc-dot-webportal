@@ -9,7 +9,7 @@ variable "aws_region" {
 
 variable "lambda_zip_path" {
   type = string
-  default = "../src/"
+  default = "../"
 }
 
 variable "log_level" {

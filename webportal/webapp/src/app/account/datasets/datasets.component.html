@@ -20,6 +20,92 @@
           </span>
           <hr />
           <div>
+            <p-button label="Upload Files" (click)="showDialog1()"></p-button>
+
+            <p-dialog
+              header="Checklist"
+              [(visible)]="displayDialog"
+              [modal]="true"
+              [responsive]="true"
+            >
+              <ng-template pTemplate="content">
+                <ng-container *ngIf="!fileUploaded; else optionsSection">
+                  <!-- File Upload Section -->
+                  <p-fileUpload
+                    name="file"
+                    customUpload="true"
+                    (uploadHandler)="onFileUpload($event)"
+                    [multiple]="true"
+                  ></p-fileUpload>
+                </ng-container>
+
+                <ng-template #optionsSection>
+                  <div class="button-set">
+                    <div *ngFor="let item of checklistItems">
+                      <label>
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="item.checked"
+                          (change)="onCheckboxChange(item)"
+                        />
+                        {{ item.name }}
+                      </label>
+                    </div>
+
+                    <div *ngIf="showDatalakeDropdown">
+                      <h3>Destinations</h3>
+                      <div *ngFor="let option of datalakeOptions">
+                        <label>
+                          <input type="checkbox" [(ngModel)]="option.checked" />
+                          {{ option.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-template>
+
+              <div class="ui-dialog-buttonpane p-clearfix">
+                <ng-container *ngIf="!fileUploaded; else saveButtons">
+                  <button
+                    pButton
+                    type="button"
+                    (click)="closeDialog()"
+                    label="Cancel"
+                    styleClass="p-button-secondary"
+                  ></button>
+                </ng-container>
+
+                <ng-template #saveButtons>
+                  <div class="button-set">
+                    <button
+                      pButton
+                      type="button"
+                      (click)="goBack()"
+                      label="Back"
+                      icon="pi pi-arrow-left"
+                      styleClass="p-button-secondary"
+                    ></button>
+                    <p-buttonset>
+                      <button
+                        pButton
+                        type="button"
+                        (click)="saveCheckedItems()"
+                        label="Save"
+                        styleClass="p-button-success"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        (click)="closeDialog()"
+                        label="Cancel"
+                        styleClass="p-button-secondary"
+                      ></button>
+                    </p-buttonset>
+                  </div>
+                </ng-template>
+              </div>
+            </p-dialog>
             <button
               class="btn btn-primary dotBtn"
               (click)="uploadFilesToS3('Upload Files To S3')"
@@ -34,6 +120,9 @@
           </p>
           <p>
             Team bucket name - <b>{{ userBucketName }}</b>
+          </p>
+          <p>
+            Upload Locations - <b>{{ upload_locations }}</b>
           </p>
           <p>
             Files that are uploaded from the web portal will be saved in the

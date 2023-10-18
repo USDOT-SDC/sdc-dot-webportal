@@ -5,6 +5,7 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 import * as $ from "jquery";
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Injectable, Inject } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
@@ -20,6 +21,11 @@ import { MatFormFieldModule, MatHint } from "@angular/material/form-field";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTabsModule } from "@angular/material/tabs";
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DropdownModule } from "primeng/dropdown";
+import * as AWS from "aws-sdk";
 
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -35,6 +41,7 @@ import { MatSortModule } from "@angular/material/sort";
 
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { DialogModule } from "primeng/dialog";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTableModule } from "@angular/material/table";
 import { CdkTableModule } from "@angular/cdk/table";
@@ -50,9 +57,11 @@ import { MarkdownModule, MarkdownService } from "ngx-markdown";
     MatExpansionModule,
     CommonModule,
     TableModule,
+    DropdownModule,
     RouterModule,
     //BrowserAnimationsModule,
     MatDialogModule,
+    DialogModule,
 
     // MatCardModule,
     // MatExpansionModule,
@@ -115,12 +124,21 @@ export class DatasetsComponent implements OnInit {
   sdcAlgorithms: any = [];
   myDatasets = [];
   metadata = {};
+  selectedItems: any[] = [];
+  items: any[] = [
+    { label: "Datalake", value: "Datalake" },
+    { label: "Team Bucket", value: "Team Bucket" },
+  ];
+  showDialog: boolean = false;
   user: any;
   selectedsdcDataset: any = {};
+  showChecklist: boolean = false;
   dictionary: string;
   showDictionary: boolean = false;
-  userBucketName: any;
+  userBucketName: any = "";
+  upload_locations: any = "";
   stacks: any = [];
+  response: any = "";
   cols: any = [];
   selectedFiles: any = [];
   userTrustedStatus: any;
@@ -136,6 +154,8 @@ export class DatasetsComponent implements OnInit {
     this.sdcElements = JSON.parse(sdcDatasetsString);
     var stacksString = sessionStorage.getItem("stacks");
     this.userBucketName = sessionStorage.getItem("team_bucket_name");
+    this.response = sessionStorage.getItem("response");
+    this.upload_locations = sessionStorage.getItem("upload_locations");
     this.userName = sessionStorage.getItem("username");
     this.sortedSdcElements = this.sdcElements.reverse();
     this.sortedSdcElements.forEach((element) => {
@@ -164,7 +184,12 @@ export class DatasetsComponent implements OnInit {
 
   getUserInfo() {
     this.gatewayService.getUserInfo("user").subscribe((response: any) => {
+      sessionStorage.setItem("response", response);
       sessionStorage.setItem("username", response.username);
+      sessionStorage.setItem(
+        "upload_locations",
+        JSON.stringify(response.upload_locations)
+      );
       sessionStorage.setItem("email", response.email);
       sessionStorage.setItem("teamSlug", response.team_slug); // team_slug from user stacks table is used as both Team Name and Edge database name
       sessionStorage.setItem("stacks", JSON.stringify(response.stacks));
@@ -439,5 +464,68 @@ export class DatasetsComponent implements OnInit {
     });
 
     return params;
+  }
+
+  displayDialog: boolean = false;
+  showDatalakeDropdown: boolean = false;
+  checklistItems: any[] = [
+    { name: "Team Bucket", checked: false },
+    { name: "Datalake", checked: false },
+  ];
+
+  datalakeOptions: any[] = [
+    { name: "2022", checked: false },
+    { name: "2023", checked: false },
+  ];
+  fileUploaded: boolean = false; // Add this variable
+  sanitizer: DomSanitizer;
+
+  showDialog1() {
+    this.displayDialog = true;
+  }
+
+  onFileUpload(event: any) {
+    // Handle file upload here
+    console.log("Uploaded File:", event.files[0]);
+    this.fileUploaded = true; // Set to true after file upload
+  }
+  evaluateHtml(item: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(
+      item.replace("{{ userBucketName }}", this.userBucketName)
+    );
+  }
+
+  goBack() {
+    this.fileUploaded = false; // Set to false to go back to file upload section
+  }
+
+  saveCheckedItems() {
+    const checkedItems = this.checklistItems.filter((item) => item.checked);
+    const datalakeSelected = this.checklistItems.find(
+      (item) => item.name === "Datalake"
+    )?.checked;
+
+    // Logic to save the checked items
+    console.log("Checked items:", checkedItems);
+    if (datalakeSelected) {
+      const datalakeExtraOptions = this.datalakeOptions.filter(
+        (option) => option.checked
+      );
+      console.log("Datalake Extra Options:", datalakeExtraOptions);
+    }
+
+    this.displayDialog = false;
+  }
+
+  closeDialog() {
+    this.displayDialog = false;
+    this.showDatalakeDropdown = false;
+    this.datalakeOptions.forEach((option) => (option.checked = false));
+  }
+
+  onCheckboxChange(item: any) {
+    if (item.name === "Datalake") {
+      this.showDatalakeDropdown = item.checked;
+    }
   }
 }
