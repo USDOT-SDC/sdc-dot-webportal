@@ -47,6 +47,7 @@ import { MatTableModule } from "@angular/material/table";
 import { CdkTableModule } from "@angular/cdk/table";
 import { FileUploadModule } from "primeng/fileupload";
 import { MarkdownModule, MarkdownService } from "ngx-markdown";
+
 //import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 //import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
