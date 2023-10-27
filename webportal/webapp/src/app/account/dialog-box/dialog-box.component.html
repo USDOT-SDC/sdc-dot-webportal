@@ -1829,7 +1829,155 @@
 
 <!-- Upload Files to S3 -->
 <div *ngIf="requestType == 'Upload Files To S3'">
-  <p-card header="Upload files to SDC platform">
+  <p-card header="Upload files to SDC platform" style="width: 1000px">
+    <div *ngIf="!uploadNotice">
+      <p>
+        IMPORTANT: Users cannot upload PII or CBI data on their own. If you
+        would like to upload data containing PII or CBI, you must contact the
+        SDC Support Desk so that the request and its associated data can be
+        tracked appropriately.
+      </p>
+      <div>
+        <button
+          class="btn btn-primary dotBtn upload-okayBtn"
+          (click)="onOkayUploadClick()"
+        >
+          OKAY
+        </button>
+        <button
+          class="btn btn-primary dotBtn upload-cancelBtn"
+          (click)="onNoClick()"
+          [style]="{ 'margin-left': '.5em' }"
+        >
+          CANCEL
+        </button>
+      </div>
+    </div>
+    <div *ngIf="uploadNotice">
+      <div>
+        <!-- Dropdown for selecting a location -->
+        <label for="location">
+          Choose the location for files to be uploaded or create your own new
+          prefix:
+        </label>
+        <select [(ngModel)]="selectedLocation">
+          <option value="">Select a location</option>
+          <ng-container *ngFor="let location of userBucketName">
+            <ng-container *ngIf="isFolder(location.filename)">
+              <option [value]="location.filename">
+                {{ location.filename }}
+              </option>
+            </ng-container>
+          </ng-container>
+        </select>
+      </div>
+      <!-- Text box for creating a new prefix -->
+      <div>
+        <label for="newPrefix">Create your own new prefix:</label>
+        <input type="text" id="newPrefix" [(ngModel)]="customPrefix" />
+      </div>
+      <p-fileUpload
+        #fileUpload
+        name="selectedFiles[]"
+        customUpload="true"
+        (uploadHandler)="uploadFiles($event, selectedLocation)"
+        multiple="multiple"
+      >
+        <ng-template pTemplate="content">
+          <ul *ngIf="selectedFiles.length">
+            <li *ngFor="let file of selectedFiles">
+              <b> Uploaded {{ file }} - {{ getFileSize(file) }} bytes </b>
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+    </div>
+  </p-card>
+</div>
+
+<!-- <div *ngIf="requestType == 'Upload Files To S3'">
+  <p-card header="Upload files to SDC platform" style="width: 800px">
+    <div *ngIf="!uploadNotice">
+      <p>
+        IMPORTANT: Users cannot upload PII or CBI data on their own. If you
+        would like to upload data containing PII or CBI, you must contact the
+        SDC Support Desk so that the request and its associated data can be
+        tracked appropriately.
+      </p>
+      <div>
+        <button
+          class="btn btn-primary dotBtn upload-okayBtn"
+          (click)="onOkayUploadClick()"
+        >
+          OKAY
+        </button>
+        <button
+          class="btn btn-primary dotBtn upload-cancelBtn"
+          (click)="onNoClick()"
+          [style]="{ 'margin-left': '.5em' }"
+        >
+          CANCEL
+        </button>
+      </div>
+    </div>
+    <div *ngIf="uploadNotice">
+      <div>
+         Radio buttons for selecting a location -->
+<!--Change to dropdown not radio and use full bucket names-->
+<!-- <label for="location">
+          Choose the location for files to be uploaded or create your own new
+          prefix.
+        </label>
+        <div *ngFor="let location of userBucketName; let i = index">
+          <ng-container *ngIf="isFolder(location.filename)">
+            <input
+              type="radio"
+              id="location{{ i }}"
+              name="uploadLocation"
+              [value]="location.filename"
+              [(ngModel)]="selectedLocation"
+            />
+            <label for="location{{ i }}">{{ location.filename }}</label>
+          </ng-container> -->
+<!-- Sub-menu content -->
+<!-- <div *ngIf="selectedLocation && isFolder(selectedLocation)">
+            <ul>
+              <ng-container *ngFor="let file of userBucketName">
+                <ng-container *ngIf="isFolder(file.filename)">
+                  <li
+                    *ngIf="
+                      file.filename.startsWith(selectedLocation) &&
+                      file !== selectedLocation
+                    "
+                  >
+                    {{ file.filename.replace(selectedLocation, "") }}
+                  </li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </div> -->
+<!-- </div>
+      </div>
+      <p-fileUpload
+        #fileUpload
+        name="selectedFiles[]"
+        customUpload="true"
+        (uploadHandler)="uploadFiles($event)"
+        multiple="multiple"
+      >
+        <ng-template pTemplate="content">
+          <ul *ngIf="selectedFiles.length">
+            <li *ngFor="let file of selectedFiles">
+              <b> Uploaded {{ file }} - {{ getFileSize(file) }} bytes </b>
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+    </div>
+  </p-card>
+</div>  -->
+
+<!-- <p-card header="Upload files to SDC platform">
     <div *ngIf="!uploadNotice">
       <p>
         IMPORTANT: Users cannot upload PII or CBI data on their own. If you
@@ -1855,7 +2003,7 @@
     </div>
     <div *ngIf="uploadNotice">
       <p>
-        Files will be uploaded to the bucket - <b>{{ userBucketName }}</b>
+        Choose the location for files to be uploaded or create your own new prefix.
       </p>
       <p-fileUpload
         #fileUpload
@@ -1873,8 +2021,8 @@
         </ng-template>
       </p-fileUpload>
     </div>
-  </p-card>
-</div>
+  </p-card> -->
+<!-- </div> -->
 
 <div *ngIf="mailType == 'Details for export request'">
   <p-panel>

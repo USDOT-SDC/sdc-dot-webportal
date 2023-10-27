@@ -123,7 +123,7 @@ export class DatasetsComponent implements OnInit {
   sortedSdcElements: any = [];
   sdcDatasets: any = [];
   sdcAlgorithms: any = [];
-  myDatasets = [];
+  myDatasets: any = [];
   metadata = {};
   selectedItems: any[] = [];
   items: any[] = [
@@ -137,7 +137,7 @@ export class DatasetsComponent implements OnInit {
   dictionary: string;
   showDictionary: boolean = false;
   userBucketName: any = "";
-  upload_locations: any = "";
+  upload_locations: any = [];
   stacks: any = [];
   response: any = "";
   cols: any = [];
@@ -156,7 +156,8 @@ export class DatasetsComponent implements OnInit {
     var stacksString = sessionStorage.getItem("stacks");
     this.userBucketName = sessionStorage.getItem("team_bucket_name");
     this.response = sessionStorage.getItem("response");
-    this.upload_locations = sessionStorage.getItem("upload_locations");
+    var upload_locations_string = sessionStorage.getItem("upload_locations");
+    this.upload_locations = JSON.parse(upload_locations_string);
     this.userName = sessionStorage.getItem("username");
     this.sortedSdcElements = this.sdcElements.reverse();
     this.sortedSdcElements.forEach((element) => {
@@ -170,6 +171,7 @@ export class DatasetsComponent implements OnInit {
       }
     });
     this.getMyDatasetsList();
+    this.getUploadLocations();
 
     this.cols = [
       { field: "filename", header: "Filename" },
@@ -223,6 +225,62 @@ export class DatasetsComponent implements OnInit {
     });
   }
 
+  getUploadLocations() {
+    this.upload_locations.forEach((location) => {
+      console.log("Location ==", location, this.upload_locations[location]);
+      console.log(
+        "getUploadLocations called: get URL = " +
+          location +
+          "&username=" +
+          this.userName
+      );
+      this.gatewayService
+        .get(
+          "user_data?userBucketName=" + location + "&username=" + this.userName
+        )
+        .subscribe((response: any) => {
+          for (let x of response) {
+            this.getMetadataForS3Objects(x, location).subscribe((metadata) => {
+              if (metadata != null) {
+                let trusted = false;
+                // check if user is trusted for a dataset
+                for (var dt in this.userTrustedStatus) {
+                  if (dt in metadata) {
+                    this.myDatasets.push({
+                      filename: location + "/" + x,
+                      download: "true",
+                      export: "false",
+                      publish: "true",
+                      requestReviewStatus: metadata["requestReviewStatus"],
+                    });
+                    trusted = true;
+                  }
+                }
+                if (!trusted) {
+                  this.myDatasets.push({
+                    filename: location + "/" + x,
+                    download: metadata["download"],
+                    export: metadata["export"],
+                    publish: metadata["publish"],
+                    requestReviewStatus: metadata["requestReviewStatus"],
+                  });
+                }
+              } else {
+                this.myDatasets.push({
+                  filename: location + "/" + x,
+                  download: null,
+                  export: null,
+                  publish: null,
+                });
+              }
+            });
+          }
+          console.log("My Datasets: " + JSON.stringify(this.myDatasets));
+          console.log("my Datasets length = " + this.myDatasets.length);
+        });
+    });
+  }
+
   getMyDatasetsList() {
     console.log(
       "getMyDatasetsList called: get URL = " +
@@ -239,40 +297,42 @@ export class DatasetsComponent implements OnInit {
       )
       .subscribe((response: any) => {
         for (let x of response) {
-          this.getMetadataForS3Objects(x).subscribe((metadata) => {
-            if (metadata != null) {
-              let trusted = false;
-              // check if user is trusted for a dataset
-              for (var dt in this.userTrustedStatus) {
-                if (dt in metadata) {
+          this.getMetadataForS3Objects(x, this.userBucketName).subscribe(
+            (metadata) => {
+              if (metadata != null) {
+                let trusted = false;
+                // check if user is trusted for a dataset
+                for (var dt in this.userTrustedStatus) {
+                  if (dt in metadata) {
+                    this.myDatasets.push({
+                      filename: x,
+                      download: "true",
+                      export: "false",
+                      publish: "true",
+                      requestReviewStatus: metadata["requestReviewStatus"],
+                    });
+                    trusted = true;
+                  }
+                }
+                if (!trusted) {
                   this.myDatasets.push({
                     filename: x,
-                    download: "true",
-                    export: "false",
-                    publish: "true",
+                    download: metadata["download"],
+                    export: metadata["export"],
+                    publish: metadata["publish"],
                     requestReviewStatus: metadata["requestReviewStatus"],
                   });
-                  trusted = true;
                 }
-              }
-              if (!trusted) {
+              } else {
                 this.myDatasets.push({
                   filename: x,
-                  download: metadata["download"],
-                  export: metadata["export"],
-                  publish: metadata["publish"],
-                  requestReviewStatus: metadata["requestReviewStatus"],
+                  download: null,
+                  export: null,
+                  publish: null,
                 });
               }
-            } else {
-              this.myDatasets.push({
-                filename: x,
-                download: null,
-                export: null,
-                publish: null,
-              });
             }
-          });
+          );
         }
         console.log("My Datasets: " + JSON.stringify(this.myDatasets));
         console.log("my Datasets length = " + this.myDatasets.length);
@@ -394,8 +454,8 @@ export class DatasetsComponent implements OnInit {
 
   uploadFilesToS3(requestType) {
     const dialogRef = this.dialog.open(DialogBoxComponent, {
-      width: "500px",
-      data: { userBucketName: this.userBucketName, requestType: requestType },
+      width: "700px",
+      data: { userBucketName: this.myDatasets, requestType: requestType },
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log("The upload files to s3 dialog was closed");
@@ -430,15 +490,12 @@ export class DatasetsComponent implements OnInit {
     }
   }
 
-  getMetadataForS3Objects(filename: string): any {
+  getMetadataForS3Objects(filename: string, bucket: string): any {
     var resp;
     console.log("getMetadataForS3Objects called");
     return this.gatewayService
       .getMetadataOfS3Object(
-        "get_metadata_s3?bucket_name=" +
-          this.userBucketName +
-          "&file_name=" +
-          filename
+        "get_metadata_s3?bucket_name=" + bucket + "&file_name=" + filename
       )
       .pipe(
         map((response: any) => {

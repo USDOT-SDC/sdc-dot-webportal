@@ -68,7 +68,7 @@
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
         "RESTAPIID": "po6lv3qcoh",
-        "AUTHORIZERID": "xk85vl",
+        "AUTHORIZERID": "0gd98s",
         "TABLENAME_TRUSTED_USERS": "dev-TrustedUsersTable",
         "TABLENAME_EXPORT_FILE_REQUEST": "dev-RequestExportTable",
         "TABLENAME_MANAGE_USER": "dev-ManageUserWorkstationTable",

@@ -206,35 +206,49 @@ def get_my_datasets():
     content = set()
     user_id = ''
     params = app.current_request.query_params
+    #loop through params['userBucketName'] and split by / to seperate bucket and prefix
+    if "team" in params['userBucketName']:
+        try:
+            client_s3 = boto3.client('s3')
+            response = client_s3.list_objects(
+                Bucket=params['userBucketName'],
+                Prefix='{}/uploaded_files/'.format(params['username'])
+            )
+            export_response = client_s3.list_objects(
+                Bucket=params['userBucketName'],
+                Prefix='export_requests/'
+            )
+            total_content = {}
+            total_export_content = {}
+            if 'Contents' in export_response:
+                total_export_content = export_response['Contents']
+            if 'Contents' in response:
+                total_content=response['Contents']
+            for c in total_content:
+                content.add(c['Key'])
+            for c in total_export_content:
+                content.add(c['Key'])
+        except BaseException as ce:
+            logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
+            raise ChaliceViewError("Internal error occurred! Contact your administrator.")
+    else:
+        try:
+            client_s3 = boto3.client('s3')
+            response = client_s3.list_objects(
+                Bucket=params['userBucketName'],
+                Prefix='testing_dynamo/'
+            )
+            for obj in response.get('Contents', []):
+                content.add(obj["Key"])
 
-    try:
-        client_s3 = boto3.client('s3')
-        response = client_s3.list_objects(
-            Bucket=params['userBucketName'],
-            Prefix='{}/uploaded_files/'.format(params['username'])
-        )
-        export_response = client_s3.list_objects(
-            Bucket=params['userBucketName'],
-            Prefix='export_requests/'
-        )
-        total_content = {}
-        total_export_content = {}
-        if 'Contents' in export_response:
-            total_export_content = export_response['Contents']
-        if 'Contents' in response:
-            total_content=response['Contents']
-        for c in total_content:
-            content.add(c['Key'])
-        for c in total_export_content:
-            content.add(c['Key'])
-
-    except BaseException as ce:
-        logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
-        raise ChaliceViewError("Internal error occurred! Contact your administrator.")
+        except BaseException as ce:
+            logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
+            raise ChaliceViewError("New ERROR")
 
     return Response(body=list(content),
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
+
 
 @app.route('/instancestatus', authorizer=authorizer, cors=cors_config)
 def get_instance_status():
@@ -315,16 +329,30 @@ def get_dataset_dictionary():
 @app.route('/presigned_url', authorizer=authorizer, cors=cors_config)
 def get_presigned_url():
     params = app.current_request.query_params
-    try:
-        client_s3 = boto3.client('s3')
-        response = client_s3.generate_presigned_url('put_object', Params={'Bucket': params['bucket_name'], 'Key': '{}/uploaded_files/{}'.format(params["username"], params['file_name']), 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
-        logging.info("Response from pre-signed url - " + response)
-    except BaseException as be:
-        logging.exception("Error: Failed to generate presigned url" + str(be))
-        raise ChaliceViewError("Failed to get presigned url")
-    return Response(body=response,
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})
+    if "team" in params['bucket_name']:
+        try:
+            client_s3 = boto3.client('s3')
+            location = params['bucket_name'].split('/', 1)
+            response = client_s3.generate_presigned_url('put_object', Params={'Bucket': location[0], 'Key': '{}/uploaded_files/{}'.format(params["username"], params['file_name']), 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
+            logging.info("Response from pre-signed url - " + response)
+        except BaseException as be:
+            logging.exception("Error: Failed to generate presigned url" + str(be))
+            raise ChaliceViewError("Failed to get presigned url")
+        return Response(body=response,
+                        status_code=200,
+                        headers={'Content-Type': 'text/plain'})
+    else:
+        try:
+            client_s3 = boto3.client('s3')
+            location = params['bucket_name'].split('/', 1)
+            response = client_s3.generate_presigned_url('put_object', Params={'Bucket': location[0], 'Key': location[1] + params['file_name'], 'ContentType': params['file_type'], 'Metadata': {'download':'true', 'export':'false', 'publish':'true'}}, ExpiresIn=3600, HttpMethod='PUT')
+            logging.info("Response from pre-signed url - " + response)
+        except BaseException as be:
+            logging.exception("Error: Failed to generate presigned url" + str(be))
+            raise ChaliceViewError("Failed to get presigned url")
+        return Response(body=response,
+                        status_code=200,
+                        headers={'Content-Type': 'text/plain'})
 
 
 @app.route('/download_url', authorizer=authorizer, cors=cors_config)
