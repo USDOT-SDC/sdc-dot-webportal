@@ -503,13 +503,69 @@
         <mat-form-field style="width: 100%">
           <input
             matInput
-            title="e.g. Aggregated Jam Counts, Virginia Alerts in 2020, etc."
-            placeholder="Name or short description of your derived dataset"
+            title="e.g. Aggregateggd Jam Counts, Virginia Alerts in 2020, etc."
+            placeholder="Name"
             [(ngModel)]="messageModel.derivedDatasetname"
             value="{{ messageModel.derivedDatasetname }}"
             required
           />
-          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+
+          <mat-error align="end" *ngIf="!messageModel.derivedDatasetname"
+            >Required</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field style="width: 100%">
+          <input
+            matInput
+            title="e.g. Aggregated Jam Couasnts, Virginia Alerts in 2020, etc."
+            placeholder="Address"
+            [(ngModel)]="messageModel.derivedDatasetname"
+            value="{{ messageModel.derivedDatasetname }}"
+            required
+          />
+
+          <mat-error align="end" *ngIf="!messageModel.derivedDatasetname"
+            >Required</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field style="width: 100%">
+          <input
+            matInput
+            title="e.g. Aggregated Jam Cwounts, Virgindia Alerts in 2020, etc."
+            placeholder="City"
+            [(ngModel)]="messageModel.derivedDatasetname"
+            value="{{ messageModel.derivedDatasetname }}"
+            required
+          />
+
+          <mat-error align="end" *ngIf="!messageModel.derivedDatasetname"
+            >Required</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field style="width: 100%">
+          <input
+            matInput
+            title="e.g. Aggregated Jam Counts, Virginia Alerts in 2020,d etc."
+            placeholder="State"
+            [(ngModel)]="messageModel.derivedDatasetname"
+            value="{{ messageModel.derivedDatasetname }}"
+            required
+          />
+
+          <mat-error align="end" *ngIf="!messageModel.derivedDatasetname"
+            >Required</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field style="width: 100%">
+          <input
+            matInput
+            title="e.g. Aggregated Jam Counts, Virginiaa Alerts in 2020, etc."
+            placeholder="Zipcode"
+            [(ngModel)]="messageModel.derivedDatasetname"
+            value="{{ messageModel.derivedDatasetname }}"
+            required
+          />
+
           <mat-error align="end" *ngIf="!messageModel.derivedDatasetname"
             >Required</mat-error
           >
@@ -519,12 +575,12 @@
           <input
             matInput
             title="e.g. Waze jams aggregated and counted in 2022, Average number of Waze alerts per day in Virginia in 2020, etc."
-            placeholder="Detailed description of the derived dataset"
+            placeholder="Email"
             [(ngModel)]="messageModel.detailedderiveddataset"
             value="{{ messageModel.detailedderiveddataset }}"
             required
           />
-          <mat-hint align="end">Alpha-numeric characters only</mat-hint>
+
           <mat-error align="end" *ngIf="!messageModel.detailedderiveddataset"
             >Required</mat-error
           >
