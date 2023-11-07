@@ -70,8 +70,8 @@ else:
 terraform_dir = os.path.split(os.getcwd())[-1]
 
 # must run Python 3.8.x
-if not (sys.version_info.major == 3 and sys.version_info.minor == 8):
-    raise EnvironmentError("Python must be version 3.8.x")
+# if not (sys.version_info.major == 3 and sys.version_info.minor == 8):
+#     raise EnvironmentError("Python must be version 3.8.x")
 
 # load the deployment vars
 deploy_vars = yaml.load(open('zip_and_upload_lambdas_vars.yaml', 'r').read(), Loader=yaml.FullLoader)

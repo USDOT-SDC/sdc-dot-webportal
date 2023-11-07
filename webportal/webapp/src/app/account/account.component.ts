@@ -37,6 +37,11 @@ export class AccountComponent implements OnInit {
   getUserInfo() {
     this.gatewayService.getUserInfo("user").subscribe((response: any) => {
       sessionStorage.setItem("username", response.username);
+      sessionStorage.setItem("response", response);
+      sessionStorage.setItem(
+        "upload_locations",
+        JSON.stringify(response.upload_locations)
+      );
       sessionStorage.setItem("email", response.email);
       sessionStorage.setItem("stacks", JSON.stringify(response.stacks));
       sessionStorage.setItem("datasets", JSON.stringify(response.datasets));
@@ -71,13 +76,19 @@ export class AccountComponent implements OnInit {
       for (var i = 0; i < response.stacks.length; i++) {
         if (response.stacks[i].instance_id) {
           sessionStorage.setItem("instance-id", response.stacks[i].instance_id);
-          sessionStorage.setItem(
+          this.appendToStorage(
             "team_bucket_name",
             response.stacks[i].team_bucket_name
           );
         }
       }
     });
+  }
+
+  appendToStorage(name, data) {
+    var old = sessionStorage.getItem(name);
+    if (old === null) old = "";
+    sessionStorage.setItem(name, old + data);
   }
 
   userLogout() {
