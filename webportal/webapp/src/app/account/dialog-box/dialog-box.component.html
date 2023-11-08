@@ -1829,7 +1829,7 @@
 
 <!-- Upload Files to S3 -->
 <div *ngIf="requestType == 'Upload Files To S3'">
-  <p-card header="Upload files to SDC platform" style="width: 1000px">
+  <p-card header="Upload files to SDC platform">
     <div *ngIf="!uploadNotice">
       <p>
         IMPORTANT: Users cannot upload PII or CBI data on their own. If you
@@ -1880,16 +1880,16 @@
         #fileUpload
         name="selectedFiles[]"
         customUpload="true"
-        (uploadHandler)="uploadFiles($event, selectedLocation)"
+        (uploadHandler)="uploadFiles($event, selectedLocation || customPrefix)"
         multiple="multiple"
       >
-        <ng-template pTemplate="content">
+        <!-- <ng-template pTemplate="content">
           <ul *ngIf="selectedFiles.length">
             <li *ngFor="let file of selectedFiles">
               <b> Uploaded {{ file }} - {{ getFileSize(file) }} bytes </b>
             </li>
           </ul>
-        </ng-template>
+        </ng-template> -->
       </p-fileUpload>
     </div>
   </p-card>

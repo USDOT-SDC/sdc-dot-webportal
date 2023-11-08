@@ -420,7 +420,12 @@ export class DialogBoxComponent implements OnInit {
       );
       this.gatewayService
         .get(
-          "user_data?userBucketName=" + location + "&username=" + this.userName
+          "user_data?userBucketName=" +
+            location +
+            "&username=" +
+            this.userName +
+            "&teamSlug=" +
+            this.edgePrivateDatabase
         )
         .subscribe((response: any) => {
           for (let x of response) {
