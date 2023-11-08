@@ -144,6 +144,7 @@ export class DatasetsComponent implements OnInit {
   selectedFiles: any = [];
   userTrustedStatus: any;
   userName: any;
+  teamSlug: any;
   userEmail: any;
   requestReviewStatus: any;
   componentName: any;
@@ -159,6 +160,7 @@ export class DatasetsComponent implements OnInit {
     var upload_locations_string = sessionStorage.getItem("upload_locations");
     this.upload_locations = JSON.parse(upload_locations_string);
     this.userName = sessionStorage.getItem("username");
+    this.teamSlug = sessionStorage.getItem("teamSlug");
     this.sortedSdcElements = this.sdcElements.reverse();
     this.sortedSdcElements.forEach((element) => {
       if (element.Type == "Algorithm") {
@@ -236,7 +238,12 @@ export class DatasetsComponent implements OnInit {
       );
       this.gatewayService
         .get(
-          "user_data?userBucketName=" + location + "&username=" + this.userName
+          "user_data?userBucketName=" +
+            location +
+            "&username=" +
+            this.userName +
+            "&teamSlug=" +
+            this.teamSlug
         )
         .subscribe((response: any) => {
           for (let x of response) {

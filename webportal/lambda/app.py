@@ -214,20 +214,20 @@ def get_my_datasets():
                 Bucket=params['userBucketName'],
                 Prefix='{}/uploaded_files/'.format(params['username'])
             )
-            export_response = client_s3.list_objects(
-                Bucket=params['userBucketName'],
-                Prefix='export_requests/'
-            )
-            total_content = {}
-            total_export_content = {}
-            if 'Contents' in export_response:
-                total_export_content = export_response['Contents']
+            # export_response = client_s3.list_objects(
+            #     Bucket=params['userBucketName'],
+            #     Prefix='export_requests/'
+            # )
+            # total_content = {}
+            # total_export_content = {}
+            # if 'Contents' in export_response:
+            #     total_export_content = export_response['Contents']
             if 'Contents' in response:
                 total_content=response['Contents']
             for c in total_content:
                 content.add(c['Key'])
-            for c in total_export_content:
-                content.add(c['Key'])
+            # for c in total_export_content:
+            #     content.add(c['Key'])
         except BaseException as ce:
             logger.exception("Failed to list datasets folder of user %s. %s" % (user_id,ce))
             raise ChaliceViewError("Internal error occurred! Contact your administrator.")
@@ -236,7 +236,7 @@ def get_my_datasets():
             client_s3 = boto3.client('s3')
             response = client_s3.list_objects(
                 Bucket=params['userBucketName'],
-                Prefix='testing_dynamo/'
+                Prefix= '{}/'.format(params['teamSlug'])
             )
             for obj in response.get('Contents', []):
                 content.add(obj["Key"])
@@ -248,6 +248,8 @@ def get_my_datasets():
     return Response(body=list(content),
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
+
+
 
 
 @app.route('/instancestatus', authorizer=authorizer, cors=cors_config)
