@@ -3,16 +3,16 @@ variable "auto_export_lambda_name" {
   default = "sdc-auto-export"
 }
 
-data "aws_s3_bucket_object" "auto_export_lambda_zip" {
-  bucket = var.lambda_binary_bucket
+data "aws_s3_object" "auto_export_lambda_zip" {
+  bucket = local.terraform_bucket
   key = "sdc-dot-webportal/auto_export_lambda.zip"
 }
 
 resource "aws_lambda_function" "auto_export" {
-  s3_bucket = data.aws_s3_bucket_object.auto_export_lambda_zip.bucket
-  s3_key    = data.aws_s3_bucket_object.auto_export_lambda_zip.key
-  s3_object_version = data.aws_s3_bucket_object.auto_export_lambda_zip.version_id
-  function_name     = "${var.deploy_env}-${var.auto_export_lambda_name}"
+  s3_bucket = data.aws_s3_object.auto_export_lambda_zip.bucket
+  s3_key    = data.aws_s3_object.auto_export_lambda_zip.key
+  s3_object_version = data.aws_s3_object.auto_export_lambda_zip.version_id
+  function_name     = "${local.environment}-${var.auto_export_lambda_name}"
   role              = aws_iam_role.AutoExportLambdaRole.arn
   handler           = "auto_export_lambda.lambda_handler"
   runtime           = "python3.7"
@@ -20,15 +20,12 @@ resource "aws_lambda_function" "auto_export" {
   tags              = local.global_tags
   environment {
     variables = {
-      ENVIRONMENT                       = "${var.deploy_env}"
-      DYNAMODB_AVAILABLE_DATASET        = "${var.DYNAMODB_AVAILABLE_DATASET}"
-      EMAIL_SENDER                      = "${var.EMAIL_SENDER}"
+      ENVIRONMENT                       = "${local.environment}"
+      DYNAMODB_AVAILABLE_DATASET        = "${local.available_datasets_table}"
+      EMAIL_SENDER                      = "${local.sdc_support.email}"
       SDI_TEAM_BUCKET                   = "${var.SDI_TEAM_BUCKET}"
       TFHRC_TEAM_BUCKET                 = "${var.TFHRC_TEAM_BUCKET}"
       WAZE_AUTOEXPORT_BUCKET            = "${var.WAZE_AUTOEXPORT_BUCKET}"
-      WYDOT_AUTOEXPORT_BUCKET           = "${var.WYDOT_AUTOEXPORT_BUCKET}"
-      WYDOT_TEAM_BUCKET                 = "${var.WYDOT_TEAM_BUCKET}"
-      
     }
   }
 }
@@ -52,7 +49,7 @@ data "aws_iam_policy_document" "sns_policy_doc" {
       variable = "aws:SourceArn"
 
       values = [
-        for id in var.lambda_trigger_buckets[*]:
+        for id in local.lambda_trigger_buckets[*]:
           "arn:aws:s3:::${id}"
       ]  
     }  
@@ -65,7 +62,7 @@ resource "aws_sns_topic" "topic" {
 }
 
 resource "aws_iam_role" "AutoExportLambdaRole" {
-    name = "${var.deploy_env}-${var.auto_export_lambda_name}"
+    name = "${local.environment}-${var.auto_export_lambda_name}"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -73,7 +70,7 @@ resource "aws_iam_role" "AutoExportLambdaRole" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${var.account_number}:root",
+        "AWS": "arn:aws:iam::${local.account_id}:root",
         "Service": "lambda.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
@@ -85,7 +82,7 @@ resource "aws_iam_role" "AutoExportLambdaRole" {
 
 
 resource "aws_iam_policy" "AutoExportLambdaPermissions" {
-    name = "${var.deploy_env}-${var.auto_export_lambda_name}-permissions"
+    name = "${local.environment}-${var.auto_export_lambda_name}-permissions"
     policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -93,7 +90,7 @@ resource "aws_iam_policy" "AutoExportLambdaPermissions" {
     {
       "Effect": "Allow",
       "Action": "logs:CreateLogGroup",
-      "Resource": "arn:aws:logs:${var.aws_region}:${var.account_number}:*"
+      "Resource": "arn:aws:logs:${local.region_name}:${local.account_id}:*"
     },
     {
       "Effect": "Allow",
@@ -102,7 +99,7 @@ resource "aws_iam_policy" "AutoExportLambdaPermissions" {
           "logs:PutLogEvents"
       ],
       "Resource": [
-          "arn:aws:logs:${var.aws_region}:${var.account_number}:log-group:/aws/lambda/${var.deploy_env}-${var.auto_export_lambda_name}:*"
+          "arn:aws:logs:${local.region_name}:${local.account_id}:log-group:/aws/lambda/${local.environment}-${var.auto_export_lambda_name}:*"
       ]
     },
     {
