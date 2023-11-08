@@ -18,6 +18,10 @@ resource "aws_dynamodb_table" "user_stacks_table" {
     type = "S"
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
@@ -36,6 +40,10 @@ resource "aws_dynamodb_table" "available_dataset" {
   attribute {
     name = "Type"
     type = "S"
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
@@ -72,6 +80,10 @@ resource "aws_dynamodb_table" "auto_export_users_table" {
     write_capacity     = 5
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
@@ -104,6 +116,10 @@ resource "aws_dynamodb_table" "trusted_users_table" {
     range_key          = "ReqReceivedTimestamp"
     read_capacity      = 5
     write_capacity     = 5
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
@@ -144,6 +160,10 @@ resource "aws_dynamodb_table" "request_export_table" {
     write_capacity     = 5
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
@@ -171,6 +191,10 @@ resource "aws_dynamodb_table" "manage_user_workstation_table" {
     projection_type    = "ALL"
     read_capacity      = 5
     write_capacity     = 5
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
@@ -203,6 +227,10 @@ resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
     write_capacity     = 5
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
@@ -230,6 +258,10 @@ resource "aws_dynamodb_table" "schedule_uptime_table" {
     projection_type    = "ALL"
     read_capacity      = 5
     write_capacity     = 5
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
