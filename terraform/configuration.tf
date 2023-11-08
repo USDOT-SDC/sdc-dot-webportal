@@ -1,24 +1,24 @@
 terraform {
-  //required_version = "~> 0.15"
+  required_version = "~> 1.6"
   required_providers {
     aws = {
-      source = "hashicorp/aws"
-      version = "~> 3.0"
+      source  = "hashicorp/aws"
+      version = "~> 5.24"
     }
   }
   backend "s3" {
+    // Variables may not be used here.
     region = "us-east-1"
-    // Don't forget to change this to {repo_name}/terraform/terraform.tfstate
     key = "sdc-dot-webportal/terraform/terraform.tfstate"
   }
 }
 
 provider "aws" {
-  region = "us-east-1"
-  profile = "sdc"
+  region  = local.region_name
   default_tags {
     tags = {
-      Repo = "sdc-dot-webportal"
+      repository-url = local.repository-url
+      repository     = local.repository
     }
   }
 }
