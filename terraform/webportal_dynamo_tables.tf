@@ -1,13 +1,13 @@
 
 # NOTE: Some tables have inconsistent names (prod vs. production)
 locals {
-  mismatch_deploy_env = var.deploy_env == "prod" ? "production" : var.deploy_env
+  mismatch_deploy_env = local.environment == "prod" ? "production" : local.environment
 }
 
 # NOTE: Probably not worth doing a module for these as the redundancy is pretty limited,
 # and pulling them apart later would be difficult
 resource "aws_dynamodb_table" "user_stacks_table" {
-  name           = "${var.deploy_env}-UserStacksTable"
+  name           = "${local.environment}-UserStacksTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -18,11 +18,15 @@ resource "aws_dynamodb_table" "user_stacks_table" {
     type = "S"
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
 resource "aws_dynamodb_table" "available_dataset" {
-  name           = "${var.deploy_env}-AvailableDataset"
+  name           = "${local.environment}-AvailableDataset"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -38,11 +42,15 @@ resource "aws_dynamodb_table" "available_dataset" {
     type = "S"
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
 resource "aws_dynamodb_table" "auto_export_users_table" {
-  name           = "${var.deploy_env}-AutoExportUsersTable"
+  name           = "${local.environment}-AutoExportUsersTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -70,6 +78,10 @@ resource "aws_dynamodb_table" "auto_export_users_table" {
     range_key          = "ReqReceivedTime"
     read_capacity      = 5
     write_capacity     = 5
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
@@ -104,6 +116,10 @@ resource "aws_dynamodb_table" "trusted_users_table" {
     range_key          = "ReqReceivedTimestamp"
     read_capacity      = 5
     write_capacity     = 5
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
@@ -144,6 +160,10 @@ resource "aws_dynamodb_table" "request_export_table" {
     write_capacity     = 5
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
@@ -173,12 +193,16 @@ resource "aws_dynamodb_table" "manage_user_workstation_table" {
     write_capacity     = 5
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   tags = local.global_tags
 }
 
 # NOTE: does not exist in prod?
 resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
-  name           = "${var.deploy_env}-ManageDiskspaceRequestsTable"
+  name           = "${local.environment}-ManageDiskspaceRequestsTable"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -196,11 +220,15 @@ resource "aws_dynamodb_table" "manage_diskspace_requests_table" {
 
   global_secondary_index {
     hash_key           = "username"
-    name               = "${var.deploy_env}-diskspace-username-index"
+    name               = "${local.environment}-diskspace-username-index"
     non_key_attributes = []
     projection_type    = "ALL"
     read_capacity      = 5
     write_capacity     = 5
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
@@ -230,6 +258,10 @@ resource "aws_dynamodb_table" "schedule_uptime_table" {
     projection_type    = "ALL"
     read_capacity      = 5
     write_capacity     = 5
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = local.global_tags
