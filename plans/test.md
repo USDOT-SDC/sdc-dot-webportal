@@ -1,37 +1,36 @@
 # Test Plan
 
-[3.0.1](https://github.com/USDOT-SDC/sdc-dot-webportal/tree/3.0.1)
+This Test Plan is designed to prescribe the scope, objectives, test activities and
+deliverables of the testing activities for these resources.
 
-### Objectives:
+### In Scope Test Plan
 
-The test objectives are to verify the functionality of the feature improvements defined in the CRB, as well as to ensure there's been no negative impact on the, otherwise, normal functioning of the web portal within the production environment
-
-### In Scope:
-
-1. Manual functional system testing of the web portal - with focus on the new 'Table Export Request' button/form on the Datasets page and the new 'Table Export Requests' table on the Export Requests page.
-2. Manual regression testing of the SDC web portal.
-
-### Test Plan:
+Verify the following and document results in the CRB.
 
 1. Verify the web portal s3 bucket has data from the date of deployment.
-
-2. On the FAQ page:
-
-- verify that the new 'Helpful LInksl' section appears below the existing 'My Datasets/Algorithm' panel.
-- verify that each link opens properly.
-- verify the new FAQ content appears as expected
-- ensure any links in that section work also
-
-3. Verify that login redirects, data upload, data export, and data export approval functions are working.
-
-4. Perform regression testing (following the UAT template):
+1. On the FAQ page:
+   - verify that the new 'Helpful Links' section appears below the existing 'My Datasets/Algorithm' panel.
+   - verify that each link opens properly.
+   - verify the new FAQ content appears as expected
+   - ensure any links in that section work also
+1. Verify that login redirects, data upload, data export, and data export approval functions are working.
+1. Perform regression testing (following the UAT template):
    1. Validate you're able to access the portal.
-   2. Validate portal login is working.
-   3. Validate Import/Export/Approval functionality.
-   4. Validate Trusted Request functionality.
-   5. Validate launching of workstations.
-   6. Validate start/stop of workstations.
-   7. Validate functionality of all the tabs in portal.
+   1. Validate portal login is working.
+   1. Validate Import/Export/Approval functionality.
+   1. Validate Trusted Request functionality.
+   1. Validate launching of workstations.
+   1. Validate start/stop of workstations.
+   1. Validate functionality of all the tabs in portal.
+
+### Out of Scope AWS Resources
+
+- Resources created durning previous deployments
+
+### Objectives
+
+The test objectives are to verify the functionality of the resources, and should focus on
+testing the in scope resources to guarantee they work normally in a production environment.
 
 ### Deliverables:
 
