@@ -9,12 +9,12 @@ terraform {
   backend "s3" {
     // Variables may not be used here.
     region = "us-east-1"
-    key = "sdc-dot-webportal/terraform/terraform.tfstate"
+    key    = "sdc-dot-webportal/terraform/terraform.tfstate"
   }
 }
 
 provider "aws" {
-  region  = local.region_name
+  region = local.region_name
   default_tags {
     tags = {
       repository-url = local.repository-url
