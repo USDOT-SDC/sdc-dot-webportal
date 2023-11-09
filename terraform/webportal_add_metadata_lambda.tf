@@ -100,15 +100,16 @@ data "aws_iam_policy_document" "policy_doc" {
   }
 }
 
-resource "aws_iam_policy" "LambdaPermissions" {
-  name   = "${local.environment}-${var.lambda_name}-permissions"
-  policy = data.aws_iam_policy_document.policy_doc.json
-}
+# resource "aws_iam_policy" "LambdaPermissions" {
+#   name   = "${local.environment}-${var.lambda_name}-permissions"
+#   policy = data.aws_iam_policy_document.policy_doc.json
+#   tags   = local.iam_policy_tags
+# }
 
-resource "aws_iam_role_policy_attachment" "CloudWatchLogsAttachment" {
-  role       = aws_iam_role.LambdaRole.name
-  policy_arn = aws_iam_policy.LambdaPermissions.arn
-}
+# resource "aws_iam_role_policy_attachment" "CloudWatchLogsAttachment" {
+#   role       = aws_iam_role.LambdaRole.name
+#   policy_arn = aws_iam_policy.LambdaPermissions.arn
+# }
 
 resource "aws_lambda_permission" "allow_lambda_trigger_buckets" {
   count         = length(local.lambda_trigger_buckets)

@@ -213,6 +213,7 @@ resource "aws_iam_policy" "AutoExportLambdaPermissions" {
       ]
     }
   )
+  tags = local.iam_policy_tags
 }
 
 resource "aws_iam_role_policy_attachment" "AutoExportCloudWatchLogsAttachment" {
