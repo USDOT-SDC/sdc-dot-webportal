@@ -58,6 +58,9 @@ locals {
   repository               = "sdc-dot-webportal"
   sdc_support              = data.aws_ssm_parameter.environment.value == "dev" ? var.dev-support : var.sdc-support
   sdc_admins               = data.aws_ssm_parameter.environment.value == "dev" ? var.dev-admins : var.sdc-admins
+  iam_policy_tags = {
+    "created-by" = "SDC-Power-User-Role"
+  }
   global_tags = {
     "Project" = "SDC-Platform"
     "Team"    = "SDC-Platform"
