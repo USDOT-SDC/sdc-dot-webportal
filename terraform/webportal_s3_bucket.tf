@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "webportal_bucket" {
-  bucket = local.webportal_bucket
+  bucket        = local.webportal_bucket
   force_destroy = false
-  tags = local.global_tags
+  tags          = local.global_tags
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "webportal_bucket" {
