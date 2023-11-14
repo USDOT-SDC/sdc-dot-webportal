@@ -7,7 +7,7 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
@@ -20,9 +20,9 @@
         "TABLENAME_MANAGE_DISK": "dev-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "dev-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "dev-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"dev-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"dev-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "dev-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "dev-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_Y5JI7ysvY"
       }
     },
     "dev-private": {
@@ -34,7 +34,7 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
@@ -47,9 +47,9 @@
         "TABLENAME_MANAGE_DISK": "dev-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "dev-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "dev-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"dev-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"dev-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_RqSIpOZN3"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "dev-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "dev-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_RqSIpOZN3"
       },
       "subnet_ids": ["subnet-1d181f40", "subnet-b29f87d6"],
       "security_group_ids": ["sg-98eae8ee"]
@@ -63,12 +63,12 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
-        "RESTAPIID": "uz94abqed5",
-        "AUTHORIZERID": "xk85vl",
+        "RESTAPIID": "po6lv3qcoh",
+        "AUTHORIZERID": "0gd98s",
         "TABLENAME_TRUSTED_USERS": "dev-TrustedUsersTable",
         "TABLENAME_EXPORT_FILE_REQUEST": "dev-RequestExportTable",
         "TABLENAME_MANAGE_USER": "dev-ManageUserWorkstationTable",
@@ -76,9 +76,9 @@
         "TABLENAME_MANAGE_DISK": "dev-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "dev-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "dev-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"dev-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"dev-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_sNIwupW53"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "dev-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "dev-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_sNIwupW53"
       }
     },
     "ecs-prod": {
@@ -90,7 +90,7 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "prod-AutoExportUsersTable",
@@ -103,9 +103,9 @@
         "TABLENAME_MANAGE_DISK": "prod-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "prod-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "production-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"prod-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:004118380849:userpool/us-east-1_e13lOvIqH"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "production-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "prod-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:004118380849:userpool/us-east-1_e13lOvIqH"
       }
     },
     "test": {
@@ -115,7 +115,7 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
@@ -128,9 +128,9 @@
         "TABLENAME_MANAGE_DISK": "dev-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "dev-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "dev-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"dev-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"test-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_89P1HiXoV"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "dev-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "test-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_89P1HiXoV"
       }
     },
     "test-private": {
@@ -142,7 +142,7 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "dev-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "dev-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "dev-AutoExportUsersTable",
@@ -155,9 +155,9 @@
         "TABLENAME_MANAGE_DISK": "dev-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "dev-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "dev-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"dev-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"test-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_89P1HiXoV"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "dev-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "test-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_89P1HiXoV"
       }
     },
     "production": {
@@ -167,7 +167,7 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "prod-AutoExportUsersTable",
@@ -180,9 +180,9 @@
         "TABLENAME_MANAGE_DISK": "production-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "production-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "production-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"prod-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_1zLqP2XrI"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "production-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "prod-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_1zLqP2XrI"
       }
     },
     "production-private": {
@@ -194,7 +194,7 @@
         "Project": "SDC-Platform",
         "Team": "sdc-platform"
       },
-      "environment_variables":{
+      "environment_variables": {
         "TABLENAME_USER_STACKS": "prod-UserStacksTable",
         "TABLENAME_AVAILABLE_DATASET": "prod-AvailableDataset",
         "TABLENAME_AUTOEXPORT_USERS": "prod-AutoExportUsersTable",
@@ -207,9 +207,9 @@
         "TABLENAME_MANAGE_DISK": "production-ManageDiskspaceRequestsTable",
         "TABLENAME_MANAGE_DISK_INDEX": "production-diskspace-username-index",
         "TABLENAME_MANAGE_UPTIME": "production-ScheduleUptimeTable",
-        "TABLENAME_MANAGE_UPTIME_INDEX":"production-scheduleuptime-username-index",
-        "COGNITO_USER_POOL":"prod-sdc-dot-cognito-pool",
-        "IDP_PROVIDER_ARNS":"arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_1zLqP2XrI"
+        "TABLENAME_MANAGE_UPTIME_INDEX": "production-scheduleuptime-username-index",
+        "COGNITO_USER_POOL": "prod-sdc-dot-cognito-pool",
+        "IDP_PROVIDER_ARNS": "arn:aws:cognito-idp:us-east-1:911061262852:userpool/us-east-1_1zLqP2XrI"
       },
       "subnet_ids": ["subnet-1d181f40", "subnet-b29f87d6"],
       "security_group_ids": ["sg-98eae8ee"]
@@ -217,7 +217,7 @@
   },
   "version": "2.0",
   "app_name": "webportal",
-  "environment_variables":{
+  "environment_variables": {
     "RECEIVER_EMAIL": "sdc-support@dot.gov"
   }
 }

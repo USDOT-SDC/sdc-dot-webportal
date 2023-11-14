@@ -12,6 +12,7 @@ import {
   MatDialogModule,
   MatDialogRef,
   MAT_DIALOG_DATA,
+  MatDialog,
 } from "@angular/material/dialog";
 //import {MatTooltipModule} from '@angular/material/tooltip'
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
@@ -43,6 +44,7 @@ import { FormsModule } from "@angular/forms";
 import { CardModule } from "primeng/card";
 import { ButtonModule } from "primeng/button";
 import { MatIconModule } from "@angular/material/icon";
+import { DatasetsComponent } from "../datasets/datasets.component";
 import {
   MatCommonModule,
   MatLineModule,
@@ -106,7 +108,7 @@ export class DialogBoxComponent implements OnInit {
   exportRequestType: string;
   userBucketName: string;
   // selectedFiles: FileList;
-  selectedFiles: any[] = [];
+  //selectedFiles: any[] = [];
   message: string;
   datasetName: string;
   userEmail: string;
@@ -122,10 +124,12 @@ export class DialogBoxComponent implements OnInit {
   selectedDataProvider: string;
   selectedDatatype: string;
   datasources: string;
+  myDatasets: any = [];
   detailedderiveddataset: string;
   autoderiveddataset: string;
   autoreason: string;
   // tags: string;
+  upload_locations: any = [];
   justifyExport: string;
   trustedStatus: boolean;
   autoExportStatus: boolean;
@@ -154,6 +158,8 @@ export class DialogBoxComponent implements OnInit {
   edgeTableRequestButtonLabel: string;
   uploadNotice = false;
   resizeFilterFormSubmitted = false;
+  locations: string[] = ["Location A", "Location B", "Location C"];
+
   diskSizeChange = true;
   cpuOptions = [2, 4, 8, 16, 24, 36, 40, 48, 60, 64, 72, 96, 128];
   memoryOptions = [
@@ -173,6 +179,7 @@ export class DialogBoxComponent implements OnInit {
   resizeWorkSpaceOnly = false;
   resizeAddDiskOnly = false;
   ManageBoth = false;
+
   // TODO
   scheduleUpTime = false;
   additionalDiskSpace = "";
@@ -190,7 +197,6 @@ export class DialogBoxComponent implements OnInit {
   ];
 
   dataSetTypes = [];
-
   pricing = [];
   requestedInstanceType = undefined;
   instanceFamilyList = [];
@@ -293,6 +299,7 @@ export class DialogBoxComponent implements OnInit {
     this.autoderiveddataset = "";
     this.autoreason = "";
     this.trustedUserJustification = "";
+    this.groupFoldersAndFiles(this.myDatasets);
     this.edgePrivateDatabase = "";
     this.edgePrivateTable = "";
     this.edgeTableRequestButtonLabel = "SUBMIT";
@@ -316,6 +323,7 @@ export class DialogBoxComponent implements OnInit {
     console.log(
       "constructor this.edgePrivateDatabase:" + this.edgePrivateDatabase
     );
+
     this.userEmail = sessionStorage.getItem("email");
     this.userName = sessionStorage.getItem("username");
     this.edgePrivateDatabase = sessionStorage.getItem("teamSlug");
@@ -326,6 +334,8 @@ export class DialogBoxComponent implements OnInit {
     const trustedStatus = sessionStorage.getItem("userTrustedStatus");
     this.userTrustedStatus = JSON.parse(trustedStatus);
     const autoExportStatus = sessionStorage.getItem("userAutoExportStatus");
+    var upload_locations_string = sessionStorage.getItem("upload_locations");
+    this.upload_locations = JSON.parse(upload_locations_string);
     this.userAutoExportStatus = JSON.parse(autoExportStatus);
     const expWorkflow = sessionStorage.getItem("exportWorkflow");
     this.expWorkflow = JSON.parse(expWorkflow);
@@ -353,6 +363,8 @@ export class DialogBoxComponent implements OnInit {
       this.getScheduleUptimeData();
       //this.shouldAllowManageVolume();
     }
+
+    this.getUploadLocations();
   }
 
   shouldAllowManageVolume() {
@@ -394,6 +406,85 @@ export class DialogBoxComponent implements OnInit {
           this.dataProviderNames.push(dataProvider);
         }
       }
+    }
+  }
+
+  getUploadLocations() {
+    this.upload_locations.forEach((location) => {
+      console.log("Location ==", location, this.upload_locations[location]);
+      console.log(
+        "getUploadLocations called: get URL = " +
+          location +
+          "&username=" +
+          this.userName
+      );
+      this.gatewayService
+        .get(
+          "user_data?userBucketName=" +
+            location +
+            "&username=" +
+            this.userName +
+            "&teamSlug=" +
+            this.edgePrivateDatabase
+        )
+        .subscribe((response: any) => {
+          for (let x of response) {
+            this.myDatasets.push({
+              filename: x,
+            });
+          }
+          console.log("My Datasets: " + JSON.stringify(this.myDatasets));
+          console.log("my Datasets length = " + this.myDatasets.length);
+        });
+    });
+  }
+
+  userBucketNameFiltered: any[];
+
+  filterUserBucketName() {
+    this.userBucketNameFiltered = this.myDatasets.filter(
+      (item) => item.filename && item.filename.trim() !== ""
+    );
+  }
+
+  isFolder(location) {
+    return location.endsWith("/");
+  }
+  selectedSubmenu: string[] = [];
+
+  updateSubmenu(location: string) {
+    this.selectedSubmenu = this.myDatasets.filter((file) =>
+      this.isSubmenuItem(file, location)
+    );
+  }
+
+  isSubmenuItem(file: string, location: string): boolean {
+    return file.startsWith(location) && file !== location && file.endsWith("/");
+  }
+
+  isEmptyBullet(str: string): boolean {
+    return str === null || str.trim() === "";
+  }
+
+  hasSubMenuItems(selectedLocation: string): boolean {
+    // Use the selectedLocation to determine if there are sub-menu items
+    // Return true if there are items, or false if there are none
+    return this.myDatasets.some(
+      (item) =>
+        item.filename.startsWith(selectedLocation) &&
+        item.filename !== selectedLocation
+    );
+  }
+  folders: string[] = [];
+  files: string[] = [];
+
+  groupFoldersAndFiles(elements) {
+    console.log("ELEMENTS == ", elements);
+    for (let i = 0; i < elements.length; i++) {
+      const filename = elements[i].filename;
+      console.log(`Filename ${i + 1}: ${filename}`);
+      this.folders = elements[i].filter((location) => location.endsWith("/"));
+      this.files = elements[i].filter((location) => !location.endsWith("/"));
     }
   }
 
@@ -1294,11 +1385,13 @@ export class DialogBoxComponent implements OnInit {
     this.uploadNotice = true;
   }
 
-  uploadFiles(event1) {
+  uploadFiles(event1, location: string) {
     const totalFilesCount = event1.files.length;
+    console.log("location = " + location);
     for (const file of event1.files) {
-      console.log("Bucket name is = " + this.userBucketName);
+      console.log("Bucket name is = " + location);
       console.log("File name is = " + file.name);
+      console.log("File type is = " + file.type);
       this.gatewayService
         .getPresignedUrl(
           "presigned_url?file_name=" +
@@ -1306,7 +1399,7 @@ export class DialogBoxComponent implements OnInit {
             "&file_type=" +
             file.type +
             "&bucket_name=" +
-            this.userBucketName +
+            location +
             "&username=" +
             this.userName
         )
@@ -1315,8 +1408,10 @@ export class DialogBoxComponent implements OnInit {
             reportProgress: true,
             headers: new HttpHeaders().set("Content-Type", file.type),
           });
-
+          console.log("req == ", req);
+          console.log("HAS PRESIGNED URL");
           this.http.request(req).subscribe((event) => {
+            console.log("in http.request");
             // Via this API, you get access to the raw event stream.
             // Look for upload progress events.
             if (event.type === HttpEventType.UploadProgress) {
@@ -1327,12 +1422,16 @@ export class DialogBoxComponent implements OnInit {
               this.fileUpload.progress = percentDone;
               console.log("File is ${percentDone}% uploaded.", percentDone);
             } else if (event instanceof HttpResponse) {
-              this.selectedFiles.push(file);
+              console.log("in if");
+              //this.selectedFiles.push(file);
               event1.files.forEach((file1, index) => {
+                console.log("File1 = ", file1, " index = ", index);
                 if (file1.name === file.name) {
+                  console.log("in ===");
                   this.fileUpload.remove(event1.files, index);
                 }
               });
+              console.log("Past for");
               this.uploadedFilesCount++;
               console.log("File is completely uploaded!");
               if (this.uploadedFilesCount === totalFilesCount) {

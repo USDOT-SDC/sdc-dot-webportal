@@ -44,6 +44,8 @@ export class LoginSyncComponent implements OnInit {
           this.changeTemporaryPassword = true;
           this.errorMessage = "";
         } else {
+          console.log("ERRORED")
+          console.log("userErrorMessage = ", error.userErrorMessage)
           this.errorMessage = error.userErrorMessage;
         }
       }

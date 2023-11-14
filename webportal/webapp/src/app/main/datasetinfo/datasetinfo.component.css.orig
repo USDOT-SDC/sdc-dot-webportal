@@ -1,4 +1,5 @@
 .info {
+<<<<<<< HEAD
     text-align: left;
     padding-top: 25px;
     font-size: 16px;
@@ -135,3 +136,11 @@ label[for="notice-checkbox"] {
 .checkbox-section {
   margin-top: 16px; /* Adjust the margin-top as needed */
 }
+=======
+  text-align: left;
+  padding-top: 25px;
+  font-size: 16px;
+  color: rgb(52, 73, 95);
+  padding: 40px;
+}
+>>>>>>> origin/SDC-5950_SDC-5965

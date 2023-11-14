@@ -1,0 +1,136 @@
+.info {
+  text-align: left;
+  padding-top: 25px;
+  font-size: 16px;
+  color: rgb(52, 73, 95);
+  padding: 40px;
+}
+/* Add desired font and global styles */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Apply some padding and margin to the form */
+form {
+  padding: 20px;
+  margin: 20px;
+}
+
+/* Style the fieldset and legend */
+.p-fieldset {
+  border: none;
+  margin-bottom: 20px;
+}
+
+.p-fieldset > legend {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+/* Apply some grid layout to the form fields */
+.p-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Apply some responsive layout to the form fields */
+@media screen and (max-width: 768px) {
+  .p-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Style the input fields */
+.p-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.p-field input,
+.p-field textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Style the submit button */
+.p-field button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.p-field button:hover {
+  background-color: #0056b3;
+}
+
+/* Add some margin-bottom to the input fields */
+.p-field input,
+.p-field textarea {
+  /* Existing styles */
+  margin-bottom: 10px;
+}
+
+/* Add some margin-bottom to the legend */
+.p-fieldset > legend {
+  /* Existing styles */
+  margin-bottom: 15px;
+}
+
+.toggle-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background-color: #45a049;
+}
+
+.toggle-button:active {
+  background-color: #3c883d;
+}
+
+.ui-chkbox-icon {
+  background-color: transparent;
+  border-color: #000;
+}
+
+.ui-chkbox-icon:before {
+  content: "\f00c";
+  font-family: "FontAwesome";
+  font-size: 12px;
+  color: #000;
+}
+
+label[for="notice-checkbox"] {
+  font-weight: bold;
+}
+
+.checkbox-label {
+  margin-left: 8px; /* Adjust the value as needed */
+}
+
+.form-section {
+  background-color: rgb(226, 225, 225); /* Adjust the color as needed */
+  padding: 16px;
+}
+
+.checkbox-section {
+  margin-top: 16px; /* Adjust the margin-top as needed */
+}

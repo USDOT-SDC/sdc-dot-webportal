@@ -1,15 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { ApiGatewayService } from "../../../services/apigateway.service";
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import * as $ from "jquery";
-import { Injectable, Inject } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { CommonModule } from "@angular/common";
-import { TableModule } from "primeng/table";
-import { RouterModule } from "@angular/router";
 import { ButtonModule } from "primeng/button";
 import { FormsModule } from "@angular/forms";
 import { InputTextModule } from "primeng/inputtext";
@@ -29,29 +20,14 @@ import { MessageService } from "primeng/api";
 import { CdkTableModule } from "@angular/cdk/table";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatSelectModule } from "@angular/material/select";
-import { MatTabsModule } from "@angular/material/tabs";
-import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { DropdownModule } from "primeng/dropdown";
-
+import { MatNativeDateModule } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
-import {
-  MatCommonModule,
-  MatLineModule,
-  MatNativeDateModule,
-} from "@angular/material/core";
+import { MatInputModule } from "@angular/material/input";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatSortModule } from "@angular/material/sort";
-
-import { MatButtonModule } from "@angular/material/button";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { DialogModule } from "primeng/dialog";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
@@ -107,38 +83,15 @@ import { TableModule } from "primeng/table";
     FormsModule,
     CardModule,
     ButtonModule,
-    InputTextModule,
-    FormsModule,
-    MarkdownModule,
-    RouterModule,
-    // MatButtonModule,
-    // MatCheckboxModule,
-    // MatMenuModule,
-    // MatTooltipModule,
-    // MatToolbarModule,
-    // MatIconModule,
-    // MatRadioModule,
-    // MatTabsModule,
-    // MatProgressSpinnerModule,
-    // MatDialogModule,
-    // MatInputModule,
-    // MatDatepickerModule,
-    // MatNativeDateModule,
-    CdkTableModule,
+    PanelModule,
     FileUploadModule,
-    // MatFormFieldModule,
-    // MatSelectModule,
-    // MatTableModule,
-    // MatSnackBarModule,
-    // //BrowserAnimationsModule,
-    // MatDialogModule,
   ],
-  selector: "app-datasetinfo",
+  //selector: "app-datasetinfo",
   providers: [MessageService],
-  templateUrl: "./datasetinfo.component.html",
-  styleUrls: ["./datasetinfo.component.css"],
+  templateUrl: "./hsis.component.html",
+  styleUrls: ["./hsis.component.css"],
 })
-export class DatasetinfoComponent implements OnInit {
+export class HSISComponent implements OnInit {
   constructor(private messageService: MessageService) {}
   mailType: string;
   displayDialog = false;
@@ -166,55 +119,12 @@ export class DatasetinfoComponent implements OnInit {
     });
   }
 
-  displayDialog: boolean = false;
-  showDatalakeDropdown: boolean = false;
-  checklistItems: any[] = [
-    { name: "Team Bucket", checked: false },
-    { name: "Datalake", checked: false },
-  ];
-
-  datalakeOptions: any[] = [
-    { name: "2022", checked: false },
-    { name: "2023", checked: false },
-  ];
-  fileUploaded: boolean = false; // Add this variable
-
   showDialog() {
     this.displayDialog = true;
   }
 
-  onFileUpload(event: any) {
-    // Handle file upload here
-    console.log("Uploaded File:", event.files[0]);
-    this.fileUploaded = true; // Set to true after file upload
-  }
-
-  goBack() {
-    this.fileUploaded = false; // Set to false to go back to file upload section
-  }
-
-  saveCheckedItems() {
-    const checkedItems = this.checklistItems.filter((item) => item.checked);
-    const datalakeSelected = this.checklistItems.find(
-      (item) => item.name === "Datalake"
-    )?.checked;
-
-    // Logic to save the checked items
-    console.log("Checked items:", checkedItems);
-    if (datalakeSelected) {
-      const datalakeExtraOptions = this.datalakeOptions.filter(
-        (option) => option.checked
-      );
-      console.log("Datalake Extra Options:", datalakeExtraOptions);
-    }
-
+  hideDialog() {
     this.displayDialog = false;
-  }
-
-  closeDialog() {
-    this.displayDialog = false;
-    this.showDatalakeDropdown = false;
-    this.datalakeOptions.forEach((option) => (option.checked = false));
   }
 
   submitForm() {
