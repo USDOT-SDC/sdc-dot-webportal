@@ -206,6 +206,7 @@ def get_my_datasets():
     content = set()
     user_id = ''
     params = app.current_request.query_params
+    print("USER_BUCKET == ", params['userBucketName'])
     try:
         client_s3 = boto3.client('s3')
         response = client_s3.list_objects(

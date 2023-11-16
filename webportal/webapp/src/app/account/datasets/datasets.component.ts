@@ -136,7 +136,7 @@ export class DatasetsComponent implements OnInit {
   showChecklist: boolean = false;
   dictionary: string;
   showDictionary: boolean = false;
-  userBucketName: any = "";
+  userBucketName: any;
   upload_locations: any = [];
   stacks: any = [];
   response: any = "";
@@ -156,6 +156,7 @@ export class DatasetsComponent implements OnInit {
     this.sdcElements = JSON.parse(sdcDatasetsString);
     var stacksString = sessionStorage.getItem("stacks");
     this.userBucketName = sessionStorage.getItem("team_bucket_name");
+    console.log("userBucketName at first == ", this.userBucketName);
     this.response = sessionStorage.getItem("response");
     var upload_locations_string = sessionStorage.getItem("upload_locations");
     this.upload_locations = JSON.parse(upload_locations_string);
@@ -401,7 +402,7 @@ export class DatasetsComponent implements OnInit {
   uploadFilesToS3(requestType) {
     const dialogRef = this.dialog.open(DialogBoxComponent, {
       width: "700px",
-      data: { userBucketName: this.myDatasets, requestType: requestType },
+      data: { userBucketName: this.userBucketName, requestType: requestType },
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log("The upload files to s3 dialog was closed");
@@ -468,68 +469,5 @@ export class DatasetsComponent implements OnInit {
     });
 
     return params;
-  }
-
-  displayDialog: boolean = false;
-  showDatalakeDropdown: boolean = false;
-  checklistItems: any[] = [
-    { name: "Team Bucket", checked: false },
-    { name: "Datalake", checked: false },
-  ];
-
-  datalakeOptions: any[] = [
-    { name: "2022", checked: false },
-    { name: "2023", checked: false },
-  ];
-  fileUploaded: boolean = false; // Add this variable
-  sanitizer: DomSanitizer;
-
-  showDialog1() {
-    this.displayDialog = true;
-  }
-
-  onFileUpload(event: any) {
-    // Handle file upload here
-    console.log("Uploaded File:", event.files[0]);
-    this.fileUploaded = true; // Set to true after file upload
-  }
-  evaluateHtml(item: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(
-      item.replace("{{ userBucketName }}", this.userBucketName)
-    );
-  }
-
-  goBack() {
-    this.fileUploaded = false; // Set to false to go back to file upload section
-  }
-
-  saveCheckedItems() {
-    const checkedItems = this.checklistItems.filter((item) => item.checked);
-    const datalakeSelected = this.checklistItems.find(
-      (item) => item.name === "Datalake"
-    )?.checked;
-
-    // Logic to save the checked items
-    console.log("Checked items:", checkedItems);
-    if (datalakeSelected) {
-      const datalakeExtraOptions = this.datalakeOptions.filter(
-        (option) => option.checked
-      );
-      console.log("Datalake Extra Options:", datalakeExtraOptions);
-    }
-
-    this.displayDialog = false;
-  }
-
-  closeDialog() {
-    this.displayDialog = false;
-    this.showDatalakeDropdown = false;
-    this.datalakeOptions.forEach((option) => (option.checked = false));
-  }
-
-  onCheckboxChange(item: any) {
-    if (item.name === "Datalake") {
-      this.showDatalakeDropdown = item.checked;
-    }
   }
 }
