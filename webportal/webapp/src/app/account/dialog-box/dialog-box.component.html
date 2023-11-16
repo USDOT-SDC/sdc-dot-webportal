@@ -1855,41 +1855,52 @@
     </div>
     <div *ngIf="uploadNotice">
       <div>
-        <!-- Dropdown for selecting a location -->
         <label for="location">
           Choose the location for files to be uploaded or create your own new
           prefix:
         </label>
         <select [(ngModel)]="selectedLocation">
           <option value="">Select a location</option>
-          <ng-container *ngFor="let location of userBucketName">
-            <ng-container *ngIf="isFolder(location.filename)">
-              <option [value]="location.filename">
-                {{ location.filename }}
-              </option>
-            </ng-container>
+          <ng-container *ngFor="let location of upload_locations">
+            <option [value]="location">
+              {{ location }}
+            </option>
           </ng-container>
         </select>
       </div>
       <!-- Text box for creating a new prefix -->
-      <div>
-        <label for="newPrefix">Create your own new prefix:</label>
-        <input type="text" id="newPrefix" [(ngModel)]="customPrefix" />
+      <div style="margin-top: 1em">
+        <label for="newPrefix" style="margin-right: 8px"
+          >Append a new prefix:</label
+        >
+        <input
+          type="text"
+          id="newPrefix"
+          [(ngModel)]="customPrefix"
+          pattern="^[^\s]+$"
+          title="No spaces allowed"
+        />
+      </div>
+
+      <!-- Display custom prefix along with predefined options -->
+      <div style="margin-top: 1em">
+        <label for="finalPrefix">Selected Prefix:</label>
+        <span id="finalPrefix"> {{ selectedLocation }}</span>
+        <span *ngIf="customPrefix">{{ customPrefix }}/</span>
       </div>
       <p-fileUpload
         #fileUpload
         name="selectedFiles[]"
         customUpload="true"
-        (uploadHandler)="uploadFiles($event, selectedLocation || customPrefix)"
+        (uploadHandler)="
+          uploadFiles(
+            $event,
+            selectedLocation + (customPrefix ? '/' + customPrefix : '')
+          )
+        "
         multiple="multiple"
       >
-        <!-- <ng-template pTemplate="content">
-          <ul *ngIf="selectedFiles.length">
-            <li *ngFor="let file of selectedFiles">
-              <b> Uploaded {{ file }} - {{ getFileSize(file) }} bytes </b>
-            </li>
-          </ul>
-        </ng-template> -->
+        <!-- ... your existing code for file upload -->
       </p-fileUpload>
     </div>
   </p-card>

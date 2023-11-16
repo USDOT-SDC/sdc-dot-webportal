@@ -173,7 +173,7 @@ export class DatasetsComponent implements OnInit {
       }
     });
     this.getMyDatasetsList();
-    this.getUploadLocations();
+    //this.getUploadLocations();
 
     this.cols = [
       { field: "filename", header: "Filename" },
@@ -224,67 +224,6 @@ export class DatasetsComponent implements OnInit {
           );
         }
       }
-    });
-  }
-
-  getUploadLocations() {
-    this.upload_locations.forEach((location) => {
-      console.log("Location ==", location, this.upload_locations[location]);
-      console.log(
-        "getUploadLocations called: get URL = " +
-          location +
-          "&username=" +
-          this.userName
-      );
-      this.gatewayService
-        .get(
-          "user_data?userBucketName=" +
-            location +
-            "&username=" +
-            this.userName +
-            "&teamSlug=" +
-            this.teamSlug
-        )
-        .subscribe((response: any) => {
-          for (let x of response) {
-            this.getMetadataForS3Objects(x, location).subscribe((metadata) => {
-              if (metadata != null) {
-                let trusted = false;
-                // check if user is trusted for a dataset
-                for (var dt in this.userTrustedStatus) {
-                  if (dt in metadata) {
-                    this.myDatasets.push({
-                      filename: location + "/" + x,
-                      download: "true",
-                      export: "false",
-                      publish: "true",
-                      requestReviewStatus: metadata["requestReviewStatus"],
-                    });
-                    trusted = true;
-                  }
-                }
-                if (!trusted) {
-                  this.myDatasets.push({
-                    filename: location + "/" + x,
-                    download: metadata["download"],
-                    export: metadata["export"],
-                    publish: metadata["publish"],
-                    requestReviewStatus: metadata["requestReviewStatus"],
-                  });
-                }
-              } else {
-                this.myDatasets.push({
-                  filename: location + "/" + x,
-                  download: null,
-                  export: null,
-                  publish: null,
-                });
-              }
-            });
-          }
-          console.log("My Datasets: " + JSON.stringify(this.myDatasets));
-          console.log("my Datasets length = " + this.myDatasets.length);
-        });
     });
   }
 
