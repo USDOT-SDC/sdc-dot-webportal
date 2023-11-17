@@ -1895,7 +1895,7 @@
         (uploadHandler)="
           uploadFiles(
             $event,
-            selectedLocation + (customPrefix ? '/' + customPrefix : '')
+            selectedLocation + (customPrefix ? customPrefix + '/' : '')
           )
         "
         multiple="multiple"
