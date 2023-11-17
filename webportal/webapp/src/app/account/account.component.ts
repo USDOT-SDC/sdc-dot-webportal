@@ -76,7 +76,7 @@ export class AccountComponent implements OnInit {
       for (var i = 0; i < response.stacks.length; i++) {
         if (response.stacks[i].instance_id) {
           sessionStorage.setItem("instance-id", response.stacks[i].instance_id);
-          this.appendToStorage(
+          sessionStorage.setItem(
             "team_bucket_name",
             response.stacks[i].team_bucket_name
           );

@@ -158,6 +158,8 @@ export class DialogBoxComponent implements OnInit {
   edgeTableRequestButtonLabel: string;
   uploadNotice = false;
   resizeFilterFormSubmitted = false;
+  customPrefix: string = "";
+  showError: boolean = false;
   locations: string[] = ["Location A", "Location B", "Location C"];
 
   diskSizeChange = true;
@@ -364,7 +366,7 @@ export class DialogBoxComponent implements OnInit {
       //this.shouldAllowManageVolume();
     }
 
-    this.getUploadLocations();
+    //this.getUploadLocations();
   }
 
   shouldAllowManageVolume() {
@@ -407,36 +409,6 @@ export class DialogBoxComponent implements OnInit {
         }
       }
     }
-  }
-
-  getUploadLocations() {
-    this.upload_locations.forEach((location) => {
-      console.log("Location ==", location, this.upload_locations[location]);
-      console.log(
-        "getUploadLocations called: get URL = " +
-          location +
-          "&username=" +
-          this.userName
-      );
-      this.gatewayService
-        .get(
-          "user_data?userBucketName=" +
-            location +
-            "&username=" +
-            this.userName +
-            "&teamSlug=" +
-            this.edgePrivateDatabase
-        )
-        .subscribe((response: any) => {
-          for (let x of response) {
-            this.myDatasets.push({
-              filename: x,
-            });
-          }
-          console.log("My Datasets: " + JSON.stringify(this.myDatasets));
-          console.log("my Datasets length = " + this.myDatasets.length);
-        });
-    });
   }
 
   userBucketNameFiltered: any[];
