@@ -12,7 +12,6 @@ import { FaqComponent } from "./account/faq/faq.component";
 import { DatasetinfoComponent } from "./main/datasetinfo/datasetinfo.component";
 import { ExportRequestsComponent } from "./account/exportrequests/exportrequests.component";
 import { LoginSyncComponent } from "./account/loginsync/components/loginsync.component";
-import { HSISComponent } from "./account/hsis/hsis.component";
 import { LoginSyncGuard } from "./account/loginsync/guards/loginsync.guard";
 import { NgModule } from "@angular/core";
 
@@ -45,7 +44,6 @@ export const APP_Routes: Routes = [
       { path: "workstation", component: WorkstationComponent },
       { path: "faq", component: FaqComponent },
       { path: "loginsync", component: LoginSyncComponent },
-      { path: "hsis", component: HSISComponent },
     ],
   },
 ];

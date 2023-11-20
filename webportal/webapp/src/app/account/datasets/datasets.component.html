@@ -36,8 +36,12 @@
             Team bucket name - <b>{{ userBucketName }}</b>
           </p>
           <p>
-            Upload Locations - <b>{{ upload_locations }}</b>
+            Upload Locations -
+            <b *ngFor="let location of upload_locations; let last = last">
+              {{ location }}{{ !last ? ", " : "" }}
+            </b>
           </p>
+
           <p>
             Files that are uploaded from the web portal will be saved in the
             folder - <b>{{ userName }}</b
