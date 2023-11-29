@@ -1,7 +1,7 @@
 data "archive_file" "add_metadata" {
   type        = "zip"
-  source_file = "${path.module}./add-metadata-to-s3-object/add_metadata.py"
-  output_path = "${path.module}./add-metadata-to-s3-object/deployment-package.zip"
+  source_file = "${path.module}/add-metadata-to-s3-object/add_metadata.py"
+  output_path = "${path.module}/add-metadata-to-s3-object/deployment-package.zip"
 }
 
 resource "aws_lambda_function" "add_metadata" {
@@ -103,7 +103,6 @@ data "aws_iam_policy_document" "policy_doc" {
 resource "aws_iam_policy" "LambdaPermissions" {
   name   = "${local.environment}-${var.lambda_name}-permissions"
   policy = data.aws_iam_policy_document.policy_doc.json
-  tags   = local.iam_policy_tags
 }
 
 resource "aws_iam_role_policy_attachment" "CloudWatchLogsAttachment" {
