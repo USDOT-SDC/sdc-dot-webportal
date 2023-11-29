@@ -18,8 +18,6 @@ variable "lambda_trigger_buckets_dev" {
 variable "lambda_trigger_buckets_prod" {
   type = list(string)
   default = [
-    "prod-sdc-fta-004118380849",
-    "prod-sdc-icf-004118380849",
     "prod-sdc-sdi-004118380849",
     "prod-sdc-waze-academic-tamu-004118380849",
     "prod-sdc-waze-academic-unc-004118380849",
@@ -58,9 +56,6 @@ locals {
   repository               = "sdc-dot-webportal"
   sdc_support              = data.aws_ssm_parameter.environment.value == "dev" ? var.dev-support : var.sdc-support
   sdc_admins               = data.aws_ssm_parameter.environment.value == "dev" ? var.dev-admins : var.sdc-admins
-  iam_policy_tags = {
-    "created-by" = "SDC-Power-User-Role"
-  }
   global_tags = {
     "Project" = "SDC-Platform"
     "Team"    = "SDC-Platform"

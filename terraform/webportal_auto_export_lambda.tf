@@ -5,8 +5,8 @@ variable "auto_export_lambda_name" {
 
 data "archive_file" "auto_export" {
   type        = "zip"
-  source_file = "${path.module}./auto_export_lambda/auto_export_lambda.py"
-  output_path = "${path.module}./auto_export_lambda/deployment-package.zip"
+  source_file = "${path.module}/auto_export_lambda/auto_export_lambda.py"
+  output_path = "${path.module}/auto_export_lambda/deployment-package.zip"
 }
 
 resource "aws_lambda_function" "auto_export" {
@@ -213,7 +213,6 @@ resource "aws_iam_policy" "AutoExportLambdaPermissions" {
       ]
     }
   )
-  tags = local.iam_policy_tags
 }
 
 resource "aws_iam_role_policy_attachment" "AutoExportCloudWatchLogsAttachment" {

@@ -51,6 +51,9 @@ html_coverage_reports/
 # Local config files
 **/terraform/**/*.conf
 
+# tf plans
+**/*tfplan*
+
 # Lambda deployment packages
 *.zip
 
