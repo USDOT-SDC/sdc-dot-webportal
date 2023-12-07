@@ -11,7 +11,16 @@ variable "EXPORT_REQUEST_FOLDER" {
 variable "lambda_trigger_buckets_dev" {
   type = list(string)
   default = [
-    "dev.sdc.dot.gov.team.sdc-support"
+    "dev.sdc.dot.gov.team.acme-research-team",
+    "dev.sdc.dot.gov.team.faa-gen",
+    "dev.sdc.dot.gov.team.hass-coe",
+    "dev.sdc.dot.gov.team.hsis",
+    "dev.sdc.dot.gov.team.hsis-ku",
+    "dev.sdc.dot.gov.team.hsis.curated",
+    "dev.sdc.dot.gov.team.oceanic-research-team",
+    "dev.sdc.dot.gov.team.roadii",
+    "dev.sdc.dot.gov.team.sdc-support",
+    "dev.sdc.dot.gov.team.volpe-testbed",
   ]
 }
 
@@ -25,7 +34,15 @@ variable "lambda_trigger_buckets_prod" {
     "prod-sdc-waze-ccp-academic-004118380849",
     "prod-sdc-waze-covid-004118380849",
     "prod.sdc.dot.gov.team.acme-research-team",
-    "prod.sdc.dot.gov.team.sdc-support"
+    "prod.sdc.dot.gov.team.faa-gen",
+    "prod.sdc.dot.gov.team.hass-coe",
+    "prod.sdc.dot.gov.team.hsis",
+    "prod.sdc.dot.gov.team.hsis-ku",
+    "prod.sdc.dot.gov.team.hsis.curated",
+    "prod.sdc.dot.gov.team.oceanic-research-team",
+    "prod.sdc.dot.gov.team.roadii",
+    "prod.sdc.dot.gov.team.sdc-support",
+    "prod.sdc.dot.gov.team.volpe-testbed",
   ]
 }
 
