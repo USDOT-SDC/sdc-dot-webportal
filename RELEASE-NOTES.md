@@ -1,7 +1,22 @@
 # SDC Data Lake Pipeline Release Notes
 
 # Get This Release
+
 ​To deploy this release, select this version's tag and follow the instructions in the [Deployment Plan](plans/deployment.md).
+
+## 3.1.3 (2023-12-15)
+
+- Updated access request form
+- Added Data Agreement Form Link
+- Made HSIS Data Request Form open in new tab / updated link
+
+## 3.1.2 (2023-11-22)
+
+- add current team buckets to lambda_trigger_buckets var
+
+## 3.1.1 (2023-11-22)
+
+- Added GUI Data Ingest feature to the datasets page. Allows users to upload to S3 in the locations provided by their upload_locations variable in session storage. Users can now upload to multiple locations if allowed and create sub-prefixes under those locations.
 
 ## 3.1.0 (2023-11-09)
 
