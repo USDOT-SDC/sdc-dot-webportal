@@ -4,6 +4,10 @@
 
 ​To deploy this release, select this version's tag and follow the instructions in the [Deployment Plan](plans/deployment.md).
 
+## 3.1.4 (2024-01-17)
+
+- Edited portal footer by getting rid of contract number
+
 ## 3.1.3 (2023-12-15)
 
 - Updated access request form
