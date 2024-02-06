@@ -4,6 +4,10 @@
 
 ​To deploy this release, select this version's tag and follow the instructions in the [Deployment Plan](plans/deployment.md).
 
+## 3.1.5 (2024-02-07)
+
+- Fixed known issue where uploading new file under same name was treated as old file so you could export files that were not approved
+
 ## 3.1.4 (2024-01-17)
 
 - Edited portal footer by getting rid of contract number

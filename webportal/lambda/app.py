@@ -12,6 +12,7 @@ import datetime
 from boto3.dynamodb.conditions import Attr, Key
 from chalice import CORSConfig
 import time
+
 import os
 
 
@@ -46,6 +47,7 @@ TABLENAME_MANAGE_UPTIME = os.getenv("TABLENAME_MANAGE_UPTIME")
 TABLENAME_MANAGE_UPTIME_INDEX = os.getenv("TABLENAME_MANAGE_UPTIME_INDEX")
 
 authorizer = CognitoUserPoolAuthorizer(COGNITO_USER_POOL, provider_arns=[PROVIDER_ARNS])
+time_lst = []
 
 def get_user_details(id_token):
     try:
@@ -349,24 +351,45 @@ def get_metadata_s3_object():
     logger.setLevel("INFO")
     logging.info("Params - " + params['bucket_name'])
     logging.info("Params filename- " + params['file_name'])
+
     try:
         client_s3 = boto3.client('s3')
         response = client_s3.get_object(Bucket=params['bucket_name'],Key=params['file_name'])
+        response = client_s3.head_object(Bucket=params['bucket_name'], Key=params['file_name'])
         logging.info("S3 object metadata response - " + str(response["Metadata"]))
+        print("response == ", response)
+
+        eTag = response['ETag']
+
 
         exportFileRequestTable = dynamodb_client.Table(TABLENAME_EXPORT_FILE_REQUEST)
+
         exportFileRequestResponse = exportFileRequestTable.scan(
             Select= 'ALL_ATTRIBUTES',
             FilterExpression=Attr('S3Key').eq(params['file_name'])
         )
-        if exportFileRequestResponse["Items"]:
-            response["Metadata"]["requestReviewStatus"] = exportFileRequestResponse["Items"][0]["RequestReviewStatus"]
-        else:
+        if exportFileRequestResponse['Items']:
+            sorted_items = sorted(exportFileRequestResponse['Items'], key=lambda x: x['ReqReceivedTimestamp'], reverse=True)
+            if sorted_items:
+                print(str(eTag) + "  <-- tags -->  " + str(sorted_items[0]["S3KeyHash"]))
+
+
+        if exportFileRequestResponse['Items'] and str(eTag) == str(sorted_items[0]["S3KeyHash"]):
+            
+            response["Metadata"]["requestReviewStatus"] = sorted_items[0]["RequestReviewStatus"]
+        elif exportFileRequestResponse['Items'] and not str(eTag) == str(sorted_items[0]["S3KeyHash"]):
+            return Response(body={'download': 'false', 'export': 'true', 'publish': 'false', 'requestReviewStatus': "-1"},
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
+        else: 
             response["Metadata"]["requestReviewStatus"] = "-1"
+        
 
     except BaseException as be:
         logging.exception("Error: Failed to get S3 metadata" + str(be))
         raise ChaliceViewError("Failed to get s3 metadata")
+
+    print("Response == ", response)
     return Response(body=response["Metadata"],
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
@@ -398,6 +421,8 @@ def export():
     logging.info("Received request {}".format(paramsString))
     params = json.loads(paramsString)
     bypassExportFileRequestTable = False
+
+
 
     try:
         selctedDataSet=params['selectedDataInfo']['selectedDataSet']
@@ -488,6 +513,7 @@ def export():
                         )
 
         if not bypassExportFileRequestTable :
+
             requestReviewStatus = params['RequestReviewStatus']
             download = 'false'
             export = 'true'
@@ -498,15 +524,34 @@ def export():
                 publish = 'true'
                 export = 'false'
                 emailContent += "<br/>Export request has been approved to <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
+
             else:
                 emailContent += "<br/>Export request has been requested by <b>" + userID + "</b> for dataset <b>" + params['S3Key'] + "</b>"
 
+
             exportFileRequestTable = dynamodb.Table(TABLENAME_EXPORT_FILE_REQUEST)
             hashed_object = hashlib.md5(params['S3Key'].encode())
+
+            s3 = boto3.resource('s3')
+            s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
+            #s3_object.metadata.update()
+
+
+            s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
+                                Metadata={'download': download, 'export': export, 'publish': publish},
+                                MetadataDirective='REPLACE')
+            logging.info("BEFORE")
+            logging.info("KEY == " + params['TeamBucket'] + params['S3Key'])
+            client_s3 = boto3.client('s3')
+            response = client_s3.list_object_versions(Bucket=params['TeamBucket'], Prefix=params['S3Key'])
+            latest_version = max(response['Versions'], key=lambda x: x['LastModified'])
+            logging.info("LATEST VERSION" + str(latest_version))
+
+
             timemills = int(time.time())
             response = exportFileRequestTable.put_item(
                 Item={
-                    'S3KeyHash': hashed_object.hexdigest(),
+                    'S3KeyHash': str(latest_version['ETag']),
                     'Dataset-DataProvider-Datatype': combinedDataInfo,
                     'ApprovalForm': params['ApprovalForm'],
                     'RequestReviewStatus': requestReviewStatus,
@@ -522,12 +567,7 @@ def export():
             availableDatasets = get_datasets()['datasets']['Items']
             logging.info("Available datasets:" + str(availableDatasets))
 
-            s3 = boto3.resource('s3')
-            s3_object = s3.Object(params['TeamBucket'], params['S3Key'])
-            #s3_object.metadata.update()
-            s3_object.copy_from(CopySource={'Bucket': params['TeamBucket'], 'Key': params['S3Key']},
-                                Metadata={'download': download, 'export': export, 'publish': publish},
-                                MetadataDirective='REPLACE')
+            
 
             #send email to List of POC
             send_notification(listOfPOC,emailContent)
@@ -797,6 +837,7 @@ def scan_db(table, scan_kwargs=None):
 
         complete = True if next_key is None else False
     return records
+
 
 @app.route('/export/requests/updatefilestatus', methods=['POST'], authorizer=authorizer, cors=cors_config)
 def updatefilestatus():
