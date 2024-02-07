@@ -14,8 +14,8 @@
     {
       "name": "rest_api",
       "resource_type": "rest_api",
-      "rest_api_id": "sdnv9sbd1g",
-      "rest_api_url": "https://sdnv9sbd1g.execute-api.us-east-1.amazonaws.com/webportal-api/"
+      "rest_api_id": "y5f9toqa3k",
+      "rest_api_url": "https://y5f9toqa3k.execute-api.us-east-1.amazonaws.com/webportal-api/"
     }
   ],
   "schema_version": "2.0",

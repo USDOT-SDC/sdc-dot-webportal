@@ -388,7 +388,9 @@ export class ExportRequestsComponent implements OnInit {
     reqBody["S3Key"] = targetObj["S3Key"];
     reqBody["TeamBucket"] = targetObj["TeamBucket"];
     reqBody["userEmail"] = targetObj["UserEmail"];
-
+    console.log("==============================");
+    console.log(reqBody["key1"]);
+    console.log("==============================");
     this.gatewayService
       .post(
         "export/requests/updatefilestatus?message=" +
