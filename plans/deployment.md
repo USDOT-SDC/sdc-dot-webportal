@@ -1,7 +1,6 @@
 # Deployment Plan
 
 ### Deployment Build Environment
-
 - See [setup.md](setup.md)
 - See [configuration.tf](../terraform/configuration.tf) for other version constraints.
 
