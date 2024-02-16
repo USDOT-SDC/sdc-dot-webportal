@@ -1,10 +1,8 @@
 # Test Plan
-
-This Test Plan is designed to prescribe the scope, objectives, test activities and
-deliverables of the testing activities for these resources.
+This Test Plan is designed to prescribe the scope, objectives, test
+activities and deliverables of the testing activities for the Web Portal resources.
 
 ### In Scope Test Plan
-
 Verify the following and document results in the CRB.
 
 1. Verify the web portal s3 bucket has data from the date of deployment.
@@ -24,14 +22,9 @@ Verify the following and document results in the CRB.
    1. Validate functionality of all the tabs in portal.
 
 ### Out of Scope AWS Resources
-
 - Resources created durning previous deployments
 
 ### Objectives
-
-The test objectives are to verify the functionality of the resources, and should focus on
-testing the in scope resources to guarantee they work normally in a production environment.
-
-### Deliverables:
-
-Test results will be documented within the CRB.
+The test objectives are to verify the functionality of the
+{Repo Name} resources, and should focus on testing the in scope items
+to guarantee they work normally in a production environment.
