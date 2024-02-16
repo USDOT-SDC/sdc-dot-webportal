@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+
+import subprocess
+import sys
+
+# List of allowed usernames
+allowed_user_names: list[str] = [
+    "Brandon Fitzpatrick",
+    "Brian Davison",
+    "Christine Fitzgerald",
+    "Dianne Bauman",
+    "Doug Tong",
+    "Douglas Tong",
+    "Hamza Abdelghani",
+    "Jeff Ussing",
+    "Praveen Jinka",
+    "Pallavi Mehta",
+    "Shyla Morisetty",
+    "Vyach Mayorskiy",
+    "Vyacheslav Mayorskiy",
+    "Will Sharp",
+    "William Sharp",
+]
+
+# List of allowed user emails
+allowed_user_emails: list[str] = [
+    "b.fitzpatrick.ctr@dot.gov",
+    "brian.davison.ctr@dot.gov",
+    "c.m.fitzgerald.ctr@dot.gov",
+    "dianne.bauman.ctr@dot.gov",
+    "douglas.tong.ctr@dot.gov",
+    "hamza.abdelghani.ctr@dot.gov",
+    "Jeff.Ussing.CTR@dot.gov",
+    "praveen.jinka.ctr@dot.gov",
+    "shyla.morisetty@dot.gov",
+    "vyach.mayorskiy.ctr@dot.gov",
+    "william.sharp.ctr@dot.gov",
+]
+
+
+def get_user_name() -> str:
+    # run 'git config user.name' to get the configured user name
+    result: subprocess.CompletedProcess[bytes] = subprocess.run(["git", "config", "user.name"], stdout=subprocess.PIPE)
+    git_user_name: str = result.stdout.decode("utf-8").strip()
+    return git_user_name
+
+
+def get_user_email() -> str:
+    # run 'git config user.name' to get the configured user email
+    result: subprocess.CompletedProcess[bytes] = subprocess.run(["git", "config", "user.email"], stdout=subprocess.PIPE)
+    git_user_email: str = result.stdout.decode("utf-8").strip()
+    return git_user_email
+
+
+def is_string_in_list(string, list_of_strings) -> bool:
+    # convert strings to lower case and check for string in list of strings
+    for list_string in list_of_strings:
+        if string.lower() == list_string.lower():
+            return True
+    return False
+
+
+def main() -> None:
+    error = False
+    user_name: str = get_user_name()
+    if not is_string_in_list(user_name, allowed_user_names):
+        print(f"Error: Commit from unauthorized user.name '{user_name}'.")
+        print("Only commits from the following user.names are allowed:")
+        print("\n".join(allowed_user_names))
+        error = True
+    user_email: str = get_user_email()
+    if not is_string_in_list(user_email, allowed_user_emails):
+        print(f"Error: Commit from unauthorized user.email '{user_email}'.")
+        print("Only commits from the following user.email are allowed:")
+        print("\n".join(allowed_user_emails))
+        error = True
+    if error:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
