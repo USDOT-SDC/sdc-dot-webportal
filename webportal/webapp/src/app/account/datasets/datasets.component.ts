@@ -11,7 +11,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { CommonModule } from "@angular/common";
 import { TableModule } from "primeng/table";
-import { RouterModule } from "@angular/router";
+import { RouterModule, Router, NavigationStart } from "@angular/router";
+import { CognitoService } from "../../../services/cognito.service";
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { FormsModule } from "@angular/forms";
@@ -63,6 +64,7 @@ import { MarkdownModule, MarkdownService } from "ngx-markdown";
     //BrowserAnimationsModule,
     MatDialogModule,
     DialogModule,
+    RouterModule,
 
     // MatCardModule,
     // MatExpansionModule,
@@ -100,7 +102,7 @@ import { MarkdownModule, MarkdownService } from "ngx-markdown";
   styleUrls: ["./datasets.component.css"],
   //animations: ["@bodyExpansion.done"],
   providers: [
-    // CognitoService,
+    CognitoService,
     // ApiGatewayService,
     //MatSnackBar,
     // MatDialogModule,
@@ -117,7 +119,9 @@ export class DatasetsComponent implements OnInit {
   constructor(
     private gatewayService: ApiGatewayService,
     public snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cognitoService: CognitoService,
+    public router: Router
   ) {}
   sdcElements: any = [];
   sortedSdcElements: any = [];
@@ -150,6 +154,7 @@ export class DatasetsComponent implements OnInit {
   componentName: any;
 
   ngOnInit() {
+    this.inactivityTimer();
     this.componentName = "Datasets";
     this.getUserInfo();
     var sdcDatasetsString = sessionStorage.getItem("datasets");
@@ -471,5 +476,84 @@ export class DatasetsComponent implements OnInit {
     });
 
     return params;
+  }
+
+  inactivityTimer() {
+    let sessionTimer: any;
+    let warningTimer: any;
+    let sessionStart: number;
+    const sessionTimeout = 1200000; // 20 minutes in milliseconds
+    const warningTime = 900000; // 15 minutes in milliseconds
+
+    const isSessionExpired = () => {
+      return Date.now() - sessionStart > sessionTimeout;
+    };
+
+    const startSessionTimer = () => {
+      sessionTimer = setTimeout(() => {
+        this.userLogout();
+      }, sessionTimeout);
+    };
+
+    const showWarningAlert = () => {
+      warningTimer = setTimeout(() => {
+        var notification = new Notification("Alert", {
+          body: "Your session is about to expire due to inactivity. Please continue your session or you will be logged out.",
+        });
+
+        if (isSessionExpired()) {
+          this.refreshPage();
+        }
+      }, warningTime);
+    };
+
+    const resetTimers = () => {
+      clearTimeout(sessionTimer);
+      clearTimeout(warningTimer);
+    };
+
+    const clearEventListeners = () => {
+      window.removeEventListener("beforeunload", resetTimers);
+      window.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("unload", clearEventListeners);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        resetTimers(); // Reset the timer when the page becomes visible (e.g., when switching tabs)
+      }
+    };
+
+    sessionStart = Date.now();
+    startSessionTimer();
+    showWarningAlert();
+
+    window.addEventListener("beforeunload", resetTimers);
+
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+
+    window.addEventListener("unload", clearEventListeners);
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        clearTimeout(sessionTimer);
+        clearTimeout(warningTimer);
+        clearEventListeners();
+      }
+    });
+  }
+
+  refreshPage() {
+    window.location.reload(); // Refresh the page
+  }
+
+  userLogout() {
+    this.router.navigate(["/"]);
+    var notification = new Notification("Alert", {
+      body: "Your session has expired due to inactivity. You have been logged out.",
+    });
+    this.cognitoService.logout();
+    localStorage.clear();
+    sessionStorage.clear();
   }
 }

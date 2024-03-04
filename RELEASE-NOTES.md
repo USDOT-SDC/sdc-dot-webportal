@@ -4,6 +4,11 @@
 
 ​To deploy this release, select this version's tag and follow the instructions in the [Deployment Plan](plans/deployment.md).
 
+## 3.1.6 (2024-03-06)
+
+- Added warning message to user when they are inactive and the portal will log out soon
+- Portal now logs out inactive users
+
 ## 3.1.5 (2024-02-07)
 
 - Fixed known issue where uploading new file under same name was treated as old file so you could export files that were not approved
