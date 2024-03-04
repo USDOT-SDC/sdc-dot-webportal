@@ -10,7 +10,8 @@ import {
 } from "@angular/material/dialog";
 import { AccordionModule } from "primeng/accordion";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-
+import { CognitoService } from "../../../services/cognito.service";
+import { Router, RouterModule, NavigationStart } from "@angular/router";
 //import { MatCard } from '@angular/material/card';
 import { SelectionModel } from "@angular/cdk/collections";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
@@ -64,6 +65,7 @@ import { ExportRequestsPanelComponent } from "./export-requests-panel.component"
     MatCardModule,
     TagModule,
     MatExpansionModule,
+    RouterModule,
     TableModule,
     CommonModule,
     RequestReviewStatusSeverityPipe,
@@ -106,7 +108,7 @@ import { ExportRequestsPanelComponent } from "./export-requests-panel.component"
   templateUrl: "./exportrequests.component.html",
   styleUrls: ["./exportrequests.component.css"],
   providers: [
-    // CognitoService,
+    CognitoService,
     //ApiGatewayService,
     MatDialog,
     //MatSnackBar,
@@ -123,7 +125,9 @@ export class ExportRequestsComponent implements OnInit {
   constructor(
     private gatewayService: ApiGatewayService,
     public snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cognitoService: CognitoService,
+    private router: Router
   ) {}
 
   exportFileRequests = [];
@@ -142,6 +146,7 @@ export class ExportRequestsComponent implements OnInit {
   userBucketName: string;
 
   ngOnInit() {
+    this.inactivityTimer();
     this.userEmail = sessionStorage.getItem("email"); //Reminder: this is data steward user information
     console.log(this.userEmail);
     this.userName = sessionStorage.getItem("username");
@@ -474,5 +479,84 @@ export class ExportRequestsComponent implements OnInit {
       params[queryKey] = queryValue;
     });
     return params;
+  }
+
+  inactivityTimer() {
+    let sessionTimer: any;
+    let warningTimer: any;
+    let sessionStart: number;
+    const sessionTimeout = 1200000; // 20 minutes in milliseconds
+    const warningTime = 900000; // 15 minutes in milliseconds
+
+    const isSessionExpired = () => {
+      return Date.now() - sessionStart > sessionTimeout;
+    };
+
+    const startSessionTimer = () => {
+      sessionTimer = setTimeout(() => {
+        this.userLogout();
+      }, sessionTimeout);
+    };
+
+    const showWarningAlert = () => {
+      warningTimer = setTimeout(() => {
+        var notification = new Notification("Alert", {
+          body: "Your session is about to expire due to inactivity. Please continue your session or you will be logged out.",
+        });
+
+        if (isSessionExpired()) {
+          this.refreshPage();
+        }
+      }, warningTime);
+    };
+
+    const resetTimers = () => {
+      clearTimeout(sessionTimer);
+      clearTimeout(warningTimer);
+    };
+
+    const clearEventListeners = () => {
+      window.removeEventListener("beforeunload", resetTimers);
+      window.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("unload", clearEventListeners);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        resetTimers(); // Reset the timer when the page becomes visible (e.g., when switching tabs)
+      }
+    };
+
+    sessionStart = Date.now();
+    startSessionTimer();
+    showWarningAlert();
+
+    window.addEventListener("beforeunload", resetTimers);
+
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+
+    window.addEventListener("unload", clearEventListeners);
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        clearTimeout(sessionTimer);
+        clearTimeout(warningTimer);
+        clearEventListeners();
+      }
+    });
+  }
+
+  refreshPage() {
+    window.location.reload(); // Refresh the page
+  }
+
+  userLogout() {
+    this.router.navigate(["/"]);
+    var notification = new Notification("Alert", {
+      body: "Your session has expired due to inactivity. You have been logged out.",
+    });
+    this.cognitoService.logout();
+    localStorage.clear();
+    sessionStorage.clear();
   }
 }

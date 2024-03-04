@@ -88,6 +88,48 @@ export class CognitoService {
       .catch((err) => callback.isLoggedIn("is logged in", false));
   }
 
+  // isUserSessionActive(callback: LoggedInCallback) {
+  //   Auth.currentAuthenticatedUser()
+  //     .then((user) => {
+  //       // Start a timer to warn the user before session expiration
+  //       const sessionTimeout = 15000; // 10 minutes in milliseconds
+  //       const warningTime = 5000; // 8 minutes in milliseconds
+  //       let timer: any;
+
+  //       const startSessionTimer = () => {
+  //         timer = setTimeout(() => {
+  //           // Warn the user that their session is about to expire
+  //           alert(
+  //             "Your session is about to expire due to inactivity. Please continue your session or you will be logged out."
+  //           );
+  //           alert(
+  //             "Your session has expired due to inactivity. You have been logged out."
+  //           );
+  //           console.log("RIGHT BEFORE LOGOUT");
+  //           accout.userLogout();
+  //           // this.logout();
+  //         }, sessionTimeout - warningTime);
+  //       };
+
+  //       const resetSessionTimer = () => {
+  //         clearTimeout(timer);
+  //         startSessionTimer();
+  //       };
+
+  //       startSessionTimer();
+
+  //       // Reset the timer when the page is refreshed
+  //       window.addEventListener("beforeunload", resetSessionTimer);
+
+  //       // Invoke the callback to indicate the user is logged in
+  //       callback.isLoggedIn("is logged in", true);
+  //     })
+  //     .catch((err) => {
+  //       // If there's an error, invoke the callback to indicate the user is not logged in
+  //       callback.isLoggedIn("is logged in", false);
+  //     });
+  // }
+
   // Logout the user session
   logout() {
     try {
