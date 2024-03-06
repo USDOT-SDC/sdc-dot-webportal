@@ -1115,7 +1115,11 @@ def resize_workstation(params):
         print(state)
         if state == "running":
            ec2_instance_stop(instance_id)
-        modify_instance(instance_id, requested_instance_type)
+        while state != "stopped":
+            state=get_ec2_instance_state(params)  
+        else: 
+            modify_instance(instance_id, requested_instance_type)
+            time.sleep(5)
         ### send email
         workstation_instance_request_notification(params)
 
