@@ -62,14 +62,6 @@
                   </a>
                   <a
                     class="btn btn-primary dotBtn"
-                    *ngIf="instanceStates[stack.instance_id] == 'stopping'"
-                    [style.pointer-events]="none"
-                    [style.color]="'gray'"
-                  >
-                    Start
-                  </a>
-                  <a
-                    class="btn btn-primary dotBtn"
                     *ngIf="instanceStates[stack.instance_id] == 'stop'"
                     [style.pointer-events]="
                       statusProcessing[stack.instance_id] ? 'none' : 'auto'
