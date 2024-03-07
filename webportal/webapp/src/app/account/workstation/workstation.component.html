@@ -50,29 +50,13 @@
                   <a
                     class="btn btn-primary dotBtn"
                     *ngIf="instanceStates[stack.instance_id] == 'running'"
-                    [style.pointer-events]="
-                      statusProcessing[stack.instance_id] ? 'none' : 'auto'
-                    "
-                    [style.color]="
-                      statusProcessing[stack.instance_id] ? 'gray' : ''
-                    "
-                    (click)="instanceAction(stack.instance_id, 'stop')"
-                  >
-                    Stop
-                  </a>
+                    [style.pointer-events]="statusProcessing[stack.instance_id] ? 'none' : 'auto'" [style.color]="statusProcessing[stack.instance_id] ? 'gray' : ''" (click)="instanceAction(stack.instance_id, 'stop')"
+                  >Stop</a>
                   <a
                     class="btn btn-primary dotBtn"
                     *ngIf="instanceStates[stack.instance_id] == 'stop'"
-                    [style.pointer-events]="
-                      statusProcessing[stack.instance_id] ? 'none' : 'auto'
-                    "
-                    [style.color]="
-                      statusProcessing[stack.instance_id] ? 'gray' : ''
-                    "
-                    (click)="instanceAction(stack.instance_id, 'run')"
-                  >
-                    Start
-                  </a>
+                    [style.pointer-events]="statusProcessing[stack.instance_id] ? 'none' : 'auto'" [style.color]="statusProcessing[stack.instance_id] ? 'gray' : ''" (click)="instanceAction(stack.instance_id, 'run')"
+                  >Start</a>
                   <p *ngIf="instanceStates[stack.instance_id] == 'error'">
                     Error
                   </p>
