@@ -217,6 +217,7 @@
   },
   "version": "2.0",
   "app_name": "webportal",
+  "lambda_timeout": 300,
   "environment_variables": {
     "RECEIVER_EMAIL": "sdc-support@dot.gov"
   }

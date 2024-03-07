@@ -178,7 +178,7 @@ export class DialogBoxComponent implements OnInit {
   instanceId: string;
   selectedCpu: string;
   selectedMemory: string;
-  resizeWorkSpaceOnly = false;
+  resizeWorkSpaceOnly = true;
   resizeAddDiskOnly = false;
   ManageBoth = false;
 
@@ -743,6 +743,7 @@ export class DialogBoxComponent implements OnInit {
     }
     console.log("handle resize next ");
     this.selectedIndexChange(this.selectedIndex + 1);
+    // this.selectedIndexChange(2);
     console.log("this.selectedIndex: ", this.selectedIndex);
   }
 
