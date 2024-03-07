@@ -4,6 +4,13 @@
 
 ​To deploy this release, select this version's tag and follow the instructions in the [Deployment Plan](plans/deployment.md).
 
+## 3.1.7 (2024-03-07)
+- update webportal lambda to shutdown instance before resize
+  - resize waits for instance to be stopped before attempting resize
+  - restart correctly waits for instance to resize
+- update webportal front end to skip check box tab since resize is the only option
+- update webportal front end to close dialog box as soon as options are submitted
+
 ## 3.1.6 (2024-03-06)
 
 - Added warning message to user when they are inactive and the portal will log out soon
