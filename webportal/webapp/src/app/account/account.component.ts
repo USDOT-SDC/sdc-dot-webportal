@@ -33,8 +33,8 @@ export class AccountComponent implements OnInit {
   isDataProvider: any;
 
   ngOnInit() {
-    this.idleTimeoutService.startTimer();
     this.getUserInfo();
+    //this.idleTimeoutService.startTimer();
   }
 
   getUserInfo() {

@@ -40,7 +40,7 @@
     "http": "^0.0.1-security",
     "jquery": "^3.3.1",
     "marked": "^4.2.12",
-    "ngx-bootstrap": "^12.0.0",
+    "ngx-bootstrap": "^6.2.0",
     "ngx-markdown": "^15.1.1",
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",
