@@ -1444,11 +1444,7 @@
       </mat-dialog-content>
     </mat-tab> -->
     <!--TAB2 (as of 20240307 change all subsequent tab numbers by reducing by 1) - RESIZE WORKSTATION-->
-    <mat-tab
-      *ngIf="resizeWorkSpaceOnly"
-      label="Resize Workstation"
-      #tab1
-    >
+    <mat-tab *ngIf="resizeWorkSpaceOnly" label="Resize Workstation" #tab1>
       <mat-dialog-content style="height: 100%">
         <hr />
         <p>
@@ -1477,7 +1473,10 @@
           >
           <p>
             <br />
-            <i>Note: Make sure your work is saved. Your workstation will be stopped while resizing.</i>
+            <i
+              >Note: Make sure your work is saved. Your workstation will be
+              stopped while resizing.</i
+            >
           </p>
         </div>
         <hr />
@@ -1718,10 +1717,7 @@
       *ngIf="resizeAddDiskOnly || ManageBoth"
       label="Disk Space"
       #tab2
-      [disabled]="
-        selectedIndex == 0 ||
-        (!resizeAddDiskOnly && !ManageBoth)
-      "
+      [disabled]="selectedIndex == 0 || (!resizeAddDiskOnly && !ManageBoth)"
     >
       <mat-dialog-content style="height: 100%">
         <hr />
@@ -1952,7 +1948,6 @@
         "
         multiple="multiple"
       >
-        <!-- ... your existing code for file upload -->
       </p-fileUpload>
     </div>
   </p-card>

@@ -4,7 +4,6 @@ import { CognitoService } from "../../services/cognito.service";
 import { ApiGatewayService } from "../../services/apigateway.service";
 import * as $ from "jquery";
 import { CommonModule } from "@angular/common";
-import { IdleTimeoutService } from "./idle-timeout.service";
 
 @Component({
   standalone: true,
@@ -27,14 +26,12 @@ export class AccountComponent implements OnInit {
   constructor(
     private cognitoService: CognitoService,
     private gatewayService: ApiGatewayService,
-    private router: Router,
-    private idleTimeoutService: IdleTimeoutService
+    private router: Router
   ) {}
   isDataProvider: any;
 
   ngOnInit() {
     this.getUserInfo();
-    //this.idleTimeoutService.startTimer();
   }
 
   getUserInfo() {
