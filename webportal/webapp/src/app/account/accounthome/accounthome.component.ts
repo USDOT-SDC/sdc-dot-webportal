@@ -5,16 +5,29 @@ import { Router, RouterModule, NavigationStart } from "@angular/router";
 import { CardModule } from "primeng/card";
 import { CognitoService } from "../../../services/cognito.service";
 
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+
 @Component({
   standalone: true,
-  imports: [MatCardModule, RouterModule, CommonModule, CardModule],
+  imports: [
+    MatCardModule,
+    RouterModule,
+    CommonModule,
+    CardModule,
+
+    MatSnackBarModule,
+  ],
   providers: [CognitoService],
   selector: "app-accounthome",
   templateUrl: "./accounthome.component.html",
   styleUrls: ["./accounthome.component.css"],
 })
 export class AccountHomeComponent implements OnInit {
-  constructor(public router: Router, private cognitoService: CognitoService) {}
+  constructor(
+    public router: Router,
+    private cognitoService: CognitoService,
+    public snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     this.inactivityTimer();
@@ -25,7 +38,7 @@ export class AccountHomeComponent implements OnInit {
     let warningTimer: any;
     let sessionStart: number;
     const sessionTimeout = 1200000; // 20 minutes in milliseconds
-    const warningTime = 900000; // 15 minutes in milliseconds
+    const warningTime = 1080000; // 18 minutes in milliseconds
 
     const isSessionExpired = () => {
       return Date.now() - sessionStart > sessionTimeout;
@@ -39,9 +52,13 @@ export class AccountHomeComponent implements OnInit {
 
     const showWarningAlert = () => {
       warningTimer = setTimeout(() => {
-        var notification = new Notification("Alert", {
-          body: "Your session is about to expire due to inactivity. Please continue your session or you will be logged out.",
-        });
+        this.snackBar.open(
+          "Your session is about to expire. Please refresh the page.",
+          "close",
+          {
+            duration: 120000,
+          }
+        );
 
         if (isSessionExpired()) {
           this.refreshPage();
@@ -54,33 +71,15 @@ export class AccountHomeComponent implements OnInit {
       clearTimeout(warningTimer);
     };
 
-    const clearEventListeners = () => {
-      window.removeEventListener("beforeunload", resetTimers);
-      window.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("unload", clearEventListeners);
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        resetTimers(); // Reset the timer when the page becomes visible (e.g., when switching tabs)
-      }
-    };
-
     sessionStart = Date.now();
     startSessionTimer();
     showWarningAlert();
-
-    window.addEventListener("beforeunload", resetTimers);
-
-    window.addEventListener("visibilitychange", handleVisibilityChange);
-
-    window.addEventListener("unload", clearEventListeners);
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         clearTimeout(sessionTimer);
         clearTimeout(warningTimer);
-        clearEventListeners();
+        resetTimers();
       }
     });
   }
@@ -91,9 +90,10 @@ export class AccountHomeComponent implements OnInit {
 
   userLogout() {
     this.router.navigate(["/"]);
-    var notification = new Notification("Alert", {
-      body: "Your session has expired due to inactivity. You have been logged out.",
+    this.snackBar.open("Your session has expired due to inactivity", "close", {
+      duration: 600000,
     });
+
     this.cognitoService.logout();
     localStorage.clear();
     sessionStorage.clear();

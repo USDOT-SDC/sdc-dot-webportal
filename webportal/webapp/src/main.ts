@@ -49,6 +49,7 @@ bootstrapApplication(AppComponent, {
     LoginSyncGuard,
     MatSnackBar,
     LoaderService,
+
     provideAnimations(),
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

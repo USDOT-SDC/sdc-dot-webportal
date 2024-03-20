@@ -4,7 +4,12 @@
 
 ​To deploy this release, select this version's tag and follow the instructions in the [Deployment Plan](plans/deployment.md).
 
+## 3.1.8 (2024-03-22)
+
+- Fixed inactivity timer to notify users using a different function type due to DOT Admins blocking notifications on Chrome
+
 ## 3.1.7 (2024-03-07)
+
 - update webportal lambda to shutdown instance before resize
   - resize waits for instance to be stopped before attempting resize
   - restart correctly waits for instance to resize
